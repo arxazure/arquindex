@@ -1,0 +1,116 @@
+* {
+  padding: 0;
+  border: 0;
+}
+
+body {
+  background-color: #1c1c1c;
+  font-family: "Poppins", sans-serif;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: aqua;
+}
+
+main {
+  min-height: 90vh;
+  width: 70%;
+  margin-top: 3rem;
+  background-color: #303030;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+}
+
+.main__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  width: 100%;
+}
+
+.main__content .main__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  width: 300px;
+
+  height: auto;
+}
+
+.main__input {
+  width: 100%;
+}
+
+.input__topText {
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  height: 100%;
+  width: 100%;
+}
+
+.input__topText .text {
+  font-weight: 300;
+  font-size: 14px;
+  text-align: center;
+}
+
+.btn {
+  padding: 0.8rem;
+  color: white;
+  font-weight: 900;
+  background-color: #ec2044;
+  width: 100%;
+}
+
+.form-control,
+.form-select,
+option {
+  background-color: rgba(158, 158, 158, 0.25);
+  border: none;
+  color: white;
+}
+
+span {
+  color: #ec2044;
+}
+
+.main__imgLogin img {
+  width: 100%;
+  height: 100%;
+}
+
+.nav-link a {
+  color: aqua;
+}
+
+.navbar {
+  background-color: #1c1c1c;
+  color: aqua;
+}
+
+.nav-link {
+  color: aqua;
+}
+
+.card {
+  background-color: #0d0c0c;
+}
