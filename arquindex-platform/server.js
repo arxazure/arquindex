@@ -139,6 +139,7 @@ const server=http.createServer(async(req,res)=>{
    try{const rr=await fetch("https://api.indexnow.org/indexnow",{method:"POST",headers:{"content-type":"application/json; charset=utf-8"},body:JSON.stringify(payload)});res.writeHead(rr.status,{"content-type":"application/json"});return res.end(JSON.stringify({ok:rr.ok,status:rr.status,count:urls.length}));}catch(e){res.writeHead(500,{"content-type":"application/json"});return res.end(JSON.stringify({ok:false,error:String(e)}));}
  }
  */
+ }
  if(process.env.INDEXNOW_KEY&&p==="/"+process.env.INDEXNOW_KEY+".txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(process.env.INDEXNOW_KEY);}
  res.writeHead(404,{"content-type":"text/html; charset=utf-8"});res.end(layout("Página não encontrada | Arquindex","Página não encontrada.","<section><h1>Página não encontrada</h1><p><a href='/'>Voltar ao início</a></p></section>",req));
 });
