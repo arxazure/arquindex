@@ -165,3 +165,18 @@ const server=http.createServer(async(req,res)=>{
  res.writeHead(404,{"content-type":"text/html; charset=utf-8"});res.end(layout("Página não encontrada | Arquindex","Página não encontrada.","<section><h1>Página não encontrada</h1><p><a href='/'>Voltar ao início</a></p></section>",req));
 });
 server.listen(PORT,"0.0.0.0",()=>console.log("Arquindex running on",PORT));
+async function notifyIndexNowForPublishedPages(){
+ const key=process.env.INDEXNOW_KEY;
+ if(!key || !/^[A-Za-z0-9-]{8,128}$/.test(key)){console.log("IndexNow skipped: key missing or invalid");return;}
+ const paths=["/","/solucoes","/conteudo","/contato",...services.map(x=>"/solucoes/"+x[0]),...articles.map(a=>"/conteudo/"+a.slug)];
+ const host="arquindex-web-production.up.railway.app";
+ const payload={host,key,keyLocation:"https://"+host+"/"+key+".txt",urlList:[...new Set(paths)].map(path=>"https://"+host+path)};
+ try{
+  const response=await fetch("https://api.indexnow.org/indexnow",{method:"POST",headers:{"content-type":"application/json; charset=utf-8"},body:JSON.stringify(payload),signal:AbortSignal.timeout(12000)});
+  console.log("IndexNow notification",response.status,"urls",payload.urlList.length);
+ }catch(err){console.warn("IndexNow notification error",String(err));}
+}
+if(process.env.NODE_ENV==="production"&&process.env.INDEXNOW_AUTO_SUBMIT==="true"){
+ setTimeout(()=>{notifyIndexNowForPublishedPages().catch(err=>console.warn("IndexNow error",String(err)));},12000);
+}
+
