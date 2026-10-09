@@ -6,13 +6,13 @@ const BASE = (process.env.SITE_BASE_URL || "").replace(/\/$/,"");
 const WHATSAPP = "5531973632725";
 
 const services = [
-["digitalizacao-documentos","Digitalização de Documentos","Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.","A partir de R$ 0,09 por página"],
+["digitalizacao-documentos","Digitalização de Documentos","Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.","A partir de R$ 0,10 por página"],
 ["digitalizacao-certificada","Digitalização Certificada","Projeto de digitalização alinhado aos requisitos técnicos do Decreto 10.278/2020, com integridade, metadados e controle de qualidade.","Sob orçamento"],
 ["prontuarios-medicos","Digitalização de Prontuários Médicos","Organização, captura, OCR e indexação de prontuários com foco em rastreabilidade, sigilo e acesso controlado.","Sob orçamento"],
 ["gestao-documental","Gestão Documental","Classificação, plano de classificação, temporalidade, retenção, destinação, governança e acesso seguro.","Sob orçamento"],
 ["organizacao-arquivos","Organização de Arquivos","Organização física e digital, inventário, endereçamento, empréstimos, temporalidade e padronização.","Sob orçamento"],
 ["alfresco-incloud","Alfresco inCloud","ECM/GED em nuvem com permissões, metadados, versionamento, workflows, OCR, pesquisa e auditoria.","A partir de R$ 750"],
-["consultoria-lgpd","Adequação LGPD","Diagnóstico, mapeamento, ROPA, RIPD quando aplicável, políticas, contratos, cookies, direitos dos titulares e governança.","A partir de R$ 550 para pequenos negócios"],
+["consultoria-lgpd","Adequação LGPD","Diagnóstico, mapeamento, ROPA, RIPD quando aplicável, políticas, contratos, cookies, direitos dos titulares e governança.","A partir de R$ 2.500"],
 ["dpo-terceirizado","DPO Terceirizado","Encarregado terceirizado, acompanhamento, orientação, registros, canal de titulares e governança de privacidade.","A partir de R$ 299/mês"],
 ["databook","Databook","Organização de documentos de engenharia por volumes, capítulos, itens, subitens, índices, conferência e entrega.","Sob orçamento"],
 ["digitacao","Digitação e Processamento de Formulários","Captura estruturada, validação, conferência, tratamento de dados e relatórios de produtividade.","Sob orçamento"],
@@ -117,25 +117,28 @@ function sitemap(req,index){
  const o=origin(req);
  const urls=[];
  for(const s of services) for(const c of cities) for(const i of intents) urls.push(`${o}/seo/${s[0]}/${slugCity(c)}/${i[0]}`);
- const start=index*1000, chunk=urls.slice(start,start+1000);
+ const start=index*1000, chunk=[]; // páginas locais aguardam revisão editorial e evidência local
  return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+chunk.map(u=>'<url><loc>'+u+'</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>').join('')+'</urlset>';
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
  if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
- if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[0,1,2,3,4].map(i=>'<sitemap><loc>'+origin(req)+'/sitemap-'+(i+1)+'.xml</loc></sitemap>').join('')+'</sitemapindex>');}
+ if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["/","/solucoes",...services.map(s=>"/solucoes/"+s[0])].map(path=>"<url><loc>"+origin(req)+path+"</loc></url>").join("")+"</urlset>");}
  const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){const n=Number(sm[1]);if(n>=1&&n<=5){res.writeHead(200,{"content-type":"application/xml"});return res.end(sitemap(req,n-1));}}
+ if(p==="/conteudo"||p==="/contato"){const isContact=p==="/contato";res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout(isContact?"Contato | Arquindex":"Conteúdos | Arquindex",isContact?"Solicite um orçamento para soluções documentais.":"Artigos e guias de gestão documental, LGPD e ECM.",isContact?'<section><h1>Fale com a Arquindex</h1><p>Peça um orçamento pelo WhatsApp: <a href="https://wa.me/'+WHATSAPP+'">31 97363-2725</a></p><p>Email: comercial@arquindex.com.br</p></section>':'<section><h1>Conteúdo técnico Arquindex</h1><p>Publicações em preparação editorial. Veja nossas <a href="/solucoes">soluções</a>.</p></section>',req));}
  if(p==="/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(home(req));}
  if(p==="/solucoes"){const cards=services.map(([s,n,d,pr])=>`<article class="card"><h3>${n}</h3><p>${d}</p><div class="price">${pr}</div><a href="/solucoes/${s}">Detalhes →</a></article>`).join("");res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Soluções | Arquindex","Soluções de gestão documental, digitalização, LGPD, Alfresco ECM, Databook e arquivos.",`<section><h1>Soluções Arquindex</h1><div class="grid">${cards}</div></section>`,req));}
  const sol=p.match(/^\/solucoes\/([^/]+)$/); if(sol){const h=solutionPage(sol[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
- const m=p.match(/^\/seo\/([^/]+)\/([^/]+)\/([^/]+)$/); if(m){const h=seoPage(m[1],m[2],m[3],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow"});return res.end(h);}}
- if(p==="/api/indexnow"&&req.method==="POST"){
+ const m=p.match(/^\/seo\/([^/]+)\/([^/]+)\/([^/]+)$/); if(m){const h=seoPage(m[1],m[2],m[3],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"noindex, follow"});return res.end(h);}}
+ if(p==="/api/indexnow"&&req.method==="POST"){res.writeHead(403,{"content-type":"application/json"});return res.end(JSON.stringify({ok:false,error:"Envio desabilitado ate aprovacao editorial e autenticacao"}));
+ /*
    const key=process.env.INDEXNOW_KEY; if(!key){res.writeHead(503,{"content-type":"application/json"});return res.end(JSON.stringify({ok:false,error:"INDEXNOW_KEY not configured"}));}
    const urls=[]; for(const s of services) for(const c of cities) for(const i of intents) urls.push(`${origin(req)}/seo/${s[0]}/${slugCity(c)}/${i[0]}`);
    const payload={host:new URL(origin(req)).host,key,keyLocation:origin(req)+"/"+key+".txt",urlList:urls};
    try{const rr=await fetch("https://api.indexnow.org/indexnow",{method:"POST",headers:{"content-type":"application/json; charset=utf-8"},body:JSON.stringify(payload)});res.writeHead(rr.status,{"content-type":"application/json"});return res.end(JSON.stringify({ok:rr.ok,status:rr.status,count:urls.length}));}catch(e){res.writeHead(500,{"content-type":"application/json"});return res.end(JSON.stringify({ok:false,error:String(e)}));}
  }
+ */
  if(process.env.INDEXNOW_KEY&&p==="/"+process.env.INDEXNOW_KEY+".txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(process.env.INDEXNOW_KEY);}
  res.writeHead(404,{"content-type":"text/html; charset=utf-8"});res.end(layout("Página não encontrada | Arquindex","Página não encontrada.","<section><h1>Página não encontrada</h1><p><a href='/'>Voltar ao início</a></p></section>",req));
 });
