@@ -1,5 +1,6 @@
 import http from "node:http";
 import { URL } from "node:url";
+import { articles } from "./articles.js";
 
 const PORT = Number(process.env.PORT || 3000);
 const BASE = (process.env.SITE_BASE_URL || "").replace(/\/$/,"");
@@ -113,6 +114,20 @@ function seoPage(serviceSlug,citySlug,intentSlug,req){
  const body=`<div class="hero"><div class="wrap"><div class="eyebrow">${city}</div><h1>${name} em ${city}</h1><p>${desc}</p><div class="cta"><a class="btn primary" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Olá Arquindex, quero orçamento de "+name+" para "+city)}">Solicitar orçamento</a></div></div></div><section><h2>${intent.charAt(0).toUpperCase()+intent.slice(1)} em ${city}</h2>${blocks.map(x=>"<p>"+x+"</p>").join("")}<div class="grid"><div class="card"><h3>Preço inicial</h3><div class="price">${price}</div></div><div class="card"><h3>Planos</h3><p>Projeto · Recorrente · Sob demanda · Corporativo</p></div><div class="card"><h3>Atendimento</h3><p>WhatsApp 31 97363-2725</p></div></div><h2>Perguntas frequentes</h2><h3>Como pedir orçamento?</h3><p>Informe cidade, tipo de documento, volume aproximado, prazo e necessidade de coleta ou visita.</p><h3>O atendimento é apenas em Minas Gerais?</h3><p>Não. A Arquindex desenvolve projetos para empresas em diferentes estados, conforme escopo e logística.</p></section>`;
  return layout(title,description,body,req,`<script type="application/ld+json">${schema}</script>`);
 }
+
+function contentListing(req){
+ const cards=articles.map(a=>'<article class="card"><div class="eyebrow" style="color:#0b3d91">'+esc(a.category)+'</div><h3><a href="/conteudo/'+a.slug+'">'+esc(a.title)+'</a></h3><p>'+esc(a.lead)+'</p><p><a href="/conteudo/'+a.slug+'">Ler artigo →</a></p></article>').join("");
+ return layout("Artigos sobre digitalização, Alfresco e LGPD | Arquindex","Guias técnicos de digitalização, Alfresco ECM, proteção de dados e LGPD.",'<section><h1>Conteúdos e artigos</h1><p>Guias técnicos para apoiar decisões documentais e de privacidade.</p><div class="grid">'+cards+'</div></section>',req);
+}
+function articlePage(slug,req){
+ const a=articles.find(a=>a.slug===slug);if(!a)return null;
+ const sections=a.sections.map(([h,p])=>'<h2>'+esc(h)+'</h2><p>'+esc(p)+'</p>').join("");
+ const service=a.category==="Digitalização"?"/solucoes/digitalizacao-documentos":a.category==="Alfresco"?"/solucoes/alfresco-incloud":"/solucoes/consultoria-lgpd";
+ const schema=JSON.stringify({"@context":"https://schema.org","@type":"Article",headline:a.title,dateModified:a.reviewed,author:{"@type":"Organization",name:"Arquindex"},publisher:{"@type":"Organization",name:"Arquindex"}});
+ const body='<section style="max-width:860px"><p><a href="/conteudo">← Voltar aos artigos</a></p><p class="muted">'+esc(a.category)+' · Revisado em '+esc(a.reviewed)+'</p><h1>'+esc(a.title)+'</h1><p style="font-size:19px">'+esc(a.lead)+'</p>'+sections+'<h2>Referência e leitura adicional</h2><p><a href="'+esc(a.source)+'" rel="noopener noreferrer">Consultar fonte técnica ou normativa</a></p><div class="card"><h2>Planeje seu projeto com a Arquindex</h2><p>Conheça as soluções relacionadas ao tema e solicite um orçamento conforme o escopo de sua organização.</p><a href="'+service+'">Conhecer solução</a> · <a href="/contato">Pedir orçamento</a></div></section>';
+ return layout(a.title+" | Blog Arquindex",a.lead,body,req,'<script type="application/ld+json">'+schema+'</script>');
+}
+
 function sitemap(req,index){
  const o=origin(req);
  const urls=[];
@@ -124,9 +139,11 @@ const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
  if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
- if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["/","/solucoes",...services.map(s=>"/solucoes/"+s[0])].map(path=>"<url><loc>"+origin(req)+path+"</loc></url>").join("")+"</urlset>");}
+ if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["/","/solucoes",...services.map(s=>"/solucoes/"+s[0]),"/conteudo",...articles.map(a=>"/conteudo/"+a.slug)].map(path=>"<url><loc>"+origin(req)+path+"</loc></url>").join("")+"</urlset>");}
  const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){const n=Number(sm[1]);if(n>=1&&n<=5){res.writeHead(200,{"content-type":"application/xml"});return res.end(sitemap(req,n-1));}}
- if(p==="/conteudo"||p==="/contato"){const isContact=p==="/contato";res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout(isContact?"Contato | Arquindex":"Conteúdos | Arquindex",isContact?"Solicite um orçamento para soluções documentais.":"Artigos e guias de gestão documental, LGPD e ECM.",isContact?'<section><h1>Fale com a Arquindex</h1><p>Peça um orçamento pelo WhatsApp: <a href="https://wa.me/'+WHATSAPP+'">31 97363-2725</a></p><p>Email: comercial@arquindex.com.br</p></section>':'<section><h1>Conteúdo técnico Arquindex</h1><p>Publicações em preparação editorial. Veja nossas <a href="/solucoes">soluções</a>.</p></section>',req));}
+ const art=p.match(/^\/conteudo\/([a-z0-9-]+)$/);if(art){const h=articlePage(art[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
+ if(p==="/conteudo"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(contentListing(req));}
+ if(p==="/contato"){const isContact=p==="/contato";res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout(isContact?"Contato | Arquindex":"Conteúdos | Arquindex",isContact?"Solicite um orçamento para soluções documentais.":"Artigos e guias de gestão documental, LGPD e ECM.",isContact?'<section><h1>Fale com a Arquindex</h1><p>Peça um orçamento pelo WhatsApp: <a href="https://wa.me/'+WHATSAPP+'">31 97363-2725</a></p><p>Email: comercial@arquindex.com.br</p></section>':'<section><h1>Conteúdo técnico Arquindex</h1><p>Publicações em preparação editorial. Veja nossas <a href="/solucoes">soluções</a>.</p></section>',req));}
  if(p==="/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(home(req));}
  if(p==="/solucoes"){const cards=services.map(([s,n,d,pr])=>`<article class="card"><h3>${n}</h3><p>${d}</p><div class="price">${pr}</div><a href="/solucoes/${s}">Detalhes →</a></article>`).join("");res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Soluções | Arquindex","Soluções de gestão documental, digitalização, LGPD, Alfresco ECM, Databook e arquivos.",`<section><h1>Soluções Arquindex</h1><div class="grid">${cards}</div></section>`,req));}
  const sol=p.match(/^\/solucoes\/([^/]+)$/); if(sol){const h=solutionPage(sol[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
