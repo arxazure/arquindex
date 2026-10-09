@@ -63,23 +63,40 @@ function origin(req){return "https://arquindex-web-production.up.railway.app";}
 function analyticsSnippet(){
  const id=process.env.GA4_MEASUREMENT_ID||"";
  if(!/^G-[A-Z0-9]{6,20}$/.test(id))return "";
- return `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
- <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
- gtag('js',new Date());gtag('config','${id}',{anonymize_ip:true});
- document.addEventListener('DOMContentLoaded',function(){
- var recorded=new Set();
- if('IntersectionObserver' in window){
- var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;
- var el=e.target;var section=el.id||el.getAttribute('aria-label')||el.querySelector('h1,h2,h3')?.textContent?.trim()||'secao';
- section=section.slice(0,95);if(recorded.has(section))return;recorded.add(section);
- gtag('event','section_view',{section_name:section,page_path:location.pathname});});},{threshold:0.4});
- document.querySelectorAll('main section,main article,section').forEach(function(el){obs.observe(el)});
+ return `<script>
+ window.dataLayer=window.dataLayer||[];
+ function gtag(){dataLayer.push(arguments)}
+ gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+ function startAnalytics(){
+  if(window.__arqAnalyticsStarted)return;window.__arqAnalyticsStarted=true;
+  var script=document.createElement('script');script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id=${id}';document.head.appendChild(script);
+  gtag('js',new Date());gtag('consent','update',{analytics_storage:'granted'});gtag('config','${id}',{anonymize_ip:true});
+  var recorded=new Set();
+  if('IntersectionObserver' in window){
+   var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;
+   var el=e.target,heading=el.querySelector('h1,h2,h3');
+   var section=(el.id||el.getAttribute('aria-label')||(heading&&heading.textContent.trim())||'secao').slice(0,95);
+   if(recorded.has(section))return;recorded.add(section);
+   gtag('event','section_view',{section_name:section,page_path:location.pathname});});},{threshold:0.4});
+   document.querySelectorAll('main section,main article,section').forEach(function(el){obs.observe(el)});
+  }
+  document.addEventListener('click',function(e){var a=e.target.closest('a');if(!a)return;
+   var label=(a.textContent||a.getAttribute('aria-label')||'link').trim().slice(0,95);
+   var type=/wa.me|whatsapp/i.test(a.href)?'whatsapp_click':/contato|mailto:|tel:/i.test(a.href)?'contact_click':'link_click';
+   gtag('event',type,{link_label:label,link_url:a.href,page_path:location.pathname});
+  });
  }
- document.addEventListener('click',function(e){var a=e.target.closest('a');if(!a)return;
- var label=(a.textContent||a.getAttribute('aria-label')||'link').trim().slice(0,95);
- var type=/wa.me|whatsapp/i.test(a.href)?'whatsapp_click':/contato|mailto:|tel:/i.test(a.href)?'contact_click':'link_click';
- gtag('event',type,{link_label:label,link_url:a.href,page_path:location.pathname});
- });});
+ document.addEventListener('DOMContentLoaded',function(){
+  var consent='';try{consent=localStorage.getItem('arquindex_analytics_consent')||''}catch(e){}
+  if(consent==='granted'){startAnalytics();return}if(consent==='denied')return;
+  var bar=document.createElement('div');bar.setAttribute('role','dialog');bar.setAttribute('aria-label','Preferencias de analise');
+  bar.style.cssText='position:fixed;bottom:12px;left:12px;right:12px;z-index:9999;max-width:720px;margin:auto;padding:16px;border-radius:12px;background:#fff;color:#14253e;border:1px solid #ddd;box-shadow:0 8px 30px #0003;font:14px Arial';
+  bar.innerHTML='<span>Utilizamos estatisticas opcionais para melhorar paginas e conteudos. Voce pode aceitar ou recusar a medicao de visitas.</span> <button type="button" data-choice="granted">Aceitar</button> <button type="button" data-choice="denied">Recusar</button>';
+  bar.addEventListener('click',function(e){var v=e.target.getAttribute('data-choice');if(!v)return;
+   try{localStorage.setItem('arquindex_analytics_consent',v)}catch(err){}
+   bar.remove();if(v==='granted')startAnalytics();
+  });document.body.appendChild(bar);
+ });
  </script>`;
 }
 function layout(title,desc,body,req,extraHead=""){
