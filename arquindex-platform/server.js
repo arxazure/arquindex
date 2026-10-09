@@ -60,9 +60,31 @@ const cases = {
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function slugCity(c){return c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
 function origin(req){return "https://arquindex-web-production.up.railway.app";}
+function analyticsSnippet(){
+ const id=process.env.GA4_MEASUREMENT_ID||"";
+ if(!/^G-[A-Z0-9]{6,20}$/.test(id))return "";
+ return `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+ gtag('js',new Date());gtag('config','${id}',{anonymize_ip:true});
+ document.addEventListener('DOMContentLoaded',function(){
+ var recorded=new Set();
+ if('IntersectionObserver' in window){
+ var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(!e.isIntersecting)return;
+ var el=e.target;var section=el.id||el.getAttribute('aria-label')||el.querySelector('h1,h2,h3')?.textContent?.trim()||'secao';
+ section=section.slice(0,95);if(recorded.has(section))return;recorded.add(section);
+ gtag('event','section_view',{section_name:section,page_path:location.pathname});});},{threshold:0.4});
+ document.querySelectorAll('main section,main article,section').forEach(function(el){obs.observe(el)});
+ }
+ document.addEventListener('click',function(e){var a=e.target.closest('a');if(!a)return;
+ var label=(a.textContent||a.getAttribute('aria-label')||'link').trim().slice(0,95);
+ var type=/wa.me|whatsapp/i.test(a.href)?'whatsapp_click':/contato|mailto:|tel:/i.test(a.href)?'contact_click':'link_click';
+ gtag('event',type,{link_label:label,link_url:a.href,page_path:location.pathname});
+ });});
+ </script>`;
+}
 function layout(title,desc,body,req,extraHead=""){
  const o=origin(req);
- return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${extraHead}
+ return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${extraHead}${analyticsSnippet()}
  <style>
  :root{--b:#0b3d91;--b2:#0b67c2;--ink:#0c1b33;--mut:#56657a;--bg:#f4f7fb;--card:#fff;--line:#d9e2ef;--g:#25d366}
  *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff;line-height:1.55}
