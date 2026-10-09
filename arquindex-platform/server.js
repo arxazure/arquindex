@@ -115,6 +115,7 @@ function seoPage(serviceSlug,citySlug,intentSlug,req){
  return layout(title,description,body,req,`<script type="application/ld+json">${schema}</script>`);
 }
 
+function geoAudit(req){const pages=[...services.map(x=>({path:"/solucoes/"+x[0],title:x[1],type:"service"})),...articles.map(a=>({path:"/conteudo/"+a.slug,title:a.title,type:"article",source:a.source,reviewed:a.reviewed}))];return {name:"Radar GEO AEO Arquindex",date:"2026-10-08",audited:pages.length,pages:pages.map(p=>({...p,url:origin(req)+p.path,author:"Equipe editorial Arquindex",evidence:p.source||null,externalMentions:"Nao verificadas",nextAction:p.type==="article"?"Validar autoria, FAQ e exemplos autorizados":"Adicionar casos e provas publicas"})),policy:"Nao fabricar reviews, links nem mencoes. Paginas locais nao revisadas permanecem noindex."};}
 function contentListing(req){
  const cards=articles.map(a=>'<article class="card"><div class="eyebrow" style="color:#0b3d91">'+esc(a.category)+'</div><h3><a href="/conteudo/'+a.slug+'">'+esc(a.title)+'</a></h3><p>'+esc(a.lead)+'</p><p><a href="/conteudo/'+a.slug+'">Ler artigo →</a></p></article>').join("");
  return layout("Artigos sobre digitalização, Alfresco e LGPD | Arquindex","Guias técnicos de digitalização, Alfresco ECM, proteção de dados e LGPD.",'<section><h1>Conteúdos e artigos</h1><p>Guias técnicos para apoiar decisões documentais e de privacidade.</p><div class="grid">'+cards+'</div></section>',req);
@@ -137,7 +138,9 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(p==="/radar-geo-aeo.json"){res.writeHead(200,{"content-type":"application/json; charset=utf-8"});return res.end(JSON.stringify(geoAudit(req)));}
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
+ if(p==="/favicon.ico"){res.writeHead(204);return res.end();}
  if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
  if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["/","/solucoes",...services.map(s=>"/solucoes/"+s[0]),"/conteudo",...articles.map(a=>"/conteudo/"+a.slug)].map(path=>"<url><loc>"+origin(req)+path+"</loc></url>").join("")+"</urlset>");}
  const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){const n=Number(sm[1]);if(n>=1&&n<=5){res.writeHead(200,{"content-type":"application/xml"});return res.end(sitemap(req,n-1));}}
