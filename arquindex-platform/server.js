@@ -109,6 +109,19 @@ const serviceBenefits = {
  "dpo-terceirizado":["Rotina de governança","Canal de titulares","Registro de decisões","Acompanhamento de pendências","Orientação contínua"]
 };
 
+const priorityEnhancements = {
+ "guarda-documental":{
+  title:"Guarda de Documentos para Empresas | Custódia, Inventário e SLA",
+  answer:"A guarda documental corporativa combina custódia física, inventário, localização, controle de consultas, temporalidade e descarte autorizado. O objetivo não é apenas armazenar caixas, mas garantir que cada documento possa ser localizado, movimentado e destinado com rastreabilidade.",
+  extras:["Comparação entre guarda física interna e terceirizada","Estimativa por quantidade de caixas e frequência de consulta","SLA de atendimento a solicitações","Temporalidade e descarte seguro","Digitalização sob demanda"]
+ },
+ "databook":{
+  title:"Databook de Engenharia | Organização, Revisões e Entrega Técnica",
+  answer:"Um Databook bem estruturado reúne documentação técnica de obra, engenharia, manutenção ou fornecimento em uma estrutura conferível, com índice, capítulos, revisões, certificados, desenhos, as built, pendências e critérios de aceite.",
+  extras:["Modelo de índice técnico","Controle de revisões","Checklist de documentos de qualidade","As built, laudos, certificados e manuais","Pendências e aceite final"]
+ }
+};
+
 const serviceApplications = {
  "digitalizacao-documentos":["RH e Departamento Pessoal","Saúde e prontuários","Jurídico","Indústria","Engenharia e Databook"],
  "guarda-documental":["Administrativo","RH","Jurídico","Saúde","Engenharia"],
@@ -221,6 +234,7 @@ function home(req){
 function solutionPage(slug,req){
  const s=services.find(x=>x[0]===slug); if(!s)return null;
  const [_,name,desc,price]=s;
+ const enhancement=priorityEnhancements[slug]||null;
  const caseTxt=cases[slug]||"A Arquindex atua há 20 anos em projetos corporativos de gestão documental, digitalização, organização de arquivos, compliance e tecnologia.";
  const benefits=(serviceBenefits[slug]||["Diagnóstico","Execução controlada","Rastreabilidade","Qualidade","Entrega organizada"]).map(x=>'<div class="kpi"><strong>'+esc(x)+'</strong></div>').join("");
  const apps=(serviceApplications[slug]||["Indústria","Serviços","Jurídico","Administrativo","Operações corporativas"]).map(x=>'<li>'+esc(x)+'</li>').join("");
@@ -234,10 +248,11 @@ function solutionPage(slug,req){
  const bread=breadcrumbSchema([["Início","/"],["Soluções","/solucoes"],[name,"/solucoes/"+slug]],req);
  const extra= slug==="digitalizacao-certificada" ? "<p><strong>Digitalização certificada:</strong> projetos podem ser estruturados considerando os requisitos técnicos do Decreto 10.278/2020, incluindo padrões de digitalização, metadados, integridade e controle de qualidade, conforme o contexto do acervo.</p><p><strong>Equipamentos:</strong> utilizamos scanners profissionais Fujitsu fi Series, incluindo famílias fi-6000, fi-7000 e fi-8000, além de equipamentos A3 e A4, conforme formato e volume.</p>" : slug==="gestao-documental"||slug==="organizacao-arquivos" ? "<p>O trabalho pode incluir diagnóstico, inventário, classificação, plano de classificação, tabela de temporalidade, avaliação, retenção, destinação, arquivos correntes/intermediários/permanentes, empréstimos, endereçamento físico e organização digital, alinhados a boas práticas arquivísticas e referências do CONARQ.</p>" : slug==="alfresco-incloud" ? "<p>O Alfresco inCloud pode reunir repositório documental, sites por departamento, permissões, metadados, OCR/PDF-A, versionamento, workflows, pesquisa, auditoria, integrações, migração, backup, treinamento e suporte. Perfis típicos incluem Gerente, Colaborador, Contribuidor e Consumidor.</p>" : slug==="consultoria-lgpd" ? "<p>A jornada de adequação pode envolver diagnóstico, mapa de dados, bases legais, ROPA, RIPD quando aplicável, avisos de privacidade, cookies, contratos, operadores, direitos dos titulares, resposta a incidentes, retenção, treinamento, governança e DPO terceirizado.</p>" : "";
  const calculator=slug==="guarda-documental"?`<div class="calc"><h2>Estimador inicial de volume para guarda</h2><p>Informe a quantidade de caixas para organizar o levantamento comercial. O resultado não é orçamento.</p><label>Quantidade de caixas<br><input id="boxes" type="number" min="1" placeholder="Ex.: 1000"></label><p><button class="btn primary" style="background:#0b3d91;color:white;border:0" onclick="var n=Number(document.getElementById('boxes').value||0);document.getElementById('boxout').textContent=n?('Acervo informado: '+n.toLocaleString('pt-BR')+' caixas. Próximo passo: confirmar dimensões, frequência de consulta, temporalidade e logística.'):'Informe uma quantidade válida.'">Calcular levantamento</button></p><p id="boxout"></p></div>`:"";
- const body=`<div class="hero"><div class="wrap"><div class="eyebrow">Solução Arquindex</div><h1>${name}</h1><p>${desc}</p><div class="cta"><a class="btn primary" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Olá Arquindex, quero orçamento para "+name)}">Solicitar orçamento</a><a class="btn whats" href="#processo">Conhecer o processo</a></div></div></div>
+ const enhancementBlocks=enhancement?'<h2>O que esta página responde</h2><ul>'+enhancement.extras.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'';
+ const body=`<div class="hero"><div class="wrap"><div class="eyebrow">Solução Arquindex</div><h1>${enhancement?enhancement.title:name}</h1><p>${enhancement?enhancement.answer:desc}</p><div class="cta"><a class="btn primary" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Olá Arquindex, quero orçamento para "+name)}">Solicitar orçamento</a><a class="btn whats" href="#processo">Conhecer o processo</a></div></div></div>
  <section>${answerBox("Resposta direta",desc+" O projeto é dimensionado por volume, complexidade, prazo, segurança, indexação, logística e resultado esperado.")}
  <nav class="toc"><a href="#beneficios">Benefícios</a><a href="#processo">Processo</a><a href="#preco">Preços</a><a href="#conformidade">Conformidade</a><a href="#aplicacoes">Aplicações</a><a href="#experiencia">Experiência</a><a href="#faq">FAQ</a></nav>
- <h2 id="beneficios">Benefícios</h2><div class="kpis">${benefits}</div>
+ <h2 id="beneficios">Benefícios</h2><div class="kpis">${benefits}</div>${enhancementBlocks}
  <h2 id="processo">Processo técnico</h2><div class="steps"><div class="step"><strong>Diagnóstico</strong><p>Objetivo, volume, riscos, formatos, usuários e prazo.</p></div><div class="step"><strong>Preparação</strong><p>Regras, classificação, metadados, logística e critérios de aceite.</p></div><div class="step"><strong>Execução</strong><p>Produção em lotes com registros, controles e tratamento de exceções.</p></div><div class="step"><strong>Validação e entrega</strong><p>Qualidade, conferência, relatórios, entrega e continuidade.</p></div></div>
  <h2 id="preco">Preços e fatores de custo</h2><div class="card"><p class="price">${price}</p><p>O valor final depende de volume, formatos, preparação, prazo, deslocamento, indexação, requisitos técnicos, integrações e forma de entrega. Compare propostas pelo escopo completo, não apenas pelo valor unitário.</p></div>
  ${calculator}
@@ -247,7 +262,7 @@ function solutionPage(slug,req){
  <h2 id="faq">Perguntas frequentes</h2>${faqHtml(faqs)}
  <div class="card"><h2>Solicite uma avaliação do volume</h2><p>Informe cidade, quantidade aproximada, tipo de documento, prazo e objetivo. A equipe comercial usa essas informações para preparar o próximo passo.</p><a class="btn whats" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Olá Arquindex, quero avaliar um projeto de "+name)}">Falar com a Arquindex</a></div>
  </section>`;
- return layout(name+" | Arquindex",desc,body,req,jsonLd(serviceSchema)+jsonLd(faqSchema)+jsonLd(bread));
+ return layout((enhancement?enhancement.title:name+" | Arquindex"),enhancement?enhancement.answer:desc,body,req,jsonLd(serviceSchema)+jsonLd(faqSchema)+jsonLd(bread));
 }
 function seoPage(serviceSlug,citySlug,intentSlug,req){
  const s=services.find(x=>x[0]===serviceSlug); const c=cities.find(x=>slugCity(x)===citySlug); const i=intents.find(x=>x[0]===intentSlug);
