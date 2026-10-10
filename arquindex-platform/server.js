@@ -131,6 +131,10 @@ function answerBox(title,text){return '<div class="answer"><strong>'+esc(title)+
 function faqHtml(items){return items.map(([q,a])=>'<details class="faq"><summary>'+esc(q)+'</summary><p>'+esc(a)+'</p></details>').join("");}
 function slugCity(c){return c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
 function origin(req){return "https://arquindex-web-production.up.railway.app";}
+function isRailwayPreview(req){
+ const host=(req.headers.host||"").toLowerCase();
+ return host.endsWith(".railway.app");
+}
 function analyticsSnippet(){
  const id=process.env.GA4_MEASUREMENT_ID||"";
  if(!/^G-[A-Z0-9]{6,20}$/.test(id))return "";
@@ -172,7 +176,8 @@ function analyticsSnippet(){
 }
 function layout(title,desc,body,req,extraHead=""){
  const o=origin(req);
- return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${jsonLd(organizationSchema())}${extraHead}${analyticsSnippet()}
+ const robotsMeta=isRailwayPreview(req)?'<meta name="robots" content="noindex,nofollow,noarchive">':'<meta name="robots" content="index,follow">';
+ return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}">${robotsMeta}<link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${jsonLd(organizationSchema())}${extraHead}${analyticsSnippet()}
  <style>
  :root{--b:#0b3d91;--b2:#0b67c2;--ink:#0c1b33;--mut:#56657a;--bg:#f4f7fb;--card:#fff;--line:#d9e2ef;--g:#25d366}
  *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff;line-height:1.55}
@@ -319,10 +324,11 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(isRailwayPreview(req))res.setHeader("x-robots-tag","noindex, nofollow, noarchive");
  if(p==="/radar-geo-aeo.json"){res.writeHead(200,{"content-type":"application/json; charset=utf-8"});return res.end(JSON.stringify(geoAudit(req)));}
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
  if(p==="/favicon.ico"){res.writeHead(204);return res.end();}
- if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
+ if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});if(isRailwayPreview(req))return res.end("User-agent: *\nDisallow: /\n");return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
  if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug)].map(path=>"<url><loc>"+origin(req)+path+"</loc></url>").join("")+"</urlset>");}
  const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){res.writeHead(410,{"content-type":"text/plain","x-robots-tag":"noindex"});return res.end("Sitemap antigo desativado. Consulte /sitemap.xml");}
  if(p==="/biblioteca-normativa"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(normativeLibrary(req));}
