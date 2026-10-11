@@ -42,6 +42,19 @@ const cities = [
 "Manaus-AM","Belem-PA","Cuiaba-MT","Campo Grande-MS","Palmas-TO"
 ];
 
+const legacyRedirects = new Map([
+ ["/guarda_de_documentos.html","/solucoes/guarda-documental"],
+ ["/gestao_de_colaboradores_documentos.html","/setores/digitalizacao-documentos-rh-departamento-pessoal"],
+ ["/montagem_databook_organizar.html","/solucoes/databook"],
+ ["/terceirizacao_arquivos_documentos.html","/solucoes/guarda-documental"],
+ ["/lgpd-consultoria.html","/solucoes/consultoria-lgpd"],
+ ["/digitalizacao-documentos-salvador.html","/solucoes/digitalizacao-documentos"],
+ ["/digitalizacao-documentos-brasilia.html","/solucoes/digitalizacao-documentos"],
+ ["/digitalizacao_microfilmagem_de_documentos.html","/conteudo/pdfa-preservacao-documentos"],
+ ["/adequacao-lgpd-dpo/","/solucoes/consultoria-lgpd"],
+ ["/LGPD.html","/solucoes/consultoria-lgpd"]
+]);
+
 const intents = [
 ["empresa","empresa especializada"],
 ["preco","preços e contratação"],
@@ -163,6 +176,11 @@ function answerBox(title,text){return '<div class="answer"><strong>'+esc(title)+
 function faqHtml(items){return items.map(([q,a])=>'<details class="faq"><summary>'+esc(q)+'</summary><p>'+esc(a)+'</p></details>').join("");}
 function slugCity(c){return c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
 function origin(req){return "https://arquindex-web-production.up.railway.app";}
+function canonicalOrigin(req){
+ const host=(req.headers.host||"").toLowerCase().split(":")[0];
+ if(host==="arquindex.com.br"||host==="www.arquindex.com.br") return "https://www.arquindex.com.br";
+ return origin(req);
+}
 function isRailwayPreview(req){
  const host=(req.headers.host||"").toLowerCase();
  return host.endsWith(".railway.app");
@@ -207,7 +225,7 @@ function analyticsSnippet(){
  </script>`;
 }
 function layout(title,desc,body,req,extraHead=""){
- const o=origin(req);
+ const o=canonicalOrigin(req);
  const robotsMeta='<meta name="robots" content="index,follow,max-image-preview:large">';
  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}">${robotsMeta}<link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${jsonLd(organizationSchema())}${extraHead}${analyticsSnippet()}
  <style>
@@ -361,7 +379,7 @@ function methodologyPage(req){
  return layout("Metodologia editorial e técnica | Arquindex","Como a Arquindex produz, revisa e atualiza conteúdos técnicos.",body,req,jsonLd(breadcrumbSchema([["Início","/"],["Metodologia","/metodologia"]],req)));
 }
 function sitemap(req,index){
- const o=origin(req);
+ const o=canonicalOrigin(req);
  const urls=[];
  for(const s of services) for(const c of cities) for(const i of intents) urls.push(`${o}/seo/${s[0]}/${slugCity(c)}/${i[0]}`);
  const start=index*1000, chunk=[]; // páginas locais aguardam revisão editorial e evidência local
@@ -369,6 +387,11 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(legacyRedirects.has(p)){
+  const target=legacyRedirects.get(p);
+  res.writeHead(301,{"location":target,"cache-control":"public, max-age=3600"});
+  return res.end();
+ }
  // The public documentation hub can be indexed; /seo/ remains noindex below.
  if(p==="/radar-concorrentes.json"){const data=await competitorRadar();res.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"public, max-age=3600"});return res.end(JSON.stringify(data));}
  if(p==="/radar-geo-aeo.json"){res.writeHead(200,{"content-type":"application/json; charset=utf-8"});return res.end(JSON.stringify(geoAudit(req)));}
