@@ -30,5 +30,32 @@ export async function competitorRadar(){
    return {...c,status:"acessivel",httpStatus:response.status,title,description};
   }catch(e){return {...c,status:"falha de coleta",error:String(e).slice(0,130)}}
  }));
- return {name:"Radar competitivo Arquindex",checkedAt,kind:"observacao de páginas públicas, não ranking",competitors:records,opportunities,methodology:"URLs públicas pré-aprovadas; títulos e descrições para análise editorial. Sem copiar artigos, sem alegar posições não medidas e sem indexação automática."};
+ return {name:"Radar competitivo Arquindex",checkedAt,kind:"observacao de páginas públicas, não ranking",competitors:records,opportunities:rankOpportunities(),gscSnapshot,methodology:"URLs públicas pré-aprovadas; títulos e descrições para análise editorial. Sem copiar artigos, sem alegar posições não medidas e sem indexação automática."};
+}
+
+// Historical Search Console snapshot: measured 2026-10-11, last settled date unavailable.
+// Never present these as live metrics or competitor rankings.
+export const gscSnapshot={
+ property:"sc-domain:arquindex.com.br",observedAt:"2026-10-11",dataSource:"Google Search Console via GSC Wizard",
+ settledThrough:null,
+ queries:[
+ {query:"empresa de guarda de documentos",clicks:1,impressions:38,ctrPct:2.63,position:11,topic:"Guarda",target:"/solucoes/guarda-documental"},
+ {query:"adequação lgpd empresas",clicks:0,impressions:5,ctrPct:0,position:17,topic:"LGPD",target:"/solucoes/consultoria-lgpd"},
+ {query:"empresas de digitalização de documentos",clicks:2,impressions:5,ctrPct:40,position:23.8,topic:"Digitalização",target:"/solucoes/digitalizacao-documentos"},
+ {query:"digitalização de documentos",clicks:1,impressions:90,ctrPct:1.11,position:27.19,topic:"Digitalização",target:"/solucoes/digitalizacao-documentos"},
+ {query:"serviço de digitalização de documentos",clicks:1,impressions:67,ctrPct:1.49,position:38.81,topic:"Digitalização",target:"/solucoes/digitalizacao-documentos"}
+ ],
+ pages:[
+ {page:"https://www.arquindex.com.br/guarda_de_documentos.html",clicks:1,impressions:293,ctrPct:0.34,position:17.41},
+ {page:"https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",clicks:1,impressions:108,ctrPct:0.93,position:7.8},
+ {page:"https://www.arquindex.com.br/",clicks:45,impressions:763,ctrPct:5.9,position:21.54}
+ ]
+};
+export function rankOpportunities(){
+ return opportunities.map(o=>{
+  const queries=gscSnapshot.queries.filter(q=>q.topic===o.category);
+  const totalImpressions=queries.reduce((n,q)=>n+q.impressions,0);
+  const nearTop10=queries.some(q=>q.position>=8&&q.position<=20);
+  return {...o,gscEvidence:{observedAt:gscSnapshot.observedAt,queries,impressions:totalImpressions,nearTop10},rankingSignal:nearTop10?"priorizar página próxima do top 10":totalImpressions>=50?"otimizar conteúdo já visível":"validar demanda e intenção"};
+ }).sort((a,b)=>Number(b.gscEvidence.nearTop10)-Number(a.gscEvidence.nearTop10)||b.gscEvidence.impressions-a.gscEvidence.impressions);
 }
