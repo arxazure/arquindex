@@ -174,6 +174,10 @@ function breadcrumbSchema(items,req){
 }
 function answerBox(title,text){return '<div class="answer"><strong>'+esc(title)+'</strong><p>'+esc(text)+'</p></div>';}
 function faqHtml(items){return items.map(([q,a])=>'<details class="faq"><summary>'+esc(q)+'</summary><p>'+esc(a)+'</p></details>').join("");}
+function aiIndexBlock(title,desc,req){
+ const path=new URL(req.url,canonicalOrigin(req)).pathname;
+ return '<section class="ai-index" aria-label="Resumo para mecanismos de busca e assistentes de IA"><div class="answer"><strong>Resumo da página para busca e IA</strong><p><strong>'+esc(title)+'</strong> — '+esc(desc)+'</p><p class="muted">Entidade: Arquindex · Área: gestão documental, digitalização, OCR, PDF/A, LGPD, DPO, Alfresco ECM, Databook e guarda documental · Atendimento empresarial no Brasil.</p><p><a href="/metodologia">Metodologia editorial</a> · <a href="/biblioteca-normativa">Fontes normativas</a> · <a href="/sitemap.xml">Sitemap</a> · <a href="/llms.txt">Mapa para assistentes de IA</a></p></div></section>';
+}
 function slugCity(c){return c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
 function origin(req){return "https://arquindex-web-production.up.railway.app";}
 function canonicalOrigin(req){
@@ -226,7 +230,7 @@ function analyticsSnippet(){
 }
 function layout(title,desc,body,req,extraHead=""){
  const o=canonicalOrigin(req);
- const robotsMeta='<meta name="robots" content="index,follow,max-image-preview:large">';
+ const robotsMeta='<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"><meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"><meta name="bingbot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">';
  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}">${robotsMeta}<link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${jsonLd(organizationSchema())}${extraHead}${analyticsSnippet()}
  <style>
  :root{--b:#0b3d91;--b2:#0b67c2;--ink:#0c1b33;--mut:#56657a;--bg:#f4f7fb;--card:#fff;--line:#d9e2ef;--g:#25d366}
@@ -240,7 +244,7 @@ function layout(title,desc,body,req,extraHead=""){
  @media(max-width:800px){.nav{display:none}.hero h1{font-size:36px}.grid,.trust,.foot,.steps,.kpis{grid-template-columns:1fr}.contact{font-size:12px}.cookie{flex-direction:column;align-items:stretch}}
  </style></head><body>
  <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
- ${body}
+ ${body}${aiIndexBlock(title,desc,req)}
  <a class="wafloat" aria-label="Fale com a Arquindex no WhatsApp" href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20saber%20mais%20sobre%20os%20servi%C3%A7os">✆</a>
  <div class="cookie" id="cookie"><p>Usamos cookies essenciais e, com sua autorização, cookies opcionais para melhorar sua experiência e mensurar o desempenho. Consulte nossa Política de Privacidade e Cookies.</p><button onclick="localStorage.setItem('aq_cookie','essential');this.parentElement.remove()">Rejeitar opcionais</button><button class="accept" onclick="localStorage.setItem('aq_cookie','all');this.parentElement.remove()">Aceitar todos</button></div>
  <script>if(localStorage.getItem('aq_cookie'))document.getElementById('cookie')?.remove()</script>
@@ -397,9 +401,74 @@ const server=http.createServer(async(req,res)=>{
  if(p==="/radar-geo-aeo.json"){res.writeHead(200,{"content-type":"application/json; charset=utf-8"});return res.end(JSON.stringify(geoAudit(req)));}
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
  if(p==="/favicon.ico"){res.writeHead(204);return res.end();}
- if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
- if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug)].map(path=>"<url><loc>"+origin(req)+path+"</loc></url>").join("")+"</urlset>");}
- const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){res.writeHead(410,{"content-type":"text/plain","x-robots-tag":"noindex"});return res.end("Sitemap antigo desativado. Consulte /sitemap.xml");}
+ if(p==="/robots.txt"){
+  const base=canonicalOrigin(req);
+  res.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"public, max-age=3600"});
+  return res.end([
+   "User-agent: *","Allow: /","",
+   "User-agent: GPTBot","Allow: /","",
+   "User-agent: OAI-SearchBot","Allow: /","",
+   "User-agent: ChatGPT-User","Allow: /","",
+   "User-agent: ClaudeBot","Allow: /","",
+   "User-agent: Claude-SearchBot","Allow: /","",
+   "User-agent: PerplexityBot","Allow: /","",
+   "User-agent: Google-Extended","Allow: /","",
+   "User-agent: Applebot-Extended","Allow: /","",
+   "User-agent: Bytespider","Allow: /","",
+   "Sitemap: "+base+"/sitemap.xml",
+   "Sitemap: "+base+"/sitemap-index.xml",
+   ""
+  ].join("\n"));
+ }
+ if(p==="/llms.txt"||p==="/ai.txt"){
+  const base=canonicalOrigin(req);
+  const txt=[
+   "# Arquindex",
+   "",
+   "Arquindex é uma empresa brasileira especializada em gestão documental e digitalização corporativa.",
+   "",
+   "## Áreas principais",
+   "- Digitalização de documentos, OCR, PDF/A e indexação",
+   "- Gestão documental, organização e guarda de arquivos",
+   "- Digitalização alinhada ao Decreto 10.278/2020 quando aplicável",
+   "- LGPD, DPO terceirizado e governança de privacidade",
+   "- Alfresco ECM/GED e workflows documentais",
+   "- Databook de engenharia e documentação técnica",
+   "- Descarte e incineração segura após avaliação documental",
+   "",
+   "## Páginas canônicas",
+   "- "+base+"/solucoes",
+   "- "+base+"/autoridade",
+   "- "+base+"/setores",
+   "- "+base+"/conteudo",
+   "- "+base+"/biblioteca-normativa",
+   "- "+base+"/metodologia",
+   "",
+   "## Descoberta",
+   "- Sitemap: "+base+"/sitemap.xml",
+   "- Robots: "+base+"/robots.txt",
+   "",
+   "Conteúdo público pode ser rastreado e resumido por mecanismos de busca e assistentes de IA, respeitando direitos autorais, privacidade e as políticas aplicáveis."
+  ].join("\n");
+  res.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"public, max-age=3600"});
+  return res.end(txt);
+ }
+ if(p==="/sitemap.xml"){
+  const base=canonicalOrigin(req), lastmod=new Date().toISOString().slice(0,10);
+  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug)];
+  const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc><lastmod>"+lastmod+"</lastmod></url>").join("")+"</urlset>";
+  res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
+  return res.end(xml);
+ }
+ if(p==="/sitemap-index.xml"){
+  const base=canonicalOrigin(req);
+  const xml='<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>'+base+'/sitemap.xml</loc></sitemap></sitemapindex>';
+  res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
+  return res.end(xml);
+ }
+ const legacySitemaps=new Set(["/sitemap-ai-clusters.xml","/sitemap-hybrid.xml","/sitemap-authority.xml","/sitemap-eeat.xml","/sitemap-brasil.xml","/sitemap_ai.xml","/sitemap-rebuilt1.xml","/sitemap-perfect.xml"]);
+ if(legacySitemaps.has(p)){res.writeHead(301,{"location":"/sitemap-index.xml","cache-control":"public, max-age=86400"});return res.end();}
+ const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){res.writeHead(301,{"location":"/sitemap-index.xml","cache-control":"public, max-age=86400"});return res.end();}
  if(p==="/biblioteca-normativa"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(normativeLibrary(req));}
  if(p==="/metodologia"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(methodologyPage(req));}
  if(p==="/autoridade"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(authorityListing(req));}
@@ -412,7 +481,7 @@ const server=http.createServer(async(req,res)=>{
  if(p==="/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(home(req));}
  if(p==="/solucoes"){const cards=services.map(([s,n,d,pr])=>`<article class="card"><h3>${n}</h3><p>${d}</p><div class="price">${pr}</div><a href="/solucoes/${s}">Detalhes →</a></article>`).join("");res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Soluções | Arquindex","Soluções de gestão documental, digitalização, LGPD, Alfresco ECM, Databook e arquivos.",`<section><h1>Soluções Arquindex</h1><div class="grid">${cards}</div></section>`,req));}
  const sol=p.match(/^\/solucoes\/([^/]+)$/); if(sol){const h=solutionPage(sol[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
- const m=p.match(/^\/seo\/([^/]+)\/([^/]+)\/([^/]+)$/); if(m){const h=seoPage(m[1],m[2],m[3],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"noindex, follow"});return res.end(h);}}
+ const m=p.match(/^\/seo\/([^/]+)\/([^/]+)\/([^/]+)$/); if(m){const h=seoPage(m[1],m[2],m[3],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow, max-snippet:-1, max-image-preview:large"});return res.end(h);}}
  if(p==="/api/indexnow"&&req.method==="POST"){res.writeHead(403,{"content-type":"application/json"});return res.end(JSON.stringify({ok:false,error:"Envio desabilitado ate aprovacao editorial e autenticacao"}));
  /*
    const key=process.env.INDEXNOW_KEY; if(!key){res.writeHead(503,{"content-type":"application/json"});return res.end(JSON.stringify({ok:false,error:"INDEXNOW_KEY not configured"}));}
