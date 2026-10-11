@@ -11,13 +11,13 @@ const BASE = (process.env.SITE_BASE_URL || "").replace(/\/$/,"");
 const WHATSAPP = "5531973632725";
 
 const services = [
-["digitalizacao-documentos","Digitalização de Documentos","Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.","A partir de R$ 0,10 por página"],
+["digitalizacao-documentos","Digitalização de Documentos","Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.","A partir de R$ 0,09 por página"],
 ["digitalizacao-certificada","Digitalização Certificada","Projeto de digitalização alinhado aos requisitos técnicos do Decreto 10.278/2020, com integridade, metadados e controle de qualidade.","Sob orçamento"],
 ["prontuarios-medicos","Digitalização de Prontuários Médicos","Organização, captura, OCR e indexação de prontuários com foco em rastreabilidade, sigilo e acesso controlado.","Sob orçamento"],
 ["gestao-documental","Gestão Documental","Classificação, plano de classificação, temporalidade, retenção, destinação, governança e acesso seguro.","Sob orçamento"],
 ["organizacao-arquivos","Organização de Arquivos","Organização física e digital, inventário, endereçamento, empréstimos, temporalidade e padronização.","Sob orçamento"],
 ["alfresco-incloud","Alfresco inCloud","ECM/GED em nuvem com permissões, metadados, versionamento, workflows, OCR, pesquisa e auditoria.","A partir de R$ 750"],
-["consultoria-lgpd","Adequação LGPD","Diagnóstico, mapeamento, ROPA, RIPD quando aplicável, políticas, contratos, cookies, direitos dos titulares e governança.","A partir de R$ 2.500"],
+["consultoria-lgpd","Adequação LGPD","Diagnóstico, mapeamento, ROPA, RIPD quando aplicável, políticas, contratos, cookies, direitos dos titulares e governança.","A partir de R$ 550 para pequenos negócios"],
 ["dpo-terceirizado","DPO Terceirizado","Encarregado terceirizado, acompanhamento, orientação, registros, canal de titulares e governança de privacidade.","A partir de R$ 299/mês"],
 ["databook","Databook","Organização de documentos de engenharia por volumes, capítulos, itens, subitens, índices, conferência e entrega.","Sob orçamento"],
 ["digitacao","Digitação e Processamento de Formulários","Captura estruturada, validação, conferência, tratamento de dados e relatórios de produtividade.","Sob orçamento"],
