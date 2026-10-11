@@ -110,6 +110,24 @@ const serviceBenefits = {
  "dpo-terceirizado":["Rotina de governança","Canal de titulares","Registro de decisões","Acompanhamento de pendências","Orientação contínua"]
 };
 
+const fastSeoGuides = {
+ "guarda-documental":{
+  heading:"Como escolher uma empresa de guarda de documentos",
+  intro:"Compare propostas de guarda documental pelo custo total, qualidade do inventário, prazo de atendimento, controle de acesso, rastreabilidade e procedimentos de destinação — não apenas pela mensalidade por caixa.",
+  steps:[["Inventário verificável","Cada caixa deve ter um identificador único, proprietário, conteúdo resumido, período e endereço de localização."],["SLA de consulta e devolução","Defina prazos por criticidade, responsável pela autorização, evidência de retirada, transporte e devolução."],["Custos transparentes","Solicite preços separados de armazenagem, implantação, coleta, consultas, digitalização sob demanda e descarte."],["Proteção e continuidade","Avalie controles de acesso, prevenção de incêndio, documentação de incidentes, backup do inventário e plano de contingência."],["Temporalidade e destinação","A eliminação de documentos depende de avaliação legal, autorização e registro; terceirizar a guarda não transfere automaticamente essas decisões."]],
+  questions:[["Quanto custa a guarda de documentos por caixa?","O preço depende de quantidade, dimensões das caixas, movimentações, localização e SLA; peça orçamento com custos recorrentes e por evento."],["Como saber se a empresa encontra meus arquivos?","Solicite demonstração do inventário, do endereçamento e do procedimento documentado de consulta e devolução."]]
+ },
+ "digitalizacao-documentos":{
+  heading:"Como contratar uma empresa de digitalização de documentos",
+  intro:"Uma comparação útil entre fornecedores começa pelo arquivo entregue e pelos controles realizados: resolução de captura, preparo físico, OCR, PDF/A, indexação, rastreabilidade, segurança e critérios de aceite.",
+  steps:[["Conferência de amostra","Teste documentos dobrados, folhas frente e verso, carimbos, anexos, tabelas e arquivos multipáginas."],["PDF pesquisável com OCR","Exija que o OCR possa ser testado por termos reais, inclusive nomes e números, sem confundir reconhecimento de texto com garantia de precisão total."],["Indexação e nomenclatura","Defina campos, convenção de arquivos e regras para documentos sem identificação legível."],["Controle de qualidade","Registre páginas ausentes, ilegíveis, recortadas ou fora de ordem; estabeleça plano de retrabalho."],["Entrega e segurança","Combine acesso, criptografia, retenção, hashes, formato de exportação e responsabilidades de descarte antes de iniciar o projeto."]],
+  questions:[["Quanto custa digitalizar documentos?","A Arquindex apresenta preço inicial a partir de R$ 0,10 por página, sujeito a volume, formatos, preparação, indexação, logística e requisitos técnicos."],["O que diferencia digitalização certificada de digitalização simples?","São relevantes os requisitos legais aplicáveis, a integridade, os metadados, a conferência e o processo documentado; apenas gerar PDF não comprova conformidade."]]
+ }
+};
+function fastSeoBlock(slug){
+ const g=fastSeoGuides[slug];if(!g)return "";
+ return '<section aria-label="Guia de contratação"><h2>'+esc(g.heading)+'</h2><p>'+esc(g.intro)+'</p>'+g.steps.map(([h,p])=>'<h3>'+esc(h)+'</h3><p>'+esc(p)+'</p>').join('')+'<h2>Dúvidas na contratação</h2>'+g.questions.map(([q,a])=>'<h3>'+esc(q)+'</h3><p>'+esc(a)+'</p>').join('')+'</section>';
+}
 const priorityEnhancements = {
  "guarda-documental":{
   title:"Guarda de Documentos para Empresas | Custódia, Inventário e SLA",
@@ -267,7 +285,7 @@ function solutionPage(slug,req){
  <h2 id="beneficios">Benefícios</h2><div class="kpis">${benefits}</div>${enhancementBlocks}
  <h2 id="processo">Processo técnico</h2><div class="steps"><div class="step"><strong>Diagnóstico</strong><p>Objetivo, volume, riscos, formatos, usuários e prazo.</p></div><div class="step"><strong>Preparação</strong><p>Regras, classificação, metadados, logística e critérios de aceite.</p></div><div class="step"><strong>Execução</strong><p>Produção em lotes com registros, controles e tratamento de exceções.</p></div><div class="step"><strong>Validação e entrega</strong><p>Qualidade, conferência, relatórios, entrega e continuidade.</p></div></div>
  <h2 id="preco">Preços e fatores de custo</h2><div class="card"><p class="price">${price}</p><p>O valor final depende de volume, formatos, preparação, prazo, deslocamento, indexação, requisitos técnicos, integrações e forma de entrega. Compare propostas pelo escopo completo, não apenas pelo valor unitário.</p></div>
- ${calculator}${ecosystemLinks(slug)}
+ ${calculator}${fastSeoBlock(slug)}${ecosystemLinks(slug)}
  <h2 id="conformidade">Conformidade, segurança e rastreabilidade</h2><p>O projeto pode envolver controles de acesso, registro de movimentações, confidencialidade, temporalidade, integridade e documentação de decisões. Requisitos legais e regulatórios devem ser avaliados conforme o tipo documental e o setor.</p>${extra}
  <h2 id="aplicacoes">Aplicações</h2><ul>${apps}</ul>
  <h2 id="experiencia">Experiência e evidências</h2><p>${caseTxt}</p><p>Estudos de caso detalhados, volumes, resultados e nomes de clientes só devem ser publicados quando houver informação verificável e autorização adequada.</p>
