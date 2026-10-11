@@ -3,6 +3,7 @@ import { URL } from "node:url";
 import { articles } from "./articles.js";
 import { landingPages } from "./landing-pages.js";
 import { authorityPages } from "./authority-pages.js";
+import { competitorRadar } from "./competitor-radar.js";
 
 const OFFICIAL="https://arquindex.com.br";
 const PORT = Number(process.env.PORT || 3000);
@@ -340,6 +341,7 @@ function sitemap(req,index){
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
  // The public documentation hub can be indexed; /seo/ remains noindex below.
+ if(p==="/radar-concorrentes.json"){const data=await competitorRadar();res.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"public, max-age=3600"});return res.end(JSON.stringify(data));}
  if(p==="/radar-geo-aeo.json"){res.writeHead(200,{"content-type":"application/json; charset=utf-8"});return res.end(JSON.stringify(geoAudit(req)));}
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
  if(p==="/favicon.ico"){res.writeHead(204);return res.end();}
