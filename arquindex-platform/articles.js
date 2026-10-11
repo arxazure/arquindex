@@ -1,5 +1,43 @@
 export const articles = [
   {
+  "slug": "rastreabilidade-digitalizacao-cadeia-custodia-ocr-hash",
+  "title": "Rastreabilidade na digitalização: cadeia de custódia, OCR e hash SHA-256",
+  "category": "Digitalização",
+  "lead": "Como documentar a trajetória do arquivo físico ao documento digital pesquisável sem confundir controles de integridade com autenticação jurídica.",
+  "sections": [
+    [
+      "O que significa rastreabilidade documental",
+      "Rastreabilidade é a capacidade de reconstruir o percurso de um documento, desde o recebimento do acervo e identificação da caixa até a digitalização, conferência, indexação, entrega e eventual movimentação do original. Uma boa trilha registra lote, operador, data, etapa, ocorrência, versão e decisão tomada, mantendo relação com a identificação original."
+    ],
+    [
+      "A cadeia de custódia começa antes do scanner",
+      "No recebimento, registre remetente, quantidade de volumes, estado aparente, lacres quando houver, responsável e protocolo. Para cada transferência interna, anote quem entregou, quem recebeu e o momento. Exceções como folhas rasgadas, páginas ilegíveis, documentos misturados ou lacres rompidos precisam de tratamento e validação, não de correção silenciosa."
+    ],
+    [
+      "OCR e PDF/A cumprem funções diferentes",
+      "OCR cria uma camada de texto para busca e extração. PDF/A trata de requisitos de preservação do arquivo ao longo do tempo. Nenhum dos dois, isoladamente, demonstra autoria ou validade jurídica. Amostras de qualidade devem incluir tabelas, carimbos, escrita inclinada, baixa resolução e documentos de múltiplas páginas para aferir legibilidade e fidelidade."
+    ],
+    [
+      "Hash SHA-256 permite conferir integridade",
+      "Uma função hash como SHA-256 produz um resumo criptográfico do conteúdo do arquivo. Se o conteúdo mudar, o resumo tende a mudar. Registre o hash junto ao identificador do documento, versão, data e sistema que o calculou. O hash não comprova sozinho quem produziu o arquivo, quando foi criado nem a legitimidade do processo; para isso são necessários controles adicionais, e assinatura digital quando exigida."
+    ],
+    [
+      "Conferência e assinatura devem seguir critérios definidos",
+      "Defina pontos de controle para páginas faltantes, ordem, orientação, cortes, resolução, OCR, nome, metadados e separação correta de documentos. A assinatura digital com certificado ICP-Brasil, quando aplicável, deve ocorrer após a aprovação da versão final, com guarda do arquivo assinado, evidências e registros de validação. Não altere um arquivo assinado sem prever novo processo de validação."
+    ],
+    [
+      "Indicadores para auditoria e melhoria contínua",
+      "Monitore percentuais de páginas rejeitadas, documentos sem identificação, retrabalho, tempo de processamento, ocorrências de custódia e inconsistências de hashes. Use um identificador estável para relacionar caixa, lote, documento, registro de indexação e PDF final. Esses registros tornam a entrega verificável e ajudam a localizar falhas antes da disponibilização ao cliente."
+    ],
+    [
+      "Como contratar um projeto com controle documental",
+      "Informe tipos de documentos, estimativa de páginas, formatos, presença de dados pessoais, requisitos de indexação, prazo, locais de coleta e critérios de aceite. Solicite descrição do processo de custódia, dos testes de OCR, do formato de entrega e dos relatórios disponibilizados. Antes de descartar originais, verifique regras legais e tabela de temporalidade aplicáveis."
+    ]
+  ],
+  "source": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/D10278.htm",
+  "reviewed": "2026-10-11"
+},
+  {
     "slug": "digitalizacao-certificada-decreto-10278",
     "title": "Digitalização certificada e Decreto 10.278/2020",
     "category": "Digitalização",
