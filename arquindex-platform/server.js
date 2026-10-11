@@ -189,7 +189,7 @@ function analyticsSnippet(){
 }
 function layout(title,desc,body,req,extraHead=""){
  const o=origin(req);
- const robotsMeta=isRailwayPreview(req)?'<meta name="robots" content="noindex,nofollow,noarchive">':'<meta name="robots" content="index,follow">';
+ const robotsMeta='<meta name="robots" content="index,follow,max-image-preview:large">';
  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}">${robotsMeta}<link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${jsonLd(organizationSchema())}${extraHead}${analyticsSnippet()}
  <style>
  :root{--b:#0b3d91;--b2:#0b67c2;--ink:#0c1b33;--mut:#56657a;--bg:#f4f7fb;--card:#fff;--line:#d9e2ef;--g:#25d366}
@@ -202,12 +202,12 @@ function layout(title,desc,body,req,extraHead=""){
  footer{background:#071a3a;color:#dce7f7;padding:40px 22px}.foot{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}.cookie{position:fixed;left:18px;right:18px;bottom:18px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px #0003;border-radius:14px;padding:16px;z-index:50;display:flex;gap:16px;align-items:center}.cookie p{margin:0;flex:1;font-size:13px}.cookie button{border:0;padding:10px 13px;border-radius:8px;cursor:pointer}.accept{background:var(--b);color:#fff}
  @media(max-width:800px){.nav{display:none}.hero h1{font-size:36px}.grid,.trust,.foot,.steps,.kpis{grid-template-columns:1fr}.contact{font-size:12px}.cookie{flex-direction:column;align-items:stretch}}
  </style></head><body>
- <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
+ <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
  ${body}
  <a class="wafloat" aria-label="Fale com a Arquindex no WhatsApp" href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20saber%20mais%20sobre%20os%20servi%C3%A7os">✆</a>
  <div class="cookie" id="cookie"><p>Usamos cookies essenciais e, com sua autorização, cookies opcionais para melhorar sua experiência e mensurar o desempenho. Consulte nossa Política de Privacidade e Cookies.</p><button onclick="localStorage.setItem('aq_cookie','essential');this.parentElement.remove()">Rejeitar opcionais</button><button class="accept" onclick="localStorage.setItem('aq_cookie','all');this.parentElement.remove()">Aceitar todos</button></div>
  <script>if(localStorage.getItem('aq_cookie'))document.getElementById('cookie')?.remove()</script>
- <footer><div class="foot"><div><strong>Arquindex</strong><p>Há 20 anos apoiando empresas na transformação de arquivos em informação estratégica.</p></div><div><strong>Atendimento</strong><p>WhatsApp: 31 97363-2725<br>comercial@arquindex.com.br<br>Belo Horizonte / MG</p></div><div><strong>Ecossistema Arquindex</strong><p><a style="color:#fff" href="https://arquindex.com.br/">Site oficial</a> · <a style="color:#fff" href="https://arquindex.com.br/blog.html">Blog e acervo</a> · <a style="color:#fff" href="/conteudo">Artigos técnicos</a></p></div></div></footer></body></html>`;
+ <footer><div class="foot"><div><strong>Arquindex</strong><p>Há 20 anos apoiando empresas na transformação de arquivos em informação estratégica.</p></div><div><strong>Atendimento</strong><p>WhatsApp: 31 97363-2725<br>comercial@arquindex.com.br<br>Belo Horizonte / MG</p></div><div><strong>Ecossistema Arquindex</strong><p><a style="color:#fff" href="https://arquindex.com.br/">Site oficial</a> · <a style="color:#fff" href="https://arquindex.com.br/blog.html">Blog e acervo</a> · <a style="color:#fff" href="/conteudo">Artigos técnicos</a> · <a style="color:#fff" href="/autoridade">Guias de referência</a> · <a style="color:#fff" href="https://arquindex.com.br/#services">Serviços do site oficial</a></p></div></div></footer></body></html>`;
 }
 function home(req){
  const cards=services.slice(0,12).map(([s,n,d,p])=>`<article class="card"><h3>${n}</h3><p class="muted">${d}</p><div class="price">${p}</div><p><a href="/solucoes/${s}">Conhecer solução →</a></p></article>`).join("");
@@ -339,11 +339,11 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
- if(isRailwayPreview(req))res.setHeader("x-robots-tag","noindex, nofollow, noarchive");
+ // The public documentation hub can be indexed; /seo/ remains noindex below.
  if(p==="/radar-geo-aeo.json"){res.writeHead(200,{"content-type":"application/json; charset=utf-8"});return res.end(JSON.stringify(geoAudit(req)));}
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
  if(p==="/favicon.ico"){res.writeHead(204);return res.end();}
- if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});if(isRailwayPreview(req))return res.end("User-agent: *\nDisallow: /\n");return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
+ if(p==="/robots.txt"){res.writeHead(200,{"content-type":"text/plain"});return res.end(`User-agent: *\nAllow: /\nSitemap: ${origin(req)}/sitemap.xml\n`);}
  if(p==="/sitemap.xml"){res.writeHead(200,{"content-type":"application/xml"});return res.end('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug)].map(path=>"<url><loc>"+origin(req)+path+"</loc></url>").join("")+"</urlset>");}
  const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){res.writeHead(410,{"content-type":"text/plain","x-robots-tag":"noindex"});return res.end("Sitemap antigo desativado. Consulte /sitemap.xml");}
  if(p==="/biblioteca-normativa"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(normativeLibrary(req));}
