@@ -232,6 +232,17 @@ function home(req){
  const extra=jsonLd(breadcrumbSchema([["Início","/"]],req));
  return layout("Arquindex | Gestão Documental, Digitalização, LGPD e ECM","Há 20 anos em gestão documental, digitalização, LGPD, Alfresco ECM, Databook e organização de arquivos.",body,req,extra);
 }
+function ecosystemLinks(slug){
+ const links={
+ "digitalizacao-documentos":[["Rastreabilidade, OCR e hash","/conteudo/rastreabilidade-digitalizacao-cadeia-custodia-ocr-hash"],["Digitalização certificada","/conteudo/digitalizacao-certificada-decreto-10278"]],
+ "consultoria-lgpd":[["Guias e artigos LGPD","/conteudo"],["Biblioteca normativa LGPD","/biblioteca-normativa"]],
+ "guarda-documental":[["Guarda corporativa e rastreabilidade","/autoridade/guarda-documental-corporativa"],["Gestão documental","/solucoes/gestao-documental"]],
+ "alfresco-incloud":[["Alfresco ECM corporativo","/autoridade/alfresco-ecm-ged-corporativo"],["Artigos sobre ECM","/conteudo"]],
+ "databook":[["Databook de engenharia industrial","/autoridade/databook-engenharia-industrial"],["Documentos de engenharia","/solucoes/engenharia"]]
+ };
+ const items=links[slug];if(!items)return "";
+ return '<aside class="card" aria-label="Leitura complementar"><h2>Guias técnicos relacionados</h2><p>Aprofunde este serviço com conteúdos da plataforma Arquindex.</p><ul>'+items.map(([label,path])=>'<li><a href="'+path+'">'+esc(label)+'</a></li>').join("")+'</ul><p><a href="https://arquindex.com.br/">Conheça também o site oficial da Arquindex</a></p></aside>';
+}
 function solutionPage(slug,req){
  const s=services.find(x=>x[0]===slug); if(!s)return null;
  const [_,name,desc,price]=s;
@@ -256,7 +267,7 @@ function solutionPage(slug,req){
  <h2 id="beneficios">Benefícios</h2><div class="kpis">${benefits}</div>${enhancementBlocks}
  <h2 id="processo">Processo técnico</h2><div class="steps"><div class="step"><strong>Diagnóstico</strong><p>Objetivo, volume, riscos, formatos, usuários e prazo.</p></div><div class="step"><strong>Preparação</strong><p>Regras, classificação, metadados, logística e critérios de aceite.</p></div><div class="step"><strong>Execução</strong><p>Produção em lotes com registros, controles e tratamento de exceções.</p></div><div class="step"><strong>Validação e entrega</strong><p>Qualidade, conferência, relatórios, entrega e continuidade.</p></div></div>
  <h2 id="preco">Preços e fatores de custo</h2><div class="card"><p class="price">${price}</p><p>O valor final depende de volume, formatos, preparação, prazo, deslocamento, indexação, requisitos técnicos, integrações e forma de entrega. Compare propostas pelo escopo completo, não apenas pelo valor unitário.</p></div>
- ${calculator}
+ ${calculator}${ecosystemLinks(slug)}
  <h2 id="conformidade">Conformidade, segurança e rastreabilidade</h2><p>O projeto pode envolver controles de acesso, registro de movimentações, confidencialidade, temporalidade, integridade e documentação de decisões. Requisitos legais e regulatórios devem ser avaliados conforme o tipo documental e o setor.</p>${extra}
  <h2 id="aplicacoes">Aplicações</h2><ul>${apps}</ul>
  <h2 id="experiencia">Experiência e evidências</h2><p>${caseTxt}</p><p>Estudos de caso detalhados, volumes, resultados e nomes de clientes só devem ser publicados quando houver informação verificável e autorização adequada.</p>
