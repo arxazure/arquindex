@@ -1,5 +1,39 @@
 export const articles = [
   {
+    "slug": "empresa-guarda-documentos-como-escolher",
+    "title": "Empresa de guarda de documentos: como escolher com segurança",
+    "category": "Guarda Documental",
+    "lead": "Critérios práticos para comparar custódia física, inventário, rastreabilidade, SLA, temporalidade e digitalização sob demanda.",
+    "sections": [
+      ["O que uma empresa de guarda de documentos realmente entrega","A guarda documental profissional vai além de armazenar caixas. O serviço precisa permitir localizar, movimentar, consultar e destinar documentos com rastreabilidade. Inventário, endereçamento, protocolos de retirada e devolução, controle de acesso e critérios de temporalidade tornam o acervo gerenciável e auditável."],
+      ["Como comparar propostas de guarda documental","Compare implantação, inventário inicial, mensalidade, movimentações, consultas, digitalização sob demanda, devoluções, descarte autorizado e relatórios. Um valor mensal aparentemente menor pode gerar custo maior quando serviços essenciais são cobrados separadamente."],
+      ["Rastreabilidade e SLA","Defina como cada caixa recebe um identificador, como sua localização é registrada, quem pode solicitar documentos e qual o prazo de atendimento. O SLA deve separar consultas normais, urgentes, retirada física, digitalização sob demanda e devolução."],
+      ["Temporalidade e descarte","Guardar tudo indefinidamente aumenta custo e risco. O acervo deve ser associado a critérios de retenção e destinação aplicáveis ao negócio. A eliminação precisa ser autorizada e registrada, sem presumir que a digitalização por si só permite destruir originais."],
+      ["Segurança e proteção de dados","Documentos físicos podem conter dados pessoais, informações financeiras, trabalhistas e sigilosas. Controles de acesso, registro de movimentações, confidencialidade e procedimentos de incidente devem fazer parte do serviço."],
+      ["Quando digitalizar sob demanda","Acervos pouco consultados podem permanecer sob custódia física enquanto documentos solicitados são digitalizados conforme necessidade. Esse modelo pode reduzir manuseio e acelerar o acesso sem exigir conversão integral imediata."],
+      ["Checklist para contratação","Informe quantidade e padrão das caixas, departamentos, frequência de consulta, prazo de guarda, necessidade de digitalização, local de coleta e requisitos de segurança. Peça demonstração do inventário, relatórios, SLA e processo de devolução ou descarte."]
+    ],
+    "source": "https://www.gov.br/conarq/pt-br",
+    "reviewed": "2026-10-11"
+  },
+  {
+    "slug": "classificacao-documentos-ocr",
+    "title": "Classificação de documentos com OCR: como automatizar sem perder controle",
+    "category": "Digitalização",
+    "lead": "OCR pode apoiar classificação e indexação, mas a qualidade depende de regras, campos-alvo, confiança, validação e tratamento de exceções.",
+    "sections": [
+      ["OCR não é classificação automática por si só","OCR transforma imagem em texto pesquisável. Para classificar documentos, o sistema precisa combinar o texto reconhecido com regras, palavras-chave, campos estruturados, padrões de layout, metadados e critérios de confiança."],
+      ["Campos-alvo reduzem erros","Quando existe um rótulo conhecido, como Nome, Matrícula, CPF, Tipo de Documento ou Data, a extração deve priorizar o valor associado a esse campo em vez de qualquer texto solto da página. Isso reduz falsos positivos."],
+      ["Similaridade e contexto","Nomes podem aparecer com acentos diferentes, abreviações ou falhas de leitura. Técnicas de similaridade ajudam a reconciliar variações, mas devem considerar páginas anteriores e seguintes para evitar separar documentos multipágina de forma incorreta."],
+      ["Tratamento de páginas sem identificação","Uma página sem nome não deve necessariamente iniciar um novo documento. Em prontuários, dossiês e formulários multipágina, é mais seguro manter a página vinculada ao documento anterior até surgir evidência clara de um novo registro."],
+      ["Confiança e revisão humana","Automação eficaz separa casos de alta confiança dos casos ambíguos. Um painel de validação permite revisar exceções, corrigir classificação e alimentar regras futuras sem interromper o processamento de todo o lote."],
+      ["OCR, PDF pesquisável e indexação","O arquivo final pode combinar imagem preservada, camada OCR pesquisável e metadados externos. Esses recursos têm funções diferentes: o OCR melhora a busca, enquanto a indexação estrutura os campos usados para recuperar e organizar documentos."],
+      ["Como começar um projeto","Defina tipos documentais, campos obrigatórios, exemplos reais, limites de confiança, regras de separação, convenções de nomes e indicadores de erro. Teste primeiro em uma amostra representativa antes de processar grandes volumes."]
+    ],
+    "source": "https://www.gov.br/conarq/pt-br",
+    "reviewed": "2026-10-11"
+  },
+  {
   "slug": "rastreabilidade-digitalizacao-cadeia-custodia-ocr-hash",
   "title": "Rastreabilidade na digitalização: cadeia de custódia, OCR e hash SHA-256",
   "category": "Digitalização",
