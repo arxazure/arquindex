@@ -1,6 +1,8 @@
 import http from "node:http";
 import { URL } from "node:url";
-import { articles } from "./articles.js";
+import { articles as previousArticles } from "./articles.js";
+import { top10Articles, top10Guides } from "./top10-content.js";
+const articles=[...previousArticles,...top10Articles];
 import { landingPages } from "./landing-pages.js";
 import { authorityPages } from "./authority-pages.js";
 import { competitorRadar } from "./competitor-radar.js";
@@ -243,7 +245,7 @@ function layout(title,desc,body,req,extraHead=""){
  footer{background:#071a3a;color:#dce7f7;padding:40px 22px}.foot{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}.cookie{position:fixed;left:18px;right:18px;bottom:18px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px #0003;border-radius:14px;padding:16px;z-index:50;display:flex;gap:16px;align-items:center}.cookie p{margin:0;flex:1;font-size:13px}.cookie button{border:0;padding:10px 13px;border-radius:8px;cursor:pointer}.accept{background:var(--b);color:#fff}
  @media(max-width:800px){.nav{display:none}.hero h1{font-size:36px}.grid,.trust,.foot,.steps,.kpis{grid-template-columns:1fr}.contact{font-size:12px}.cookie{flex-direction:column;align-items:stretch}}
  </style></head><body>
- <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
+ <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="/guias">Guias operacionais</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
  ${body}${aiIndexBlock(title,desc,req)}
  <a class="wafloat" aria-label="Fale com a Arquindex no WhatsApp" href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20saber%20mais%20sobre%20os%20servi%C3%A7os">✆</a>
  <div class="cookie" id="cookie"><p>Usamos cookies essenciais e, com sua autorização, cookies opcionais para melhorar sua experiência e mensurar o desempenho. Consulte nossa Política de Privacidade e Cookies.</p><button onclick="localStorage.setItem('aq_cookie','essential');this.parentElement.remove()">Rejeitar opcionais</button><button class="accept" onclick="localStorage.setItem('aq_cookie','all');this.parentElement.remove()">Aceitar todos</button></div>
@@ -374,6 +376,17 @@ function articlePage(slug,req){
  return layout(a.title+" | Blog Arquindex",a.lead,body,req,'<script type="application/ld+json">'+schema+'</script>');
 }
 
+function top10Listing(req){
+ const cards=top10Guides.map(a=>'<article class="card"><div class="eyebrow">'+esc(a.category)+'</div><h2><a href="/guias/'+a.slug+'">'+esc(a.title)+'</a></h2><p>'+esc(a.lead)+'</p></article>').join('');
+ return layout('Guias operacionais de gestão documental | Arquindex','100 guias práticos por tipo documental e tarefa: OCR, indexação, acesso, aprovação e migração.','<section><h1>Guias operacionais para empresas</h1><p>Orientações por tipo de documento e tarefa. Exemplos ilustrativos; requisitos, logística e condições são definidos conforme o projeto.</p><div class="grid">'+cards+'</div></section>',req);
+}
+function top10GuidePage(slug,req){
+ const a=top10Guides.find(x=>x.slug===slug);if(!a)return null;
+ const sections=a.sections.map(([h,p])=>'<h2>'+esc(h)+'</h2><p>'+esc(p)+'</p>').join('');
+ const body='<section style="max-width:900px"><p><a href="/guias">Guias operacionais</a> · '+esc(a.category)+'</p><h1>'+esc(a.title)+'</h1>'+answerBox('Resposta direta',a.lead)+'<p class="muted">Equipe editorial Arquindex · Atualizado em '+a.reviewed+'</p>'+sections+'<h2>Planeje o próximo passo</h2><p>Informe volume, cidade, formatos e consultas prioritárias. A equipe dimensionará o projeto conforme o escopo.</p><a class="btn whats" href="https://wa.me/'+WHATSAPP+'">Falar com a Arquindex</a><p><a href="/solucoes">Soluções relacionadas</a> · <a href="/conteudo">Artigos</a> · <a href="/metodologia">Metodologia</a></p></section>';
+ const data={'@context':'https://schema.org','@type':'Article',headline:a.title,dateModified:a.reviewed,author:{'@type':'Organization',name:'Arquindex'},publisher:{'@type':'Organization',name:'Arquindex'}};
+ return layout(a.title+' | Arquindex',a.lead,body,req,jsonLd(data));
+}
 function normativeLibrary(req){
  const body='<div class="hero"><div class="wrap"><div class="eyebrow">Biblioteca normativa</div><h1>Legislação e referências para gestão documental e privacidade</h1><p>Fontes oficiais para apoiar decisões sobre digitalização, proteção de dados, classificação, temporalidade e preservação.</p></div></div><section>'+answerBox("Como usar esta biblioteca","Use as referências oficiais para validar requisitos jurídicos e técnicos. Conteúdos da Arquindex devem distinguir obrigação legal, orientação normativa e boa prática.")+'<div class="grid"><article class="card"><h2>Decreto 10.278/2020</h2><p>Requisitos técnicos relacionados à digitalização de documentos públicos ou privados nos casos abrangidos pela norma.</p><a href="https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm" rel="noopener noreferrer">Fonte oficial →</a></article><article class="card"><h2>Lei Geral de Proteção de Dados</h2><p>Lei nº 13.709/2018, com princípios, bases legais, direitos, agentes de tratamento e governança.</p><a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" rel="noopener noreferrer">Fonte oficial →</a></article><article class="card"><h2>CONARQ</h2><p>Referências arquivísticas, orientações e instrumentos para gestão, classificação e preservação documental.</p><a href="https://www.gov.br/conarq/pt-br" rel="noopener noreferrer">Portal oficial →</a></article></div></section>';
  return layout("Biblioteca normativa | Arquindex","Fontes oficiais sobre Decreto 10.278/2020, LGPD e CONARQ.",body,req,jsonLd(breadcrumbSchema([["Início","/"],["Biblioteca normativa","/biblioteca-normativa"]],req)));
@@ -455,7 +468,7 @@ const server=http.createServer(async(req,res)=>{
  }
  if(p==="/sitemap.xml"){
   const base=canonicalOrigin(req), lastmod=new Date().toISOString().slice(0,10);
-  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug)];
+  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug)];
   const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc><lastmod>"+lastmod+"</lastmod></url>").join("")+"</urlset>";
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
@@ -469,6 +482,8 @@ const server=http.createServer(async(req,res)=>{
  const legacySitemaps=new Set(["/sitemap-ai-clusters.xml","/sitemap-hybrid.xml","/sitemap-authority.xml","/sitemap-eeat.xml","/sitemap-brasil.xml","/sitemap_ai.xml","/sitemap-rebuilt1.xml","/sitemap-perfect.xml"]);
  if(legacySitemaps.has(p)){res.writeHead(301,{"location":"/sitemap-index.xml","cache-control":"public, max-age=86400"});return res.end();}
  const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){res.writeHead(301,{"location":"/sitemap-index.xml","cache-control":"public, max-age=86400"});return res.end();}
+ if(p==="/guias"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(top10Listing(req));}
+ const guide=p.match(/^\/guias\/([a-z0-9-]+)$/);if(guide){const h=top10GuidePage(guide[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
  if(p==="/biblioteca-normativa"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(normativeLibrary(req));}
  if(p==="/metodologia"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(methodologyPage(req));}
  if(p==="/autoridade"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(authorityListing(req));}
@@ -498,7 +513,7 @@ server.listen(PORT,"0.0.0.0",()=>console.log("Arquindex running on",PORT));
 async function notifyIndexNowForPublishedPages(){
  const key=process.env.INDEXNOW_KEY;
  if(!key || !/^[A-Za-z0-9-]{8,128}$/.test(key)){console.log("IndexNow skipped: key missing or invalid");return;}
- const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato",...services.map(x=>"/solucoes/"+x[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug)];
+ const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato",...services.map(x=>"/solucoes/"+x[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug)];
  const host="arquindex-web-production.up.railway.app";
  const payload={host,key,keyLocation:"https://"+host+"/"+key+".txt",urlList:[...new Set(paths)].map(path=>"https://"+host+path)};
  try{
@@ -509,4 +524,5 @@ async function notifyIndexNowForPublishedPages(){
 if(process.env.NODE_ENV==="production"&&process.env.INDEXNOW_AUTO_SUBMIT==="true"&&BASE===OFFICIAL){
  setTimeout(()=>{notifyIndexNowForPublishedPages().catch(err=>console.warn("IndexNow error",String(err)));},12000);
 }
+
 
