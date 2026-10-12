@@ -6,6 +6,7 @@ const articles=[...previousArticles,...top10Articles];
 import { landingPages } from "./landing-pages.js";
 import { authorityPages } from "./authority-pages.js";
 import { competitorRadar } from "./competitor-radar.js";
+import { regionalGuides, regionalPage, regionalIndex } from "./regional-guides.js";
 
 const OFFICIAL="https://arquindex.com.br";
 const PORT = Number(process.env.PORT || 3000);
@@ -468,7 +469,7 @@ const server=http.createServer(async(req,res)=>{
  }
  if(p==="/sitemap.xml"){
   const base=canonicalOrigin(req), lastmod=new Date().toISOString().slice(0,10);
-  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug)];
+  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao",...regionalGuides.map(a=>a.path)];
   const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc><lastmod>"+lastmod+"</lastmod></url>").join("")+"</urlset>";
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
@@ -482,6 +483,8 @@ const server=http.createServer(async(req,res)=>{
  const legacySitemaps=new Set(["/sitemap-ai-clusters.xml","/sitemap-hybrid.xml","/sitemap-authority.xml","/sitemap-eeat.xml","/sitemap-brasil.xml","/sitemap_ai.xml","/sitemap-rebuilt1.xml","/sitemap-perfect.xml"]);
  if(legacySitemaps.has(p)){res.writeHead(301,{"location":"/sitemap-index.xml","cache-control":"public, max-age=86400"});return res.end();}
  const sm=p.match(/^\/sitemap-(\d+)\.xml$/); if(sm){res.writeHead(301,{"location":"/sitemap-index.xml","cache-control":"public, max-age=86400"});return res.end();}
+ if(p==="/digitalizacao"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Digitalização por cidade e preços | Arquindex","Guias de digitalização de documentos e preço por página em capitais e cidades da Grande BH.",regionalIndex(),req));}
+ const regionalMatch=p.match(/^\/digitalizacao\/(local|preco)\/([a-z0-9-]+)\/?$/);if(regionalMatch){const guide=regionalPage(regionalMatch[2],regionalMatch[1]);if(guide){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow"});return res.end(layout(guide.title,guide.description,guide.body,req,guide.head));}}
  if(p==="/guias"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(top10Listing(req));}
  const guide=p.match(/^\/guias\/([a-z0-9-]+)$/);if(guide){const h=top10GuidePage(guide[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
  if(p==="/biblioteca-normativa"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(normativeLibrary(req));}
