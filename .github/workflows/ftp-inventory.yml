@@ -20,11 +20,12 @@ jobs:
         env:
           FTP_HOST: ftp.arquindex.com.br
           FTP_USERNAME: chat1@arquindex.com.br
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           INPUT_REMOTE_DIR: ${{ inputs.remote_dir }}
         run: |
           python - <<'PY'
-          import ftplib, os, ssl, sys
+          import ftplib, os, ssl, sys, socket
           host = os.getenv('FTP_HOST')
           user = os.getenv('FTP_USERNAME')
           password = os.getenv('FTP_PASSWORD')
@@ -34,8 +35,11 @@ jobs:
               sys.exit('Faltam secrets com os nomes esperados; nenhum acesso foi tentado.')
           try:
               port = 21
+              tls_host = (os.getenv('FTP_TLS_HOST') or '').strip() or host
+              if tls_host != host:
+                  print('TLS: usando nome alternativo configurado para validacao do certificado.')
               ftp = ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=20)
-              ftp.connect(host, port)
+              ftp.connect(tls_host, port)
               ftp.login(user, password)
               ftp.prot_p()
               print('FTPS com TLS: conexao e autenticacao OK')
@@ -79,8 +83,10 @@ jobs:
               print('Outros nomes omitidos para evitar vazamento de dados em logs.')
               ftp.quit()
               print('Diagnostico concluido. Nenhum arquivo alterado.')
-          except (ftplib.all_errors, OSError, ValueError) as exc:
+          except (*ftplib.all_errors, OSError, ValueError) as exc:
               print('Falha de conexao, TLS, permissao ou listagem:', type(exc).__name__)
+              if isinstance(exc, ssl.SSLCertVerificationError):
+                  print('Certificado TLS nao corresponde ao host usado. Solicite o hostname FTPS certificado ao provedor e configure a variavel FTP_TLS_HOST em Actions.')
               sys.exit(1)
           PY
 
