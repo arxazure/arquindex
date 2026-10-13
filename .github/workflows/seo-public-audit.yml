@@ -1,0 +1,54 @@
+name: Auditoria publica SEO Arquindex
+on:
+  push:
+    paths:
+      - '.github/workflows/seo-public-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Verificar URLs publicas sem modificar o site
+        run: |
+          python - <<'PY'
+          import urllib.request, urllib.error, json, datetime
+          urls=[
+            "https://arquindex.com.br/",
+            "https://www.arquindex.com.br/",
+            "http://arquindex.com.br/",
+            "http://www.arquindex.com.br/",
+            "https://arquindex.com.br/robots.txt",
+            "https://www.arquindex.com.br/robots.txt",
+            "https://arquindex.com.br/sitemap.xml",
+            "https://www.arquindex.com.br/sitemap.xml",
+            "http://www.arquindex.com.br/sitemap.xml",
+            "http://arquindex.com.br/sitemap.txt",
+            "http://arquindex.com.br/sitemap_index.xml",
+            "http://arquindex.com.br/lista_subdominios_e_sitemaps.txt"
+          ]
+          output=[]
+          for url in urls:
+            row={"url":url}
+            try:
+              req=urllib.request.Request(url,headers={"User-Agent":"ArquindexSEOAudit/1.0"},method="GET")
+              with urllib.request.urlopen(req,timeout=12) as response:
+                body=response.read(512000)
+                row.update(status=response.status,final_url=response.url,content_type=response.headers.get("Content-Type"),bytes_sampled=len(body))
+                if "sitemap" in url or "robots.txt" in url:
+                  row["looks_like_html"]=b"<html" in body[:1000].lower()
+                  row["looks_like_sitemap"]=b"<urlset" in body[:3000].lower() or b"<sitemapindex" in body[:3000].lower()
+            except urllib.error.HTTPError as e: row.update(status=e.code,error="HTTPError")
+            except Exception as e: row.update(error=type(e).__name__)
+            output.append(row)
+            print(json.dumps(row,ensure_ascii=False))
+          with open("seo-public-audit.json","w") as f:json.dump({"checked_at":datetime.datetime.now(datetime.timezone.utc).isoformat(),"results":output},f,ensure_ascii=False,indent=2)
+          PY
+      - name: Salvar resultado da auditoria
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-seo-public-audit
+          path: seo-public-audit.json
+          retention-days: 14
