@@ -1,55 +1,68 @@
-name: Inventario FTP somente leitura
+name: Diagnostico FTPS Homehost (somente leitura)
 on:
   workflow_dispatch:
+    inputs:
+      remote_dir:
+        description: 'Diretorio remoto relativo a raiz FTP (deixe vazio para autodetectar)'
+        required: false
+        default: ''
 permissions:
   contents: read
 jobs:
-  inventory:
+  ftps-check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Verificar nomes de secrets sem exibir valores
+      - name: Diagnosticar conexao FTPS sem alterar servidor
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          python - <<'PY'
-          import os
-          for name in ('FTP_HOST','FTP_SERVER','FTP_USERNAME','FTP_USER','FTP_PASSWORD'):
-              print(f'{name}: ' + ('configurado' if os.getenv(name) else 'ausente'))
-          PY
-      - name: Listar diretorio remoto sem modificar arquivos
-        env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ vars.FTP_PORT }}
           FTP_DIR: ${{ vars.FTP_DIR }}
+          INPUT_REMOTE_DIR: ${{ inputs.remote_dir }}
         run: |
           python - <<'PY'
-          import os, ftplib, ssl, posixpath
-          host=os.getenv('FTP_HOST') or os.getenv('FTP_SERVER')
-          user=os.getenv('FTP_USERNAME') or os.getenv('FTP_USER')
-          password=os.getenv('FTP_PASSWORD')
+          import ftplib, os, ssl, sys
+          host = os.getenv('FTP_HOST') or os.getenv('FTP_SERVER')
+          user = os.getenv('FTP_USERNAME') or os.getenv('FTP_USER')
+          password = os.getenv('FTP_PASSWORD')
+          for label, present in [('servidor', bool(host)), ('usuario', bool(user)), ('senha', bool(password))]:
+              print(f'{label}: ' + ('configurado' if present else 'AUSENTE'))
           if not all((host,user,password)):
-              print('Credenciais esperadas nao encontradas; confira nomes dos secrets.')
-              raise SystemExit(1)
-          ftp=ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=20)
-          ftp.connect(host,21)
-          ftp.login(user,password)
-          ftp.prot_p()
-          remote=os.getenv('FTP_DIR') or 'public_html'
-          ftp.cwd(remote)
-          print('Conexao FTPS estabelecida. Pasta remota acessivel.')
-          names=ftp.nlst()
-          for name in names[:150]:
-              base=posixpath.basename(name.rstrip('/'))
-              if base and not base.startswith('.'):
-                  print('Arquivo ou pasta:',base)
-          print('Total de entradas listadas:',len(names))
-          ftp.quit()
+              sys.exit('Faltam secrets com os nomes esperados; nenhum acesso foi tentado.')
+          try:
+              port = int(os.getenv('FTP_PORT') or '21')
+              ftp = ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=20)
+              ftp.connect(host, port)
+              ftp.login(user, password)
+              ftp.prot_p()
+              print('FTPS com TLS: conexao e autenticacao OK')
+              start = ftp.pwd()
+              print('Diretorio inicial acessivel.')
+              requested = (os.getenv('INPUT_REMOTE_DIR') or os.getenv('FTP_DIR') or '').strip()
+              candidates = [requested] if requested else ['public_html', '/public_html', '.', '/home/arquind2/public_html']
+              selected = None
+              for candidate in candidates:
+                  try:
+                      ftp.cwd(start)
+                      ftp.cwd(candidate)
+                      selected = candidate
+                      break
+                  except ftplib.error_perm:
+                      continue
+              if selected is None:
+                  sys.exit('Autenticado, mas nenhum diretorio candidato foi acessivel. Ajuste FTP_DIR.')
+              print('Diretorio remoto selecionado:', selected)
+              entries = ftp.nlst()
+              print('Total de entradas:', len(entries))
+              for item in entries[:100]:
+                  print('Entrada:', item.rsplit('/', 1)[-1])
+              ftp.quit()
+              print('Diagnostico concluido. Nenhum arquivo alterado.')
+          except (ftplib.all_errors, OSError, ValueError) as exc:
+              print('Falha de conexao, TLS, permissao ou listagem:', type(exc).__name__)
+              sys.exit(1)
           PY
