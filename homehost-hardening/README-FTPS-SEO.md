@@ -17,3 +17,16 @@ Destino: Homehost, diretório `public_html`. O Railway é um site separado e nã
 - Conferir os códigos HTTP, canonicals, sitemap e conteúdo publicado após o envio.
 - O script não configura uma sincronização automática GitHub → Homehost; precisa ser executado num ambiente com credenciais e acesso FTPS.
 - Não publicar automaticamente todas as URLs da planilha: status de indexação não significa ausência física do arquivo.
+
+
+## Auditoria real dos URLs do Search Console (sem publicação)
+O script `audit-ftps.ts` recebe JSON `{"urls":[{"url":"https://www.arquindex.com.br/caminho/"}]}`, ou array de URLs.
+Use a exportação de auditoria `arquindex_auditoria_homehost_2026-10-12.json` gerada a partir das duas planilhas; ela contém 2.000 registros em `urls`, inclusive subdomínios, que são marcados como `other-host` e NÃO publicados.
+No ambiente que já tem as variáveis de FTP:
+```sh
+bun run homehost-hardening/audit-ftps.ts ./arquindex_auditoria_homehost_2026-10-12.json > homehost-ftps-audit-result.json
+```
+O comando é somente leitura. Não use o serviço do site Railway para servir páginas da Homehost; caso use infraestrutura auxiliar para executar o comando, não altere a aplicação web.
+O resultado distingue `ftp-file-present`, `ftp-file-missing`, `directory-missing-or-inaccessible`, `other-host` e arquivos internos. Falha de acesso não equivale a 404.
+Para publicar, é necessário revisar o conteúdo original, montar manifesto `{schemaVersion:1,host:"www.arquindex.com.br",files:[{path,content,sha256}]}` e primeiro simular com `homehost-ftps-publish.ts`.
+ATENÇÃO: o relatório do Search Console não é manifesto de publicação; não gere páginas em massa a partir dos slugs.
