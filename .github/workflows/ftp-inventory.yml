@@ -18,27 +18,22 @@ jobs:
     steps:
       - name: Diagnosticar conexao FTPS sem alterar servidor
         env:
-          FTP_HOMEHOST: ${{ secrets.FTP_HOMEHOST }}
           FTP_HOST: ftp.arquindex.com.br
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: chat1@arquindex.com.br
-          FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_PORT: ${{ vars.FTP_PORT }}
-          FTP_DIR: ${{ vars.FTP_DIR }}
           INPUT_REMOTE_DIR: ${{ inputs.remote_dir }}
         run: |
           python - <<'PY'
           import ftplib, os, ssl, sys
-          host = os.getenv('FTP_HOMEHOST') or os.getenv('FTP_HOST') or os.getenv('FTP_SERVER')
-          user = os.getenv('FTP_USERNAME') or os.getenv('FTP_USER')
+          host = os.getenv('FTP_HOST')
+          user = os.getenv('FTP_USERNAME')
           password = os.getenv('FTP_PASSWORD')
           for label, present in [('servidor', bool(host)), ('usuario', bool(user)), ('senha', bool(password))]:
               print(f'{label}: ' + ('configurado' if present else 'AUSENTE'))
           if not all((host,user,password)):
               sys.exit('Faltam secrets com os nomes esperados; nenhum acesso foi tentado.')
           try:
-              port = int(os.getenv('FTP_PORT') or '21')
+              port = 21
               ftp = ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=20)
               ftp.connect(host, port)
               ftp.login(user, password)
@@ -46,7 +41,7 @@ jobs:
               print('FTPS com TLS: conexao e autenticacao OK')
               start = ftp.pwd()
               print('Diretorio inicial acessivel.')
-              requested = (os.getenv('INPUT_REMOTE_DIR') or os.getenv('FTP_DIR') or '').strip()
+              requested = (os.getenv('INPUT_REMOTE_DIR') or '').strip()
               # Contas FTP restritas podem iniciar diretamente dentro de public_html.
               # Tentamos primeiro o diretorio inicial, depois um nivel acima e a raiz.
               candidates = ([requested] if requested else
