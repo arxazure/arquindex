@@ -40,51 +40,50 @@ jobs:
               print('FTP sem TLS: conexao e autenticacao OK')
               start = ftp.pwd()
               print('Diretorio inicial acessivel.')
-              requested = (os.getenv('INPUT_REMOTE_DIR') or '').strip()
-              print('Diretorio inicial (FTP):', start)
-              candidates = ([requested] if requested else
-                            ['.', 'public_html', '../public_html', '..', '/', '/public_html',
-                             '/home/arquind2/public_html'])
-              selected = None
-              for candidate in candidates:
+              import collections, time
+              start = ftp.pwd()
+              for i in range(2):
+                  before = ftp.pwd()
                   try:
-                      ftp.cwd(start)
-                      ftp.cwd(candidate)
-                      current = ftp.pwd()
-                      names = {x.rstrip('/').rsplit('/',1)[-1] for x in ftp.nlst()}
-                      site_markers = {'index.php','index.html','robots.txt','sitemap.xml','.htaccess'}
-                      print('Candidato:', candidate, 'diretorio:', current, 'entradas:', len(names))
-                      print('Indicadores presentes:', ', '.join(sorted(names & site_markers)) or 'nenhum')
-                      print('Pastas conhecidas:', ', '.join(sorted(names & {'public_html','www','htdocs','httpdocs'})) or 'nenhuma')
-                      if names & site_markers:
-                          selected = current
-                          break
-                      for dirname in ('public_html','www','htdocs','httpdocs'):
-                          if dirname in names:
-                              try:
-                                  ftp.cwd(dirname)
-                                  selected = ftp.pwd()
-                                  print('Subdiretorio publico acessivel:', dirname)
-                                  break
-                              except ftplib.error_perm:
-                                  pass
-                      if selected:
-                          break
-                  except (ftplib.error_perm, OSError) as exc:
-                      print('Candidato indisponivel:', candidate, type(exc).__name__)
-              if selected is None:
-                  print('FTP autenticado; nenhuma raiz publica identificada. A conta pode estar limitada a pasta vazia ou diferente de public_html.')
-                  ftp.quit()
-                  sys.exit(2)
-              print('Diretorio remoto selecionado:', selected)
-              entries = ftp.nlst()
-              print('Total de entradas:', len(entries))
-              safe_names = {'index.html','index.php','wp-config.php','wp-content','wp-includes','wp-admin','robots.txt','sitemap.xml','.htaccess','assets','css','js','composer.json','package.json'}
-              found = {item.rstrip('/').rsplit('/', 1)[-1] for item in entries}
-              print('Indicadores de tecnologia encontrados:')
-              for name in sorted(found & safe_names):
-                  print(' -', name)
-              print('Outros nomes omitidos para evitar vazamento de dados em logs.')
+                      ftp.cwd('..')
+                      print('Subida', i+1, 'de 2:', 'mesma raiz virtual' if ftp.pwd()==before else 'nivel superior acessivel')
+                  except ftplib.all_errors as exc:
+                      print('Subida', i+1, 'de 2: acesso negado:', type(exc).__name__)
+              root = ftp.pwd()
+              queue = collections.deque([(root, 0)])
+              visited = set()
+              directories = files = errors = 0
+              started = time.monotonic()
+              limit = 10000
+              while queue and directories < limit and time.monotonic()-started < 900:
+                  path, depth = queue.popleft()
+                  if path in visited:
+                      continue
+                  visited.add(path)
+                  try:
+                      ftp.cwd(path)
+                      entries = list(ftp.mlsd())
+                      directories += 1
+                      for name, facts in entries:
+                          if name in ('.','..'):
+                              continue
+                          kind = facts.get('type','').lower()
+                          if kind == 'dir':
+                              child = ftp.pwd().rstrip('/') + '/' + name
+                              if child not in visited:
+                                  queue.append((child, depth+1))
+                          elif kind == 'file':
+                              files += 1
+                      if directories % 100 == 0:
+                          print('Progresso: pastas',directories,'arquivos',files,flush=True)
+                  except ftplib.error_perm:
+                      errors += 1
+                      print('Pasta sem acesso ou MLSD indisponivel; diagnostico parcial.')
+                  except (OSError, EOFError) as exc:
+                      errors += 1
+                      print('Erro de listagem:',type(exc).__name__)
+              print('Inventario FTP: pastas',directories,'arquivos',files,'erros',errors,'pendentes',len(queue))
+              print('Nomes e caminhos internos omitidos dos logs.')
               ftp.quit()
               print('Diagnostico concluido. Nenhum arquivo alterado.')
           except (*ftplib.all_errors, OSError, ValueError) as exc:
