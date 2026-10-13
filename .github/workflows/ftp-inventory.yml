@@ -58,8 +58,12 @@ jobs:
               print('Diretorio remoto selecionado:', selected)
               entries = ftp.nlst()
               print('Total de entradas:', len(entries))
-              for item in entries[:100]:
-                  print('Entrada:', item.rsplit('/', 1)[-1])
+              safe_names = {'index.html','index.php','wp-config.php','wp-content','wp-includes','wp-admin','robots.txt','sitemap.xml','.htaccess','assets','css','js','composer.json','package.json'}
+              found = {item.rstrip('/').rsplit('/', 1)[-1] for item in entries}
+              print('Indicadores de tecnologia encontrados:')
+              for name in sorted(found & safe_names):
+                  print(' -', name)
+              print('Outros nomes omitidos para evitar vazamento de dados em logs.')
               ftp.quit()
               print('Diagnostico concluido. Nenhum arquivo alterado.')
           except (ftplib.all_errors, OSError, ValueError) as exc:
