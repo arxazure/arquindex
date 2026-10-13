@@ -73,3 +73,5 @@ jobs:
               print('Falha de conexao, TLS, permissao ou listagem:', type(exc).__name__)
               sys.exit(1)
           PY
+
+# Execucao solicitada em 2026-10-13: auditoria FTPS somente leitura.
