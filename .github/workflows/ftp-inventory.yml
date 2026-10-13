@@ -41,8 +41,7 @@ jobs:
               start = ftp.pwd()
               print('Diretorio inicial acessivel.')
               requested = (os.getenv('INPUT_REMOTE_DIR') or '').strip()
-              # Contas FTP restritas podem iniciar diretamente dentro de public_html.
-              # Tentamos primeiro o diretorio inicial, depois um nivel acima e a raiz.
+              print('Diretorio inicial (FTP):', start)
               candidates = ([requested] if requested else
                             ['.', 'public_html', '../public_html', '..', '/', '/public_html',
                              '/home/arquind2/public_html'])
@@ -51,22 +50,32 @@ jobs:
                   try:
                       ftp.cwd(start)
                       ftp.cwd(candidate)
+                      current = ftp.pwd()
                       names = {x.rstrip('/').rsplit('/',1)[-1] for x in ftp.nlst()}
                       site_markers = {'index.php','index.html','robots.txt','sitemap.xml','.htaccess'}
+                      print('Candidato:', candidate, 'diretorio:', current, 'entradas:', len(names))
+                      print('Indicadores presentes:', ', '.join(sorted(names & site_markers)) or 'nenhum')
+                      print('Pastas conhecidas:', ', '.join(sorted(names & {'public_html','www','htdocs','httpdocs'})) or 'nenhuma')
                       if names & site_markers:
-                          selected = candidate
-                          print('Raiz publica identificada por arquivos do site.')
+                          selected = current
                           break
-                      if candidate in ('.', '/', '..') and 'public_html' in names:
-                          ftp.cwd('public_html')
-                          selected = candidate.rstrip('/') + '/public_html'
-                          print('Diretorio public_html encontrado a partir da raiz acessivel.')
+                      for dirname in ('public_html','www','htdocs','httpdocs'):
+                          if dirname in names:
+                              try:
+                                  ftp.cwd(dirname)
+                                  selected = ftp.pwd()
+                                  print('Subdiretorio publico acessivel:', dirname)
+                                  break
+                              except ftplib.error_perm:
+                                  pass
+                      if selected:
                           break
-                      print('Candidato acessivel sem indicadores de raiz publica:', candidate)
-                  except (ftplib.error_perm, OSError):
-                      continue
+                  except (ftplib.error_perm, OSError) as exc:
+                      print('Candidato indisponivel:', candidate, type(exc).__name__)
               if selected is None:
-                  sys.exit('Nenhuma raiz publica identificada. Confira o diretorio inicial e as permissoes da conta FTP.')
+                  print('FTP autenticado; nenhuma raiz publica identificada. A conta pode estar limitada a pasta vazia ou diferente de public_html.')
+                  ftp.quit()
+                  sys.exit(2)
               print('Diretorio remoto selecionado:', selected)
               entries = ftp.nlst()
               print('Total de entradas:', len(entries))
