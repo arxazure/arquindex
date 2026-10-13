@@ -15,9 +15,9 @@ jobs:
     steps:
       - name: Diagnosticar conexao FTPS sem alterar servidor
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_HOST: ftp.arquindex.com.br
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_USERNAME: arquind2
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_PORT: ${{ vars.FTP_PORT }}
