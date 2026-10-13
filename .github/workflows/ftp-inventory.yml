@@ -19,7 +19,7 @@ jobs:
       - name: Diagnosticar conexao FTPS sem alterar servidor
         env:
           FTP_HOST: ftp.arquindex.com.br
-          FTP_USERNAME: chat1@arquindex.com.br
+          FTP_USERNAME: arquind2
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           INPUT_REMOTE_DIR: ${{ inputs.remote_dir }}
         run: |
@@ -36,7 +36,11 @@ jobs:
               port = 21
               ftp = ftplib.FTP(timeout=20)
               ftp.connect(host, port)
-              ftp.login(user, password)
+              try:
+                  ftp.login(user, password)
+              except ftplib.error_perm:
+                  print('Autenticacao recusada: FTP_PASSWORD deve conter a senha do usuario arquind2.')
+                  raise
               print('FTP sem TLS: conexao e autenticacao OK')
               start = ftp.pwd()
               print('Diretorio inicial acessivel.')
