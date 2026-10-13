@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       remote_dir:
-        description: 'Opcional: public_html, ../public_html ou /; vazio detecta automaticamente'
+        description: 'Destino apos subir dois niveis; vazio tenta arquind2/public_html e a raiz publica conhecida'
         required: false
         default: ''
 permissions:
@@ -50,12 +50,33 @@ jobs:
                   except ftplib.all_errors as exc:
                       print('Subida', i+1, 'de 2: acesso negado:', type(exc).__name__)
               root = ftp.pwd()
+              requested = os.getenv('INPUT_REMOTE_DIR', '').strip()
+              candidates = [requested] if requested else [
+                  'arquind2/public_html',
+                  '/arquind2/public_html',
+                  '/home/arquind2/public_html',
+                  'public_html',
+              ]
+              selected = None
+              for candidate in candidates:
+                  try:
+                      ftp.cwd(root)
+                      ftp.cwd(candidate)
+                      selected = ftp.pwd()
+                      print('Destino solicitado acessivel:', candidate, flush=True)
+                      break
+                  except ftplib.error_perm:
+                      print('Destino solicitado sem acesso:', candidate, flush=True)
+              if selected is None:
+                  ftp.quit()
+                  sys.exit('FTP autenticado, mas a pasta do site nao esta acessivel. Nenhum arquivo alterado.')
+              root = selected
               queue = collections.deque([(root, 0)])
               visited = set()
               directories = files = errors = 0
               started = time.monotonic()
               limit = 10000
-              while queue and directories < limit and time.monotonic()-started < 900:
+              while queue and directories < limit and time.monotonic()-started < 420:
                   path, depth = queue.popleft()
                   if path in visited:
                       continue
