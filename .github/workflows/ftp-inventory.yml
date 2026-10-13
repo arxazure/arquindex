@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       remote_dir:
-        description: 'Diretorio remoto relativo a raiz FTP (deixe vazio para autodetectar)'
+        description: 'Opcional: public_html, ../public_html ou /; vazio detecta automaticamente'
         required: false
         default: ''
 permissions:
@@ -46,18 +46,32 @@ jobs:
               start = ftp.pwd()
               print('Diretorio inicial acessivel.')
               requested = (os.getenv('INPUT_REMOTE_DIR') or os.getenv('FTP_DIR') or '').strip()
-              candidates = [requested] if requested else ['public_html', '/public_html', '.', '/home/arquind2/public_html']
+              # Contas FTP restritas podem iniciar diretamente dentro de public_html.
+              # Tentamos primeiro o diretorio inicial, depois um nivel acima e a raiz.
+              candidates = ([requested] if requested else
+                            ['.', 'public_html', '../public_html', '..', '/', '/public_html',
+                             '/home/arquind2/public_html'])
               selected = None
               for candidate in candidates:
                   try:
                       ftp.cwd(start)
                       ftp.cwd(candidate)
-                      selected = candidate
-                      break
-                  except ftplib.error_perm:
+                      names = {x.rstrip('/').rsplit('/',1)[-1] for x in ftp.nlst()}
+                      site_markers = {'index.php','index.html','robots.txt','sitemap.xml','.htaccess'}
+                      if names & site_markers:
+                          selected = candidate
+                          print('Raiz publica identificada por arquivos do site.')
+                          break
+                      if candidate in ('.', '/', '..') and 'public_html' in names:
+                          ftp.cwd('public_html')
+                          selected = candidate.rstrip('/') + '/public_html'
+                          print('Diretorio public_html encontrado a partir da raiz acessivel.')
+                          break
+                      print('Candidato acessivel sem indicadores de raiz publica:', candidate)
+                  except (ftplib.error_perm, OSError):
                       continue
               if selected is None:
-                  sys.exit('Autenticado, mas nenhum diretorio candidato foi acessivel. Ajuste FTP_DIR.')
+                  sys.exit('Nenhuma raiz publica identificada. Confira o diretorio inicial e as permissoes da conta FTP.')
               print('Diretorio remoto selecionado:', selected)
               entries = ftp.nlst()
               print('Total de entradas:', len(entries))
