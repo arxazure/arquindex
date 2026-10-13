@@ -18,6 +18,7 @@ jobs:
     steps:
       - name: Diagnosticar conexao FTPS sem alterar servidor
         env:
+          FTP_HOMEHOST: ${{ secrets.FTP_HOMEHOST }}
           FTP_HOST: ftp.arquindex.com.br
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: chat1@arquindex.com.br
@@ -29,7 +30,7 @@ jobs:
         run: |
           python - <<'PY'
           import ftplib, os, ssl, sys
-          host = os.getenv('FTP_HOST') or os.getenv('FTP_SERVER')
+          host = os.getenv('FTP_HOMEHOST') or os.getenv('FTP_HOST') or os.getenv('FTP_SERVER')
           user = os.getenv('FTP_USERNAME') or os.getenv('FTP_USER')
           password = os.getenv('FTP_PASSWORD')
           for label, present in [('servidor', bool(host)), ('usuario', bool(user)), ('senha', bool(password))]:
