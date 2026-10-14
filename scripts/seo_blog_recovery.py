@@ -51,6 +51,7 @@ def main():
         requested[slug]=url
     def recover(slug):
         try:return slug,get_article(slug),None
+        except ValueError as e:return slug,None,str(e)
         except Exception as e:return slug,None,type(e).__name__
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool: results=list(pool.map(recover,requested))
     articles={slug:a for slug,a,error in results if a}
@@ -62,20 +63,29 @@ def main():
     for slug,a in articles.items():
         url=mapping[requested[slug]]
         content,n=patch_links(a['content'],requested[slug],mapping);links+=n
+        # Embedded articles originally resolve relative references on the homepage.
+        def absolute_reference(match):
+            value=html.unescape(match.group(3))
+            if not value or value.startswith('#') or urllib.parse.urlsplit(value).scheme:
+                return match.group(0)
+            target=urllib.parse.urljoin(requested[slug],value)
+            return match.group(1)+'='+match.group(2)+html.escape(target,quote=True)+match.group(2)
+        content=re.sub(r'(?<![\w:-])(href|src)\s*=\s*(["\x27])(.*?)\2',absolute_reference,content,flags=re.I|re.S)
         related=[(s,b) for s,b in articles.items() if s!=slug][:6]
-        body='<article><h1>'+html.escape(a['title'])+'</h1><time datetime="'+html.escape(a.get('isoDate',''),quote=True)+'">'+html.escape(a.get('date',''))+'</time>'
-        image=a.get('image','')
+        body='<article><h1>'+html.escape(a['title'])+'</h1><time datetime="'+html.escape(a.get('isoDate') or '',quote=True)+'">'+html.escape(a.get('date') or '')+'</time>'
+        image=a.get('image') or ''
         if image.startswith('https://'):body+='<p><img src="'+html.escape(image,quote=True)+'" alt="'+html.escape(a['title'],quote=True)+'"></p>'
         body+='<div class="article-content">'+content+'</div></article><aside aria-label="Artigos relacionados"><h2>Leia também</h2><ul>'
         body+=''.join('<li><a href="'+mapping[requested[s]]+'">'+html.escape(b['title'])+'</a></li>' for s,b in related)+'</ul><a href="/'+PREFIX+'/">Todos os artigos</a></aside>'
-        data={'@context':'https://schema.org','@type':'BlogPosting','headline':a['title'],'description':a.get('excerpt',''),'datePublished':a.get('isoDate',''),'mainEntityOfPage':url,'publisher':{'@type':'Organization','name':'Arquindex','url':BASE+'/'}}
+        data={'@context':'https://schema.org','@type':'BlogPosting','headline':a['title'],'description':a.get('excerpt') or '', 'mainEntityOfPage':url,'publisher':{'@type':'Organization','name':'Arquindex','url':BASE+'/'}}
+        if a.get('isoDate'):data['datePublished']=a['isoDate']
         if image.startswith('https://'):data['image']=image
         path=PREFIX+'/'+slug+'/index.html'
         if read(path,optional=True) is not None:raise ValueError('Destino ja existe; publicar exige comparacao')
-        changes[path]=shell(a['title'],a.get('excerpt',''),url,body,data)
+        changes[path]=shell(a['title'],a.get('excerpt') or '',url,body,data)
     index_path=PREFIX+'/index.html'
     if read(index_path,optional=True) is not None:raise ValueError('Indice ja existe')
-    cards='<h1>Artigos da Arquindex</h1><p>Digitalização, gestão documental, privacidade e soluções ECM.</p><div class="cards">'+''.join('<article><h2><a href="'+mapping[requested[s]]+'">'+html.escape(a['title'])+'</a></h2><p>'+html.escape(a.get('excerpt',''))+'</p></article>' for s,a in articles.items())+'</div>'
+    cards='<h1>Artigos da Arquindex</h1><p>Digitalização, gestão documental, privacidade e soluções ECM.</p><div class="cards">'+''.join('<article><h2><a href="'+mapping[requested[s]]+'">'+html.escape(a['title'])+'</a></h2><p>'+html.escape(a.get('excerpt') or '')+'</p></article>' for s,a in articles.items())+'</div>'
     changes[index_path]=shell('Artigos originais da Arquindex','Artigos sobre digitalização, gestão documental, LGPD e ECM.',BASE+'/'+PREFIX+'/',cards)
     # Only change existing public HTML whose bytes match the served document.
     for path in ['index.html','blog/index.html']:
@@ -121,6 +131,7 @@ def main():
             raw=read(path,optional=True)
             if raw is not None:z.writestr(path,raw)
         z.writestr('manifest.json',json.dumps({'new_files':[p for p in changes if originals[p] is None],'changed_files':list(changes),'articles':list(articles),'mapping':mapping},ensure_ascii=False))
+        z.writestr('recovered-original-articles.json',json.dumps(articles,ensure_ascii=False))
     zipped=archive.getvalue();ftp.storbinary('STOR '+backup+'/originais.zip',io.BytesIO(zipped))
     verified=bytearray();ftp.retrbinary('RETR '+backup+'/originais.zip',verified.extend)
     if bytes(verified)!=zipped:raise ValueError('Backup divergiu')
