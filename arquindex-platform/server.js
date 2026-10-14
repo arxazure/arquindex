@@ -371,11 +371,16 @@ function contentListing(req){
 }
 function articlePage(slug,req){
  const a=articles.find(a=>a.slug===slug);if(!a)return null;
- const sections=a.sections.map(([h,p])=>'<h2>'+esc(h)+'</h2><p>'+esc(p)+'</p>').join("");
- const service=a.category==="Digitalização"?"/solucoes/digitalizacao-documentos":a.category==="Alfresco"?"/solucoes/alfresco-incloud":"/solucoes/consultoria-lgpd";
- const schema=JSON.stringify({"@context":"https://schema.org","@type":"Article",headline:a.title,dateModified:a.reviewed,author:{"@type":"Organization",name:"Arquindex"},publisher:{"@type":"Organization",name:"Arquindex"}});
- const body='<section style="max-width:860px"><p><a href="/conteudo">← Voltar aos artigos</a> · <a href="https://arquindex.com.br/blog.html">Blog oficial e acervo histórico</a></p><p class="muted">'+esc(a.category)+' · Revisado em '+esc(a.reviewed)+'</p><h1>'+esc(a.title)+'</h1><p style="font-size:19px">'+esc(a.lead)+'</p>'+sections+'<h2>Referência e leitura adicional</h2><p><a href="'+esc(a.source)+'" rel="noopener noreferrer">Consultar fonte técnica ou normativa</a></p><div class="card"><h2>Planeje seu projeto com a Arquindex</h2><p>Conheça as soluções relacionadas ao tema e solicite um orçamento conforme o escopo de sua organização.</p><a href="'+service+'">Conhecer solução</a> · <a href="/contato">Pedir orçamento</a></div></section>';
- return layout(a.title+" | Blog Arquindex",a.lead,body,req,'<script type="application/ld+json">'+schema+'</script>');
+ const sections=a.sections.map(([h,p],i)=>'<h2 id="sec-'+(i+1)+'">'+esc(h)+'</h2><p>'+esc(p)+'</p>').join("");
+ const toc=a.sections.length>3?'<nav class="toc" aria-label="Neste artigo">'+a.sections.map(([h],i)=>'<a href="#sec-'+(i+1)+'">'+esc(h)+'</a>').join("")+'</nav>':"";
+ const faqs=(a.faqs||[]).map(([q,answer])=>'<details class="faq"><summary>'+esc(q)+'</summary><p>'+esc(answer)+'</p></details>').join("");
+ const service=a.category==="Digitalização"?"/solucoes/digitalizacao-documentos":a.category==="Alfresco"?"/solucoes/alfresco-incloud":a.category==="Gestão Documental"?"/solucoes/gestao-documental":"/solucoes/consultoria-lgpd";
+ const o=canonicalOrigin(req), articleUrl=o+"/conteudo/"+a.slug;
+ const schema={"@context":"https://schema.org","@type":"Article",headline:a.title,description:a.lead,datePublished:a.published||a.reviewed,dateModified:a.reviewed,inLanguage:"pt-BR",mainEntityOfPage:articleUrl,author:{"@type":"Organization",name:"Arquindex",url:o},publisher:{"@type":"Organization",name:"Arquindex",url:o}};
+ const faqSchema=(a.faqs||[]).length?{"@context":"https://schema.org","@type":"FAQPage",mainEntity:a.faqs.map(([q,answer])=>({"@type":"Question",name:q,acceptedAnswer:{"@type":"Answer",text:answer}}))}:null;
+ const head=jsonLd(schema)+jsonLd(breadcrumbSchema([["Início","/"],["Conteúdo","/conteudo"],[a.title,"/conteudo/"+a.slug]],req))+(faqSchema?jsonLd(faqSchema):"");
+ const body='<section style="max-width:860px"><p><a href="/conteudo">← Voltar aos artigos</a> · <a href="https://arquindex.com.br/blog.html">Blog oficial e acervo histórico</a></p><p class="muted">'+esc(a.category)+' · Publicado em '+esc(a.published||a.reviewed)+' · Revisado em '+esc(a.reviewed)+'</p><h1>'+esc(a.title)+'</h1><p style="font-size:19px">'+esc(a.lead)+'</p>'+(a.quickAnswer?answerBox("Resposta direta",a.quickAnswer):"")+toc+sections+(faqs?'<h2>Perguntas frequentes</h2>'+faqs:"")+'<h2>Referência oficial</h2><p><a href="'+esc(a.source)+'" rel="noopener noreferrer">Consultar a fonte primária</a></p><p><a href="/biblioteca-normativa">Biblioteca normativa</a> · <a href="/conteudo">Mais conteúdos sobre gestão documental</a></p><div class="card"><h2>Planeje seu projeto com a Arquindex</h2><p>Conheça as soluções relacionadas ao tema e solicite um orçamento conforme o escopo de sua organização.</p><a href="'+service+'">Conhecer solução</a> · <a href="/contato">Pedir orçamento</a></div></section>';
+ return layout(a.title+" | Blog Arquindex",a.lead,body,req,head);
 }
 
 function top10Listing(req){
