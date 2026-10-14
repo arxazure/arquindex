@@ -1,4 +1,4 @@
-import concurrent.futures, datetime, ftplib, hashlib, html, html.parser, io, json, os, posixpath, re, sys, time, urllib.error, urllib.parse, urllib.request, uuid
+import concurrent.futures, datetime, ftplib, hashlib, html, html.parser, io, json, os, posixpath, re, sys, time, urllib.error, urllib.parse, urllib.request, uuid, zipfile
 import xml.etree.ElementTree as ET
 BASE = "https://www.arquindex.com.br"
 HOSTS = {"arquindex.com.br", "www.arquindex.com.br"}
@@ -43,7 +43,7 @@ def patch_canonical(text, old, new):
     def link(m):
         nonlocal count
         tag = m.group(0)
-        rel = re.search(r'\brel\s*=\s*(["\x27])(.*?)\1', tag, re.I | re.S)
+        rel = re.search(r'(?<![\w:-])rel\s*=\s*(["\x27])(.*?)\1', tag, re.I | re.S)
         if not rel or "canonical" not in rel.group(2).lower().split():
             return tag
         def href(h):
@@ -52,7 +52,7 @@ def patch_canonical(text, old, new):
                 return h.group(0)
             count += 1
             return "href=" + h.group(1) + html.escape(new, quote=True) + h.group(1)
-        return re.sub(r'\bhref\s*=\s*(["\x27])(.*?)\1', href, tag, flags=re.I | re.S)
+        return re.sub(r'(?<![\w:-])href\s*=\s*(["\x27])(.*?)\1', href, tag, flags=re.I | re.S)
     result = re.sub(r"<link\b[^>]*>", link, text, flags=re.I | re.S)
     return result, count
 def patch_links(text, page_url, mapping):
@@ -75,7 +75,7 @@ def patch_links(text, page_url, mapping):
                 return h.group(0)
             count += 1
             return "href=" + h.group(1) + html.escape(target, quote=True) + h.group(1)
-        return re.sub(r'\bhref\s*=\s*(["\x27])(.*?)\1', href, tag, flags=re.I | re.S)
+        return re.sub(r'(?<![\w:-])href\s*=\s*(["\x27])(.*?)\1', href, tag, flags=re.I | re.S)
     return re.sub(r"<a\b[^>]*>", anchor, text, flags=re.I | re.S), count
 def main():
     password = os.environ.get("FTP_PASSWORD", "")
@@ -158,7 +158,11 @@ def main():
         source_pages[source] = {"url": final, "old_canonical": canon[0], "data": raw}
     changes, canonical_changes, link_changes, sitemap_changes = {}, 0, 0, 0
     for path, page in source_pages.items():
-        text = page["data"].decode("utf-8")
+        try:
+            text = page["data"].decode("utf-8")
+        except UnicodeDecodeError:
+            review.append({"url": page["url"], "reason": "encoding_review"})
+            continue
         if page["old_canonical"] != page["url"]:
             text, n = patch_canonical(text, page["old_canonical"], page["url"])
             if n != 1:
@@ -215,14 +219,21 @@ def main():
         ftp.cwd(root)
     mkdirs(backup)
     originals = {path: read(path) for path in changes}
-    for path, data in originals.items():
-        destination = posixpath.join(backup, path)
-        mkdirs(posixpath.dirname(destination))
-        ftp.storbinary("STOR " + destination, io.BytesIO(data))
-        restored = bytearray()
-        ftp.retrbinary("RETR " + destination, restored.extend)
-        if bytes(restored) != data:
-            sys.exit("Backup nao verificado; nenhum arquivo do site alterado.")
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as z:
+        for path, data in originals.items():
+            z.writestr(path, data)
+    archived = archive.getvalue()
+    destination = posixpath.join(backup, "originais.zip")
+    ftp.storbinary("STOR " + destination, io.BytesIO(archived))
+    restored = bytearray()
+    ftp.retrbinary("RETR " + destination, restored.extend)
+    if bytes(restored) != archived:
+        sys.exit("Backup nao verificado; nenhum arquivo do site alterado.")
+    with zipfile.ZipFile(io.BytesIO(restored)) as z:
+        if z.testzip() is not None or any(z.read(path) != data for path, data in originals.items()):
+            sys.exit("Backup invalido; nenhum arquivo do site alterado.")
+    print("Backup completo verificado fora de public_html.", flush=True)
     applied = []
     try:
         for path, data in changes.items():
