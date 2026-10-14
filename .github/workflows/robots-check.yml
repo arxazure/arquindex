@@ -1,0 +1,30 @@
+name: Verificar robots Arquindex
+on:
+  push:
+    paths: ['.github/workflows/robots-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ler robots e cabecalhos publicos
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python - <<'PY'
+          import ftplib,os,urllib.request,json
+          ftp=ftplib.FTP('ftp.arquindex.com.br',timeout=25)
+          ftp.login('arquind2',os.environ['FTP_PASSWORD']);ftp.cwd('public_html')
+          b=bytearray();ftp.retrbinary('RETR robots.txt',b.extend);ftp.quit()
+          print('ROBOTS_CONTENT',json.dumps(b.decode('utf-8','replace'),ensure_ascii=False))
+          for host in ['https://www.arquindex.com.br','https://arquindex.com.br']:
+              for path in ['/robots.txt','/','/sitemap.xml']:
+                  u=host+path
+                  try:
+                      with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Googlebot'}),timeout=20) as r:
+                          print('HTTP_CHECK',json.dumps({'url':u,'status':r.status,'final':r.url,'x_robots_tag':r.headers.get('X-Robots-Tag'),'type':r.headers.get('Content-Type')}))
+                  except Exception as e: print('HTTP_CHECK',json.dumps({'url':u,'error':type(e).__name__}))
+          PY
