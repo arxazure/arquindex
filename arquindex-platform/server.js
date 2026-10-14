@@ -1,5 +1,6 @@
 import http from "node:http";
 import { URL } from "node:url";
+import { serveReplica } from "./replica-proxy.js";
 import { articles as previousArticles } from "./articles.js";
 import { top10Articles, top10Guides } from "./top10-content.js";
 const articles=[...previousArticles,...top10Articles];
@@ -246,12 +247,12 @@ function layout(title,desc,body,req,extraHead=""){
  footer{background:#071a3a;color:#dce7f7;padding:40px 22px}.foot{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}.cookie{position:fixed;left:18px;right:18px;bottom:18px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px #0003;border-radius:14px;padding:16px;z-index:50;display:flex;gap:16px;align-items:center}.cookie p{margin:0;flex:1;font-size:13px}.cookie button{border:0;padding:10px 13px;border-radius:8px;cursor:pointer}.accept{background:var(--b);color:#fff}
  @media(max-width:800px){.nav{display:none}.hero h1{font-size:36px}.grid,.trust,.foot,.steps,.kpis{grid-template-columns:1fr}.contact{font-size:12px}.cookie{flex-direction:column;align-items:stretch}}
  </style></head><body>
- <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="/guias">Guias operacionais</a><a href="/digitalizacao">Digitalização por cidade e preços</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
+ <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="/guias">Guias operacionais</a><a href="/digitalizacao">Digitalização por cidade e preços</a><a href="/gestao-documental/">500 cidades e blog técnico</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
  ${body}${aiIndexBlock(title,desc,req)}
  <a class="wafloat" aria-label="Fale com a Arquindex no WhatsApp" href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20saber%20mais%20sobre%20os%20servi%C3%A7os">✆</a>
  <div class="cookie" id="cookie"><p>Usamos cookies essenciais e, com sua autorização, cookies opcionais para melhorar sua experiência e mensurar o desempenho. Consulte nossa Política de Privacidade e Cookies.</p><button onclick="localStorage.setItem('aq_cookie','essential');this.parentElement.remove()">Rejeitar opcionais</button><button class="accept" onclick="localStorage.setItem('aq_cookie','all');this.parentElement.remove()">Aceitar todos</button></div>
  <script>if(localStorage.getItem('aq_cookie'))document.getElementById('cookie')?.remove()</script>
- <footer><div class="foot"><div><strong>Arquindex</strong><p>Há 20 anos apoiando empresas na transformação de arquivos em informação estratégica.</p></div><div><strong>Atendimento</strong><p>WhatsApp: 31 97363-2725<br>comercial@arquindex.com.br<br>Belo Horizonte / MG</p></div><div><strong>Ecossistema Arquindex</strong><p><a style="color:#fff" href="https://arquindex.com.br/">Site oficial</a> · <a style="color:#fff" href="https://arquindex.com.br/blog.html">Blog e acervo</a> · <a style="color:#fff" href="/conteudo">Artigos técnicos</a> · <a style="color:#fff" href="/autoridade">Guias de referência</a> · <a style="color:#fff" href="https://arquindex.com.br/#services">Serviços do site oficial</a></p></div></div></footer></body></html>`;
+ <footer><div class="foot"><div><strong>Arquindex</strong><p>Há 20 anos apoiando empresas na transformação de arquivos em informação estratégica.</p></div><div><strong>Atendimento</strong><p>WhatsApp: 31 97363-2725<br>comercial@arquindex.com.br<br>Belo Horizonte / MG</p></div><div><strong>Ecossistema Arquindex</strong><p><a style="color:#fff" href="https://arquindex.com.br/">Site oficial</a> · <a style="color:#fff" href="https://arquindex.com.br/blog.html">Blog e acervo</a> · <a style="color:#fff" href="/conteudo">Artigos técnicos</a> · <a style="color:#fff" href="/autoridade">Guias de referência</a> · <a style="color:#fff" href="/gestao-documental/">Gestão documental em 500 cidades</a> · <a style="color:#fff" href="https://arquindex.com.br/#services">Serviços do site oficial</a></p></div></div></footer></body></html>`;
 }
 function home(req){
  const cards=services.slice(0,12).map(([s,n,d,p])=>`<article class="card"><h3>${n}</h3><p class="muted">${d}</p><div class="price">${p}</div><p><a href="/solucoes/${s}">Conhecer solução →</a></p></article>`).join("");
@@ -405,6 +406,7 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(await serveReplica(req,res)) return;
  if(legacyRedirects.has(p)){
   const target=legacyRedirects.get(p);
   res.writeHead(301,{"location":target,"cache-control":"public, max-age=3600"});
@@ -431,6 +433,7 @@ const server=http.createServer(async(req,res)=>{
    "User-agent: Bytespider","Allow: /","",
    "Sitemap: "+base+"/sitemap.xml",
    "Sitemap: "+base+"/sitemap-index.xml",
+   "Sitemap: "+base+"/gestao-documental/sitemap.xml",
    ""
   ].join("\n"));
  }
@@ -457,6 +460,7 @@ const server=http.createServer(async(req,res)=>{
    "- "+base+"/conteudo",
    "- "+base+"/biblioteca-normativa",
    "- "+base+"/metodologia",
+   "- "+base+"/gestao-documental/",
    "",
    "## Descoberta",
    "- Sitemap: "+base+"/sitemap.xml",
@@ -469,14 +473,14 @@ const server=http.createServer(async(req,res)=>{
  }
  if(p==="/sitemap.xml"){
   const base=canonicalOrigin(req), lastmod=new Date().toISOString().slice(0,10);
-  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao",...regionalGuides.map(a=>a.path)];
+  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path)];
   const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc><lastmod>"+lastmod+"</lastmod></url>").join("")+"</urlset>";
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
  }
  if(p==="/sitemap-index.xml"){
   const base=canonicalOrigin(req);
-  const xml='<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>'+base+'/sitemap.xml</loc></sitemap></sitemapindex>';
+  const xml='<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>'+base+'/sitemap.xml</loc></sitemap><sitemap><loc>'+base+'/gestao-documental/sitemap.xml</loc></sitemap></sitemapindex>';
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
  }
