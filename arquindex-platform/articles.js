@@ -851,4 +851,59 @@ export const articles = [
   "source": "https://www.gov.br/conarq/pt-br",
   "reviewed": "2026-10-09"
 }
+,
+  {
+    "slug": "agenda-anpd-2027-2028-lgpd-ia-governanca",
+    "title": "Agenda ANPD 2027–2028: o que empresas, DPOs e gestores de documentos precisam acompanhar",
+    "category": "LGPD",
+    "lead": "A consulta pública da Agenda Regulatória 2027–2028 ajuda organizações a antecipar temas de governança de dados sem tratar propostas como regras já aprovadas.",
+    "quickAnswer": "Até 16 de outubro de 2026, a ANPD recebe contribuições para definir os temas prioritários de sua Agenda Regulatória 2027–2028. Empresas podem usar esse período para revisar inventários, registros das operações de tratamento, políticas, avaliações de risco e evidências de atendimento aos titulares — sem presumir o conteúdo de futuras normas.",
+    "keywords": ["Agenda Regulatória ANPD 2027–2028", "LGPD", "governança de dados", "DPO", "inteligência artificial"],
+    "published": "2026-10-14",
+    "sections": [
+      ["O que é a Agenda Regulatória da ANPD", "A Agenda Regulatória organiza os temas que a Autoridade pretende estudar ou regulamentar em determinado período. A consulta não equivale à aprovação de novas obrigações: ela reúne contribuições que podem orientar prioridades futuras."],
+      ["O que está acontecendo agora", "A consulta pública foi aberta em 1º de setembro de 2026 e aceita contribuições até 16 de outubro de 2026 na plataforma Brasil Participativo. O objeto oficial é receber sugestões sobre temas relevantes para a Agenda Regulatória 2027–2028."],
+      ["Por que isso interessa às empresas", "Decisões futuras da ANPD podem afetar processos, contratos, sistemas e evidências de conformidade. A preparação mais útil é fortalecer fundamentos permanentes da LGPD: finalidade, necessidade, transparência, segurança, responsabilização e atendimento aos direitos dos titulares."],
+      ["IA, biometria e bases documentais", "Projetos com inteligência artificial ou biometria dependem da qualidade e da governança das bases usadas. Antes de ampliar automações, documente origem, finalidade, acesso, retenção, controles de segurança e critérios de revisão humana aplicáveis ao caso."],
+      ["Transparência e direitos dos titulares", "O acervo precisa permitir localizar dados pessoais e atender solicitações com segurança. Avisos de privacidade, canais de atendimento, critérios de autenticação e fluxos de resposta devem refletir o tratamento realmente realizado."],
+      ["Documentos que demonstram governança", "Inventários de dados, registros das operações de tratamento, políticas internas, contratos, relatórios de incidentes e avaliações de risco ajudam a demonstrar decisões. O relatório de impacto deve ser avaliado quando cabível, conforme o contexto e as orientações da ANPD."],
+      ["Papel do DPO e das áreas de negócio", "O encarregado atua como canal e apoio à governança, mas a conformidade depende de responsabilidades distribuídas. Jurídico, segurança, tecnologia, arquivo, compras e áreas operacionais precisam manter processos e evidências coerentes."],
+      ["Checklist de preparação para 2027", "Revise o mapa de dados; associe documentos a prazos de retenção; registre acessos; teste buscas e respostas a titulares; verifique fornecedores; atualize planos de incidentes; e acompanhe publicações oficiais da ANPD antes de alterar controles por mera expectativa."],
+      ["Como acompanhar os próximos atos", "Consulte a página oficial da participação social e os canais da ANPD. Quando a agenda final e eventuais atos forem publicados, compare o texto oficial com suas políticas e priorize mudanças conforme risco, aplicabilidade e prazo." ]
+    ],
+    "faqs": [
+      ["A Agenda Regulatória 2027–2028 já criou novas obrigações?", "Não. A consulta reúne contribuições para a definição de prioridades. Obrigações só devem ser atribuídas a atos oficiais efetivamente publicados e aplicáveis."],
+      ["Até quando é possível participar da consulta?", "A página oficial informa prazo até 16 de outubro de 2026."],
+      ["Quais evidências de governança documental vale revisar?", "Inventários, registros de tratamento, políticas, contratos, controles de acesso, prazos de retenção, registros de incidentes e avaliações de risco, conforme o contexto da organização."]
+    ],
+    "source": "https://brasilparticipativo.presidencia.gov.br/processes/agenda-regulatoria-2027-2028",
+    "reviewed": "2026-10-14"
+  },
+  {
+    "slug": "gestao-documental-estudos-usuarios-conarq-60",
+    "title": "Gestão documental não termina na digitalização: como medir o uso e a recuperação dos arquivos",
+    "category": "Gestão Documental",
+    "lead": "A Resolução CONARQ nº 60 reforça uma pergunta prática: o acervo digitalizado pode ser localizado, compreendido e usado por quem realmente precisa dele?",
+    "quickAnswer": "A Resolução CONARQ nº 60, de 14 de setembro de 2026, estabelece princípios e diretrizes para políticas, programas e ações de estudos de usos e usuários em serviços arquivísticos. Na prática, o programa de gestão documental deve medir a experiência de busca, acesso e compreensão do acervo — não apenas a quantidade de páginas digitalizadas.",
+    "keywords": ["Resolução CONARQ 60", "estudos de usuários", "gestão documental", "recuperação da informação", "OCR e metadados"],
+    "published": "2026-10-14",
+    "sections": [
+      ["O que estabelece a Resolução CONARQ nº 60", "A norma, datada de 14 de setembro de 2026 e publicada em 18 de setembro de 2026, apresenta princípios e diretrizes para formular políticas, programas e ações de estudos de usos e usuários nos serviços arquivísticos."],
+      ["Digitalizar não garante encontrar", "Uma imagem pode estar legível e ainda ser difícil de recuperar. Nomes inconsistentes, OCR sem revisão, metadados incompletos e permissões mal configuradas transformam um acervo digital em um conjunto pouco utilizável."],
+      ["Comece pelas necessidades dos usuários", "Mapeie quem consulta, quais tarefas precisa concluir, quais termos utiliza e quais restrições de acesso se aplicam. Entrevistas, observação de tarefas e análise de chamados ajudam a revelar diferenças entre o modelo do sistema e a linguagem real do usuário."],
+      ["Métricas úteis para busca e acesso", "Acompanhe tempo até localizar um documento, pesquisas sem resultado, taxa de refinamento, documentos inacessíveis, solicitações repetidas, abandono e erros de permissão. Combine números com relatos para entender a causa dos problemas."],
+      ["OCR, metadados e taxonomia", "Avalie a qualidade do OCR por amostragem e priorize campos essenciais ao negócio. Vocabulários controlados, regras de nomenclatura e taxonomias devem facilitar a busca sem apagar a terminologia adotada pelos usuários."],
+      ["Acessibilidade e linguagem de descrição", "Descrições claras, estrutura de títulos, contraste, navegação por teclado e formatos acessíveis ampliam o uso do acervo. Evite siglas sem explicação e revise termos históricos ou técnicos que possam dificultar a recuperação."],
+      ["Teste de recuperação antes da entrega", "Defina cenários reais e peça a usuários representativos que encontrem documentos conhecidos e desconhecidos. Registre tempo, caminho, obstáculos e sucesso. Corrija metadados, filtros, permissões e instruções antes da aceitação do projeto."],
+      ["Plano de melhoria contínua", "Estabeleça responsáveis, periodicidade de análise, metas e um backlog de melhorias. Refaça testes após migrações, mudanças de taxonomia, novos tipos documentais ou alterações relevantes no perfil dos usuários."],
+      ["Aplicação em GED, ECM e arquivos", "Os mesmos princípios servem a arquivos permanentes, repositórios digitais, SharePoint, Alfresco e outras plataformas de GED ou ECM. As métricas e os controles devem respeitar finalidade, contexto arquivístico, segurança e proteção de dados." ]
+    ],
+    "faqs": [
+      ["O que são estudos de usos e usuários em arquivos?", "São métodos para entender quem utiliza o serviço arquivístico, quais informações procura, como busca e quais barreiras encontra no acesso e na compreensão."],
+      ["Qual indicador mostra se a digitalização funcionou?", "Não existe um indicador único. Tempo de localização, buscas sem resultado, sucesso em tarefas, erros de acesso e satisfação devem ser analisados em conjunto."],
+      ["OCR substitui metadados?", "Não. O OCR amplia a busca no conteúdo, enquanto metadados estruturam contexto, identificação, classificação, restrições e outros elementos necessários à recuperação e à gestão." ]
+    ],
+    "source": "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-conarq-no-60-de-14-de-setembro-de-2026",
+    "reviewed": "2026-10-14"
+  }
 ];
