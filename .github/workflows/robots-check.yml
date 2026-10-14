@@ -38,7 +38,7 @@ jobs:
               seen.add(u)
               if not rp.can_fetch('Googlebot',u):failures.append({'url':u,'error':'sitemap_blocked'});continue
               try:
-                  with urllib.request.urlopen(u,timeout=20) as response:root=ET.fromstring(response.read(10000000))
+                  with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Googlebot'}),timeout=20) as response:root=ET.fromstring(response.read(10000000))
                   locs=[(n.text or '').strip() for n in root.iter() if n.tag.split('}')[-1]=='loc']
                   if root.tag.split('}')[-1]=='sitemapindex':queue.extend(locs)
                   elif root.tag.split('}')[-1]=='urlset':urls.update(locs)
