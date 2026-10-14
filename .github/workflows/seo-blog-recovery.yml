@@ -1,8 +1,5 @@
 name: Recuperacao dos artigos originais
 on:
-  push:
-    paths:
-      - '.github/workflows/seo-blog-recovery.yml'
   workflow_dispatch:
     inputs:
       apply:
@@ -21,6 +18,5 @@ jobs:
           FTP_HOST: ftp.arquindex.com.br
           FTP_USERNAME: arquind2
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          APPLY_CHANGES: ${{ github.event_name == 'push' && 'true' || inputs.apply == true && 'true' || 'false' }}
+          APPLY_CHANGES: ${{ inputs.apply == true && 'true' || 'false' }}
         run: python3 scripts/seo_blog_recovery.py
-# Validate nullable source metadata and original HTML
