@@ -11,12 +11,12 @@ const ROUTE_PREFIXES = [
 
 function rewriteText(input) {
   const marker = "__ARQUINDEX_REPLICA_CANONICAL_BASE__";
-  let output = input.replaceAll(SOURCE, marker);
+  let output = input.replaceAll(SOURCE + "/", marker).replaceAll(SOURCE, CANONICAL_BASE);
   for (const prefix of ROUTE_PREFIXES) output = output.replaceAll("/" + prefix, BASE_PATH + "/" + prefix);
   return output
     .replace(/((?:href|src|action)=["'])\/(?!\/)/gi, "$1" + BASE_PATH + "/")
     .replaceAll('codex-preview" content="development', 'codex-preview" content="production')
-    .replaceAll(marker, CANONICAL_BASE);
+    .replaceAll(marker, CANONICAL_BASE + "/");
 }
 
 function isText(type) {

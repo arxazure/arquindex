@@ -55,7 +55,8 @@ foreach ($textTypes as $prefix) if (strpos($contentType, $prefix) !== false) $is
 
 if ($isText) {
     $marker = '__ARQUINDEX_REPLICA_CANONICAL_BASE__';
-    $body = str_replace(SOURCE_ORIGIN, $marker, $body);
+    $body = str_replace(SOURCE_ORIGIN . '/', $marker, $body);
+    $body = str_replace(SOURCE_ORIGIN, CANONICAL_BASE, $body);
     $prefixes = [
         '_next','api','autores','blog','brasil','cidades','comparativo','conhecimento',
         'feed.xml','favicon.svg','glossario','llms-full.txt','llms.txt','manifest.webmanifest',
@@ -65,7 +66,7 @@ if ($isText) {
     foreach ($prefixes as $prefix) $body = str_replace('/' . $prefix, BASE_PATH . '/' . $prefix, $body);
     $body = preg_replace('/((?:href|src|action)=["\'])\/(?!\/)/i', '$1' . BASE_PATH . '/', $body);
     $body = str_replace('codex-preview" content="development', 'codex-preview" content="production', $body);
-    $body = str_replace($marker, CANONICAL_BASE, $body);
+    $body = str_replace($marker, CANONICAL_BASE . '/', $body);
 }
 
 http_response_code($status);
