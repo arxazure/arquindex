@@ -18,11 +18,18 @@ def get_article(slug):
         raise ValueError('Dados originais indisponiveis')
     articles, _ = json.JSONDecoder().raw_decode(text[marker.end():])
     matches = [a for a in articles if a.get('slug') == slug]
-    if len(matches) != 1 or not matches[0].get('title') or not isinstance(matches[0].get('content'), str) or len(matches[0]['content']) < 300:
+    if len(matches) != 1:
+        raise ValueError('Slug ausente no catalogo original')
+    article=matches[0]
+    if not article.get('content') and re.fullmatch(r'[a-f0-9-]{36}',article.get('id','')):
+        with urllib.request.urlopen(EMBED+'/article/'+article['id'],timeout=30) as response:
+            recovered=json.load(response)
+        article['content']=recovered.get('content')
+    if not article.get('title') or not isinstance(article.get('content'), str) or len(article['content']) < 300:
         raise ValueError('Conteudo original ausente ou incompleto')
     if re.search(r'<(?:script|iframe|form|object)\b|\son\w+\s*=|javascript:',matches[0]['content'],re.I):
         raise ValueError('Conteudo exige revisao de HTML')
-    return matches[0]
+    return article
 
 def main():
     ftp=ftplib.FTP(os.environ['FTP_HOST'],timeout=35)
@@ -96,6 +103,15 @@ def main():
             if text.lower().count('</main>')!=1:raise ValueError('Limite de main inesperado')
             text=text.replace('</main>','<section><h2>Artigos originais</h2><p><a href="/'+PREFIX+'/">Explore todos os artigos da Arquindex sobre digitalização, gestão documental e LGPD.</a></p></section></main>')
         if text.encode('utf-8')!=raw:changes[path]=text.encode('utf-8')
+    excluded=[]
+    for row in missing:
+        if row['reason']=='Slug ausente no catalogo original':
+            old=requested[row['slug']];check=fetch(old)
+            if check.get('status')==200 and check.get('canonical')==[BASE+'/']:
+                excluded.append(old)
+    for entry in list(sitemap.findall('{'+NS+'}url')):
+        loc=entry.find('{'+NS+'}loc')
+        if loc is not None and loc.text in excluded:sitemap.remove(entry)
     for loc in sitemap.findall('.//{'+NS+'}loc'):
         if loc.text in mapping:loc.text=mapping[loc.text]
     changes['sitemap-blog-original.xml']=ET.tostring(sitemap,encoding='utf-8',xml_declaration=True)+b'\n'
@@ -113,7 +129,7 @@ def main():
         block+='RewriteCond %{QUERY_STRING} ^post='+slug+'$\nRewriteRule ^(?:index\\.html)?$ /'+PREFIX+'/'+slug+'/? [R=301,L,NE]\n'
     block+='</IfModule>\n# END ARQUINDEX ORIGINAL BLOG RECOVERY\n'
     changes['.htaccess']=(block+text).encode('utf-8')
-    print('PLANO',json.dumps({'static_articles':len(articles),'files':len(changes),'internal_links_corrected':links,'redirects':len(mapping)}),flush=True)
+    print('PLANO',json.dumps({'static_articles':len(articles),'files':len(changes),'internal_links_corrected':links,'redirects':len(mapping),'obsolete_home_duplicates_excluded':excluded}),flush=True)
     if os.environ.get('APPLY_CHANGES')!='true':ftp.quit();return
     token=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-'+uuid.uuid4().hex[:8]
     backup=posixpath.join(parent,'seo-blog-recovery-backups',token)
@@ -166,6 +182,6 @@ def main():
             else:ftp.storbinary('STOR '+destination,io.BytesIO(originals[path]))
         ftp.quit();raise RuntimeError('Publicacao falhou; alteracoes restauradas')
     ftp.quit()
-    print('CONCLUIDO',json.dumps({'articles_published':len(articles),'files_published':len(applied),'internal_links_corrected':links,'sitemap_urls_replaced':len(mapping),'redirects_verified':len(checks),'unresolved':missing,'backup':backup,'verified':True}),flush=True)
+    print('CONCLUIDO',json.dumps({'articles_published':len(articles),'files_published':len(applied),'internal_links_corrected':links,'sitemap_urls_replaced':len(mapping),'redirects_verified':len(checks),'obsolete_home_duplicates_excluded':excluded,'unresolved':missing,'backup':backup,'verified':True}),flush=True)
 
 if __name__=='__main__':main()
