@@ -37,7 +37,7 @@ def fetch(url):
     return result
 def slash_equivalent(a, b):
     x, y = urllib.parse.urlsplit(a), urllib.parse.urlsplit(b)
-    return x.scheme == y.scheme and x.netloc == y.netloc and x.query == y.query and x.fragment == y.fragment and x.path.rstrip("/") == y.path.rstrip("/")
+    return x.scheme == y.scheme and x.netloc == y.netloc and x.query == y.query and x.fragment == y.fragment and urllib.parse.unquote(x.path).rstrip("/") == urllib.parse.unquote(y.path).rstrip("/")
 def patch_canonical(text, old, new):
     count = 0
     def link(m):
