@@ -60,7 +60,7 @@ if ($isText) {
     $prefixes = [
         '_next','api','autores','blog','brasil','cidades','comparativo','conhecimento',
         'feed.xml','favicon.svg','glossario','llms-full.txt','llms.txt','manifest.webmanifest',
-        'orcamento','privacidade','robots.txt','setores','sitemap','solucoes',
+        'orcamento','privacidade','robots.txt','setores','solucoes',
         'a948be82c7824bc989f2c5dd0f071bea.txt'
     ];
     foreach ($prefixes as $prefix) $body = str_replace('/' . $prefix, BASE_PATH . '/' . $prefix, $body);
