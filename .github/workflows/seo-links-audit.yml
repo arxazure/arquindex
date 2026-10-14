@@ -1,0 +1,81 @@
+name: Auditoria de links internos Homehost
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/seo-links-audit.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Ler paginas e verificar referencias internas sem publicar
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python - <<'PY'
+          import ftplib,os,collections,posixpath,html.parser,urllib.parse,json
+          ftp=ftplib.FTP('ftp.arquindex.com.br',timeout=25)
+          ftp.login('arquind2',os.environ['FTP_PASSWORD'])
+          for candidate in ('public_html','/public_html'):
+              try:
+                  ftp.cwd(candidate);break
+              except ftplib.error_perm:pass
+          else:raise RuntimeError('Raiz publica indisponivel')
+          root=ftp.pwd()
+          q=collections.deque([''])
+          visited=set()
+          html_files=[]
+          known=set()
+          while q and len(visited)<5000:
+              rel=q.popleft()
+              if rel in visited:continue
+              visited.add(rel)
+              ftp.cwd(root)
+              if rel:ftp.cwd(rel)
+              for name,facts in ftp.mlsd():
+                  if name in ('.','..'):continue
+                  path=posixpath.join(rel,name)
+                  kind=facts.get('type','')
+                  if kind=='dir':q.append(path)
+                  elif kind=='file':
+                      known.add('/'+path)
+                      if path.lower().endswith(('.html','.htm','.php')):html_files.append(path)
+          class Parser(html.parser.HTMLParser):
+              def __init__(self):super().__init__();self.links=[]
+              def handle_starttag(self,tag,attrs):
+                  if tag in ('a','link','script','img'):
+                      d=dict(attrs);v=d.get('href') or d.get('src')
+                      if v:self.links.append(v)
+          checked=0;missing=[];skipped=0
+          for path in html_files[:250]:
+              data=bytearray()
+              try:
+                  ftp.cwd(root)
+                  ftp.retrbinary('RETR '+path,lambda chunk:data.extend(chunk) if len(data)<2000000 else None)
+                  if len(data)>2000000:skipped+=1;continue
+                  p=Parser();p.feed(data.decode('utf-8','replace'));checked+=1
+                  for link in p.links:
+                      u=urllib.parse.urlsplit(link)
+                      if u.scheme or u.netloc or link.startswith(('#','mailto:','tel:','data:','javascript:')):continue
+                      target=urllib.parse.unquote(u.path)
+                      if not target:continue
+                      resolved=posixpath.normpath(posixpath.join('/'+posixpath.dirname(path),target)) if not target.startswith('/') else posixpath.normpath(target)
+                      if resolved.endswith('/'):resolved+='index.html'
+                      if resolved not in known and resolved+'/index.html' not in known and resolved+'/index.php' not in known:
+                          missing.append({'source':'/'+path,'target':resolved})
+              except (ftplib.all_errors, OSError, ValueError):
+                  skipped+=1
+          ftp.quit()
+          report={'directories':len(visited),'files':len(known),'html_php_files':len(html_files),'pages_checked':checked,'skipped':skipped,'unresolved_local_references':missing[:500],'unresolved_count':len(missing),'changes':0}
+          with open('seo-links-report.json','w') as f:json.dump(report,f,ensure_ascii=False,indent=2)
+          print('Pastas:',len(visited),'arquivos:',len(known),'HTML/PHP:',len(html_files),'paginas verificadas:',checked,'referencias locais nao resolvidas:',len(missing),'ignoradas:',skipped)
+          print('Relatorio em artefato privado da execucao; nenhum arquivo alterado.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seo-links-report
+          path: seo-links-report.json
+          retention-days: 7
