@@ -27,4 +27,27 @@ jobs:
                       with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Googlebot'}),timeout=20) as r:
                           print('HTTP_CHECK',json.dumps({'url':u,'status':r.status,'final':r.url,'x_robots_tag':r.headers.get('X-Robots-Tag'),'type':r.headers.get('Content-Type')}))
                   except Exception as e: print('HTTP_CHECK',json.dumps({'url':u,'error':type(e).__name__}))
+          import urllib.robotparser,xml.etree.ElementTree as ET,collections
+          rp=urllib.robotparser.RobotFileParser();rp.parse(b.decode('utf-8').splitlines())
+          base='https://www.arquindex.com.br'
+          queue=collections.deque([base+'/sitemap.xml',base+'/gestao-documental/sitemap.xml'])
+          seen=set();urls=set();failures=[]
+          while queue and len(seen)<30:
+              u=queue.popleft()
+              if u in seen:continue
+              seen.add(u)
+              if not rp.can_fetch('Googlebot',u):failures.append({'url':u,'error':'sitemap_blocked'});continue
+              try:
+                  with urllib.request.urlopen(u,timeout=20) as response:root=ET.fromstring(response.read(10000000))
+                  locs=[(n.text or '').strip() for n in root.iter() if n.tag.split('}')[-1]=='loc']
+                  if root.tag.split('}')[-1]=='sitemapindex':queue.extend(locs)
+                  elif root.tag.split('}')[-1]=='urlset':urls.update(locs)
+                  else:failures.append({'url':u,'error':'invalid_xml_root'})
+              except Exception as e:failures.append({'url':u,'error':type(e).__name__})
+          blocked=[]
+          for u in sorted(urls):
+              bots=[bot for bot in ['Googlebot','Bingbot','OAI-SearchBot','ChatGPT-User'] if not rp.can_fetch(bot,u)]
+              if bots:blocked.append({'url':u,'bots':bots})
+          print('ROBOTS_AUDIT',json.dumps({'maps_checked':len(seen),'sitemap_urls_checked':len(urls),'blocked':blocked,'errors':failures,'pending_maps':len(queue)},ensure_ascii=False))
+          if blocked or failures or queue:raise RuntimeError('Rastreamento exige revisao')
           PY
