@@ -1,0 +1,25 @@
+name: Recuperacao dos artigos originais
+on:
+  push:
+    paths:
+      - '.github/workflows/seo-blog-recovery.yml'
+  workflow_dispatch:
+    inputs:
+      apply:
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar e conferir os artigos originais
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          APPLY_CHANGES: ${{ inputs.apply == true && 'true' || 'false' }}
+        run: python3 scripts/seo_blog_recovery.py
