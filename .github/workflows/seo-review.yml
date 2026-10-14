@@ -1,0 +1,64 @@
+name: Revisao de URLs SEO preservadas
+on:
+  push:
+    paths:
+      - '.github/workflows/seo-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Inspecionar conteudo publico sem alteracoes
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python - <<'PY'
+          import ftplib,os,json,re,urllib.parse,html.parser
+          f=ftplib.FTP(os.environ["FTP_HOST"],timeout=25)
+          f.login(os.environ["FTP_USERNAME"],os.environ["FTP_PASSWORD"])
+          f.cwd("public_html")
+          def read(p):
+           b=bytearray()
+           f.retrbinary("RETR "+p,b.extend)
+           if len(b)>5000000: raise ValueError("limite")
+           return b.decode("utf-8",errors="replace")
+          class P(html.parser.HTMLParser):
+           def __init__(self): super().__init__();self.scripts=[];self.canon=[];self.title="";self.t=False
+           def handle_starttag(self,t,a):
+            a=dict(a)
+            if t=="script" and a.get("src"): self.scripts.append(a["src"])
+            if t=="link" and "canonical" in a.get("rel",""):self.canon.append(a.get("href"))
+            if t=="title":self.t=True
+           def handle_endtag(self,t):
+            if t=="title":self.t=False
+           def handle_data(self,d):
+            if self.t:self.title+=d
+          targets=["index.html","blog.html","administraçao_de_arquivos.html","googleb9fa38c37f423597 (3).html","marcação.html","marcação1.html","marcação2.html"]
+          for p in targets:
+           try:
+            s=read(p);i=P();i.feed(s)
+            print("PAGE",json.dumps({"path":p,"bytes":len(s),"title":i.title,"canonical":i.canon,"scripts":i.scripts},ensure_ascii=False),flush=True)
+            if p in ["index.html","blog.html"]:
+             lines=s.splitlines()
+             for n,line in enumerate(lines):
+              if re.search(r"URLSearchParams|[?]post=|get\(['\"]post|posts[.]|posts\s*=|fetch\(|blogData|location[.]search",line):
+               print("POST_CODE",p,n,"\n".join(lines[max(0,n-2):n+4])[:7000],flush=True)
+             for src in i.scripts:
+              u=urllib.parse.urlsplit(src)
+              if u.netloc or ".." in u.path.split("/"):continue
+              path=u.path.lstrip("/")
+              try:
+               js=read(path)
+               print("JS",json.dumps({"path":path,"bytes":len(js)}),flush=True)
+               for m in list(re.finditer(r"URLSearchParams|location\.search|fetch\(|get\(['\"]post|alfresco-ou-fluig|posts\s*=",js))[:12]:
+                print("JS_POST_CODE",path,js[max(0,m.start()-250):m.end()+1600],flush=True)
+              except Exception as e: print("JS_ERROR",path,type(e).__name__,flush=True)
+           except Exception as e:print("PAGE_ERROR",p,type(e).__name__,flush=True)
+          f.quit()
+          
+          PY
