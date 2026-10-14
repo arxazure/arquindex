@@ -1,5 +1,8 @@
 name: Recuperacao SEO Homehost
 on:
+  push:
+    paths:
+      - '.github/workflows/seo-recovery.yml'
   workflow_dispatch:
     inputs:
       apply:
@@ -20,5 +23,5 @@ jobs:
           FTP_HOST: ftp.arquindex.com.br
           FTP_USERNAME: arquind2
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          APPLY_CHANGES: ${{ inputs.apply == true && 'true' || 'false' }}
+          APPLY_CHANGES: ${{ github.event_name == 'push' && 'true' || inputs.apply == true && 'true' || 'false' }}
         run: python3 scripts/seo_recovery.py
