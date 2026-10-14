@@ -1,0 +1,21 @@
+name: Recuperacao SEO Homehost
+on:
+  push:
+    paths:
+      - '.github/workflows/seo-recovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar e corrigir referencias SEO confirmadas
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          APPLY_CHANGES: 'false'
+        run: python3 scripts/seo_recovery.py
