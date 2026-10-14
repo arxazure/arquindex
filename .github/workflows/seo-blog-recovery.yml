@@ -23,3 +23,4 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           APPLY_CHANGES: ${{ inputs.apply == true && 'true' || 'false' }}
         run: python3 scripts/seo_blog_recovery.py
+# Validate nullable source metadata and original HTML
