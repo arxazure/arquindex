@@ -1,4 +1,5 @@
 import http from "node:http";
+import { rmbhData, rmbhPage } from "./rmbh-pages.js";
 import { URL } from "node:url";
 import { serveReplica } from "./replica-proxy.js";
 import { articles as previousArticles } from "./articles.js";
@@ -247,7 +248,7 @@ function layout(title,desc,body,req,extraHead=""){
  footer{background:#071a3a;color:#dce7f7;padding:40px 22px}.foot{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}.cookie{position:fixed;left:18px;right:18px;bottom:18px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px #0003;border-radius:14px;padding:16px;z-index:50;display:flex;gap:16px;align-items:center}.cookie p{margin:0;flex:1;font-size:13px}.cookie button{border:0;padding:10px 13px;border-radius:8px;cursor:pointer}.accept{background:var(--b);color:#fff}
  @media(max-width:800px){.nav{display:none}.hero h1{font-size:36px}.grid,.trust,.foot,.steps,.kpis{grid-template-columns:1fr}.contact{font-size:12px}.cookie{flex-direction:column;align-items:stretch}}
  </style></head><body>
- <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="/guias">Guias operacionais</a><a href="/digitalizacao">Digitalização por cidade e preços</a><a href="/gestao-documental/">500 cidades e blog técnico</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
+ <header><div class="top"><div><div class="brand">arquindex</div><span class="tag">EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS</span></div><nav class="nav"><a href="/">Início</a><a href="/solucoes">Soluções</a><a href="/conteudo">Conteúdo</a><a href="/autoridade">Guias</a><a href="/setores">Setores</a><a href="/guias">Guias operacionais</a><a href="/digitalizacao">Digitalização por cidade e preços</a><a href="/gestao-documental/">500 cidades e blog técnico</a><a href="https://arquindex.com.br/blog.html">Blog oficial</a><a href="https://arquindex.com.br/">Site Arquindex</a><a href="https://arquindex.com.br/#clientes">Clientes</a><a href="/atendimento-rmbh">Grande BH</a><a href="/contato">Contato</a></nav><div class="contact">WhatsApp<br><a href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20um%20or%C3%A7amento">31 97363-2725</a></div></div></header>
  ${body}${aiIndexBlock(title,desc,req)}
  <a class="wafloat" aria-label="Fale com a Arquindex no WhatsApp" href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20saber%20mais%20sobre%20os%20servi%C3%A7os">✆</a>
  <div class="cookie" id="cookie"><p>Usamos cookies essenciais e, com sua autorização, cookies opcionais para melhorar sua experiência e mensurar o desempenho. Consulte nossa Política de Privacidade e Cookies.</p><button onclick="localStorage.setItem('aq_cookie','essential');this.parentElement.remove()">Rejeitar opcionais</button><button class="accept" onclick="localStorage.setItem('aq_cookie','all');this.parentElement.remove()">Aceitar todos</button></div>
@@ -411,6 +412,13 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(p==="/atendimento-rmbh"||p==="/atendimento-rmbh/"||p.startsWith("/atendimento-rmbh/")) {
+ const slug=p.replace(/^\/atendimento-rmbh\/?/,"").replace(/\/$/,"");const page=rmbhPage(slug);
+ if(page){let html=layout(page.title,page.description,page.body,req,"<style>"+rmbhData.css+"</style>");
+ html=html.replace(/<link rel="canonical" href="[^"]*">/,'<link rel="canonical" href="'+page.canonical+'">');
+ res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(html);}
+ res.writeHead(404,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Página não encontrada","Página não encontrada.","<section><h1>Página não encontrada</h1><a href='/atendimento-rmbh'>Grande BH</a></section>",req));
+ }
  if(await serveReplica(req,res)) return;
  if(legacyRedirects.has(p)){
   const target=legacyRedirects.get(p);
