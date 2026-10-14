@@ -59,6 +59,17 @@ jobs:
                 print("JS_POST_CODE",path,js[max(0,m.start()-250):m.end()+1600],flush=True)
               except Exception as e: print("JS_ERROR",path,type(e).__name__,flush=True)
            except Exception as e:print("PAGE_ERROR",p,type(e).__name__,flush=True)
+          import urllib.request
+          u="https://app.trysoro.com/api/embed/da4cf361-eac9-4fc5-8f6e-f4f34a4291a5?post=alfresco-ou-fluig"
+          try:
+           with urllib.request.urlopen(u,timeout=25) as r:
+            s=r.read(4000000).decode("utf-8",errors="replace")
+            print("SORO_META",json.dumps({"status":r.status,"bytes":len(s),"type":r.headers.get("Content-Type")}),flush=True)
+            print("SORO_START",s[:1800],flush=True)
+            for m in list(re.finditer(r"alfresco-ou-fluig|fetch\(|canonical|<article|postContent|content:|content\x22:",s))[:10]:
+             print("SORO_CONTENT",s[max(0,m.start()-200):m.end()+1800],flush=True)
+          except Exception as e: print("SORO_ERROR",type(e).__name__,flush=True)
+          
           f.quit()
           
           PY
