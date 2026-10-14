@@ -17,5 +17,5 @@ jobs:
           FTP_HOST: ftp.arquindex.com.br
           FTP_USERNAME: arquind2
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          APPLY_CHANGES: 'false'
+          APPLY_CHANGES: 'true'
         run: python3 scripts/seo_recovery.py
