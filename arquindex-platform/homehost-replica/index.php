@@ -17,7 +17,7 @@ if ($path === BASE_PATH . '/' . INDEXNOW_KEY . '.txt') {
     echo INDEXNOW_KEY;
     exit;
 }
-if (!str_starts_with($path, BASE_PATH)) {
+if (strpos($path, BASE_PATH) !== 0) {
     http_response_code(404);
     exit;
 }
@@ -51,7 +51,7 @@ if ($body === false || $status < 100) {
 
 $textTypes = ['text/', 'application/xml', 'application/json', 'application/javascript', 'image/svg+xml'];
 $isText = false;
-foreach ($textTypes as $prefix) if (str_contains($contentType, $prefix)) $isText = true;
+foreach ($textTypes as $prefix) if (strpos($contentType, $prefix) !== false) $isText = true;
 
 if ($isText) {
     $marker = '__ARQUINDEX_REPLICA_CANONICAL_BASE__';
