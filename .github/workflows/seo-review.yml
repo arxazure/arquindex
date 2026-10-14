@@ -66,14 +66,15 @@ jobs:
             s=r.read(4000000).decode("utf-8",errors="replace")
             print("SORO_META",json.dumps({"status":r.status,"bytes":len(s),"type":r.headers.get("Content-Type")}),flush=True)
             print("SORO_START",s[:3500],flush=True)
-          print("SORO_END",s[-12000:],flush=True)
+            print("SORO_END",s[-12000:],flush=True)
+            for m in list(re.finditer(r"alfresco-ou-fluig|fetch\(|canonical|<article|postContent|content:|content\x22:",s))[:10]:
+             print("SORO_CONTENT",s[max(0,m.start()-200):m.end()+1800],flush=True)
+          except Exception as e: print("SORO_ERROR",type(e).__name__,flush=True)
+          
           try:
            ht=read(".htaccess")
            print("HTACCESS_REWRITE", "\n".join(l for l in ht.splitlines() if re.search(r"Rewrite|Redirect|DirectoryIndex",l)),flush=True)
           except Exception as e: print("HTACCESS_ERROR",type(e).__name__,flush=True)
-            for m in list(re.finditer(r"alfresco-ou-fluig|fetch\(|canonical|<article|postContent|content:|content\x22:",s))[:10]:
-             print("SORO_CONTENT",s[max(0,m.start()-200):m.end()+1800],flush=True)
-          except Exception as e: print("SORO_ERROR",type(e).__name__,flush=True)
           
           f.quit()
           
