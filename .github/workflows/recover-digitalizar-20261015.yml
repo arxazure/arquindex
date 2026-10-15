@@ -1,0 +1,168 @@
+name: Recuperar digitalizar.arquindex.com.br
+on:
+  push:
+    paths:
+      - '.github/workflows/recover-digitalizar-20261015.yml'
+permissions:
+  contents: read
+  actions: write
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Backup, restauracao e validacao
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import ftplib,os,io,re,ssl,json,urllib.request,urllib.error
+          from datetime import datetime,timezone
+          HOST=os.environ["FTP_HOST"]; USER=os.environ["FTP_USERNAME"]; PASSWORD=os.environ["FTP_PASSWORD"]
+          DOMAIN="https://digitalizar.arquindex.com.br/"
+          stamp=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+          html='''<!doctype html>
+          <html lang="pt-BR"><head>
+          <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>Digitalização de Documentos com OCR | Arquindex</title>
+          <meta name="description" content="Diagnóstico, projeto-piloto, digitalização, OCR, indexação e controle de qualidade para acervos empresariais. Atendimento em todo o Brasil.">
+          <meta name="robots" content="index,follow,max-image-preview:large">
+          <link rel="canonical" href="https://digitalizar.arquindex.com.br/">
+          <style>
+          :root{--n:#062b47;--t:#0bbfaf;--l:#eef8f8;--w:#fff;--x:#203747}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--x);line-height:1.6;background:#fff}a{color:#066f75}header{background:linear-gradient(135deg,#041d35,#086174);color:#fff;padding:72px 22px}.wrap{max-width:1080px;margin:auto}.eyebrow{font-weight:700;color:#74f4db;letter-spacing:.08em;text-transform:uppercase}h1{font-size:clamp(2.3rem,6vw,4.6rem);line-height:1.02;margin:.3em 0}h2{color:var(--n);font-size:2rem}.lead{font-size:1.25rem;max-width:780px}.btn{display:inline-block;background:#20d4b5;color:#032b3d;text-decoration:none;font-weight:800;padding:15px 22px;border-radius:9px;margin:10px 10px 0 0}main section{padding:48px 22px}.light{background:var(--l)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}.card{background:#fff;border:1px solid #d9e7ea;border-radius:14px;padding:22px}.steps{counter-reset:s}.step{position:relative;padding-left:58px;margin:24px 0}.step:before{counter-increment:s;content:counter(s);position:absolute;left:0;top:0;background:var(--t);color:#023b48;font-weight:900;width:40px;height:40px;border-radius:50%;display:grid;place-items:center}details{border-top:1px solid #ccdce0;padding:16px 0}summary{font-weight:700;cursor:pointer}.cta{background:var(--n);color:#fff;border-radius:18px;padding:34px}.cta h2{color:#fff}footer{padding:30px 22px;text-align:center;background:#031c31;color:#cce2e7}
+          </style>
+          <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Digitalização de documentos com OCR","provider":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"areaServed":"BR","serviceType":["Digitalização de documentos","OCR","Indexação documental","Gestão documental"],"url":"https://digitalizar.arquindex.com.br/"}</script>
+          <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Como começa um projeto de digitalização?","acceptedAnswer":{"@type":"Answer","text":"O ponto de partida é uma amostra representativa para identificar tipos documentais, estado físico, metadados, uso futuro, exceções e critérios de qualidade."}},{"@type":"Question","name":"OCR elimina a conferência humana?","acceptedAnswer":{"@type":"Answer","text":"Não. OCR facilita busca e extração, mas campos críticos, manuscritos, tabelas e documentos degradados podem exigir conferência definida no projeto."}},{"@type":"Question","name":"Digitalizar permite descartar todo documento original?","acceptedAnswer":{"@type":"Answer","text":"Não automaticamente. Temporalidade, finalidade, valor jurídico, regras setoriais e exceções precisam ser avaliados antes de qualquer destinação."}}]}</script>
+          </head><body>
+          <header><div class="wrap"><div class="eyebrow">Arquindex · Atendimento nacional</div><h1>Digitalização empresarial com OCR e rastreabilidade</h1><p class="lead">Transforme acervos físicos em informação consultável com diagnóstico, projeto-piloto, captura, indexação e critérios de qualidade adequados ao uso real dos documentos.</p><a class="btn" href="https://wa.me/5531973632725?text=Quero%20avaliar%20meu%20acervo%20para%20digitalizacao">Solicitar avaliação no WhatsApp</a><a class="btn" href="https://www.arquindex.com.br/digitalizacao.html">Ver solução completa</a></div></header>
+          <main>
+          <section><div class="wrap"><h2>O que o projeto pode incluir</h2><div class="grid">
+          <div class="card"><h3>Diagnóstico do acervo</h3><p>Volumes, formatos, estado físico, classes documentais, prioridades, temporalidade e finalidade de uso.</p></div>
+          <div class="card"><h3>Captura controlada</h3><p>Preparação, ordenação, parâmetros de imagem, tratamento de exceções e conferência de completude.</p></div>
+          <div class="card"><h3>OCR e dados</h3><p>PDF pesquisável, classificação ou extração de campos, conforme qualidade do original e critérios de aceite.</p></div>
+          <div class="card"><h3>Entrega rastreável</h3><p>Metadados, nomenclatura, estrutura de pastas, relatórios e integração com GED quando prevista no escopo.</p></div>
+          </div></div></section>
+          <section class="light"><div class="wrap"><h2>Projeto-piloto antes da escala</h2>
+          <div class="step"><h3>Selecionar a amostra</h3><p>Inclua documentos comuns e difíceis para que o teste represente o acervo real.</p></div>
+          <div class="step"><h3>Definir critérios</h3><p>Legibilidade, sequência, metadados, campos críticos, formato de saída e método de conferência.</p></div>
+          <div class="step"><h3>Medir e ajustar</h3><p>Registre exceções, causas de erro e decisões antes de ampliar volume e prazo.</p></div>
+          <p>Veja também: <a href="https://www.arquindex.com.br/digitalizacao-com-ocr.html">digitalização com OCR</a>, <a href="https://www.arquindex.com.br/guarda_de_documentos.html">gestão e guarda documental</a> e <a href="https://www.arquindex.com.br/lgpd-consultoria.html">consultoria LGPD e DPO</a>.</p>
+          </div></section>
+          <section><div class="wrap"><h2>Perguntas frequentes</h2>
+          <details><summary>Como é calculado o orçamento?</summary><p>O valor depende de volume, preparo, formatos, estado físico, metadados, OCR, conferência, prazo e forma de entrega. A amostra reduz incertezas.</p></details>
+          <details><summary>OCR funciona em manuscritos e tabelas?</summary><p>O desempenho varia. Manuscritos, tabelas, carimbos, fundos coloridos e imagens degradadas exigem teste e podem precisar de revisão humana.</p></details>
+          <details><summary>A digitalização tem validade jurídica automática?</summary><p>Não. Requisitos e exceções dependem do documento, da finalidade e das normas aplicáveis. O Decreto 10.278/2020 não deve ser tratado como garantia genérica para qualquer acervo.</p></details>
+          <div class="cta"><h2>Converse sobre seu acervo</h2><p>Informe tipos documentais, volume aproximado, estado dos documentos, metadados necessários e prazo esperado.</p><a class="btn" href="https://wa.me/5531973632725?text=Quero%20um%20diagnostico%20de%20digitalizacao">WhatsApp +55 31 97363-2725</a></div>
+          </div></section></main>
+          <footer>Arquindex · Digitalização, OCR, gestão documental e LGPD · comercial@arquindex.com.br</footer>
+          </body></html>'''
+          robots='''User-agent: *
+Allow: /
+
+Sitemap: https://digitalizar.arquindex.com.br/sitemap.xml
+'''
+          sitemap='''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://digitalizar.arquindex.com.br/</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+</urlset>
+'''
+          marker="# ARQUINDEX-DIGITALIZAR-RECOVERY-20261015"
+          rules='''
+
+# ARQUINDEX-DIGITALIZAR-RECOVERY-20261015
+Options -Indexes
+DirectoryIndex index.html
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^digitalizar\.arquindex\.com\.br$ [NC]
+RewriteRule ^ https://digitalizar.arquindex.com.br%{REQUEST_URI} [R=301,L]
+</IfModule>
+'''
+          protect_marker="# ARQUINDEX-PROTECT-ADMIN-FILES-20261015"
+          protect='''
+
+# ARQUINDEX-PROTECT-ADMIN-FILES-20261015
+<FilesMatch "(?i)^(client_secret.*[.]json|credentials[.]json|.*coverage.*[.]xlsx|.*performance.*[.]xlsx)$">
+<IfModule mod_authz_core.c>
+Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+Order allow,deny
+Deny from all
+</IfModule>
+</FilesMatch>
+'''
+
+          f=ftplib.FTP(timeout=30);f.connect(HOST,21);f.login(USER,PASSWORD)
+          def read(path):
+            b=bytearray();f.retrbinary("RETR "+path,b.extend);return bytes(b)
+          def put(path,data):
+            if isinstance(data,str):data=data.encode("utf-8")
+            f.storbinary("STOR "+path,io.BytesIO(data))
+          def ensure(path):
+            cur=f.pwd();f.cwd("/")
+            for p in path.strip("/").split("/"):
+              try:f.mkd(p)
+              except ftplib.error_perm:pass
+              f.cwd(p)
+            f.cwd(cur)
+          backup="/public_html/_backups/digitalizar-recovery-"+stamp
+          ensure(backup)
+          f.cwd("/")
+          try: oldsub=read("digitalizar.arquindex.com.br/.htaccess")
+          except: oldsub=b""
+          put(backup+"/subdomain.htaccess.before",oldsub)
+          try: oldmain=read("public_html/.htaccess")
+          except: oldmain=b""
+          put(backup+"/main.htaccess.before",oldmain)
+          subtext=oldsub.decode("utf-8",errors="replace")
+          if marker not in subtext: subtext+=rules
+          maintext=oldmain.decode("utf-8",errors="replace")
+          if protect_marker not in maintext: maintext+=protect
+          put("digitalizar.arquindex.com.br/.htaccess",subtext)
+          put("public_html/.htaccess",maintext)
+          put("digitalizar.arquindex.com.br/index.html",html)
+          put("digitalizar.arquindex.com.br/robots.txt",robots)
+          put("digitalizar.arquindex.com.br/sitemap.xml",sitemap)
+          put(backup+"/manifest.txt","created="+stamp+"\nsubdomain=digitalizar.arquindex.com.br\nfiles=index.html,robots.txt,sitemap.xml,.htaccess\n")
+          f.quit()
+          print("BACKUP_CREATED",backup,flush=True)
+
+          checks={}
+          for path in ["","robots.txt","sitemap.xml"]:
+            url=DOMAIN+path
+            try:
+              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 (compatible; ArquindexVerify/1.0)"})
+              with urllib.request.urlopen(req,timeout=30,context=ssl.create_default_context()) as r:
+                body=r.read(3000000).decode("utf-8",errors="replace");status=r.status;final=r.geturl()
+              checks[path or "home"]={"status":status,"final":final,"bytes":len(body)}
+              if not path:
+                checks["home"].update({"title":"Digitalização de Documentos com OCR | Arquindex" in body,"canonical":DOMAIN in body,"no_noindex":"noindex" not in body.lower(),"not_directory":"Index of /" not in body,"whatsapp":"5531973632725" in body})
+              if path=="robots.txt":checks[path]["sitemap"]=DOMAIN+"sitemap.xml" in body
+              if path=="sitemap.xml":checks[path]["xml"]=("<urlset" in body and DOMAIN in body)
+            except Exception as e: checks[path or "home"]={"error":type(e).__name__}
+          print("PUBLIC_VERIFY",json.dumps(checks,ensure_ascii=False),flush=True)
+          ok=checks.get("home",{}).get("status")==200 and all(checks["home"].get(k) for k in ["title","canonical","no_noindex","not_directory","whatsapp"]) and checks.get("robots.txt",{}).get("status")==200 and checks["robots.txt"].get("sitemap") and checks.get("sitemap.xml",{}).get("status")==200 and checks["sitemap.xml"].get("xml")
+          if not ok: raise SystemExit("Validacao publica falhou; revisar backup "+backup)
+
+          key=os.environ.get("INDEXNOW_KEY","").strip()
+          if key:
+            payload=json.dumps({"host":"digitalizar.arquindex.com.br","key":key,"keyLocation":DOMAIN+key+".txt","urlList":[DOMAIN]}).encode()
+            req=urllib.request.Request("https://api.indexnow.org/indexnow",data=payload,headers={"Content-Type":"application/json"},method="POST")
+            try:
+              with urllib.request.urlopen(req,timeout=30) as r: print("INDEXNOW_STATUS",r.status,flush=True)
+            except urllib.error.HTTPError as e: print("INDEXNOW_HTTP_ERROR",e.code,flush=True)
+            except Exception as e: print("INDEXNOW_ERROR",type(e).__name__,flush=True)
+          else: print("INDEXNOW_SKIPPED key_ausente",flush=True)
+          PY
+      - name: Remover log de diagnostico com inventario
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl -fsS -X DELETE -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/arxazure/arquindex/actions/runs/38803582250 || true
