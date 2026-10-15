@@ -1,8 +1,5 @@
 name: Auditoria final da recuperacao SEO
 on:
-  push:
-    paths:
-      - '.github/workflows/seo-final-audit.yml'
   workflow_dispatch:
 permissions:
   contents: read
