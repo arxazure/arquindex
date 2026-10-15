@@ -60,16 +60,8 @@ jobs:
           </div></section></main>
           <footer>Arquindex · Digitalização, OCR, gestão documental e LGPD · comercial@arquindex.com.br</footer>
           </body></html>'''
-          robots='''User-agent: *
-Allow: /
-
-Sitemap: https://digitalizar.arquindex.com.br/sitemap.xml
-'''
-          sitemap='''<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://digitalizar.arquindex.com.br/</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-</urlset>
-'''
+          robots="User-agent: *\\nAllow: /\\n\\nSitemap: https://digitalizar.arquindex.com.br/sitemap.xml\\n"
+          sitemap='<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n<url><loc>https://digitalizar.arquindex.com.br/</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>\\n</urlset>\\n'
           marker="# ARQUINDEX-DIGITALIZAR-RECOVERY-20261015"
           rules='''
 
