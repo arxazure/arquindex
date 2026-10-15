@@ -63,32 +63,9 @@ jobs:
           robots="User-agent: *\\nAllow: /\\n\\nSitemap: https://digitalizar.arquindex.com.br/sitemap.xml\\n"
           sitemap='<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\\n<url><loc>https://digitalizar.arquindex.com.br/</loc><lastmod>2026-10-15</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>\\n</urlset>\\n'
           marker="# ARQUINDEX-DIGITALIZAR-RECOVERY-20261015"
-          rules='''
-
-# ARQUINDEX-DIGITALIZAR-RECOVERY-20261015
-Options -Indexes
-DirectoryIndex index.html
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteCond %{HTTPS} !=on [OR]
-RewriteCond %{HTTP_HOST} !^digitalizar\.arquindex\.com\.br$ [NC]
-RewriteRule ^ https://digitalizar.arquindex.com.br%{REQUEST_URI} [R=301,L]
-</IfModule>
-'''
+          rules="\\n\\n# ARQUINDEX-DIGITALIZAR-RECOVERY-20261015\\nOptions -Indexes\\nDirectoryIndex index.html\\n<IfModule mod_rewrite.c>\\nRewriteEngine On\\nRewriteCond %{HTTPS} !=on [OR]\\nRewriteCond %{HTTP_HOST} !^digitalizar\\\\.arquindex\\\\.com\\\\.br$ [NC]\\nRewriteRule ^ https://digitalizar.arquindex.com.br%{REQUEST_URI} [R=301,L]\\n</IfModule>\\n"
           protect_marker="# ARQUINDEX-PROTECT-ADMIN-FILES-20261015"
-          protect='''
-
-# ARQUINDEX-PROTECT-ADMIN-FILES-20261015
-<FilesMatch "(?i)^(client_secret.*[.]json|credentials[.]json|.*coverage.*[.]xlsx|.*performance.*[.]xlsx)$">
-<IfModule mod_authz_core.c>
-Require all denied
-</IfModule>
-<IfModule !mod_authz_core.c>
-Order allow,deny
-Deny from all
-</IfModule>
-</FilesMatch>
-'''
+          protect="\\n\\n# ARQUINDEX-PROTECT-ADMIN-FILES-20261015\\n<FilesMatch \\\"(?i)^(client_secret.*[.]json|credentials[.]json|.*coverage.*[.]xlsx|.*performance.*[.]xlsx)$\\\">\\n<IfModule mod_authz_core.c>\\nRequire all denied\\n</IfModule>\\n<IfModule !mod_authz_core.c>\\nOrder allow,deny\\nDeny from all\\n</IfModule>\\n</FilesMatch>\\n"
 
           f=ftplib.FTP(timeout=30);f.connect(HOST,21);f.login(USER,PASSWORD)
           def read(path):
