@@ -1,4 +1,4 @@
-name: Publicar arte OCR 2026-10-15
+name: Publicar arte DPO 2026-10-15 tarde
 on:
   push:
     paths:
@@ -28,9 +28,9 @@ jobs:
             <rect width="1080" height="1350" fill="url(#bg)"/>
             <circle cx="910" cy="130" r="260" fill="#0bb9c1" opacity=".10"/>
             <circle cx="120" cy="1050" r="330" fill="#0bb9c1" opacity=".08"/>
-            <text x="80" y="145" font-family="Arial,Helvetica,sans-serif" font-size="94" font-weight="800" fill="#ffffff">OCR COM</text>
-            <text x="80" y="248" font-family="Arial,Helvetica,sans-serif" font-size="104" font-weight="900" fill="#10dbc5">CRITÉRIO</text>
-            <text x="84" y="315" font-family="Arial,Helvetica,sans-serif" font-size="38" fill="#d8f4f5">Teste piloto antes da escala</text>
+            <text x="80" y="145" font-family="Arial,Helvetica,sans-serif" font-size="94" font-weight="800" fill="#ffffff">DPO</text>
+            <text x="80" y="248" font-family="Arial,Helvetica,sans-serif" font-size="104" font-weight="900" fill="#10dbc5">TERCEIRIZADO</text>
+            <text x="84" y="315" font-family="Arial,Helvetica,sans-serif" font-size="38" fill="#d8f4f5">Privacidade na rotina, não só no papel</text>
             <g transform="translate(105 415)" filter="url(#s)">
               <rect width="360" height="510" rx="28" fill="#fff"/>
               <path d="M260 0h72l28 30v72h-100z" fill="#dff7f7"/>
@@ -40,7 +40,7 @@ jobs:
               <rect x="55" y="245" width="220" height="16" rx="8" fill="#95a9b6"/>
               <rect x="55" y="315" width="110" height="70" rx="10" fill="#0fcdbd" opacity=".28"/>
               <rect x="185" y="315" width="120" height="70" rx="10" fill="#0fcdbd" opacity=".52"/>
-              <text x="70" y="455" font-family="Arial" font-size="30" font-weight="700" fill="#17344e">DOCUMENTO</text>
+              <text x="70" y="455" font-family="Arial" font-size="30" font-weight="700" fill="#17344e">GOVERNANÇA</text>
             </g>
             <path d="M490 665h110" stroke="#10dbc5" stroke-width="20" stroke-linecap="round"/>
             <path d="M585 620l55 45-55 45" fill="none" stroke="#10dbc5" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
@@ -54,19 +54,19 @@ jobs:
                 <rect x="42" y="180" width="246" height="64" rx="12"/><rect x="42" y="270" width="246" height="64" rx="12"/><rect x="42" y="360" width="246" height="64" rx="12"/>
               </g>
               <g fill="#12cdbd"><rect x="66" y="205" width="150" height="14" rx="7"/><rect x="66" y="295" width="105" height="14" rx="7"/><rect x="66" y="385" width="175" height="14" rx="7"/></g>
-              <text x="55" y="475" font-family="Arial" font-size="30" font-weight="700" fill="#fff">DADOS PESQUISÁVEIS</text>
+              <text x="55" y="475" font-family="Arial" font-size="30" font-weight="700" fill="#fff">ROTINA E EVIDÊNCIAS</text>
             </g>
             <g transform="translate(70 1010)">
               <rect width="940" height="240" rx="32" fill="#ffffff" opacity=".97"/>
               <text x="50" y="78" font-family="Arial,Helvetica,sans-serif" font-size="48" font-weight="800" fill="#082b46">Arquindex</text>
-              <text x="50" y="132" font-family="Arial,Helvetica,sans-serif" font-size="29" fill="#294e66">Digitalização, OCR e gestão documental</text>
+              <text x="50" y="132" font-family="Arial,Helvetica,sans-serif" font-size="29" fill="#294e66">Consultoria LGPD e acompanhamento mensal</text>
               <rect x="50" y="163" width="840" height="54" rx="27" fill="url(#a)"/>
               <text x="470" y="201" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="800" fill="#06273f">WhatsApp 31 97363-2725</text>
             </g>
           </svg>
           SVG
-          convert -background white /tmp/ocr.svg -resize 1080x1350 -quality 92 /tmp/ocr-criterio-20261015.jpg
-          test $(stat -c%s /tmp/ocr-criterio-20261015.jpg) -gt 10000
+          convert -background white /tmp/ocr.svg -resize 1080x1350 -quality 92 /tmp/dpo-terceirizado-20261015-tarde.jpg
+          test $(stat -c%s /tmp/dpo-terceirizado-20261015-tarde.jpg) -gt 10000
           python - <<'PY'
           import ftplib,os,io
           f=ftplib.FTP(os.environ["FTP_HOST"],timeout=30);f.login(os.environ["FTP_USERNAME"],os.environ["FTP_PASSWORD"]);f.cwd("public_html")
@@ -74,8 +74,8 @@ jobs:
             try:f.mkd(d)
             except ftplib.error_perm:pass
             f.cwd(d)
-          data=open("/tmp/ocr-criterio-20261015.jpg","rb").read()
-          f.storbinary("STOR ocr-criterio-20261015.jpg",io.BytesIO(data));f.quit()
-          print("ASSET https://www.arquindex.com.br/assets/social/ocr-criterio-20261015.jpg",len(data))
+          data=open("/tmp/dpo-terceirizado-20261015-tarde.jpg","rb").read()
+          f.storbinary("STOR dpo-terceirizado-20261015-tarde.jpg",io.BytesIO(data));f.quit()
+          print("ASSET https://www.arquindex.com.br/assets/social/dpo-terceirizado-20261015-tarde.jpg",len(data))
           PY
-          curl -fsSI https://www.arquindex.com.br/assets/social/ocr-criterio-20261015.jpg | head -n 5
+          curl -fsSI https://www.arquindex.com.br/assets/social/dpo-terceirizado-20261015-tarde.jpg | head -n 5
