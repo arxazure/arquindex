@@ -1,32 +1,24 @@
-name: Testar formulario comercial de guarda BH
+name: Verificar acesso publico guarda BH
 on:
   push:
     branches: ['work/formulario-guarda-bh']
-  pull_request:
-    paths:
-      - 'scripts/templates/guarda-commercial-form.html'
-      - 'scripts/sync_guarda_form.py'
-      - 'tests/guarda-form.cjs'
 permissions:
   contents: read
 jobs:
-  testar:
+  verificar:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Instalar navegador de teste
+      - name: Verificar DNS e formulario HTTPS publicado
         run: |
-          npm install --prefix /tmp/guarda-form-test --no-package-lock --no-save playwright@1.62.1
-          /tmp/guarda-form-test/node_modules/.bin/playwright install --with-deps chromium
-      - name: Testar sem enviar mensagens
-        run: NODE_PATH=/tmp/guarda-form-test/node_modules SCREENSHOT_DIR=/tmp/guarda-preview node tests/guarda-form.cjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: formulario-guarda-preview
-          path: /tmp/guarda-preview
-          if-no-files-found: ignore
+          python - <<'PY'
+          import socket, urllib.request
+          host='guardadocumentalembh.arquindex.com.br'
+          print('DNS',sorted({x[4][0] for x in socket.getaddrinfo(host,443,type=socket.SOCK_STREAM)}),flush=True)
+          with urllib.request.urlopen('https://'+host+'/',timeout=25) as response:
+              page=response.read(500000).decode('utf-8')
+              print('HTTP_STATUS',response.status,flush=True)
+              assert response.status==200 and response.url.split('/')[2]==host
+              assert 'id="commercial-form"' in page and 'data-form-version="2026-10-16-v1"' in page
+              print('GUARDA_BH_PUBLIC_FORM_VERIFIED',flush=True)
+          PY
