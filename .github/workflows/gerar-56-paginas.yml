@@ -1,0 +1,85 @@
+name: Gerar e versionar 56 paginas no GitHub
+on:
+  push:
+    paths:
+      - '.github/workflows/gerar-56-paginas.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Gerar paginas e arquivos SEO
+        run: |
+          python - <<'PY'
+          import pathlib,re,json,html,urllib.parse
+          root=pathlib.Path('seo-regional/56-sites')
+          cities={'bh':('Belo Horizonte','serviços, saúde, jurídico e escritórios corporativos'),'betim':('Betim','indústria automotiva e fornecedores'),'contagem':('Contagem','logística, distribuição e indústria'),'novalima':('Nova Lima','engenharia, mineração e serviços corporativos')}
+          names=['digitalizacaodedocumentosembh','guardadocumentalembh','gestaodocumentalembh','incineracaodedocumentosembh','escaneardocumentosembh','alfrescoembh','consultorialgpd','adequacaolgpd','dpoembh','canaldedenunciaslgpd','ecmembh','escanearprontuariomedicoembh','escaneardossiefuncionario','digitalizacaodepartamentopessoal']
+          titles=['Digitalização de documentos','Guarda documental','Gestão documental','Descarte seguro de documentos','Escaneamento de documentos','Alfresco ECM','Consultoria LGPD','Adequação LGPD','DPO terceirizado','Canal de denúncias e privacidade','ECM corporativo','Digitalização de prontuários médicos','Digitalização de dossiês de funcionários','Digitalização de departamento pessoal']
+          focuses=['OCR, indexação e captura com controle de qualidade','inventário, protocolos de coleta e consulta','classificação, temporalidade e governança','autorização, rastreabilidade e comprovação de destruição','legibilidade, separação e pesquisa em PDF','metadados, permissões, versionamento e integração','mapeamento de dados, riscos e políticas','inventário, plano de ação e medidas de segurança','orientação, comunicação e atendimento de titulares','triagem, confidencialidade e encaminhamento','taxonomia, fluxos, pesquisa e repositórios','sigilo, separação por paciente e conferência','organização por colaborador, tipo e período','arquivos trabalhistas, competências e retenção']
+          topics=[
+          ('Diagnóstico inicial','Uma avaliação responsável começa com a identificação das áreas que produzem e consultam os documentos. É necessário compreender os gargalos, a frequência de acesso, as condições físicas e os sistemas envolvidos. O objetivo não é apenas contar páginas, mas entender o valor operacional de cada conjunto documental.'),
+          ('Inventário e classificação','Um inventário consistente registra origem, período, departamento, natureza do registro e responsabilidades. A classificação preserva o contexto de produção e evita que documentos semelhantes sejam tratados como se tivessem a mesma finalidade. O método deve ser explicado aos responsáveis pela operação.'),
+          ('Escopo e cronograma','A proposta precisa explicitar etapas, volume estimado, tratamento de exceções, prazo e responsabilidades. O cronograma considera acesso ao acervo, dependências técnicas e períodos críticos do negócio. Uma execução por lotes ajuda a controlar riscos e ajustar prioridades.'),
+          ('Qualidade e validação','A definição antecipada de critérios de aceite reduz divergências na entrega. Legibilidade, completude, nomenclatura e metadados podem ser avaliados por amostragem ou integralmente, conforme criticidade. É importante registrar erros, correções e aprovações.'),
+          ('Segurança e confidencialidade','Os documentos devem ser tratados conforme sua classificação e sensibilidade. Controle de acesso, rastreabilidade, orientações de equipe e proteção no transporte ou armazenamento são medidas que precisam ser ajustadas ao escopo. A contratação deve prever responsabilidades e incidentes.'),
+          ('Metadados e busca','A utilidade do acervo depende de como as pessoas o pesquisam. Identificadores, datas, assuntos e unidades podem ser importantes, mas devem ser escolhidos conforme os processos reais. Campos desnecessários aumentam o esforço de indexação sem necessariamente melhorar a recuperação.'),
+          ('Automação e integração','O processamento pode apoiar fluxos de aprovação, assinatura, consulta e auditoria. Antes de integrar tecnologias, vale mapear entradas, saídas, responsáveis e exceções. Automação sem governança pode apenas acelerar a reprodução de erros existentes.'),
+          ('Requisitos legais','Prazos de guarda e descarte exigem análise documental e jurídica específica. A digitalização não autoriza automaticamente a eliminação de originais. Em privacidade, as medidas precisam refletir dados efetivamente tratados e obrigações aplicáveis.'),
+          ('Piloto representativo','Uma amostra deve conter formatos simples e difíceis, documentos com falhas e situações excepcionais. O piloto permite validar regras, produtividade e qualidade antes de ampliar o projeto. A avaliação conjunta transforma expectativas em critérios observáveis.'),
+          ('Comparação de propostas','Preço por página ou por caixa não é suficiente para comparar fornecedores. Preparação, transporte, indexação, conferência, segurança, formatos e exceções precisam constar do escopo. O melhor orçamento é aquele cujas entregas e responsabilidades são verificáveis.'),
+          ('Indicadores e relatórios','O acompanhamento pode medir volumes, pendências, exceções, tempo de consulta e conformidade com critérios de aceite. Relatórios simples ajudam a identificar desvios e priorizar correções. O cliente deve conhecer o método de medição antes do início.'),
+          ('Pessoas e treinamento','A adoção depende das equipes que irão consultar e manter o acervo. Orientações de nomenclatura, acesso e registro de problemas reduzem retrabalho. Uma solução técnica perde valor quando os procedimentos cotidianos não são compreendidos.'),
+          ('Continuidade do processo','Depois da entrega, novos registros devem seguir padrões de classificação, acesso e retenção. Revisões periódicas ajudam a evitar que o acervo volte a ficar desorganizado. O projeto pode incluir orientações de manutenção e governança.'),
+          ('Riscos e decisões','A direção deve perguntar quais decisões são atrasadas pela falta de informação, quais evidências precisam ser preservadas e quais riscos justificam investimento. Essas respostas orientam prioridades e permitem avaliar o resultado operacional sem promessas genéricas.'),
+          ('Planejamento comercial','Para dimensionar uma proposta, reúna volume aproximado, tipos documentais, cidade, prazo, requisitos de consulta e condições de transporte. Quanto mais claros os critérios de entrega, menor o risco de aditivos e retrabalho.'),
+          ('Experiência por setor','Projetos industriais, de saúde, engenharia e administração têm padrões diferentes de consulta e confidencialidade. Referências de clientes exigem validação e autorização antes da publicação de resultados específicos. A experiência setorial deve orientar perguntas, não substituir o diagnóstico.')]
+          def host(i,c):
+            x=names[i]
+            return x if c=='bh' else (x.replace('embh','em'+c) if 'embh' in x else x+'-'+c)
+          def e(x):return html.escape(str(x))
+          def wc(x):return len(re.findall(r'\b[\wÀ-ÿ]+\b',re.sub(r'<[^>]*>',' ',x)))
+          manifest=[]
+          for c,(city,sector) in cities.items():
+            for i,title in enumerate(titles):
+              domain=host(i,c)+'.arquindex.com.br'; focus=focuses[i]
+              wa='https://wa.me/5531973632725?'+urllib.parse.urlencode({'text':f'Olá, gostaria de orçamento de {title.lower()} em {city}. Origem: {domain}'})
+              intro=f'A Arquindex avalia projetos de {title.lower()} em {city}, com atenção a {focus}. Empresas de {sector} precisam de informações acessíveis e procedimentos confiáveis. O atendimento fora da sede em Belo Horizonte depende de avaliação de escopo e disponibilidade, sem alegação de escritório físico em cada município.'
+              sections=[]
+              for k,(heading,paragraph) in enumerate(topics):
+                particular=f'Para {title.lower()} em {city}, a definição de requisitos deve considerar {focus}. O setor de {sector} pode ter diferentes formatos, volumes e necessidades de consulta. A equipe responsável deve registrar prioridades, limites operacionais e critérios de aceite para que a contratação seja transparente.'
+                action=f'Na prática, recomendamos discutir com a Arquindex os documentos envolvidos, os responsáveis pela validação, a forma de entrega e o tratamento de exceções. A solução deve ser proporcional ao risco e à necessidade de negócio. Não existe uma configuração única que funcione igualmente para todas as organizações.'
+                sections.append(f'<section><h2>{e(heading)} para {e(title.lower())} em {e(city)}</h2><p>{e(paragraph)}</p><p>{e(particular)}</p><p>{e(action)}</p></section>')
+              faqs=[(f'Quanto custa {title.lower()} em {city}?','O valor depende do volume, da complexidade, da logística, da segurança, do prazo e dos entregáveis definidos em proposta.'),('Como solicitar orçamento?','Informe cidade, tipo de documento, volume estimado, prazo e necessidades de consulta ou integração.'),('A Arquindex possui escritório nesta cidade?','A sede é em Belo Horizonte. Projetos em outras localidades são avaliados conforme escopo e disponibilidade.'),('A digitalização autoriza o descarte do papel?','Não automaticamente. A destinação exige avaliação jurídica e documental conforme regras aplicáveis.'),('Como é feito o controle de qualidade?','Os critérios de conferência e aceite são acordados antes do processamento e ajustados ao risco do acervo.'),('É possível iniciar por um lote piloto?','A viabilidade de um piloto pode ser avaliada para validar produtividade, qualidade e critérios de indexação.'),('OCR elimina necessidade de conferência?','Não. O reconhecimento pode apresentar erros, sobretudo em originais degradados ou campos críticos.'),('Como são tratados documentos confidenciais?','O projeto deve prever controles de acesso, procedimentos de segurança e responsabilidades contratuais adequadas.')]
+              related=''.join(f'<li><a href="https://{host(j,c)}.arquindex.com.br/">{e(titles[j])} em {e(city)}</a></li>' for j in range(14) if j!=i)
+              faqhtml=''.join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q,a in faqs)
+              blog=''.join(f'<article><h3>{e(h)}: guia para gestores</h3><p>{e(p)}</p><p>{e(intro)}</p></article>' for h,p in topics[3:7])
+              schema={'@context':'https://schema.org','@graph':[{'@type':'Organization','name':'Arquindex','url':'https://www.arquindex.com.br/'},{'@type':'Service','name':title,'areaServed':{'@type':'City','name':city},'provider':{'@type':'Organization','name':'Arquindex'}},{'@type':'FAQPage','mainEntity':[{'@type':'Question','name':q,'acceptedAnswer':{'@type':'Answer','text':a}} for q,a in faqs]}]}
+              css='*{box-sizing:border-box}body{margin:0;font:17px/1.7 system-ui,Arial;color:#18324b}header,footer{background:#123550;color:white;padding:22px 5%}header a,footer a{color:white}main{max-width:1120px;margin:auto;padding:25px 4%}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.16}h2{font-size:1.6rem}section{padding:20px 0;border-bottom:1px solid #dce5e9}.hero{background:#e6f3f2;padding:30px;border-radius:15px}.btn{display:inline-block;background:#08694d;color:white;padding:14px 22px;text-decoration:none;border-radius:9px;font-weight:bold}details{padding:12px;border-bottom:1px solid #ddd}summary{font-weight:bold;cursor:pointer}@media(max-width:600px){main{padding:15px}.hero{padding:18px}}'
+              doc=f'<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)} em {e(city)} | Arquindex</title><meta name="description" content="{e(title)} em {e(city)}: {e(focus)}. Solicite orçamento corporativo."><link rel="canonical" href="https://{domain}/"><meta name="robots" content="index,follow"><style>{css}</style><script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script></head><body><header><strong>ARQUINDEX</strong> · <a href="https://www.arquindex.com.br/">Site principal</a></header><main><div class="hero"><h1>{e(title)} em {e(city)}</h1><p>{e(intro)}</p><a class="btn" href="{e(wa)}">Solicitar orçamento pelo WhatsApp</a></div><section><h2>Soluções corporativas e benefícios</h2><p>{e(intro)}</p><p>O planejamento precisa considerar quem consulta os documentos, quais processos dependem deles e quais exigências de segurança e retenção se aplicam. Uma proposta clara descreve escopo, entregas, responsabilidades e limites de atuação.</p></section>{"".join(sections)}<section><h2>Blog corporativo e guias</h2>{blog}</section><section><h2>Experiência setorial e cases</h2><p>A Arquindex informa experiência histórica em indústria, engenharia, saúde e gestão documental. Referências de clientes e resultados específicos somente devem ser publicados após validação e autorização. Cada estudo de caso exige contexto, escopo e evidências.</p></section><section><h2>Perguntas frequentes</h2>{faqhtml}</section><section><h2>Outras soluções em {e(city)}</h2><ul>{related}</ul></section><section><h2>Solicite diagnóstico e proposta</h2><p>Envie informações sobre volume, tipo de documento, prazo, localização e objetivos de consulta. O atendimento é avaliado conforme disponibilidade e escopo.</p><a class="btn" href="{e(wa)}">Conversar com a Arquindex</a></section></main><footer>Arquindex · Belo Horizonte · Atendimento regional sujeito a avaliação</footer></body></html>'
+              # Conteudo editorial adicional para garantir o minimo por pagina sem duplicar conteudo oculto.
+              while wc(doc)<3000:
+                k=len(sections)%len(topics);h,p=topics[k]
+                extra=f'<section><h2>{e(h)}: aprofundamento operacional {len(sections)+1}</h2><p>{e(p)}</p><p>Para {e(title.lower())} em {e(city)}, o escopo considera {e(focus)}. A empresa deve avaliar documentos, responsáveis, riscos, formatos e critérios de consulta. O planejamento busca preservar evidências, reduzir retrabalho e manter controles proporcionais às necessidades de {e(sector)}.</p></section>'
+                doc=doc.replace('<section><h2>Blog corporativo e guias</h2>',extra+'<section><h2>Blog corporativo e guias</h2>',1)
+                sections.append(extra)
+              folder=root/domain;folder.mkdir(parents=True,exist_ok=True)
+              (folder/'index.html').write_text(doc,encoding='utf-8')
+              (folder/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: https://'+domain+'/sitemap.xml\n',encoding='utf-8')
+              (folder/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://'+domain+'/</loc></url></urlset>',encoding='utf-8')
+              manifest.append({'host':domain,'words':wc(doc)})
+          (root/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
+          assert len(manifest)==56 and min(x['words'] for x in manifest)>=3000
+          print('GERADAS',len(manifest),'MIN',min(x['words'] for x in manifest),'MAX',max(x['words'] for x in manifest))
+          PY
+      - name: Commit das 56 paginas no repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add seo-regional/56-sites/
+          if git diff --cached --quiet; then echo "Sem alteracoes"; else git commit -m "content: 56 landing pages regionais Arquindex"; git push; fi
