@@ -18,7 +18,8 @@ jobs:
           import pathlib,re
           root=pathlib.Path('seo-regional/56-sites')
           sites=list(root.glob('*.arquindex.com.br/index.html'))
-          assert len(sites)==56, f'Esperados 56 sites, encontrados {len(sites)}. Nenhum upload realizado.'
+          print(f'Arquivos HTML encontrados: {len(sites)}')
+          assert len(sites)==56, f'Esperados 56 sites, encontrados {len(sites)}. Confira se a geracao ja fez commit em master.'
           for f in sites:
             html=f.read_text(encoding='utf-8')
             words=len(re.findall(r'\b[\wÀ-ÿ]+\b',re.sub(r'<[^>]+>',' ',html)))
@@ -40,7 +41,7 @@ jobs:
           root=pathlib.Path('seo-regional/56-sites')
           sites=sorted(root.glob('*.arquindex.com.br'))
           def deploy(host,user,password,base,label):
-            assert host and user and password
+            assert host and user and password, f'{label}: credenciais FTP ausentes'
             with ftplib.FTP(host,timeout=45) as ftp:
               ftp.login(user,password)
               for segment in base.strip('/').split('/'):
