@@ -1,0 +1,38 @@
+name: Estrategia Top 10 e Top 3 Arquindex
+on:
+  push:
+    paths:
+      - '.github/workflows/seo-top10-20261015.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-top10
+  cancel-in-progress: false
+jobs:
+  strategy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Aplicar e verificar estrategia
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          python - <<'PY'
+          import ftplib,os,re,json
+          f=ftplib.FTP(os.environ["FTP_HOST"],timeout=30);f.login(os.environ["FTP_USERNAME"],os.environ["FTP_PASSWORD"]);f.cwd("public_html")
+          for p in ["guarda_de_documentos.html","digitalizacao.html","digitalizacao-com-ocr.html","lgpd-consultoria.html","dpo-as-a-service-consultoria-lgpd.html","gestao_documental_documentos.html"]:
+           b=bytearray();f.retrbinary("RETR "+p,b.extend)
+           try:s=b.decode("utf-8")
+           except UnicodeDecodeError:s=b.decode("latin1")
+           print("AUDIT",p,"BYTES",len(b),flush=True)
+           print("META",json.dumps(re.findall(r"<(?:title|h1)\b[^>]*>.*?</(?:title|h1)>|<link\b[^>]*canonical[^>]*>|<meta\b[^>]*(?:description|robots)[^>]*>",s,re.I|re.S),ensure_ascii=False),flush=True)
+           for match in re.finditer(r"Etapas do projeto|Conteúdos relacionados|Conte&uacute;dos relacionados|Links internos estratégicos|ARQUINDEX-SEO-20261015",s,re.I):
+            print("SECTION",json.dumps(s[max(0,match.start()-120):match.start()+2100],ensure_ascii=False),flush=True)
+           print("TARGETS",json.dumps(sorted(set(re.findall(r'href=["\x27]([^"\x27]+\.html)["\x27]',s)))[:100],ensure_ascii=False),flush=True)
+          f.quit()
+          
+          PY
