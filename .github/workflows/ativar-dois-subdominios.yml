@@ -1,0 +1,90 @@
+name: Ativar dois subdominios BH
+on:
+  push:
+    paths: ['.github/workflows/ativar-dois-subdominios.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ativar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+      CPANEL_USER: ${{ secrets.CPANEL_USER }}
+      CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Verificar paginas e cadastrar apenas dois subdominios
+        run: |
+          python - <<'PY'
+          import os,json,urllib.request,urllib.parse,base64,ftplib,socket,ssl
+          names=['digitalizacaodedocumentosembh','guardadocumentalembh']
+          host=(os.getenv('CPANEL_HOST') or 'https://arquindex.com.br:2083').rstrip('/')
+          if not host.startswith('https://'):host='https://'+host
+          parsed=urllib.parse.urlsplit(host)
+          if parsed.hostname not in ('arquindex.com.br','www.arquindex.com.br','ftp.arquindex.com.br'):
+              raise SystemExit('CPANEL_HOST requer revisao: destino nao confirmado. Credenciais nao enviadas.')
+          user=os.getenv('CPANEL_USER') or 'arquind2'
+          token=os.getenv('CPANEL_API_TOKEN')
+          pwd=os.getenv('FTP_PASSWORD')
+          if token:auth='cpanel '+user+':'+token
+          elif pwd:auth='Basic '+base64.b64encode((user+':'+pwd).encode()).decode()
+          else:raise SystemExit('Credencial armazenada indisponivel.')
+          # Nunca imprimir cabeçalhos ou respostas completas contendo dados da conta.
+          def call(path,params=None):
+              url=host+path
+              if params:url+='?'+urllib.parse.urlencode(params)
+              request=urllib.request.Request(url,headers={'Authorization':auth,'Accept':'application/json'})
+              with urllib.request.urlopen(request,timeout=25) as r:return json.load(r)
+          try:
+              info=call('/execute/DomainInfo/list_domains')
+              if info.get('status')!=1:raise ValueError('Resposta sem autenticacao validada')
+          except Exception as e:
+              print('CPANEL_API_BLOCKED',type(e).__name__,getattr(e,'code',None),flush=True)
+              raise SystemExit('Nao foi possivel autenticar na API cPanel com TLS validado. Nenhum dominio alterado.')
+          data=info.get('data') or {}
+          if data.get('main_domain')!='arquindex.com.br':raise SystemExit('Conta autenticada diverge do dominio solicitado.')
+          print('CPANEL_AUTH_OK',flush=True)
+          existing=set(data.get('sub_domains') or [])|set(data.get('addon_domains') or [])
+          ftp=ftplib.FTP('ftp.arquindex.com.br',timeout=25);ftp.login('arquind2',pwd)
+          for name in names:
+              fqdn=name+'.arquindex.com.br'
+              root='public_html/subdominios/'+fqdn
+              ftp.cwd('/');ftp.cwd(root)
+              b=bytearray();ftp.retrbinary('RETR index.html',b.extend)
+              text=b.decode('utf-8')
+              if 'https://'+fqdn+'/' not in text or '<h1' not in text.lower():raise RuntimeError('Pagina nao validada: '+fqdn)
+              print('CONTENT_READY',fqdn,root,flush=True)
+              if fqdn not in existing:
+                  params={'cpanel_jsonapi_user':user,'cpanel_jsonapi_apiversion':'2','cpanel_jsonapi_module':'SubDomain','cpanel_jsonapi_func':'addsubdomain','domain':name,'rootdomain':'arquindex.com.br','dir':root,'disallowdot':'1'}
+                  result=call('/json-api/cpanel',params).get('cpanelresult') or {}
+                  ok=result.get('event',{}).get('result')==1 and any(x.get('result')==1 for x in (result.get('data') or []))
+                  if not ok:raise RuntimeError('cPanel nao confirmou criacao de '+fqdn)
+                  print('DOMAIN_CREATED',fqdn,flush=True)
+              else:print('DOMAIN_ALREADY_EXISTS',fqdn,flush=True)
+          ftp.quit()
+          fresh=call('/execute/DomainInfo/list_domains')
+          domains=set((fresh.get('data') or {}).get('sub_domains') or [])
+          for name in names:
+              fqdn=name+'.arquindex.com.br'
+              print('DOMAIN_REGISTERED',fqdn,fqdn in domains,flush=True)
+          try:
+              cert=call('/execute/SSL/start_autossl_check')
+              print('AUTOSSL_REQUEST',cert.get('status'),flush=True)
+          except Exception as e:print('AUTOSSL_PENDING',type(e).__name__,flush=True)
+          passed=True
+          for name in names:
+              fqdn=name+'.arquindex.com.br'
+              try:
+                  ips=sorted({x[4][0] for x in socket.getaddrinfo(fqdn,443,type=socket.SOCK_STREAM)})
+                  print('PUBLIC_DNS',fqdn,ips,flush=True)
+                  with urllib.request.urlopen('https://'+fqdn+'/',timeout=20) as r:
+                      text=r.read(200000).decode('utf-8')
+                      ok=r.status==200 and 'https://'+fqdn+'/' in text and '<h1' in text.lower()
+                      print('HTTPS_CONTENT_VERIFIED',fqdn,ok,flush=True)
+                      passed=passed and ok
+              except Exception as e:
+                  passed=False;print('PUBLIC_PENDING',fqdn,type(e).__name__,flush=True)
+          if not passed:raise SystemExit('Cadastro executado; DNS/HTTPS ainda exige verificacao posterior.')
+          PY
