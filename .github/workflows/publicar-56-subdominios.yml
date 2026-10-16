@@ -1,0 +1,76 @@
+name: Publicar 56 subdominios Arquindex
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'seo-regional/56-sites/**'
+      - '.github/workflows/publicar-56-subdominios.yml'
+permissions:
+  contents: read
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar pacote completo antes de qualquer upload
+        run: |
+          python - <<'PY'
+          import pathlib,re
+          root=pathlib.Path('seo-regional/56-sites')
+          sites=list(root.glob('*.arquindex.com.br/index.html'))
+          assert len(sites)==56, f'Esperados 56 sites, encontrados {len(sites)}. Nenhum upload realizado.'
+          for f in sites:
+            html=f.read_text(encoding='utf-8')
+            words=len(re.findall(r'\b[\wÀ-ÿ]+\b',re.sub(r'<[^>]+>',' ',html)))
+            assert words>=3000,(f,words)
+            for name in ['robots.txt','sitemap.xml']:
+              assert (f.parent/name).is_file(),(f,name)
+          print('PACOTE_VALIDADO',len(sites))
+          PY
+      - name: Enviar para Homehost e opcionalmente Hostinger via FTP
+        env:
+          HOMEHOST_PASS: ${{ secrets.FTP_PASSWORD }}
+          HOSTINGER_HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
+          HOSTINGER_USER: ${{ secrets.HOSTINGER_FTP_USER }}
+          HOSTINGER_PASS: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          HOSTINGER_ROOT: ${{ vars.HOSTINGER_FTP_ROOT }}
+        run: |
+          python - <<'PY'
+          import os,ftplib,pathlib,io,hashlib,time
+          root=pathlib.Path('seo-regional/56-sites')
+          sites=sorted(root.glob('*.arquindex.com.br'))
+          def deploy(host,user,password,base,label):
+            assert host and user and password
+            with ftplib.FTP(host,timeout=45) as ftp:
+              ftp.login(user,password)
+              for segment in base.strip('/').split('/'):
+                if not segment:continue
+                ftp.cwd(segment)
+              try:ftp.mkd('subdominios')
+              except ftplib.error_perm as e:
+                if not str(e).startswith('550'):raise
+              ftp.cwd('subdominios')
+              for site in sites:
+                try:ftp.mkd(site.name)
+                except ftplib.error_perm as e:
+                  if not str(e).startswith('550'):raise
+                ftp.cwd(site.name)
+                existing=set(ftp.nlst())
+                for f in site.iterdir():
+                  if f.name not in ('index.html','sitemap.xml','robots.txt'):continue
+                  data=f.read_bytes()
+                  if f.name in existing:
+                    old=bytearray();ftp.retrbinary('RETR '+f.name,old.extend)
+                    if bytes(old)!=data:
+                      backup=f.name+'.backup-'+time.strftime('%Y%m%d%H%M%S',time.gmtime())
+                      ftp.storbinary('STOR '+backup,io.BytesIO(old))
+                  ftp.storbinary('STOR '+f.name,io.BytesIO(data))
+                  got=bytearray();ftp.retrbinary('RETR '+f.name,got.extend)
+                  assert hashlib.sha256(got).digest()==hashlib.sha256(data).digest()
+                ftp.cwd('..')
+                print(label,'FTP_VERIFIED',site.name)
+          deploy('ftp.arquindex.com.br','arquind2',os.environ['HOMEHOST_PASS'],'public_html','HOMEHOST')
+          if all(os.getenv(k) for k in ['HOSTINGER_HOST','HOSTINGER_USER','HOSTINGER_PASS']):
+            deploy(os.environ['HOSTINGER_HOST'],os.environ['HOSTINGER_USER'],os.environ['HOSTINGER_PASS'],os.getenv('HOSTINGER_ROOT') or 'public_html','HOSTINGER')
+          else:print('HOSTINGER_SKIPPED: configure HOSTINGER_FTP_HOST, HOSTINGER_FTP_USER, HOSTINGER_FTP_PASSWORD')
+          PY
