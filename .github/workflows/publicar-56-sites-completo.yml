@@ -1,0 +1,191 @@
+name: Arquindex - Publicar 56 sites e indexar
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/publicar-56-sites-completo.yml'
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-56-sites-completo
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      FTP_HOST: ftp.arquindex.com.br
+      FTP_USER: arquind2
+      FTP_PORT: '21'
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_REMOTE_ROOT: ${{ vars.FTP_REMOTE_ROOT }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+      BING_INDEXNOW_KEY: ${{ secrets.BING_INDEXNOW_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preparar e validar 56 pastas independentes
+        run: |
+          python - <<'PY'
+          import pathlib,json,re,shutil,zipfile,xml.etree.ElementTree as ET
+          src=pathlib.Path('seo-regional/56-sites')
+          manifest=json.loads((src/'manifest.json').read_text(encoding='utf-8'))
+          assert len(manifest)==56 and len({r['host'] for r in manifest})==56
+          dst=pathlib.Path('deploy-56')
+          dst.mkdir(exist_ok=True)
+          for row in manifest:
+            host=row['host']
+            assert re.fullmatch(r'[a-z0-9-]+\.arquindex\.com\.br',host),host
+            target=dst/host
+            target.mkdir(exist_ok=True)
+            for name in ('index.html','sitemap.xml','robots.txt'):
+              origin=src/host/name
+              assert origin.is_file(),str(origin)
+              shutil.copy2(origin,target/name)
+            page=(target/'index.html').read_text(encoding='utf-8')
+            assert '<html' in page and '<title>' in page and 'https://www.arquindex.com.br/' in page,host
+            assert 'https://'+host+'/' in page,host
+            assert 'https://'+host+'/sitemap.xml' in (target/'robots.txt').read_text(),host
+            ET.parse(target/'sitemap.xml')
+          with zipfile.ZipFile('arquindex-56-sites.zip','w',zipfile.ZIP_DEFLATED) as z:
+            for file in sorted(dst.rglob('*')):
+              if file.is_file():z.write(file,file.relative_to(dst))
+          print('VALIDATED_56',len(manifest),'pastas; ZIP pronto')
+          PY
+      - name: Disponibilizar pacote para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-56-sites-completos
+          path: arquindex-56-sites.zip
+          retention-days: 30
+      - name: Publicar por FTPS explicito na porta 21
+        run: |
+          python - <<'PY'
+          import os,ftplib,pathlib,hashlib,io,json
+          pwd=os.environ.get('FTP_PASSWORD','')
+          if not pwd:raise RuntimeError('Falta secret FTP_PASSWORD')
+          hosts=[r['host'] for r in json.loads(pathlib.Path('seo-regional/56-sites/manifest.json').read_text())]
+          root=os.getenv('FTP_REMOTE_ROOT','').strip() or 'public_html/subdominios'
+          with ftplib.FTP_TLS(timeout=60) as ftp:
+            ftp.connect(os.environ['FTP_HOST'],int(os.environ['FTP_PORT']))
+            ftp.login(os.environ['FTP_USER'],pwd)
+            ftp.prot_p()
+            ftp.set_pasv(True)
+            print('FTPS_AUTH_OK','initial',ftp.pwd(),flush=True)
+            # A raiz pode ser a conta, public_html ou uma pasta FTP restrita.
+            candidates=[root,'/'+root,'/home/arquind2/'+root]
+            if root=='public_html/subdominios':
+              candidates+=['subdominios','/subdominios']
+            base=None
+            for candidate in dict.fromkeys(candidates):
+              try:
+                ftp.cwd(candidate)
+                base=ftp.pwd()
+                print('REMOTE_ROOT',base,flush=True)
+                break
+              except ftplib.all_errors:
+                continue
+            if base is None:
+              raise RuntimeError('REMOTE_ROOT_NOT_FOUND: crie a pasta public_html/subdominios no cPanel ou configure variable FTP_REMOTE_ROOT')
+            for host in hosts:
+              ftp.cwd(base)
+              try:ftp.mkd(host)
+              except ftplib.error_perm as exc:
+                if not str(exc).startswith('550'):raise
+              ftp.cwd(host)
+              for name in ('index.html','sitemap.xml','robots.txt'):
+                data=(pathlib.Path('deploy-56')/host/name).read_bytes()
+                ftp.storbinary('STOR '+name,io.BytesIO(data))
+                readback=bytearray()
+                ftp.retrbinary('RETR '+name,readback.extend)
+                if hashlib.sha256(data).digest()!=hashlib.sha256(readback).digest():
+                  raise RuntimeError('HASH_MISMATCH '+host+'/'+name)
+              print('FTP_VERIFIED',host,flush=True)
+          print('FTP_UPLOAD_SUCCESS_56',flush=True)
+          PY
+      - name: Verificar HTTPS publico e criar relatorio
+        id: check
+        run: |
+          python - <<'PY'
+          import json,pathlib,urllib.request,urllib.error,time
+          hosts=[r['host'] for r in json.loads(pathlib.Path('seo-regional/56-sites/manifest.json').read_text())]
+          result={}
+          for host in hosts:
+            checks={}
+            for file in ('','sitemap.xml','robots.txt'):
+              url='https://'+host+'/'+file
+              try:
+                with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Arquindex-Deploy-Check/1.0'}),timeout=12) as resp:
+                  body=resp.read(200000).decode('utf-8','replace')
+                  valid=(resp.status==200 and (host in body if file!='' else '<html' in body.lower()))
+                  checks[file or 'index.html']={'ok':valid,'status':resp.status}
+              except Exception as exc:
+                checks[file or 'index.html']={'ok':False,'error':type(exc).__name__+': '+str(exc)[:100]}
+            result[host]=checks
+            print('HTTPS',host,'OK' if all(x['ok'] for x in checks.values()) else 'PENDING',flush=True)
+          pathlib.Path('https-check.json').write_text(json.dumps(result,indent=2))
+          good=sum(all(x['ok'] for x in v.values()) for v in result.values())
+          print('HTTPS_VERIFIED',good,'OF',len(hosts),flush=True)
+          PY
+      - name: Enviar sitemaps verificados ao Google Search Console
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,pathlib,urllib.request,urllib.parse
+          if not all(os.getenv(k) for k in ('GOOGLE_CLIENT_ID','GOOGLE_CLIENT_SECRET','GOOGLE_REFRESH_TOKEN')):
+            print('GOOGLE_SKIPPED: configure GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET e GOOGLE_REFRESH_TOKEN')
+            raise SystemExit(0)
+          if not pathlib.Path('https-check.json').exists():
+            print('GOOGLE_SKIPPED: sem verificacao HTTPS');raise SystemExit(0)
+          checks=json.loads(pathlib.Path('https-check.json').read_text())
+          data=urllib.parse.urlencode({'client_id':os.environ['GOOGLE_CLIENT_ID'],'client_secret':os.environ['GOOGLE_CLIENT_SECRET'],'refresh_token':os.environ['GOOGLE_REFRESH_TOKEN'],'grant_type':'refresh_token'}).encode()
+          req=urllib.request.Request('https://oauth2.googleapis.com/token',data=data)
+          with urllib.request.urlopen(req,timeout=25) as r:token=json.load(r)['access_token']
+          for host,status in checks.items():
+            if not all(v['ok'] for v in status.values()):
+              print('GOOGLE_SKIP_UNREACHABLE',host);continue
+            site='https://'+host+'/'
+            feed=site+'sitemap.xml'
+            url='https://www.googleapis.com/webmasters/v3/sites/'+urllib.parse.quote(site,safe='')+'/sitemaps/'+urllib.parse.quote(feed,safe='')
+            try:
+              req=urllib.request.Request(url,method='PUT',headers={'Authorization':'Bearer '+token})
+              with urllib.request.urlopen(req,timeout=20) as r:
+                print('GOOGLE_SUBMITTED',host,r.status)
+            except Exception as exc:
+              print('GOOGLE_ERROR',host,str(exc)[:160])
+          PY
+      - name: Enviar URLs verificadas ao Bing via IndexNow
+        if: always()
+        run: |
+          python - <<'PY'
+          import os,json,pathlib,urllib.request
+          key=os.getenv('BING_INDEXNOW_KEY','')
+          if not key:
+            print('BING_SKIPPED: configure BING_INDEXNOW_KEY e publique chave na raiz de cada host')
+            raise SystemExit(0)
+          if not pathlib.Path('https-check.json').exists():raise SystemExit(0)
+          checks=json.loads(pathlib.Path('https-check.json').read_text())
+          for host,status in checks.items():
+            if not all(v['ok'] for v in status.values()):continue
+            keyurl='https://'+host+'/'+key+'.txt'
+            try:
+              with urllib.request.urlopen(keyurl,timeout=12) as r:
+                if r.read().decode().strip()!=key:raise RuntimeError('chave incorreta')
+              payload=json.dumps({'host':host,'key':key,'keyLocation':keyurl,'urlList':['https://'+host+'/']}).encode()
+              req=urllib.request.Request('https://api.indexnow.org/indexnow',data=payload,headers={'Content-Type':'application/json; charset=utf-8'},method='POST')
+              with urllib.request.urlopen(req,timeout=20) as r:
+                print('BING_INDEXNOW_SUBMITTED',host,r.status)
+            except Exception as exc:
+              print('BING_INDEXNOW_ERROR',host,str(exc)[:160])
+          PY
+      - name: Publicar relatorio de verificacao
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-verificacao-https
+          path: https-check.json
+          if-no-files-found: ignore
