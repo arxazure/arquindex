@@ -1,0 +1,62 @@
+name: Arquindex BH quatro pilares SEO
+on:
+  push:
+    paths:
+      - '.github/workflows/seo-bh-four-pillars.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-bh-four-pillars
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Integrar paginas BH com backup e verificar
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python - <<'PY'
+          import os,ftplib,io,html,re,urllib.request,datetime
+          assert os.environ.get('FTP_PASSWORD'), 'FTP_PASSWORD nao configurado'
+          base='https://www.arquindex.com.br/'
+          specs=[
+            ('digitalizacao-documentos-belo-horizonte.html','Digitalização de Documentos em BH','Digitalização de documentos empresariais em Belo Horizonte, com OCR, indexação e organização de acervos.','Digitalização de documentos em Belo Horizonte','Organizamos projetos de digitalização para empresas de Belo Horizonte e região metropolitana, considerando volume, tipos documentais, indexação, controle de qualidade e requisitos de confidencialidade. O OCR pode facilitar a pesquisa em arquivos quando a qualidade do original permite.'),
+            ('alfresco-belo-horizonte.html','Alfresco ECM em BH | Implantação e Migração','Consultoria Alfresco ECM em Belo Horizonte para implantação, migração, metadados, permissões e fluxos de documentos.','Alfresco ECM em Belo Horizonte','Projetos Alfresco ECM precisam de levantamento de requisitos, desenho do repositório, metadados, permissões, versionamento, integrações e plano de migração. A Arquindex pode avaliar o cenário documental da empresa e definir o escopo da solução.'),
+            ('gestao-documental-belo-horizonte.html','Gestão Documental em BH | Arquindex','Gestão documental empresarial em Belo Horizonte: classificação, organização, guarda, digitalização e consulta.','Gestão documental em Belo Horizonte','A gestão documental integra organização de arquivos físicos e digitais, classificação, políticas de acesso, temporalidade e procedimentos de consulta. O planejamento deve considerar as obrigações legais de retenção e as necessidades operacionais da empresa.'),
+            ('consultoria-lgpd-belo-horizonte.html','Consultoria LGPD em BH | Arquindex','Consultoria LGPD em Belo Horizonte: diagnóstico, mapeamento de dados pessoais, plano de adequação e governança.','Consultoria LGPD em Belo Horizonte','Um projeto de adequação à LGPD começa pela identificação dos tratamentos de dados pessoais, finalidades, bases legais, riscos, contratos e medidas de segurança. A consultoria estrutura um plano de ação adequado às operações da empresa, sem prometer conformidade automática.')
+          ]
+          def render(name,title,desc,h1,body):
+            links=''.join('<li><a href="/'+html.escape(p)+'">'+html.escape(h)+'</a></li>' for p,_,_,h,_ in specs if p!=name)
+            wa='https://wa.me/5531973632725?text=Ol%C3%A1%2C%20gostaria%20de%20um%20or%C3%A7amento%20da%20Arquindex%20em%20BH'
+            return ('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+html.escape(title)+' | Arquindex</title><meta name="description" content="'+html.escape(desc)+'"><link rel="canonical" href="'+base+name+'"><style>body{font:17px/1.65 system-ui,Arial,sans-serif;margin:0;color:#183047;background:#fff}header,footer{background:#12324d;color:white;padding:22px max(5%,calc((100% - 1000px)/2))}main{max-width:1000px;margin:auto;padding:30px 5%}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.2}a{color:#075d8e}header a,footer a{color:#fff}.cta{display:inline-block;background:#06724b;color:#fff;padding:13px 20px;border-radius:8px;text-decoration:none}li{margin:8px 0}</style></head><body><header><strong>Arquindex</strong> — Soluções documentais em Belo Horizonte</header><main><nav><a href="/">Início</a> / Belo Horizonte</nav><h1>'+html.escape(h1)+'</h1><p>'+html.escape(body)+'</p><h2>Como iniciar seu projeto</h2><ol><li>Converse com nossa equipe sobre seu acervo ou processo.</li><li>Defina objetivos, volume, requisitos e prazos.</li><li>Receba uma avaliação do escopo e das soluções adequadas.</li></ol><p><a class="cta" href="'+wa+'">Solicitar orçamento pelo WhatsApp</a></p><h2>Outras soluções da Arquindex em BH</h2><ul>'+links+'</ul><p>Atendimento comercial a empresas de Belo Horizonte e região metropolitana, conforme escopo e disponibilidade.</p></main><footer>Arquindex · <a href="/">www.arquindex.com.br</a></footer></body></html>').encode('utf-8')
+          ftp=ftplib.FTP(os.environ['FTP_HOST'],timeout=40);ftp.login(os.environ['FTP_USERNAME'],os.environ['FTP_PASSWORD']);ftp.cwd('public_html')
+          root=ftp.pwd()
+          # Do not overwrite existing pages, which may already be optimized or linked.
+          existing=set(ftp.nlst())
+          pending=[(p,render(p,t,d,h,b)) for p,t,d,h,b in specs if p not in existing]
+          print('EXISTING',sorted(set(p for p,*_ in specs)&existing),flush=True)
+          print('NEW_PAGES',len(pending),flush=True)
+          uploaded=[]
+          try:
+            for p,data in pending:
+              ftp.storbinary('STOR '+p,io.BytesIO(data));uploaded.append(p)
+              check=bytearray();ftp.retrbinary('RETR '+p,check.extend)
+              assert bytes(check)==data
+            ftp.quit()
+            for p in uploaded:
+              with urllib.request.urlopen(urllib.request.Request(base+p,headers={'Cache-Control':'no-cache','User-Agent':'ArquindexSEO/1.0'}),timeout=30) as r:
+                text=r.read().decode('utf-8');assert r.status==200 and '<link rel="canonical" href="'+base+p+'"' in text
+              print('PUBLIC_VERIFIED',base+p,flush=True)
+          except Exception:
+            try:
+              ftp.cwd(root)
+              for p in uploaded:ftp.delete(p)
+              ftp.quit()
+            except Exception as e:print('ROLLBACK_ERROR',str(e),flush=True)
+            raise
+          PY
