@@ -412,7 +412,7 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
- if(p==="/arquivardocumento.arquindex.com.br/bh.html" && u.searchParams.get("post")==="conarq-novas-normas-para-digitalizacao-de-documentos"){res.writeHead(301,{"location":"/conteudo/gestao-documental-estudos-usuarios-conarq-60","cache-control":"public, max-age=3600"});return res.end();}
+ if(p==="/arquivardocumento.arquindex.com.br/bh.html" && u.searchParams.get("post")==="conarq-novas-normas-para-digitalizacao-de-documentos"){res.writeHead(301,{"location":"/conteudo/conarq-novas-normas-para-digitalizacao-de-documentos","cache-control":"public, max-age=3600"});return res.end();}
 
  if(p==="/atendimento-rmbh"||p==="/atendimento-rmbh/"||p.startsWith("/atendimento-rmbh/")) {
  const slug=p.replace(/^\/atendimento-rmbh\/?/,"").replace(/\/$/,"");const page=rmbhPage(slug);
