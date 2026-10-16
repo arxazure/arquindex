@@ -35,7 +35,37 @@ jobs:
               assert (f.parent/name).is_file(),(f,name)
           print('PACOTE_VALIDADO',len(sites))
           PY
-      - name: Enviar para Homehost e opcionalmente Hostinger via FTP
+      - name: Montar ZIP manual com 56 pastas de subdominios
+        run: |
+          python - <<'PY'
+          import pathlib,zipfile,json
+          root=pathlib.Path('seo-regional/56-sites')
+          sites=sorted(root.glob('*.arquindex.com.br'))
+          assert len(sites)==56, f'Esperados 56 diretorios, encontrados {len(sites)}'
+          manifest=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
+          assert {x['host'] for x in manifest}=={x.name for x in sites}
+          with zipfile.ZipFile('arquindex-56-subdominios-homehost.zip','w',zipfile.ZIP_DEFLATED,compresslevel=8) as z:
+            for site in sites:
+              for name in ('index.html','sitemap.xml','robots.txt'):
+                file=site/name
+                assert file.is_file(),str(file)
+                z.write(file,arcname=site.name+'/'+name)
+            z.writestr('LEIA-ME-PUBLICACAO.txt',
+              'ARQUINDEX - 56 SUBDOMINIOS\\n'
+              'Cada pasta no ZIP possui index.html, sitemap.xml e robots.txt.\\n'
+              'Extraia no diretorio PAI das 56 raizes documentais configuradas no cPanel.\\n'
+              'Exemplo: public_html/subdominios/digitalizacaodedocumentosembh.arquindex.com.br/index.html\\n'
+              'Configure cada subdominio no cPanel com document root correspondente; verifique DNS e SSL.\\n')
+          print('ZIP_MANUAL_OK',len(sites),'pastas',pathlib.Path('arquindex-56-subdominios-homehost.zip').stat().st_size,'bytes')
+          PY
+      - name: Disponibilizar ZIP para download manual
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-56-subdominios-homehost
+          path: arquindex-56-subdominios-homehost.zip
+          if-no-files-found: error
+          retention-days: 30
+      - name: Enviar para HomeHost via FTPS explicito (porta 21)
         env:
           HOMEHOST_PASS: ${{ secrets.FTP_PASSWORD }}
           HOMEHOST_HOST: ftp.arquindex.com.br
@@ -48,10 +78,11 @@ jobs:
           sites=sorted(root.glob('*.arquindex.com.br'))
           def deploy(host,user,password,base,label):
             assert host and user and password, f'{label}: credenciais FTP ausentes'
-            with ftplib.FTP(timeout=45) as ftp:
+            with ftplib.FTP_TLS(timeout=45) as ftp:
               ftp.connect(host,port=int(os.getenv('HOMEHOST_PORT','21') if label=='HOMEHOST' else '21'))
               print(label,'FTP_LOGIN_ATTEMPT',host,user,flush=True)
               ftp.login(user,password)
+              ftp.prot_p()
               ftp.set_pasv(True)
               initial=ftp.pwd()
               print(label,'FTP_CONNECTED',host,'PORT',21,'USER',user,'INITIAL_DIR',initial,flush=True)
