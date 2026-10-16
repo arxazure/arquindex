@@ -1,0 +1,39 @@
+name: Provisionar 14 subdominios Arquindex
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+      CPANEL_USER: ${{ secrets.CPANEL_USER }}
+      CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+    steps:
+      - name: Criar subdominios via cPanel UAPI e verificar DNS
+        run: |
+          python - <<'PY'
+          import os,urllib.request,urllib.parse,json,ssl,socket
+          names=["digitalizacaodedocumentosembh","guardadocumentalembh","gestaodocumentalembh","incineracaodedocumentosembh","escaneardocumentosembh","alfrescoembh","consultorialgpd","adequacaolgpd","dpoembh","canaldedenunciaslgpd","ecmembh","escanearprontuariomedicoembh","escaneardossiefuncionario","digitalizacaodepartamentopessoal"]
+          host=os.getenv('CPANEL_HOST','').strip();user=os.getenv('CPANEL_USER','').strip();token=os.getenv('CPANEL_API_TOKEN','').strip()
+          if not all([host,user,token]):raise SystemExit('BLOQUEADO: configure CPANEL_HOST, CPANEL_USER, CPANEL_API_TOKEN nos secrets GitHub. Nenhuma alteracao efetuada.')
+          if not host.startswith('https://'):host='https://'+host
+          host=host.rstrip('/')
+          assert host.endswith(':2083'), 'CPANEL_HOST deve terminar com :2083 e usar HTTPS'
+          headers={'Authorization':'cpanel '+user+':'+token,'Accept':'application/json'}
+          for label in names:
+            fqdn=label+'.arquindex.com.br'
+            params=urllib.parse.urlencode({'domain':fqdn,'document_root':'public_html/subdominios/'+label}).encode()
+            url=host+'/execute/SubDomain/addsubdomain'
+            # API availability varies by cPanel version. Stop rather than pretend success.
+            req=urllib.request.Request(url+'?'+params.decode(),headers=headers)
+            try:
+              with urllib.request.urlopen(req,timeout=25) as response: result=json.load(response)
+              if result.get('status')!=1:print('CREATE_FAILED',fqdn,json.dumps(result)[:450]);continue
+              print('CPANEL_CREATED',fqdn)
+              try:print('DNS',fqdn,socket.gethostbyname(fqdn))
+              except OSError:print('DNS_PENDING',fqdn)
+            except Exception as exc:print('CREATE_ERROR',fqdn,type(exc).__name__,str(exc)[:250])
+          PY
