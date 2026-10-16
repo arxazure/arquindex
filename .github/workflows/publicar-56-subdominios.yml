@@ -52,9 +52,27 @@ jobs:
             with ftplib.FTP(timeout=45) as ftp:
               ftp.connect(host,port=int(os.getenv('HOMEHOST_PORT','21') if label=='HOMEHOST' else '21'))
               ftp.login(user,password)
-              for segment in base.strip('/').split('/'):
-                if not segment:continue
-                ftp.cwd(segment)
+              ftp.set_pasv(True)
+              initial=ftp.pwd()
+              print(label,'FTP_CONNECTED',host,'PORT',21,'USER',user,'INITIAL_DIR',initial,flush=True)
+              candidates=[base,'/home/arquind2/public_html','/public_html','.']
+              found=False
+              for candidate in candidates:
+                try:
+                  ftp.cwd(initial)
+                  if candidate!='.':ftp.cwd(candidate)
+                  current=ftp.pwd()
+                  entries=set(ftp.nlst())
+                  indicators=('index.html','index.php','.htaccess','wp-config.php','robots.txt')
+                  hits=[x for x in indicators if x in entries or any(str(y).rstrip('/').endswith('/'+x) for y in entries)]
+                  print(label,'FTP_ROOT_CANDIDATE',candidate,'DIR',current,'INDICATORS',hits,flush=True)
+                  if hits:
+                    found=True
+                    print(label,'FTP_ROOT_SELECTED',current,flush=True)
+                    break
+                except ftplib.all_errors as exc:
+                  print(label,'FTP_ROOT_UNAVAILABLE',candidate,type(exc).__name__,str(exc)[:150],flush=True)
+              if not found:raise RuntimeError(label+': raiz publica nao identificada; confira o FTP root no cPanel')
               try:ftp.mkd('subdominios')
               except ftplib.error_perm as e:
                 if not str(e).startswith('550'):raise
