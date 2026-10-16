@@ -1,4 +1,5 @@
 name: Publicar 56 subdominios Arquindex
+# Execucao FTPS HomeHost com pacote ZIP e 56 raizes documentais
 on:
   workflow_dispatch:
   push:
