@@ -1,4 +1,5 @@
 name: Publicar Digitalizacao Documentos BH
+# Publicacao solicitada em 2026-10-16: verificar FTPS e raiz documental antes do envio
 on:
   workflow_dispatch:
   push:
