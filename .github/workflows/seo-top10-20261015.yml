@@ -72,7 +72,7 @@ jobs:
            put(key+".txt",key.encode("ascii"));token=key
           assert token==key
           f.quit()
-          with urllib.request.urlopen(keyurl,timeout=25) as r:assert r.status==200 and r.read().decode("ascii").strip()==key
+          with urllib.request.urlopen(urllib.request.Request(keyurl,headers={"User-Agent":"Mozilla/5.0 (compatible; ArquindexSEOAudit/1.0)"}),timeout=25) as r:assert r.status==200 and r.read().decode("ascii").strip()==key
           print("INDEXNOW_KEY_FILE_VERIFIED",flush=True)
           payload=json.dumps({"host":"www.arquindex.com.br","key":key,"keyLocation":keyurl,"urlList":[BASE+p for p in paths]}).encode()
           try:
