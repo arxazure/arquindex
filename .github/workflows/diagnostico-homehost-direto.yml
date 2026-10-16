@@ -1,0 +1,41 @@
+name: Diagnostico conexao direta Homehost
+on:
+  push:
+    paths:
+      - '.github/workflows/diagnostico-homehost-direto.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostico:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Testar FTP, DNS e porta cPanel sem expor credenciais
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python - <<'PY'
+          import os,ftplib,socket,urllib.request,urllib.error
+          hosts=['ftp.arquindex.com.br','arquindex.com.br','digitalizacaodedocumentosembh.arquindex.com.br','guardadocumentalembh.arquindex.com.br']
+          for host in hosts:
+            try: print('DNS_OK',host,socket.gethostbyname(host))
+            except Exception as e: print('DNS_ERROR',host,type(e).__name__)
+          for host in ['arquindex.com.br','www.homehost.com.br']:
+            try:
+              with socket.create_connection((host,2083),timeout=6): print('CPANEL_PORT_REACHABLE',host)
+            except Exception as e: print('CPANEL_PORT_UNREACHABLE',host,type(e).__name__)
+          if not os.getenv('FTP_PASSWORD'):
+            print('FTP_SECRET_MISSING');raise SystemExit(1)
+          try:
+            with ftplib.FTP('ftp.arquindex.com.br',timeout=25) as ftp:
+              ftp.login('arquind2',os.environ['FTP_PASSWORD'])
+              print('FTP_LOGIN_OK')
+              ftp.cwd('public_html')
+              print('FTP_PUBLIC_HTML_OK')
+              names=ftp.nlst()
+              print('FTP_ROOT_ENTRIES_COUNT',len(names))
+              print('FTP_SUBDOMINIOS_DIR_EXISTS',any(n.rstrip('/').endswith('subdominios') for n in names))
+          except Exception as e:
+            print('FTP_ERROR',type(e).__name__,str(e).split(':')[0][:90]);raise
+          PY
