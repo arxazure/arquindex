@@ -91,6 +91,7 @@ jobs:
                 continue
             if base is None:
               raise RuntimeError('REMOTE_ROOT_NOT_FOUND: crie a pasta public_html/subdominios no cPanel ou configure variable FTP_REMOTE_ROOT')
+            key=os.getenv('BING_INDEXNOW_KEY','').strip()
             for host in hosts:
               ftp.cwd(base)
               try:ftp.mkd(host)
@@ -104,6 +105,8 @@ jobs:
                 ftp.retrbinary('RETR '+name,readback.extend)
                 if hashlib.sha256(data).digest()!=hashlib.sha256(readback).digest():
                   raise RuntimeError('HASH_MISMATCH '+host+'/'+name)
+              if key:
+                ftp.storbinary('STOR '+key+'.txt',io.BytesIO(key.encode('utf-8')))
               print('FTP_VERIFIED',host,flush=True)
           print('FTP_UPLOAD_SUCCESS_56',flush=True)
           PY
