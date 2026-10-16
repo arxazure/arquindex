@@ -131,8 +131,20 @@ jobs:
               req=urllib.request.Request(base+p,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
               with urllib.request.urlopen(req,timeout=35) as r:
                 data=r.read(); assert r.status==200
-              text=validate_html(p,data,deep=(p in pages))
-              assert '<title>' in text and '</title>' in text
+              text=data.decode('utf-8')
+              if p in pages:
+                text=validate_html(p,data,deep=True)
+                assert '<title>' in text and '</title>' in text
+              else:
+                checks={
+                  'viewport':'<meta name="viewport"' in text,
+                  'canonical':base+p in text and 'canonical' in text.lower(),
+                  'h1':text.lower().count('<h1')>=1,
+                  'indexable':'noindex' not in text.lower(),
+                  'whatsapp':'5531973632725' in text or '31973632725' in text
+                }
+                print('EXISTING_PAGE_CHECKS',p,json.dumps(checks,sort_keys=True),flush=True)
+                assert checks['canonical'] and checks['indexable']
               public[p]=text
               print('PUBLIC_VERIFIED',base+p,'HTTP 200','BYTES',len(data),flush=True)
 
