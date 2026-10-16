@@ -5,6 +5,9 @@ on:
     paths:
       - 'seo-regional/56-sites/**'
       - '.github/workflows/publicar-56-subdominios.yml'
+concurrency:
+  group: arquindex-deploy-56
+  cancel-in-progress: false
 permissions:
   contents: read
 jobs:
@@ -38,10 +41,6 @@ jobs:
           HOMEHOST_HOST: ftp.arquindex.com.br
           HOMEHOST_USER: arquind2
           HOMEHOST_PORT: '21'
-          HOSTINGER_HOST: ${{ secrets.HOSTINGER_FTP_HOST }}
-          HOSTINGER_USER: ${{ secrets.HOSTINGER_FTP_USER }}
-          HOSTINGER_PASS: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          HOSTINGER_ROOT: ${{ vars.HOSTINGER_FTP_ROOT }}
         run: |
           python - <<'PY'
           import os,ftplib,pathlib,io,hashlib,time
@@ -51,6 +50,7 @@ jobs:
             assert host and user and password, f'{label}: credenciais FTP ausentes'
             with ftplib.FTP(timeout=45) as ftp:
               ftp.connect(host,port=int(os.getenv('HOMEHOST_PORT','21') if label=='HOMEHOST' else '21'))
+              print(label,'FTP_LOGIN_ATTEMPT',host,user,flush=True)
               ftp.login(user,password)
               ftp.set_pasv(True)
               initial=ftp.pwd()
@@ -97,7 +97,5 @@ jobs:
                 ftp.cwd('..')
                 print(label,'FTP_VERIFIED',site.name)
           deploy(os.environ['HOMEHOST_HOST'],os.environ['HOMEHOST_USER'],os.environ['HOMEHOST_PASS'],'public_html','HOMEHOST')
-          if all(os.getenv(k) for k in ['HOSTINGER_HOST','HOSTINGER_USER','HOSTINGER_PASS']):
-            deploy(os.environ['HOSTINGER_HOST'],os.environ['HOSTINGER_USER'],os.environ['HOSTINGER_PASS'],os.getenv('HOSTINGER_ROOT') or 'public_html','HOSTINGER')
-          else:print('HOSTINGER_SKIPPED: configure HOSTINGER_FTP_HOST, HOSTINGER_FTP_USER, HOSTINGER_FTP_PASSWORD')
+          print('HOMEHOST_DEPLOY_FINISHED; Hostinger nao sera autenticada neste workflow')
           PY
