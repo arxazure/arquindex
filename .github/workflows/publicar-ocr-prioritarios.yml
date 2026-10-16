@@ -22,7 +22,8 @@ jobs:
           python scripts/priority_subdomains_ocr.py
           python - <<'PY'
           import pathlib,xml.etree.ElementTree as ET
-          sites=list(pathlib.Path('seo-priority-ocr').glob('*.arquindex.com.br'))
+          from scripts.priority_subdomains_ocr import SITES
+          sites=[pathlib.Path('seo-priority-ocr')/(slug+'.arquindex.com.br') for slug in SITES]
           assert len(sites)==9
           for s in sites:
             for name in ('index.html','robots.txt','sitemap.xml'):assert (s/name).is_file()
@@ -38,7 +39,8 @@ jobs:
           import os,ftplib,json,pathlib,hashlib,io,time
           roots=json.loads(os.environ.get('CPANEL_ROOT_MAP') or '{}')
           base=pathlib.Path('seo-priority-ocr')
-          sites=sorted(base.glob('*.arquindex.com.br'))
+          from scripts.priority_subdomains_ocr import SITES
+          sites=[base/(slug+'.arquindex.com.br') for slug in sorted(SITES)]
           # Roots must be confirmed from cPanel. Never assume public_html/subdominios is live.
           assert all(s.name in roots for s in sites),'Configure OCR_SUBDOMAIN_ROOT_MAP with confirmed document roots in cPanel before deploy'
           pwd=os.getenv('FTP_PASSWORD')
@@ -70,7 +72,9 @@ jobs:
         run: |
           python - <<'PY'
           import pathlib,urllib.request
-          for site in pathlib.Path('seo-priority-ocr').glob('*.arquindex.com.br'):
+          from scripts.priority_subdomains_ocr import SITES
+          for slug in sorted(SITES):
+            site=pathlib.Path('seo-priority-ocr')/(slug+'.arquindex.com.br')
             host=site.name
             for item in ('','sitemap.xml','robots.txt'):
               with urllib.request.urlopen('https://'+host+'/'+item,timeout=25) as r:
