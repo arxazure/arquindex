@@ -1,0 +1,81 @@
+name: Publicar OCR prioritarios no HomeHost
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'scripts/priority_subdomains_ocr.py'
+      - '.github/workflows/publicar-ocr-prioritarios.yml'
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Gerar e validar arquivos
+        run: |
+          python scripts/priority_subdomains_ocr.py
+          python - <<'PY'
+          import pathlib,xml.etree.ElementTree as ET
+          sites=list(pathlib.Path('seo-priority-ocr').glob('*.arquindex.com.br'))
+          assert len(sites)==3
+          for s in sites:
+            for name in ('index.html','robots.txt','sitemap.xml'):assert (s/name).is_file()
+            ET.parse(s/'sitemap.xml')
+            assert '<h1>' in (s/'index.html').read_text()
+          PY
+      - name: Publicar apenas em raizes confirmadas
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          CPANEL_ROOT_MAP: ${{ vars.OCR_SUBDOMAIN_ROOT_MAP }}
+        run: |
+          python - <<'PY'
+          import os,ftplib,json,pathlib,hashlib,io,time
+          roots=json.loads(os.environ.get('CPANEL_ROOT_MAP') or '{}')
+          base=pathlib.Path('seo-priority-ocr')
+          sites=sorted(base.glob('*.arquindex.com.br'))
+          # Roots must be confirmed from cPanel. Never assume public_html/subdominios is live.
+          assert all(s.name in roots for s in sites),'Configure OCR_SUBDOMAIN_ROOT_MAP with confirmed document roots in cPanel before deploy'
+          pwd=os.getenv('FTP_PASSWORD')
+          assert pwd,'FTP_PASSWORD missing'
+          with ftplib.FTP_TLS(timeout=40) as ftp:
+            ftp.connect('ftp.arquindex.com.br',21)
+            ftp.login('arquind2',pwd)
+            ftp.prot_p()
+            for site in sites:
+              root=roots[site.name]
+              assert isinstance(root,str) and root.startswith('public_html/') and '..' not in root
+              ftp.cwd('/')
+              ftp.cwd(root)
+              before=set(x.rsplit('/',1)[-1] for x in ftp.nlst())
+              # Only write these three files after preserving originals; never touch unrelated files.
+              for name in ('index.html','robots.txt','sitemap.xml'):
+                new=(site/name).read_bytes()
+                if name in before:
+                  old=bytearray();ftp.retrbinary('RETR '+name,old.extend)
+                  if bytes(old)==new:continue
+                  backup=name+'.backup-'+time.strftime('%Y%m%dT%H%M%SZ',time.gmtime())
+                  ftp.storbinary('STOR '+backup,io.BytesIO(old))
+                ftp.storbinary('STOR '+name,io.BytesIO(new))
+                got=bytearray();ftp.retrbinary('RETR '+name,got.extend)
+                assert hashlib.sha256(got).digest()==hashlib.sha256(new).digest()
+              print('FTP_FILES_VERIFIED',site.name)
+          PY
+      - name: Verificar dominios publicos
+        run: |
+          python - <<'PY'
+          import pathlib,urllib.request
+          for site in pathlib.Path('seo-priority-ocr').glob('*.arquindex.com.br'):
+            host=site.name
+            for item in ('','sitemap.xml','robots.txt'):
+              with urllib.request.urlopen('https://'+host+'/'+item,timeout=25) as r:
+                assert r.status==200 and r.url.startswith('https://'+host+'/')
+                data=r.read()
+                assert len(data)>50
+              print('PUBLIC_OK',host,item)
+          PY
