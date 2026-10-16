@@ -1,5 +1,63 @@
 export const articles = [
 {
+  "slug": "lgpd-anpd-2026-resposta-incidentes-acervos",
+  "title": "LGPD e ANPD em 2026: resposta a incidentes em arquivos e repositórios digitais",
+  "category": "LGPD",
+  "lead": "Critérios legais, inventário, resposta a incidentes, comunicação à ANPD, orientações para OCR e ECM e aplicação prática para empresas.",
+  "source": "https://www.gov.br/anpd/pt-br/canais_atendimento/agente-de-tratamento/comunicado-de-incidente-de-seguranca-cis",
+  "reviewed": "2026-10-16",
+  "sections": [
+    [
+      "Sumário e contexto",
+      "Este guia apresenta critérios legais, inventário, procedimentos operacionais, comunicação, aplicação prática, indicadores, FAQ e referências oficiais. Uma pasta compartilhada indevidamente ou um ataque que bloqueia prontuários pode atingir dados pessoais. Em serviços de digitalização, guarda documental e ECM, a resposta precisa identificar documentos, titulares, riscos, logs e responsáveis. Uma investigação anunciada pela ANPD em 8 de julho de 2026 envolveu registros de aproximadamente 500 mil pacientes: abertura de procedimento não significa condenação. O caso ilustra a necessidade de governança e evidências."
+    ],
+    [
+      "Critérios legais de comunicação",
+      "A Lei nº 13.709, de 14 de agosto de 2018, especialmente artigos 46 e 48, estabelece as bases para segurança e comunicação. A Resolução CD/ANPD nº 15, de 24 de abril de 2024, detalha os procedimentos. Nem todo alerta é necessariamente comunicável. Confirme se existe incidente envolvendo dados pessoais sujeitos à LGPD e se ele pode acarretar risco ou dano relevante aos titulares. Quando a comunicação é obrigatória, o controlador deve informar a ANPD e os titulares em três dias úteis, salvo legislação específica. Não confunda esse prazo com 72 horas corridas. A regulamentação admite, em situações justificadas, comunicação preliminar e complementação; registros de incidentes devem ser preservados por no mínimo cinco anos."
+    ],
+    [
+      "Inventário documental e prevenção",
+      "Antes da emergência, identifique finalidades de tratamento, controladores e operadores, categorias de dados, titulares, classificação e tipo documental, local de armazenamento, cópias, integrações, fornecedores, permissões, prazos de retenção e evidências de acesso. O inventário deve acompanhar alterações nos sistemas. A digitalização OCR aumenta possibilidades de busca, mas também exige controle: além dos PDFs, avalie metadados, miniaturas, índices de pesquisa, caches, exportações e documentos temporários. Um resultado de pesquisa pode revelar dados pessoais mesmo quando o download do documento original está restrito. Adote perfis por necessidade de trabalho, revisão das contas externas e testes regulares de segregação entre clientes e departamentos."
+    ],
+    [
+      "Primeira etapa: detecção e contenção",
+      "Registre o horário da ciência e convoque TI, segurança, responsável pelo negócio, jurídico e encarregado quando aplicável. Preserve logs, versões de arquivos, registros de autenticação e evidências de compartilhamento. Bloqueie credenciais ou links comprometidos e isole componentes quando necessário, sem destruir rastros para limpar o ambiente. Um alvo interno de contenção nas primeiras quatro horas pode ser útil, mas é recomendação operacional e não um prazo legal da ANPD. Documente responsáveis e decisões, incluindo as razões para manter temporariamente um componente ativo em benefício da continuidade assistencial ou operacional."
+    ],
+    [
+      "Segunda etapa: investigação e delimitação",
+      "Determine quando começou a exposição, quais documentos e usuários foram alcançados, quais permissões estavam vigentes, se houve visualização, cópia, modificação, indisponibilidade ou exclusão e quantos titulares podem ter sido afetados. Cruze logs de ECM, autenticação, firewall, compartilhamento, OCR e backup. Separe fatos confirmados de hipóteses. Um hash pode ajudar a comprovar que determinada cópia permaneceu íntegra, mas, isoladamente, não demonstra autoria nem cadeia de custódia. Preserve evidências com acesso restrito e garanta que o próprio processo de investigação não amplie a exposição."
+    ],
+    [
+      "Terceira etapa: avaliação de risco e comunicação",
+      "Use uma ficha contendo data da ciência, natureza do incidente, sistemas atingidos, categorias e volume estimado de dados, titulares vulneráveis, efeitos possíveis, medidas existentes, contenção aplicada, responsáveis e fundamentação da decisão. O operador deve informar o controlador sem demora injustificada; o controlador avalia os critérios regulatórios e realiza as comunicações exigidas. A ANPD disponibiliza o procedimento no SEI!ANPD. Comunicar apenas à Agência não substitui avisar os titulares quando a norma também exigir. A Resolução CD/ANPD nº 18/2024 e o guia do encarregado publicado em 19 de dezembro de 2024 auxiliam na organização de canais e responsabilidades, sem transferir automaticamente os deveres do controlador para o DPO."
+    ],
+    [
+      "Quarta etapa: recuperação e prevenção de recorrência",
+      "Após a contenção, teste backups, reconstrua permissões, renove credenciais, execute verificações com diferentes perfis e acompanhe tentativas posteriores de acesso. Avalie a configuração do indexador OCR e das permissões herdadas em pastas e sites. Registre causa, correção, responsável, data e evidências do teste. Defina revisões de segurança para fornecedores e contas inativas. Encerrar o chamado técnico não elimina a necessidade de conservar registros, atender titulares e concluir as ações de governança."
+    ],
+    [
+      "Aplicação prática no Alfresco ECM",
+      "Em um exemplo hipotético, uma prestadora digitaliza dossiês de três empresas no mesmo ECM. Um usuário percebe que consegue localizar documentos de cliente diferente. A equipe interrompe a regra incorreta, preserva logs de consulta e download, confere grupos, permissões herdadas, índices OCR e integrações. Os controladores recebem dados relevantes sobre suas bases, sem circular prontuários completos por correio eletrônico comum. Depois da correção, a equipe testa segregação com perfis de consumo e contribuição antes de liberar lotes adicionais e refaz a amostragem em 30 dias. O cenário é didático, não relato de incidente da Arquindex."
+    ],
+    [
+      "Indicadores de controle",
+      "Monitore o tempo até detecção e contenção, a porcentagem de repositórios inventariados, falhas em testes de autorização, disponibilidade de logs e decisões de comunicação documentadas. Faça revisão proporcional aos riscos dos dados e à criticidade do acervo. O NIST Cybersecurity Framework 2.0, divulgado em 26 de fevereiro de 2024, é uma referência voluntária para governar, identificar, proteger, detectar, responder e recuperar. Não é legislação brasileira. A integração desses controles com classificação e temporalidade documental pode reduzir custos de investigação e melhorar rastreabilidade."
+    ],
+    [
+      "Perguntas frequentes",
+      "Todo incidente deve ser comunicado? Não. É necessário avaliar confirmação e possibilidade de risco ou dano relevante. O prazo é sempre 72 horas? Não: a referência regulatória da ANPD é três dias úteis, ressalvadas regras específicas. Um operador de digitalização comunica diretamente? Em regra, deve informar sem demora injustificada ao controlador, responsável pela avaliação e comunicação cabíveis. Incidentes não comunicados devem constar de registros? Sim, de acordo com os requisitos do regulamento, inclusive para fundamentar decisões e eventuais fiscalizações."
+    ],
+    [
+      "Referências oficiais e datas",
+      "Lei Geral de Proteção de Dados, Lei nº 13.709, de 14/08/2018: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm . ANPD, regulamento de comunicação aprovado em 24/04/2024, notícia de 26/04/2024: https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-aprova-o-regulamento-de-comunicacao-de-incidente-de-seguranca . Procedimento ANPD atualizado em 04/08/2026: https://www.gov.br/anpd/pt-br/canais_atendimento/agente-de-tratamento/comunicado-de-incidente-de-seguranca-cis . ANPD, investigação divulgada em 08/07/2026: https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-instaura-processo-de-sancao-contra-organizacao-social-por-falha-na-protecao-de-dados-de-500-mil-pacientes-de-unidades-publicas-de-saude . Guia do encarregado em 19/12/2024: https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-lanca-guia-sobre-atuacao-do-encarregado . NIST CSF 2.0, 26/02/2024: https://www.nist.gov/news-events/news/2024/02/nist-releases-version-20-landmark-cybersecurity-framework"
+    ],
+    [
+      "Próximo passo com a Arquindex",
+      "O diagnóstico de repositórios, fluxos de acesso, classificação, indexação OCR, retenção e resposta a incidentes ajuda a identificar lacunas antes de um problema. Conheça as soluções da Arquindex em https://www.arquindex.com.br/ e solicite uma avaliação de gestão documental, digitalização ou consultoria LGPD adaptada à sua empresa."
+    ]
+  ]
+},
+{
   "slug": "conarq-novas-normas-para-digitalizacao-de-documentos",
   "title": "CONARQ e ANPD: novidades de outubro de 2026 para gestão documental e LGPD",
   "category": "Gestão Documental",
