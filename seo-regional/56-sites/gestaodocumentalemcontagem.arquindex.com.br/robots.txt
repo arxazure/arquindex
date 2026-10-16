@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gestaodocumentalemcontagem.arquindex.com.br/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dpoembh.arquindex.com.br/sitemap.xml

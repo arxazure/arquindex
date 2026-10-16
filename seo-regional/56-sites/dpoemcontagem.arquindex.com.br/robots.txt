@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dpoemcontagem.arquindex.com.br/sitemap.xml

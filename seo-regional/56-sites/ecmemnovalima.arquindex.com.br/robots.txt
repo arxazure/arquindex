@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ecmemnovalima.arquindex.com.br/sitemap.xml

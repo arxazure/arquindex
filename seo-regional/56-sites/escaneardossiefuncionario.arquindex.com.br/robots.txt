@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://escaneardossiefuncionario.arquindex.com.br/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ecmemcontagem.arquindex.com.br/sitemap.xml

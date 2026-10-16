@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ecmembetim.arquindex.com.br/sitemap.xml

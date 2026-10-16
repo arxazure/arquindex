@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://adequacaolgpd-betim.arquindex.com.br/sitemap.xml

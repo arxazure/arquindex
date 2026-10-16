@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://incineracaodedocumentosembh.arquindex.com.br/sitemap.xml

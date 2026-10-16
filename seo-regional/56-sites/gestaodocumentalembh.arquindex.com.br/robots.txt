@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gestaodocumentalembh.arquindex.com.br/sitemap.xml

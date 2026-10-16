@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://canaldedenunciaslgpd-betim.arquindex.com.br/sitemap.xml

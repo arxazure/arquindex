@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://alfrescoembetim.arquindex.com.br/sitemap.xml

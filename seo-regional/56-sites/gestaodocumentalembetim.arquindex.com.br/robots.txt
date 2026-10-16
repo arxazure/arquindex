@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gestaodocumentalembetim.arquindex.com.br/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://consultorialgpd.arquindex.com.br/sitemap.xml
