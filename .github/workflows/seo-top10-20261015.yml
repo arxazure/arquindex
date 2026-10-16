@@ -22,154 +22,62 @@ jobs:
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
         run: |
           python - <<'PY'
-          import ftplib,os,re,io,json,html,hashlib,urllib.request,urllib.error,time
-          import xml.etree.ElementTree as ET
+          import ftplib,os,re,io,json,html,urllib.request,urllib.error,uuid,hashlib
           from datetime import datetime,timezone
           BASE="https://www.arquindex.com.br/"
-          MARK="ARQUINDEX-TOP10-20261015"
-          cfg={
-          "guarda_de_documentos.html":("Guarda de Documentos em Belo Horizonte | Arquindex","Guarda e gestão de documentos empresariais em Belo Horizonte: identificação, controle de consultas e integração com digitalização. Solicite uma avaliação.","Guarda de documentos em Belo Horizonte com gestão do acervo"),
-          "digitalizacao.html":("Empresa de Digitalização de Documentos e OCR | Arquindex","Digitalização de documentos empresariais em BH e projetos nacionais: preparo, OCR, indexação e controle de qualidade. Solicite uma avaliação.","Digitalização de documentos para empresas"),
-          "digitalizacao-com-ocr.html":("Digitalização com OCR e PDF Pesquisável | Arquindex","OCR empresarial para PDF pesquisável e extração de campos, com piloto, critérios de conferência e tratamento de exceções. Consulte a Arquindex.","Digitalização com OCR e extração de dados"),
-          "lgpd-consultoria.html":("Consultoria de Adequação LGPD em Belo Horizonte | Arquindex","Consultoria LGPD com diagnóstico, mapa de dados, prioridades, políticas e plano de adequação. Projeto dimensionado ao porte e risco da empresa.","Consultoria de adequação LGPD para empresas"),
-          "dpo-as-a-service-consultoria-lgpd.html":("DPO Terceirizado e DPO as a Service | Arquindex","DPO terceirizado com acompanhamento de privacidade, titulares, fornecedores e orientação interna. Planos a partir de R$ 399/mês, conforme escopo.","DPO terceirizado e DPO as a Service"),
-          "gestao_documental_documentos.html":("Gestão Documental para Empresas em BH | Arquindex","Gestão documental para organizar acervos, classificação, consultas e fluxos de informação. Integre arquivos físicos, digitalização e GED.","Gestão documental para empresas")
-          }
-          labels={"guarda_de_documentos.html":"Guarda de documentos em Belo Horizonte","digitalizacao.html":"Digitalização de documentos para empresas","digitalizacao-com-ocr.html":"OCR e PDF pesquisável","lgpd-consultoria.html":"Consultoria de adequação LGPD","dpo-as-a-service-consultoria-lgpd.html":"DPO terceirizado e acompanhamento mensal","gestao_documental_documentos.html":"Gestão documental e organização do acervo"}
-          def connect():
-           f=ftplib.FTP(os.environ["FTP_HOST"],timeout=40);f.login(os.environ["FTP_USERNAME"],os.environ["FTP_PASSWORD"]);f.cwd("public_html");return f
-          def read(f,p):
+          paths=["guarda_de_documentos.html","digitalizacao.html","digitalizacao-com-ocr.html","lgpd-consultoria.html","dpo-as-a-service-consultoria-lgpd.html","gestao_documental_documentos.html"]
+          f=ftplib.FTP(os.environ["FTP_HOST"],timeout=40);f.login(os.environ["FTP_USERNAME"],os.environ["FTP_PASSWORD"]);f.cwd("public_html");root=f.pwd()
+          def read(p):
            b=bytearray();f.retrbinary("RETR "+p,b.extend);return bytes(b)
-          def put(f,p,b):f.storbinary("STOR "+p,io.BytesIO(b))
-          def decode(b):
-           try:return b.decode("utf-8"),"utf-8"
-           except UnicodeDecodeError:return b.decode("latin1"),"latin1"
-          def esc(s):return html.escape(s,quote=True)
-          def links(path):
-           return '<div class="arquindex-links-internos"><h2>Escolha o serviço para sua necessidade</h2><ul>'+''.join('<li><a href="'+BASE+p+'">'+esc(l)+'</a></li>' for p,l in labels.items() if p!=path)+'</ul></div>'
-          def section(title,body):return '<section class="arquindex-servico-foco" style="max-width:1100px;margin:1.5rem auto;padding:1.25rem;border:1px solid #dbe4ea;border-radius:12px"><h2>'+title+'</h2>'+body+'<p><a href="https://wa.me/5531973632725">Solicitar avaliação: +55 31 97363-2725</a></p></section>'
-          bodies={
-          "guarda_de_documentos.html":section("Como contratar a guarda e gestão de documentos em BH",'<p>A Arquindex atende empresas de Belo Horizonte com projetos de gestão de arquivos físicos e integração com o acervo digital. O diagnóstico considera volume, frequência de consulta, tipos documentais e responsabilidades.</p><ol><li>Informar quantidade aproximada de caixas, pastas e documentos.</li><li>Definir identificação, classificação e pessoas autorizadas a consultar.</li><li>Acordar coleta, acondicionamento, controle de movimentações e atendimento às consultas.</li><li>Estabelecer prazos e condições de entrega, digitalização sob demanda e destinação documental no contrato.</li></ol><h3>O que informar para receber uma proposta?</h3><p>Envie cidade, tipo de acervo, volume estimado, estado de organização e necessidade de consulta. A equipe avalia o escopo e as condições operacionais antes de apresentar a proposta.</p><h3>Guarda, digitalização e gestão são o mesmo serviço?</h3><p>São atividades complementares: a guarda cuida do armazenamento; a digitalização produz a representação digital; a gestão organiza identificação, acesso, localização e procedimentos. A proposta indica as atividades incluídas.</p>'),
-          "lgpd-consultoria.html":section("Projeto de adequação LGPD: diagnóstico e implantação",'<p>A consultoria da Arquindex é organizada como um projeto de diagnóstico, priorização e implantação de melhorias. O trabalho considera as operações da empresa, as áreas envolvidas e os recursos disponíveis.</p><ol><li>Levantar operações de tratamento, sistemas, arquivos e fornecedores.</li><li>Identificar lacunas e organizar prioridades com responsáveis e prazos.</li><li>Apoiar políticas, registros, procedimentos e orientação das equipes conforme o escopo.</li><li>Revisar evidências e definir o plano de manutenção das melhorias.</li></ol><h3>Consultoria de adequação ou DPO mensal?</h3><p>A adequação pode ser um projeto de implantação. O DPO terceirizado oferece acompanhamento recorrente dentro de responsabilidades e limites contratados. É possível combinar os serviços, sem confundir os entregáveis.</p><p>Consultoria de Adequação LGPD a partir de R$ 1.250,00. Valores iniciais. Consulte escopo e condições.</p>'),
-          "gestao_documental_documentos.html":section("Da organização do acervo à consulta controlada",'<p>A gestão documental conecta o arquivo físico às informações usadas pelas equipes. A Arquindex avalia como os documentos são recebidos, identificados, consultados e encaminhados ao longo da operação.</p><ol><li>Inventário do acervo e levantamento dos fluxos de consulta.</li><li>Definição de classes, identificadores e metadados necessários.</li><li>Organização dos procedimentos e responsabilidades de acesso e movimentação.</li><li>Integração com guarda, digitalização e GED quando prevista no projeto.</li></ol><h3>Como dimensionar o projeto?</h3><p>Informe os setores atendidos, tipos de documentos, quantidade aproximada de caixas ou arquivos digitais e dificuldades atuais de localização. Esses dados orientam o diagnóstico e a proposta.</p>')
-          }
-          def metadata(s,path):
-           title,desc,h1=cfg[path]
-           s,n=re.subn(r"<title\b[^>]*>.*?</title\s*>","<title>"+esc(title)+"</title>",s,count=1,flags=re.I|re.S);assert n==1
-           s,n=re.subn(r"<h1\b[^>]*>.*?</h1\s*>","<h1>"+esc(h1)+"</h1>",s,count=1,flags=re.I|re.S);assert n==1
-           # Normalize only the exact page's own canonical, without redirecting distinct content.
-           s=re.sub(r'<link\b(?=[^>]*\brel\s*=\s*["\x27][^"\x27]*canonical)[^>]*>',"",s,flags=re.I)
-           s=re.sub(r'<meta\b(?=[^>]*\bname\s*=\s*["\x27]description["\x27])[^>]*>',"",s,flags=re.I)
-           s=s.replace("</head>",'<meta name="description" content="'+esc(desc)+'"><link rel="canonical" href="'+BASE+path+'"></head>',1)
-           for key,value in [("og:title",title),("twitter:title",title),("og:description",desc),("twitter:description",desc),("og:url",BASE+path)]:
-            pat=r'<meta\b(?=[^>]*(?:name|property)\s*=\s*["\x27]'+re.escape(key)+r'["\x27])[^>]*>'
-            s=re.sub(pat,'<meta '+('property' if key.startswith("og:") else 'name')+'="'+key+'" content="'+esc(value)+'">',s,flags=re.I)
-           return s
-          f=connect()
-          originals={p:read(f,p) for p in cfg}
-          root=f.pwd()
-          # Store backups outside the public document root.
-          f.cwd("..");home=f.pwd()
-          try:f.mkd("seo-backups")
-          except ftplib.error_perm:pass
-          f.cwd("seo-backups")
-          folder="top10-"+datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ");f.mkd(folder);f.cwd(folder);backup=f.pwd()
-          for p,b in originals.items():put(f,p,b)
-          f.cwd(root)
-          updated={};added={}
-          for path,raw in originals.items():
-           s,encoding=decode(raw)
-           if MARK in s:raise RuntimeError("Already applied; inspect existing deployment before rerun")
-           s=metadata(s,path)
-           related=r'<div class=["\x27]arquindex-links-internos["\x27]>.*?</div>'
-           block=links(path)
-           if path in bodies:block=bodies[path]+block
-           s,n=re.subn(related,lambda m:block,s,flags=re.I|re.S);assert n==1,(path,"related",n)
-           s=s.replace("Links internos estratégicos","Serviços relacionados")
-           s=s.replace("Essas páginas reforçam a autoridade temática e ajudam o Google a entender a profundidade dos serviços da Arquindex.","Conheça serviços complementares para organizar, consultar e proteger seu acervo.")
-           if path=="dpo-as-a-service-consultoria-lgpd.html":
-            pat=r'(<h2\b[^>]*>Etapas do projeto</h2>\s*)<ol>.*?</ol>'
-            steps='<ol><li>Diagnóstico das operações, riscos e canais de atendimento.</li><li>Definição de responsabilidades, frequência e entregáveis do serviço.</li><li>Orientação para titulares, fornecedores e áreas internas conforme o escopo.</li><li>Acompanhamento do plano de ação e registro das evidências.</li></ol>'
-            s,n=re.subn(pat,lambda m:m.group(1)+steps,s,count=1,flags=re.I|re.S);assert n==1
-           if path=="lgpd-consultoria.html":
-            s,n=re.subn(r'<!-- ARQUINDEX-SEO-20261015:lgpd-consultoria.html -->.*?<!-- /ARQUINDEX-SEO-20261015:lgpd-consultoria.html -->',"",s,flags=re.S)
-            s=s.replace('href="dpo-terceirizado.html"','href="'+BASE+'dpo-as-a-service-consultoria-lgpd.html"')
-           # Remove only the identified generic boilerplate sections, preserving the service text.
-           s=re.sub(r'<section>\s*Este conteúdo apresenta uma abordagem completa sobre.*?</section>',"",s,flags=re.S)
-           s=re.sub(r'(<h2\b[^>]*>)Conteúdos relacionados(</h2>)',r'\1Serviços e conteúdos relacionados\2',s)
-           # Make references to the chosen commercial pages absolute and consistent.
-           for dest in cfg:
-            s=re.sub(r'href=["\x27]/?'+re.escape(dest)+r'["\x27]','href="'+BASE+dest+'"',s)
-           s=s.replace("</body>","<!-- "+MARK+" -->\n</body>",1);assert MARK in s
-           # Validate source before any mutation.
-           assert len(re.findall(r'<h1\b',s,re.I))==1,(path,"h1")
-           assert len(re.findall(r'<link\b[^>]*canonical',s,re.I))==1,(path,"canonical")
-           assert not re.search(r'<meta\b[^>]*name=["\x27]robots["\x27][^>]*noindex',s,re.I)
-           assert not re.search(r'<a\b[^>]*>\s*Index\s*</a>',re.search(r'<div class="arquindex-links-internos">.*?</div>',s,re.S).group(0),re.I)
-           for js in re.findall(r'<script\b[^>]*type=["\x27]application/ld\+json["\x27][^>]*>(.*?)</script>',s,re.S|re.I):
-            json.loads(js)
-           updated[path]=s.encode(encoding);added[path]=[p for p in cfg if p!=path]
-          # Ensure every introduced local target is present and readable.
-          for dest in cfg:assert len(originals[dest])>100
-          # Touch existing sitemap entries only; do not rebuild or drop other URLs.
-          ns={"s":"http://www.sitemaps.org/schemas/sitemap/0.9"}
-          sitemap_updates={};visited=set()
-          def sitemap(path,depth=0):
-           if path in visited or depth>2 or len(visited)>50:return
-           visited.add(path)
-           try:raw=read(f,path)
-           except ftplib.error_perm:return
-           try:tree=ET.fromstring(raw)
-           except ET.ParseError:return
-           if tree.tag.endswith("sitemapindex"):
-            for loc in tree.findall("s:sitemap/s:loc",ns):
-             from urllib.parse import urlparse,unquote
-             u=urlparse(loc.text or "")
-             if u.hostname in ("www.arquindex.com.br","arquindex.com.br"):sitemap(unquote(u.path).lstrip("/"),depth+1)
-           elif tree.tag.endswith("urlset"):
-            changed=0
-            for entry in tree.findall("s:url",ns):
-             loc=entry.find("s:loc",ns)
-             if loc is not None and loc.text in [BASE+p for p in cfg]:
-              last=entry.find("s:lastmod",ns)
-              if last is None:last=ET.SubElement(entry,"{"+ns["s"]+"}lastmod")
-              last.text=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ");changed+=1
-            if changed:
-             ET.register_namespace("",ns["s"]);sitemap_updates[path]=(raw,ET.tostring(tree,encoding="utf-8",xml_declaration=True),changed)
-          for name in ["sitemap.xml","sitemap_index.xml","sitemap-index.xml"]:sitemap(name)
-          # Back up sitemap bytes too, outside public_html.
-          for p,(raw,new,count) in sitemap_updates.items():
-           put(f,backup+"/"+p.replace("/","__"),raw)
-          all_originals=dict(originals);all_originals.update({p:v[0] for p,v in sitemap_updates.items()})
-          all_new=dict(updated);all_new.update({p:v[1] for p,v in sitemap_updates.items()})
-          written=[]
+          def put(p,b):f.storbinary("STOR "+p,io.BytesIO(b))
+          original={p:read(p) for p in paths};changes={};counts={}
+          for p,b in original.items():
+           try:s=b.decode("utf8");enc="utf8"
+           except UnicodeDecodeError:s=b.decode("latin1");enc="latin1"
+           count=[0]
+           def clean(m):
+            text=html.unescape(re.sub("<[^>]+>"," ",m.group(1)))
+            if ("No cenário atual" in text or "Este conteúdo apresenta uma abordagem completa" in text) and text.count("A melhoria contínua deve ser considerada um pilar fundamental")>=3:
+             count[0]+=1;return ""
+            return m.group(0)
+           s=re.sub(r"<section\b[^>]*>((?:(?!<section\b).)*?)</section>",clean,s,flags=re.S|re.I)
+           if count[0]:changes[p]=s.encode(enc);counts[p]=count[0]
+          f.cwd("..");f.cwd("seo-backups");folder="quality-"+datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ");f.mkd(folder);f.cwd(folder);backup=f.pwd()
+          for p in changes:put(p,original[p])
+          f.cwd(root);written=[]
           try:
-           for p,new in all_new.items():
-            # Refuse to overwrite a page another task edited after the initial read.
-            assert read(f,p)==all_originals[p],("Concurrent modification",p)
-            written.append(p);put(f,p,new)
-            assert read(f,p)==new,("FTP readback mismatch",p)
-           print("BACKUP_OUTSIDE_PUBLIC_ROOT",backup,flush=True)
-           for p in updated:
-            url=BASE+p; req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 (compatible; ArquindexSEOAudit/1.0)","Cache-Control":"no-cache"})
-            with urllib.request.urlopen(req,timeout=35) as r:
-             body=r.read().decode("utf-8",errors="replace");assert r.status==200
-            checks={"status_200":True,"marker":MARK in body,"canonical":bool(re.search(r'<link\b[^>]*href=["\x27]'+re.escape(url),body,re.I)),"h1":cfg[p][2] in body}
-            assert all(checks.values()),(p,checks)
-            print("PUBLIC_VERIFIED",p,json.dumps(checks),flush=True)
-           for p,v in sitemap_updates.items():print("SITEMAP_UPDATED",p,"entries",v[2],flush=True)
-           print("PUBLISHED_PAGES",json.dumps([BASE+p for p in updated]),flush=True)
+           for p,b in changes.items():
+            assert read(p)==original[p],("Concurrent modification",p)
+            written.append(p);put(p,b);assert read(p)==b
+           for p in paths:
+            with urllib.request.urlopen(urllib.request.Request(BASE+p,headers={"User-Agent":"ArquindexSEOAudit/1.0","Cache-Control":"no-cache"}),timeout=30) as r:
+             b=r.read();assert r.status==200
+            assert b==changes.get(p,original[p]),("Public bytes differ",p)
+            print("FINAL_PUBLIC_VERIFIED",p,"boilerplate_removed",counts.get(p,0),flush=True)
           except Exception:
-           for p in reversed(written):put(f,p,all_originals[p])
-           print("ROLLED_BACK",json.dumps(written),flush=True)
-           raise
-          finally:f.quit()
-          key=os.environ.get("INDEXNOW_KEY","").strip()
-          if key:
-           payload=json.dumps({"host":"www.arquindex.com.br","key":key,"keyLocation":BASE+key+".txt","urlList":[BASE+p for p in updated]}).encode()
-           try:
-            with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow",data=payload,headers={"Content-Type":"application/json"},method="POST"),timeout=25) as r:print("INDEXNOW_RESPONSE",r.status)
-           except urllib.error.HTTPError as e:print("INDEXNOW_HTTP",e.code)
-          else:print("INDEXNOW_NOT_SUBMITTED_KEY_ABSENT")
+           for p in written:put(p,original[p])
+           print("CLEANUP_ROLLED_BACK",flush=True);raise
+          print("QUALITY_BACKUP_OUTSIDE_PUBLIC_ROOT",backup,flush=True)
+          # IndexNow keys are public verification tokens; preserve one stable file for future submissions.
+          try:
+           key=read("indexnow-key.txt").decode("ascii").strip()
+           assert re.fullmatch("[A-Za-z0-9-]{8,128}",key)
+          except ftplib.error_perm:
+           key=uuid.uuid4().hex
+           put(key+".txt",key.encode("ascii"));put("indexnow-key.txt",key.encode("ascii"))
+          keyurl=BASE+key+".txt"
+          try:
+           token=read(key+".txt").decode("ascii").strip()
+          except ftplib.error_perm:
+           put(key+".txt",key.encode("ascii"));token=key
+          assert token==key
+          f.quit()
+          with urllib.request.urlopen(keyurl,timeout=25) as r:assert r.status==200 and r.read().decode("ascii").strip()==key
+          print("INDEXNOW_KEY_FILE_VERIFIED",flush=True)
+          payload=json.dumps({"host":"www.arquindex.com.br","key":key,"keyLocation":keyurl,"urlList":[BASE+p for p in paths]}).encode()
+          try:
+           with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow",data=payload,headers={"Content-Type":"application/json; charset=utf-8"},method="POST"),timeout=30) as r:
+            print("INDEXNOW_SUBMISSION",r.status,"urls",len(paths),flush=True)
+          except urllib.error.HTTPError as e:print("INDEXNOW_HTTP_ERROR",e.code,flush=True)
           
           PY
