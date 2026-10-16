@@ -1,14 +1,10 @@
 name: Arquindex - Publicar 56 sites e indexar
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
-    paths:
-      - '.github/workflows/publicar-56-sites-completo.yml'
 permissions:
   contents: read
 concurrency:
-  group: arquindex-56-sites-completo
+  group: arquindex-deploy-56
   cancel-in-progress: false
 jobs:
   publicar:
