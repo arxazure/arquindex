@@ -1,4 +1,46 @@
 export const articles = [
+{
+  "slug": "conarq-novas-normas-para-digitalizacao-de-documentos",
+  "title": "CONARQ e ANPD: novidades de outubro de 2026 para gestão documental e LGPD",
+  "category": "Gestão Documental",
+  "lead": "A Resolução CONARQ nº 60/2026 orienta estudos sobre usos e usuários de arquivos — não cria novas exigências de digitalização. A ANPD publicou resultados de testes de inteligência artificial, abriu consulta sobre seu processo regulatório e anunciou um canal específico de denúncias dos decretos do Marco Civil da Internet. Confira o que efetivamente mudou, os prazos de participação e as aplicações para empresas.",
+  "sections": [
+    [
+      "CONARQ 60/2026: o que realmente muda",
+      "A Resolução CONARQ nº 60, de 14 de setembro de 2026, estabelece princípios e diretrizes para estudos de usos e usuários de arquivos. Isso significa analisar como pessoas e equipes localizam, consultam e utilizam informações arquivísticas. Ela não substitui nem modifica os requisitos técnicos estabelecidos pelo Decreto nº 10.278/2020 para digitalização, quando aplicáveis. Referência oficial: https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-conarq-no-60-de-14-de-setembro-de-2026"
+    ],
+    [
+      "Como aplicar esses estudos em GED, ECM e arquivos",
+      "Mapeie as dúvidas dos usuários, as consultas mais frequentes, buscas sem resultado, campos de indexação e barreiras de acesso. Para indústrias, mineração, clínicas de medicina do trabalho, advocacia e contabilidade, testes de recuperação com casos reais ajudam a melhorar OCR, metadados, permissões e a estrutura do repositório. São recomendações operacionais da Arquindex, não obrigações novas da Resolução 60."
+    ],
+    [
+      "ANPD: inteligência artificial sob acompanhamento regulatório",
+      "Em 9 de outubro de 2026, a ANPD publicou o segundo relatório parcial do Sandbox Regulatório de IA e Proteção de Dados. O projeto-piloto acompanha testes supervisionados, avaliação de riscos, medidas de mitigação e evidências. Para equipes que usam IA em OCR e classificação documental, vale documentar finalidade, revisão humana, métricas de erro e incidentes. O relatório não constitui nova norma geral para todas as empresas. Fonte: https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-publica-2o-relatorio-parcial-de-monitoramento-do-sandbox-regulatorio-em-inteligencia-artificial"
+    ],
+    [
+      "ANPD: consulta pública sobre o processo regulatório",
+      "A consulta sobre a revisão da Portaria nº 16/2021 foi anunciada em 6 de outubro de 2026. O prazo informado para participação oral na audiência de 22 de outubro é 16 de outubro; contribuições escritas podem ser apresentadas até 23 de novembro de 2026. Trata-se de proposta em discussão, não de regra já aprovada. Fonte: https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-abre-consulta-audiencia-publica-sobre-revisao-processo-regulatorio"
+    ],
+    [
+      "ANPD: novo canal de denúncias do Marco Civil",
+      "Em 5 de outubro de 2026, a ANPD anunciou canal específico para possíveis descumprimentos dos Decretos nº 12.975/2026 e nº 12.976/2026 por plataformas e provedores abrangidos. Esse procedimento não equivale a um canal genérico de denúncias LGPD nem substitui as autoridades policiais na apuração de crimes. Fonte: https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-lanca-pagina-especifica-para-denuncias-de-infracoes-aos-novos-decretos-do-marco-civil-da-internet"
+    ],
+    [
+      "Destaque adicional: consulta sobre dosimetria e sanções",
+      "Em 15 de outubro de 2026, a ANPD abriu consulta pública sobre atualização do Regulamento de Dosimetria e Aplicação de Sanções Administrativas, com contribuições até 30 de novembro e audiência prevista para 29 de outubro. É proposta aberta à participação, não alteração já aprovada. Fonte: https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-consulta-publica-dosimetria-e-sancoes"
+    ],
+    [
+      "Checklist de ações para as empresas",
+      "Revise a qualidade das buscas por OCR e metadados; monitore prazos normativos nas fontes oficiais; documente riscos e controles no uso de IA; mantenha inventário de tratamento, política de acesso e registros de decisões atualizados; avalie o impacto setorial antes de aplicar uma norma ao seu contexto. Conheça a gestão documental da Arquindex em /solucoes/gestao-documental, a consultoria LGPD em /solucoes/consultoria-lgpd e a digitalização certificada em /solucoes/digitalizacao-certificada."
+    ],
+    [
+      "Perguntas frequentes",
+      "A CONARQ 60/2026 criou novas regras para digitalização? Não: o objeto são estudos de usos e usuários. O relatório do Sandbox obriga todas as empresas? Não: relata testes do projeto-piloto. Quando termina a consulta regulatória da ANPD? A data anunciada é 23/11/2026. Quais documentos apresentar em uma auditoria? Isso depende de atividade, finalidade, riscos e legislação aplicável."
+    ]
+  ],
+  "source": "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-conarq-no-60-de-14-de-setembro-de-2026",
+  "reviewed": "2026-10-16"
+},
   {
     "slug": "empresa-guarda-documentos-como-escolher",
     "title": "Empresa de guarda de documentos: como escolher com segurança",
