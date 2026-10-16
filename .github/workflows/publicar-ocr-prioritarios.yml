@@ -23,7 +23,7 @@ jobs:
           python - <<'PY'
           import pathlib,xml.etree.ElementTree as ET
           sites=list(pathlib.Path('seo-priority-ocr').glob('*.arquindex.com.br'))
-          assert len(sites)==3
+          assert len(sites)==9
           for s in sites:
             for name in ('index.html','robots.txt','sitemap.xml'):assert (s/name).is_file()
             ET.parse(s/'sitemap.xml')
@@ -53,7 +53,7 @@ jobs:
               ftp.cwd('/')
               ftp.cwd(root)
               before=set(x.rsplit('/',1)[-1] for x in ftp.nlst())
-              # Only write these three files after preserving originals; never touch unrelated files.
+              # Only write the required three files after preserving originals; never touch unrelated files.
               for name in ('index.html','robots.txt','sitemap.xml'):
                 new=(site/name).read_bytes()
                 if name in before:
