@@ -2,6 +2,7 @@ name: Gerar e versionar 56 paginas no GitHub
 # Regerar os 56 sites com links regionais e acionar publicacao via FTPS
 on:
   push:
+    branches: [master]
     paths:
       - '.github/workflows/gerar-56-paginas.yml'
   workflow_dispatch:

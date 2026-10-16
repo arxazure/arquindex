@@ -6,6 +6,7 @@ const root = path.resolve(__dirname, '..');
 const source = 'seo-regional/56-sites/guardadocumentalembh.arquindex.com.br/index.html';
 (async () => {
   assert.equal(fs.readFileSync(path.join(root, source), 'utf8'), fs.readFileSync(path.join(root, 'deploy/subdominios/guardadocumentalembh/index.html'), 'utf8'));
+  assert.ok(fs.readFileSync(path.join(root, source), 'utf8').includes(fs.readFileSync(path.join(root, 'scripts/templates/guarda-commercial-form.html'), 'utf8').trim()), 'Published form matches its template');
   const browser = await chromium.launch({headless:true, args:['--no-sandbox']});
   try {
     for (const width of [360, 390, 1280]) {

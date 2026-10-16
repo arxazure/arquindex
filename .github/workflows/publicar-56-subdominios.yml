@@ -140,3 +140,16 @@ jobs:
           deploy(os.environ['HOMEHOST_HOST'],os.environ['HOMEHOST_USER'],os.environ['HOMEHOST_PASS'],'public_html','HOMEHOST')
           print('HOMEHOST_DEPLOY_FINISHED; Hostinger nao sera autenticada neste workflow')
           PY
+      - name: Confirmar formulario no dominio publico de guarda BH
+        run: |
+          python - <<'PYCODE'
+          import urllib.request
+          url='https://guardadocumentalembh.arquindex.com.br/'
+          req=urllib.request.Request(url,headers={'User-Agent':'Arquindex-Form-Deploy-Check/1.0','Cache-Control':'no-cache'})
+          with urllib.request.urlopen(req,timeout=30) as response:
+              page=response.read(500000).decode('utf-8')
+              assert response.status==200
+              assert response.url.split('/')[2]=='guardadocumentalembh.arquindex.com.br', 'Redirecionamento para outro dominio'
+              assert 'id="commercial-form"' in page and 'data-form-version="2026-10-16-v1"' in page, 'Formulario novo nao encontrado no HTML publico'
+              print('GUARDA_BH_PUBLIC_FORM_VERIFIED',response.status)
+          PYCODE

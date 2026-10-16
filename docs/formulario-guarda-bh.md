@@ -27,3 +27,9 @@ Campos são processados no navegador, sem persistência pelo componente. Abrir o
 Cobertura: telas 360/390/1280 px; ausência de rolagem horizontal; campos obrigatórios; espaços em branco; telefone/e-mail inválidos; ciência de privacidade; pelo menos um serviço; seleção dos sete serviços; quantidade inválida; campos condicionais; exclusão dos dados ocultos; rótulos e teclado; mensagem, número e codificação; fallback sem JavaScript; ausência de erros JS e igualdade entre as cópias.
 
 O workflow de teste conserva capturas de tela como artefatos. O teste intercepta `wa.me`; nenhum envio é realizado.
+
+## Resultado da validação inicial
+
+Execução de teste isolada [38962369759](https://github.com/arxazure/arquindex/actions/runs/38962369759): sucesso em Chromium nas três larguras e no fallback sem JavaScript. Capturas de tela de celular e desktop inspecionadas visualmente; campos, rótulos e botão legíveis, sem sobreposição. Os publishers repetem os testes antes do envio e verificam a presença da versão do formulário no HTML HTTPS depois.
+
+O job anterior de ativação de subdomínios (execução 38938586697) falhou com `CPANEL_API_BLOCKED HTTPError 401`; o log informou que nenhum domínio foi alterado. Não presumir provisionamento concluído com base somente no upload FTPS.
