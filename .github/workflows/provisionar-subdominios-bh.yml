@@ -1,39 +1,57 @@
-name: Provisionar 14 subdominios Arquindex
+name: Provisionar 56 subdominios Arquindex
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/provisionar-subdominios-bh.yml'
 permissions:
   contents: read
 jobs:
   provision:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     env:
       CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
       CPANEL_USER: ${{ secrets.CPANEL_USER }}
       CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
     steps:
-      - name: Criar subdominios via cPanel UAPI e verificar DNS
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Provisionar dominios no cPanel e conferir DNS
         run: |
           python - <<'PY'
-          import os,urllib.request,urllib.parse,json,ssl,socket
-          names=["digitalizacaodedocumentosembh","guardadocumentalembh","gestaodocumentalembh","incineracaodedocumentosembh","escaneardocumentosembh","alfrescoembh","consultorialgpd","adequacaolgpd","dpoembh","canaldedenunciaslgpd","ecmembh","escanearprontuariomedicoembh","escaneardossiefuncionario","digitalizacaodepartamentopessoal"]
-          host=os.getenv('CPANEL_HOST','').strip();user=os.getenv('CPANEL_USER','').strip();token=os.getenv('CPANEL_API_TOKEN','').strip()
-          if not all([host,user,token]):raise SystemExit('BLOQUEADO: configure CPANEL_HOST, CPANEL_USER, CPANEL_API_TOKEN nos secrets GitHub. Nenhuma alteracao efetuada.')
+          import os,json,pathlib,urllib.request,urllib.parse,socket,sys
+          manifest=json.loads(pathlib.Path('seo-regional/56-sites/manifest.json').read_text(encoding='utf-8'))
+          domains=[x['host'] for x in manifest]
+          assert len(domains)==56 and len(set(domains))==56
+          host=os.getenv('CPANEL_HOST','').strip().rstrip('/')
+          user=os.getenv('CPANEL_USER','').strip()
+          token=os.getenv('CPANEL_API_TOKEN','').strip()
+          if not all([host,user,token]):
+              sys.exit('BLOQUEADO: configure CPANEL_HOST, CPANEL_USER e CPANEL_API_TOKEN nos secrets GitHub.')
           if not host.startswith('https://'):host='https://'+host
-          host=host.rstrip('/')
-          assert host.endswith(':2083'), 'CPANEL_HOST deve terminar com :2083 e usar HTTPS'
+          assert host.endswith(':2083'), 'CPANEL_HOST deve apontar para HTTPS porta 2083'
           headers={'Authorization':'cpanel '+user+':'+token,'Accept':'application/json'}
-          for label in names:
-            fqdn=label+'.arquindex.com.br'
-            params=urllib.parse.urlencode({'domain':fqdn,'document_root':'public_html/subdominios/'+label}).encode()
-            url=host+'/execute/SubDomain/addsubdomain'
-            # API availability varies by cPanel version. Stop rather than pretend success.
-            req=urllib.request.Request(url+'?'+params.decode(),headers=headers)
-            try:
-              with urllib.request.urlopen(req,timeout=25) as response: result=json.load(response)
-              if result.get('status')!=1:print('CREATE_FAILED',fqdn,json.dumps(result)[:450]);continue
-              print('CPANEL_CREATED',fqdn)
+          errors=[]
+          for fqdn in domains:
+              root='public_html/subdominios/'+fqdn
+              params=urllib.parse.urlencode({'domain':fqdn,'document_root':root})
+              # UAPI Domain/add_domain: permite definir a raiz do subdominio.
+              url=host+'/execute/Domain/add_domain?'+params
+              try:
+                  req=urllib.request.Request(url,headers=headers)
+                  with urllib.request.urlopen(req,timeout=30) as response:result=json.load(response)
+                  if result.get('status')!=1:
+                      detail=str(result.get('errors') or result.get('messages') or result)[:350]
+                      # Um dominio existente deve ser verificado manualmente quanto ao document root.
+                      errors.append((fqdn,detail));print('CPANEL_REVIEW',fqdn,detail)
+                  else:print('CPANEL_CREATED',fqdn,root)
+              except Exception as exc:
+                  errors.append((fqdn,str(exc)[:300]));print('CPANEL_ERROR',fqdn,type(exc).__name__,str(exc)[:300])
               try:print('DNS',fqdn,socket.gethostbyname(fqdn))
               except OSError:print('DNS_PENDING',fqdn)
-            except Exception as exc:print('CREATE_ERROR',fqdn,type(exc).__name__,str(exc)[:250])
+          print('DOMINIOS_TOTAL',len(domains),'ERROS_OU_EXISTENTES',len(errors))
+          if errors:sys.exit('Existem dominios que exigem revisao no cPanel; veja CPANEL_REVIEW/ERROR.')
           PY
