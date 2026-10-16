@@ -1,0 +1,70 @@
+name: Publicar Digitalizacao Documentos BH
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-priority-ocr/digitalizacaodedocumentosbh.arquindex.com.br/**'
+      - '.github/workflows/deploy-digitalizacao-documentos-bh.yml'
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar arquivos antes do upload
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          p=Path('seo-priority-ocr/digitalizacaodedocumentosbh.arquindex.com.br')
+          for n in ['index.html','robots.txt','sitemap.xml']: assert (p/n).is_file()
+          assert '<h1>' in (p/'index.html').read_text()
+          ET.parse(p/'sitemap.xml')
+          print('SITE_VALIDATED')
+          PY
+      - name: Publicar com FTPS em document root confirmado
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          DOCUMENT_ROOT: ${{ vars.DIGITALIZACAO_BH_DOCUMENT_ROOT }}
+        run: |
+          python - <<'PY'
+          import os,ftplib,pathlib,io,hashlib,time
+          root=os.environ.get('DOCUMENT_ROOT','').strip('/')
+          assert root.startswith('public_html/') and '..' not in root, 'Configure DIGITALIZACAO_BH_DOCUMENT_ROOT com raiz real do cPanel'
+          pwd=os.environ.get('FTP_PASSWORD')
+          assert pwd, 'FTP_PASSWORD secret required'
+          p=pathlib.Path('seo-priority-ocr/digitalizacaodedocumentosbh.arquindex.com.br')
+          with ftplib.FTP_TLS(timeout=40) as f:
+            f.connect('ftp.arquindex.com.br',21)
+            f.login('arquind2',pwd)
+            f.prot_p()
+            f.cwd('/'+root)
+            files={x.rsplit('/',1)[-1] for x in f.nlst()}
+            for n in ['index.html','robots.txt','sitemap.xml']:
+              b=(p/n).read_bytes()
+              if n in files:
+                old=bytearray()
+                f.retrbinary('RETR '+n,old.extend)
+                if bytes(old)==b:continue
+                f.storbinary('STOR '+n+'.backup-'+time.strftime('%Y%m%dT%H%M%SZ',time.gmtime()),io.BytesIO(old))
+              f.storbinary('STOR '+n,io.BytesIO(b))
+              check=bytearray()
+              f.retrbinary('RETR '+n,check.extend)
+              assert hashlib.sha256(check).digest()==hashlib.sha256(b).digest()
+              print('FTP_VERIFIED',n)
+          PY
+      - name: Validar site publico
+        run: |
+          python - <<'PY'
+          import urllib.request
+          base='https://digitalizacaodedocumentosbh.arquindex.com.br/'
+          for suffix in ('','robots.txt','sitemap.xml'):
+            with urllib.request.urlopen(base+suffix,timeout=25) as r:
+              assert r.status==200
+              assert r.url.startswith(base)
+              data=r.read()
+              if not suffix:assert b'Digitaliza' in data and b'Arquindex' in data
+              print('PUBLIC_OK',suffix or 'index.html')
+          PY
