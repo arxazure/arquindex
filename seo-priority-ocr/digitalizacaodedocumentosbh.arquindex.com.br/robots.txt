@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://digitalizacaodedocumentosbh.arquindex.com.br/sitemap.xml
