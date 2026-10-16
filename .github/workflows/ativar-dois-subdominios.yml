@@ -20,10 +20,10 @@ jobs:
           python - <<'PY'
           import os,json,urllib.request,urllib.parse,base64,ftplib,socket,ssl
           names=['digitalizacaodedocumentosembh','guardadocumentalembh']
-          host=(os.getenv('CPANEL_HOST') or 'https://arquindex.com.br:2083').rstrip('/')
+          host=(os.getenv('CPANEL_HOST') or 'https://cpanel.arquindex.com.br:2083').rstrip('/')
           if not host.startswith('https://'):host='https://'+host
           parsed=urllib.parse.urlsplit(host)
-          if parsed.hostname not in ('arquindex.com.br','www.arquindex.com.br','ftp.arquindex.com.br'):
+          if parsed.hostname not in ('arquindex.com.br','www.arquindex.com.br','ftp.arquindex.com.br','cpanel.arquindex.com.br'):
               raise SystemExit('CPANEL_HOST requer revisao: destino nao confirmado. Credenciais nao enviadas.')
           user=os.getenv('CPANEL_USER') or 'arquind2'
           token=os.getenv('CPANEL_API_TOKEN')
