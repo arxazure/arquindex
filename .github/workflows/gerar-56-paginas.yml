@@ -91,9 +91,11 @@ jobs:
           assert len(manifest)==56 and min(x['words'] for x in manifest)>=3000
           print('GERADAS',len(manifest),'MIN',min(x['words'] for x in manifest),'MAX',max(x['words'] for x in manifest))
           PY
+      - name: Preservar formulario comercial e sincronizar copia legada
+        run: python scripts/sync_guarda_form.py
       - name: Commit das 56 paginas no repositorio
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add seo-regional/56-sites/
+          git add seo-regional/56-sites/ deploy/subdominios/guardadocumentalembh/index.html
           if git diff --cached --quiet; then echo "Sem alteracoes"; else git commit -m "content: 56 landing pages regionais Arquindex"; git push; fi

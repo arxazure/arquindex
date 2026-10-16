@@ -1,0 +1,119 @@
+<!-- guarda-commercial-form:start -->
+<style>
+#orcamento{scroll-margin-top:20px;background:#f1f6fa;border:1px solid #c7d6e2;border-radius:16px;padding:clamp(16px,4vw,32px);margin:24px 0}
+#orcamento *{min-width:0}#orcamento h2{margin-top:0}#orcamento .fields,#orcamento .services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#orcamento label{display:block;font-weight:600}#orcamento input:not([type=checkbox]),#orcamento select,#orcamento textarea{width:100%;font:inherit;color:#18324b;background:white;border:1px solid #637b8e;border-radius:6px;padding:10px;min-height:48px}
+#orcamento fieldset{border:1px solid #9bb1c2;border-radius:8px;margin:22px 0;padding:16px}#orcamento legend{font-weight:700;padding:0 6px}
+#orcamento .choice{display:flex;align-items:flex-start;gap:10px;padding:8px;min-height:48px;cursor:pointer}#orcamento input[type=checkbox]{width:22px;height:22px;flex:0 0 22px;margin-top:4px;accent-color:#08694d}
+#orcamento :focus-visible{outline:3px solid #075ab5;outline-offset:3px}#orcamento .hint{font-size:.95rem}#orcamento .wide{grid-column:1/-1}#orcamento button{border:0;font:inherit;cursor:pointer;min-height:48px;white-space:normal}#orcamento [hidden]{display:none!important}#orcamento .error{color:#9b1717;font-weight:600}#orcamento .error:empty{display:none}
+@media(max-width:600px){#orcamento .fields,#orcamento .services{grid-template-columns:1fr}#orcamento button{width:100%}#orcamento fieldset{padding:10px}}
+</style>
+<section id="orcamento" aria-labelledby="orcamento-title" data-form-version="2026-10-16-v1">
+<h2 id="orcamento-title">Conte o que sua empresa precisa</h2>
+<p>Selecione um ou mais serviços e prepare sua solicitação de orçamento. Campos com * são obrigatórios.</p>
+<form id="commercial-form" aria-describedby="form-privacy" hidden>
+<div class="fields">
+<label for="lead-name">Nome *<input id="lead-name" name="nome" autocomplete="name" required minlength="2" maxlength="100"></label>
+<label for="lead-company">Empresa *<input id="lead-company" name="empresa" autocomplete="organization" required minlength="2" maxlength="150"></label>
+<label for="lead-email">E-mail *<input id="lead-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="150"></label>
+<label for="lead-phone">Telefone ou WhatsApp *<input id="lead-phone" name="telefone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="25" aria-describedby="phone-help"><span id="phone-help" class="hint">Inclua DDD. Para outro país, inclua + e o código do país.</span></label>
+</div>
+<fieldset aria-describedby="service-help service-error"><legend>Serviços de interesse *</legend>
+<p id="service-help">Você pode combinar vários serviços.</p>
+<div class="services">
+<label class="choice"><input type="checkbox" name="servicos" value="Digitalização">Digitalização</label>
+<label class="choice"><input type="checkbox" name="servicos" value="OCR">OCR (texto pesquisável)</label>
+<label class="choice"><input type="checkbox" name="servicos" value="Gestão documental">Gestão documental</label>
+<label class="choice"><input id="service-storage" type="checkbox" name="servicos" value="Guarda física" aria-controls="storage-details" aria-expanded="false">Guarda física / guarda documental</label>
+<label class="choice"><input type="checkbox" name="servicos" value="Descarte seguro">Descarte seguro</label>
+<label class="choice"><input type="checkbox" name="servicos" value="LGPD">LGPD / DPO</label>
+<label class="choice"><input type="checkbox" name="servicos" value="Alfresco">Alfresco ECM</label>
+</div><p id="service-error" class="error" aria-live="polite"></p>
+</fieldset>
+<fieldset id="storage-details" hidden disabled><legend>Sobre a guarda de documentos</legend>
+<p class="hint">As informações abaixo são opcionais. Preencha o que já souber para dimensionarmos a proposta.</p>
+<div class="fields">
+<label for="storage-boxes">Quantidade aproximada de caixas<input id="storage-boxes" name="caixas" type="number" inputmode="numeric" min="0" max="1000000" step="1" placeholder="Ex.: 250" aria-describedby="boxes-help"><span id="boxes-help" class="hint">Deixe vazio se ainda não souber.</span></label>
+<label for="storage-location">Cidade, UF e bairro do acervo<input id="storage-location" name="localizacao" maxlength="180" placeholder="Ex.: Belo Horizonte, MG — Centro"></label>
+<label for="storage-collection">Precisa de coleta?<select id="storage-collection" name="coleta"><option value="">Não informado</option><option>Sim</option><option>Não</option><option>Preciso de orientação</option></select></label>
+<label for="storage-access">Frequência de consultas ao acervo<select id="storage-access" name="consultas"><option value="">Não informado</option><option>Diária</option><option>Semanal</option><option>Mensal</option><option>Eventual</option><option>A definir</option></select></label>
+<label for="storage-scan">Digitalização sob demanda<select id="storage-scan" name="sob_demanda"><option value="">Não informado</option><option>Sim</option><option>Não</option><option>Quero conhecer</option></select></label>
+</div>
+<p>Outros serviços relacionados à guarda:</p><div class="services">
+<label class="choice"><input type="checkbox" name="relacionados" value="Inventário e etiquetagem">Inventário e etiquetagem</label>
+<label class="choice"><input type="checkbox" name="relacionados" value="Classificação e temporalidade">Classificação e temporalidade</label>
+<label class="choice"><input type="checkbox" name="relacionados" value="Organização do acervo">Organização do acervo</label>
+<label class="choice"><input type="checkbox" name="relacionados" value="Entrega de documentos para consulta">Entrega de documentos para consulta</label>
+</div></fieldset>
+<label for="lead-notes">Mais informações (opcional)<textarea id="lead-notes" name="observacoes" rows="3" maxlength="600" aria-describedby="notes-help"></textarea></label>
+<p id="notes-help" class="hint">Descreva prazos e necessidades. Não informe CPF, dados de saúde ou conteúdo confidencial dos documentos.</p>
+<div id="form-privacy" class="hint"><strong>Privacidade e envio</strong><p>Seus dados serão utilizados pela Arquindex para avaliar esta solicitação e retornar o contato comercial. Este formulário prepara a mensagem no seu navegador, sem salvar os campos em banco de dados ou armazenamento local. Ao continuar, os dados preenchidos serão compartilhados com o WhatsApp/Meta na abertura do link. Você poderá revisar a mensagem e confirmar o envio no WhatsApp.</p><p>Não há inscrição automática em marketing. Para dúvidas sobre seus dados ou para solicitar atendimento sobre privacidade, utilize o WhatsApp da Arquindex: +55 31 97363-2725. Consulte também a <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Política de Privacidade do WhatsApp</a>.</p></div>
+<label class="choice"><input id="lead-ack" name="ciencia" type="checkbox" required>Li as informações de privacidade e quero preparar minha solicitação pelo WhatsApp. *</label>
+<p id="form-error" class="error" role="alert"></p>
+<button class="btn" type="submit">Preparar mensagem no WhatsApp</button>
+<p class="hint">A mensagem só será enviada quando você confirmar no WhatsApp.</p>
+</form>
+<noscript><p>Ative o JavaScript para preencher o formulário. Você também pode <a href="https://wa.me/5531973632725">solicitar orçamento diretamente pelo WhatsApp</a>.</p></noscript>
+<p id="form-fallback">Se o formulário não carregar, <a href="https://wa.me/5531973632725">converse diretamente pelo WhatsApp</a>.</p>
+</section>
+<script>
+(() => {
+  'use strict';
+  const form = document.getElementById('commercial-form');
+  const storage = document.getElementById('service-storage');
+  const details = document.getElementById('storage-details');
+  const phone = document.getElementById('lead-phone');
+  const services = Array.from(form.querySelectorAll('[name="servicos"]'));
+  const serviceError = document.getElementById('service-error');
+  const clean = value => String(value || '').replace(/[\r\n\t]+/g, ' ').replace(/[\u0000-\u001f\u007f]/g, '').trim();
+  function syncStorage() {
+    details.hidden = !storage.checked;
+    details.disabled = !storage.checked;
+    storage.setAttribute('aria-expanded', String(storage.checked));
+  }
+  function validateServices() {
+    const valid = services.some(input => input.checked);
+    services[0].setCustomValidity(valid ? '' : 'Selecione pelo menos um serviço.');
+    serviceError.textContent = valid ? '' : 'Selecione pelo menos um serviço.';
+    return valid;
+  }
+  function validatePhone() {
+    const raw = phone.value.trim();
+    const digits = raw.replace(/\D/g, '');
+    const valid = /^[+\d\s().-]+$/.test(raw) && (raw.startsWith('+') ? digits.length >= 8 && digits.length <= 15 : digits.length === 10 || digits.length === 11 || (digits.startsWith('55') && (digits.length === 12 || digits.length === 13)));
+    phone.setCustomValidity(valid ? '' : 'Informe um telefone com DDD (10 ou 11 dígitos) ou número internacional com + e código do país.');
+  }
+  ['lead-name', 'lead-company'].forEach(id => {
+    const input = document.getElementById(id);
+    input.addEventListener('input', () => input.setCustomValidity(input.value.trim().length >= 2 ? '' : 'Preencha pelo menos dois caracteres.'));
+  });
+  services.forEach(input => input.addEventListener('change', () => { syncStorage(); validateServices(); }));
+  phone.addEventListener('input', validatePhone);
+  form.addEventListener('invalid', event => {
+    if (event.target === services[0]) serviceError.textContent = 'Selecione pelo menos um serviço.';
+  }, true);
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    validatePhone(); validateServices();
+    ['lead-name', 'lead-company'].forEach(id => document.getElementById(id).dispatchEvent(new Event('input')));
+    if (!form.reportValidity()) return;
+    const data = new FormData(form);
+    const value = name => clean(data.get(name));
+    const lines = ['Olá, Arquindex! Gostaria de uma proposta comercial.', '', 'Nome: ' + value('nome'), 'Empresa: ' + value('empresa'), 'E-mail: ' + value('email'), 'Telefone/WhatsApp: ' + value('telefone'), 'Serviços: ' + data.getAll('servicos').join(', ')];
+    if (storage.checked) {
+      lines.push('', 'GUARDA DOCUMENTAL', 'Caixas: ' + (value('caixas') || 'Não informado'), 'Localização: ' + (value('localizacao') || 'Não informado'), 'Coleta: ' + (value('coleta') || 'Não informado'), 'Consultas: ' + (value('consultas') || 'Não informado'), 'Digitalização sob demanda: ' + (value('sob_demanda') || 'Não informado'), 'Serviços relacionados: ' + (data.getAll('relacionados').join(', ') || 'Não informado'));
+    }
+    if (value('observacoes')) lines.push('', 'Observações: ' + value('observacoes'));
+    lines.push('', 'Origem: https://guardadocumentalembh.arquindex.com.br/', 'Ciência das informações de privacidade: sim.');
+    const url = new URL('https://wa.me/5531973632725');
+    url.searchParams.set('text', lines.join('\n'));
+    try { window.location.assign(url.href); }
+    catch (_) { document.getElementById('form-error').textContent = 'Não foi possível abrir o WhatsApp. Tente novamente ou use o contato direto abaixo.'; }
+  });
+  syncStorage();
+  // Validity is initialized without showing an error before user interaction.
+  services[0].setCustomValidity(services.some(input => input.checked) ? '' : 'Selecione pelo menos um serviço.');
+  form.hidden = false;
+})();
+</script>
+<!-- guarda-commercial-form:end -->

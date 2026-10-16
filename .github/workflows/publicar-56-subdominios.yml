@@ -3,6 +3,7 @@ name: Publicar 56 subdominios Arquindex
 on:
   workflow_dispatch:
   push:
+    branches: [master]
     paths:
       - 'seo-regional/56-sites/**'
       - '.github/workflows/publicar-56-subdominios.yml'
@@ -66,6 +67,14 @@ jobs:
           path: arquindex-56-subdominios-homehost.zip
           if-no-files-found: error
           retention-days: 30
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Testar formulario comercial antes de publicar
+        run: |
+          npm install --prefix /tmp/guarda-form-test --no-package-lock --no-save playwright@1.62.1
+          /tmp/guarda-form-test/node_modules/.bin/playwright install --with-deps chromium
+          NODE_PATH=/tmp/guarda-form-test/node_modules node tests/guarda-form.cjs
       - name: Enviar para HomeHost via FTPS explicito (porta 21)
         env:
           HOMEHOST_PASS: ${{ secrets.FTP_PASSWORD }}

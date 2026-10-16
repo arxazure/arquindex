@@ -2,6 +2,7 @@ name: Arquindex - Publicar 56 sites e indexar
 on:
   workflow_dispatch:
   push:
+    branches: [master]
     paths:
       - '.github/workflows/publicar-56-sites-completo.yml'
 permissions:
@@ -62,6 +63,14 @@ jobs:
           name: arquindex-56-sites-completos
           path: arquindex-56-sites.zip
           retention-days: 30
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Testar formulario comercial antes de publicar
+        run: |
+          npm install --prefix /tmp/guarda-form-test --no-package-lock --no-save playwright@1.62.1
+          /tmp/guarda-form-test/node_modules/.bin/playwright install --with-deps chromium
+          NODE_PATH=/tmp/guarda-form-test/node_modules node tests/guarda-form.cjs
       - name: Publicar por FTPS explicito na porta 21
         run: |
           python - <<'PY'
