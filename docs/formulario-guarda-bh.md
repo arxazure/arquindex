@@ -37,3 +37,9 @@ O job anterior de ativação de subdomínios (execução 38938586697) falhou com
 ## Publicadores concorrentes
 
 A revisão identificou que os dois workflows de publicação usavam grupos de concorrência diferentes. A execução completa 38962639797 encontrou `HASH_MISMATCH` em um sitemap de outro subdomínio enquanto o publicador principal também escrevia no mesmo destino. O fluxo completo foi mantido como acionamento manual e passou a compartilhar `arquindex-deploy-56` com o principal, impedindo gravações simultâneas nas próximas execuções. O formulário de guarda BH já havia passado nos testes antes de ambas as tentativas.
+
+## Bloqueio público confirmado
+
+A verificação isolada [38964102211](https://github.com/arxazure/arquindex/actions/runs/38964102211), executada em 16/10/2026 às 20:41 UTC a partir de um runner do GitHub, falhou antes do HTTPS com `socket.gaierror: [Errno -2] Name or service not known` para o host de guarda BH. Portanto, o DNS público do endereço ainda não está operacional naquela verificação. O upload do arquivo específico já foi confirmado no log da execução 38962639797 às 20:30:50 UTC: `FTP_VERIFIED guardadocumentalembh.arquindex.com.br`.
+
+O publicador principal 38962639796 continua responsável pelo restante do lote e pela checagem final; isso não remove a pendência de DNS. Para concluir a disponibilidade, é necessário restabelecer o acesso válido ao cPanel/HomeHost, conferir o subdomínio e a raiz documental indicada acima e ativar DNS/SSL. Não foram alterados registros DNS sem acesso autenticado.
