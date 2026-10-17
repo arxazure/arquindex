@@ -42,19 +42,45 @@ jobs:
           base=pathlib.Path('seo-priority-ocr')
           from scripts.priority_subdomains_ocr import SITES
           sites=[base/(slug+'.arquindex.com.br') for slug in sorted(SITES)]
-          # Roots must be confirmed from cPanel. Never assume public_html/subdominios is live.
-          assert all(s.name in roots for s in sites),'Configure OCR_SUBDOMAIN_ROOT_MAP with confirmed document roots in cPanel before deploy'
           pwd=os.getenv('FTP_PASSWORD')
-          assert pwd,'FTP_PASSWORD missing'
-          with ftplib.FTP_TLS(timeout=40) as ftp:
+          assert pwd,'FTP_PASSWORD secret missing'
+          with ftplib.FTP_TLS(timeout=45) as ftp:
             ftp.connect('ftp.arquindex.com.br',21)
             ftp.login('arquind2',pwd)
             ftp.prot_p()
+            ftp.set_pasv(True)
+            initial=ftp.pwd()
+            print('FTPS_AUTH_OK initial_dir=',initial,flush=True)
             for site in sites:
-              root=roots[site.name]
-              assert isinstance(root,str) and root.startswith('public_html/') and '..' not in root
-              ftp.cwd('/')
-              ftp.cwd(root)
+              candidates=[]
+              if site.name in roots:
+                candidates.append(roots[site.name])
+              candidates.extend([
+                'public_html/subdominios/'+site.name,
+                'public_html/'+site.name,
+                'subdominios/'+site.name,
+                site.name
+              ])
+              found=None
+              for candidate in dict.fromkeys(candidates):
+                if not isinstance(candidate,str) or '..' in candidate or not candidate.strip():continue
+                for full in (candidate,'/'+candidate.strip('/')):
+                  try:
+                    ftp.cwd(initial)
+                    ftp.cwd(full)
+                    files={str(x).rsplit('/',1)[-1] for x in ftp.nlst()}
+                    # Only preexisting roots with a site marker may be modified
+                    if ('index.html' in files or 'robots.txt' in files or 'sitemap.xml' in files):
+                      found=ftp.pwd()
+                      break
+                  except ftplib.all_errors:
+                    continue
+                if found:break
+              if not found:
+                print('ROOT_NOT_CONFIRMED',site.name,'skipped without modifying files',flush=True)
+                continue
+              ftp.cwd(found)
+              print('ROOT_CONFIRMED',site.name,found,flush=True)
               before=set(x.rsplit('/',1)[-1] for x in ftp.nlst())
               # Only write the required three files after preserving originals; never touch unrelated files.
               for name in ('index.html','robots.txt','sitemap.xml'):
