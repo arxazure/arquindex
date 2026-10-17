@@ -1,0 +1,158 @@
+name: Integrar pilares às páginas BH
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/seo-bh-pillar-links.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-seo-bh-pillar-links
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FTP_HOST: ftp.arquindex.com.br
+      FTP_USER: arquind2
+      FTP_PORT: '21'
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Backup, publicar, validar e reverter em falha
+        run: |
+          python - <<'PY'
+          import ftplib,hashlib,io,os,posixpath,re,time,urllib.request
+          from datetime import datetime,timezone
+
+          marker='seo-bh-pillar-links-20261017'
+          pages={
+            'digitalizacao.html': '''
+          <section id="seo-bh-pillar-links-20261017" aria-labelledby="seo-bh-digitalizacao-title">
+            <h2 id="seo-bh-digitalizacao-title">Atendimento de digitalização e gestão documental em Belo Horizonte</h2>
+            <p>Empresas da capital podem avaliar o acervo por volume, estado físico, necessidade de OCR, campos de indexação, frequência de consulta e critérios de conferência. A página de <a href="https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html">digitalização de documentos em Belo Horizonte</a> detalha diagnóstico, piloto, captura e aceite. Projetos que também envolvam classificação, acesso ou retenção podem consultar <a href="https://www.arquindex.com.br/gestao-documental-belo-horizonte.html">gestão documental em Belo Horizonte</a>.</p>
+            <p>Quando o destino for um repositório corporativo, veja a abordagem de <a href="https://www.arquindex.com.br/alfresco-belo-horizonte.html">Alfresco ECM em Belo Horizonte</a>. Para acervos com dados pessoais, contratos e dossiês, conheça a <a href="https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html">consultoria LGPD em Belo Horizonte</a>. O escopo e a logística são confirmados antes da proposta.</p>
+          </section>''',
+            'gestao-documental.html': '''
+          <section id="seo-bh-pillar-links-20261017" aria-labelledby="seo-bh-gestao-title">
+            <h2 id="seo-bh-gestao-title">Gestão documental para organizações de Belo Horizonte</h2>
+            <p>A atuação local começa pelo inventário do acervo, responsáveis, frequência de consulta, critérios de classificação e regras de acesso. Conheça o roteiro de <a href="https://www.arquindex.com.br/gestao-documental-belo-horizonte.html">gestão documental em Belo Horizonte</a> e, quando houver conversão do papel, a página de <a href="https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html">digitalização de documentos em Belo Horizonte</a>.</p>
+            <p>Projetos que exigem pesquisa, versionamento e permissões podem avaliar <a href="https://www.arquindex.com.br/alfresco-belo-horizonte.html">Alfresco ECM em Belo Horizonte</a>. Para documentos com dados pessoais, retenção e atendimento a titulares, veja a <a href="https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html">consultoria LGPD em Belo Horizonte</a>. Cada proposta depende do volume, riscos e condições operacionais confirmadas.</p>
+          </section>''',
+            'lgpd-consultoria.html': '''
+          <section id="seo-bh-pillar-links-20261017" aria-labelledby="seo-bh-lgpd-title">
+            <h2 id="seo-bh-lgpd-title">LGPD, documentos físicos e sistemas em Belo Horizonte</h2>
+            <p>A adequação precisa considerar onde os dados pessoais estão, quem acessa, por qual finalidade e durante quanto tempo. A <a href="https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html">consultoria LGPD em Belo Horizonte</a> apresenta diagnóstico, inventário, priorização de riscos e plano de ação. Para acervos físicos e digitais, a <a href="https://www.arquindex.com.br/gestao-documental-belo-horizonte.html">gestão documental em Belo Horizonte</a> ajuda a relacionar classificação, acesso e ciclo de vida.</p>
+            <p>Se houver captura de documentos, consulte a <a href="https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html">digitalização de documentos em Belo Horizonte</a>. Quando o tratamento depender de repositório, permissões e trilha de auditoria, veja <a href="https://www.arquindex.com.br/alfresco-belo-horizonte.html">Alfresco ECM em Belo Horizonte</a>. Nenhuma dessas etapas substitui a análise do contexto e das obrigações aplicáveis.</p>
+          </section>'''
+          }
+          wanted_title='Gestão Documental para Empresas em Belo Horizonte | Arquindex'
+          pwd=os.getenv('FTP_PASSWORD','')
+          if not pwd:raise RuntimeError('Falta secret FTP_PASSWORD')
+          stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          backup_dir='_backups/seo-bh-pillar-links-'+stamp
+
+          def sha(data):return hashlib.sha256(data).digest()
+          def read(ftp,name):
+            buf=bytearray();ftp.retrbinary('RETR '+name,buf.extend);return bytes(buf)
+          def upload_atomic(ftp,name,data,suffix):
+            temp='.'+name+'.tmp-'+suffix
+            ftp.storbinary('STOR '+temp,io.BytesIO(data))
+            if sha(data)!=sha(read(ftp,temp)):raise RuntimeError('UPLOAD_HASH_MISMATCH '+name)
+            ftp.rename(temp,name)
+
+          with ftplib.FTP_TLS(timeout=60) as ftp:
+            ftp.connect(os.environ['FTP_HOST'],int(os.environ['FTP_PORT']))
+            ftp.login(os.environ['FTP_USER'],pwd);ftp.prot_p();ftp.set_pasv(True)
+            initial=ftp.pwd();root=None
+            for candidate in dict.fromkeys(['/public_html','public_html','/home/arquind2/public_html',initial,'.']):
+              try:
+                ftp.cwd(initial);ftp.cwd(candidate)
+                names=[posixpath.basename(x.rstrip('/')) for x in ftp.nlst()]
+                if all(name in names for name in pages):root=ftp.pwd();break
+              except ftplib.all_errors:pass
+            if root is None:raise RuntimeError('DOCUMENT_ROOT_NOT_FOUND_WITH_TARGETS')
+
+            ftp.cwd(root)
+            originals={name:read(ftp,name) for name in pages}
+            for name,data in originals.items():
+              text=data.decode('utf-8')
+              if '<html' not in text.lower() or '</body>' not in text.lower():raise RuntimeError('HTML_INVALID '+name)
+              if 'rel="canonical"' not in text.lower() and "rel='canonical'" not in text.lower():raise RuntimeError('CANONICAL_MISSING '+name)
+              if '<h1' not in text.lower():raise RuntimeError('H1_MISSING '+name)
+
+            for directory in ('_backups',backup_dir):
+              try:ftp.mkd(directory)
+              except ftplib.error_perm as exc:
+                if not str(exc).startswith('550'):raise
+            ftp.cwd(root+'/'+backup_dir)
+            for name,data in originals.items():
+              ftp.storbinary('STOR '+name,io.BytesIO(data))
+              if sha(data)!=sha(read(ftp,name)):raise RuntimeError('BACKUP_HASH_MISMATCH '+name)
+              print('BACKUP_VERIFIED',backup_dir+'/'+name,flush=True)
+
+            updated={}
+            for name,data in originals.items():
+              text=data.decode('utf-8')
+              if marker in text:
+                print('LINK_SECTION_ALREADY_PRESENT',name,flush=True)
+              else:
+                idx=text.lower().rfind('</main>')
+                if idx<0:idx=text.lower().rfind('</body>')
+                if idx<0:raise RuntimeError('INSERTION_POINT_MISSING '+name)
+                text=text[:idx]+pages[name]+'\n'+text[idx:]
+              if name=='gestao-documental.html':
+                text=re.sub(r'<title>Gestão Documental - Arquindex BH 31 97363-2725 \| Arquindex \| Arquindex</title>','<title>'+wanted_title+'</title>',text,count=1,flags=re.I)
+              updated[name]=text.encode('utf-8')
+
+            try:
+              ftp.cwd(root)
+              for name,data in updated.items():upload_atomic(ftp,name,data,stamp)
+              for name in pages:
+                final=read(ftp,name).decode('utf-8')
+                checks={
+                  'marker':marker in final,
+                  'four_links':all(url in final for url in [
+                    'https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html',
+                    'https://www.arquindex.com.br/alfresco-belo-horizonte.html',
+                    'https://www.arquindex.com.br/gestao-documental-belo-horizonte.html',
+                    'https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html']),
+                  'canonical':'rel="canonical"' in final.lower() or "rel='canonical'" in final.lower(),
+                  'h1':'<h1' in final.lower(),
+                  'indexable':'noindex' not in final.lower(),
+                  'whatsapp':'5531973632725' in final,
+                }
+                if name=='gestao-documental.html':checks['title']=('<title>'+wanted_title+'</title>') in final
+                if not all(checks.values()):raise RuntimeError('FTP_POSTCHECK_FAILED '+name+' '+repr(checks))
+                print('FTP_PUBLISHED_VERIFIED',root+'/'+name,checks,flush=True)
+
+              for name in pages:
+                url='https://www.arquindex.com.br/'+name
+                req=urllib.request.Request(url+'?seo_bh_links='+stamp,headers={'User-Agent':'Arquindex-SEO-Check/1.0','Cache-Control':'no-cache'})
+                with urllib.request.urlopen(req,timeout=35) as response:
+                  body=response.read(1000000).decode('utf-8','replace')
+                  checks={
+                    'http_200':response.status==200,
+                    'marker':marker in body,
+                    'canonical':url in body,
+                    'h1':'<h1' in body.lower(),
+                    'indexable':'noindex' not in body.lower(),
+                    'four_links':all(target in body for target in [
+                      'https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html',
+                      'https://www.arquindex.com.br/alfresco-belo-horizonte.html',
+                      'https://www.arquindex.com.br/gestao-documental-belo-horizonte.html',
+                      'https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html']),
+                  }
+                  if not all(checks.values()):raise RuntimeError('PUBLIC_CHECK_FAILED '+name+' '+repr(checks))
+                  print('PUBLIC_VERIFIED',url,checks,flush=True)
+            except Exception:
+              ftp.cwd(root)
+              for name,data in originals.items():upload_atomic(ftp,name,data,'rollback-'+stamp)
+              print('ROLLBACK_COMPLETED',','.join(pages),flush=True)
+              raise
+          PY
