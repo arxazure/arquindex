@@ -27,13 +27,22 @@ def ftp(commands):
 
 # Repair the observed accented source-directory mismatch without changing the content.
 ascii_path='/seo-regional/gestao-documental-ecm-databooks/sabara/'
-try: fetch(ascii_path)
+try: current_ascii=fetch(ascii_path)
 except HTTPError as e:
     if e.code!=404: raise
+    current_ascii=b''
+if b'href="'+(BASE+ascii_path).encode()+b'"' not in current_ascii:
     source=Path('seo-regional/gestao-documental-ecm-databooks/sabará/index.html')
     assert source.exists(),'Fonte Sabara ausente'
+    fixed=source.read_text().replace('/sabará/','/sabara/').replace('/sabar%C3%A1/','/sabara/').replace('/sabar%c3%a1/','/sabara/')
+    (work/'sabara.html').write_text(fixed)
     target='public_html'+ascii_path
-    ftp(['mkdir -f -p '+target,'put '+lftp_quote(str(source))+' -o '+target+'index.html'])
+    backup_route='seo-backups/sabara-canonical-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+    (work/'sabara-original.html').write_bytes(current_ascii)
+    commands=['mkdir -f -p '+target,'mkdir -f -p '+backup_route]
+    if current_ascii: commands.append('put '+str(work/'sabara-original.html')+' -o '+backup_route+'/index.html')
+    commands.append('put '+str(work/'sabara.html')+' -o '+target+'index.html')
+    ftp(commands)
     assert b'<h1>' in fetch(ascii_path)
     print('PUBLIC_ROUTE_REPAIRED',BASE+ascii_path)
 
