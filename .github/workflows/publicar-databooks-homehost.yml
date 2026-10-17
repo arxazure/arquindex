@@ -5,6 +5,7 @@ on:
     branches: [master, main]
     paths:
       - 'blog/montagem-de-databooks-de-engenharia/index.html'
+      - 'seo-regional/gestao-documental-ecm-databooks/**'
       - '.github/workflows/publicar-databooks-homehost.yml'
   workflow_dispatch:
 
@@ -79,6 +80,8 @@ jobs:
           set ssl:verify-certificate yes
           mkdir -p public_html/blog/montagem-de-databooks-de-engenharia
           put -O public_html/blog/montagem-de-databooks-de-engenharia/ blog/montagem-de-databooks-de-engenharia/index.html
+          mkdir -p public_html/seo-regional/gestao-documental-ecm-databooks
+          mirror -R --verbose seo-regional/gestao-documental-ecm-databooks public_html/seo-regional/gestao-documental-ecm-databooks
           bye
           LFTP
       - name: Conferir URL publica
