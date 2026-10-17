@@ -1,0 +1,1175 @@
+{
+  "version": "2026-10-12-top10",
+  "domain": "https://www.arquindex.com.br",
+  "basePath": "/top10",
+  "key": "top10d80b1ba9134b485fa3a8cd038c283ad4",
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "c4c8e55eca37837aa24d62b4fb1d17319b1561eb851253ea4d1900579d79b875",
+      "bytes": 16220
+    },
+    {
+      "path": "sitemap.xml",
+      "sha256": "41dca49c375bbc446e7e4a1435dab228ffa3dd5bbc184423ef830daca205fec6",
+      "bytes": 14656
+    },
+    {
+      "path": "top10d80b1ba9134b485fa3a8cd038c283ad4.txt",
+      "sha256": "9266507e9d66180acec86c334d421217014f19560e0858ca592abbc2a85630e8",
+      "bytes": 37
+    },
+    {
+      "path": "guias/ocr-dossies-colaboradores.html",
+      "sha256": "d31dfceae2ebd553a1b3e3334c32b659dfb3e670b93f1f81a5b37db441cd4e42",
+      "bytes": 12519
+    },
+    {
+      "path": "guias/indexacao-dossies-colaboradores.html",
+      "sha256": "0ed78b47d7771f16e024ba9bbb2c7b10c4e34025537f3d4792afdc8fec24fb4b",
+      "bytes": 12488
+    },
+    {
+      "path": "guias/acesso-dossies-colaboradores.html",
+      "sha256": "27db133569fd6bb6f871607df820bcdddd31d5788bf4af406fd5fa737a474224",
+      "bytes": 12466
+    },
+    {
+      "path": "guias/workflow-dossies-colaboradores.html",
+      "sha256": "18849306e529a0182e1499f31cf0a6b09238a33cdb4090256f7add04ecc7d166",
+      "bytes": 12465
+    },
+    {
+      "path": "guias/migracao-dossies-colaboradores.html",
+      "sha256": "c9d5c66ca96a970858f689cee370a5275eca58341ff0e68c76cbb1b36b475acd",
+      "bytes": 12582
+    },
+    {
+      "path": "guias/ocr-contratos-fornecedores.html",
+      "sha256": "5d6d9c6dc7e7f01ee2fcce13d820e8687b290770faa9d573635df9478e12ab14",
+      "bytes": 12511
+    },
+    {
+      "path": "guias/indexacao-contratos-fornecedores.html",
+      "sha256": "9592d338d90d5983ada705e049a722c049764c0c9591be5f0e60cb2a3a2a2b82",
+      "bytes": 12480
+    },
+    {
+      "path": "guias/acesso-contratos-fornecedores.html",
+      "sha256": "58fafa8542d645b8ff6297f882574cdf03600bcfdf83a01ac0eeca0976516da3",
+      "bytes": 12458
+    },
+    {
+      "path": "guias/workflow-contratos-fornecedores.html",
+      "sha256": "9fa73bf3d2756857b632f96e04b8957f8754caf1cef86ff7c1c54fc472651023",
+      "bytes": 12457
+    },
+    {
+      "path": "guias/migracao-contratos-fornecedores.html",
+      "sha256": "fd46535aa11032f56501d361ccce591c9a722ff9784c765e58c983e0998ffdcc",
+      "bytes": 12574
+    },
+    {
+      "path": "guias/ocr-processos-juridicos.html",
+      "sha256": "278345b981e45c466973cb2df82b68d108a8830743ebacfd2aa11425272f3dbf",
+      "bytes": 12458
+    },
+    {
+      "path": "guias/indexacao-processos-juridicos.html",
+      "sha256": "8c5dac9c65913196b2991dcc0ec405b608f38682658d1a81d97240c3e6ff58be",
+      "bytes": 12427
+    },
+    {
+      "path": "guias/acesso-processos-juridicos.html",
+      "sha256": "63b1a5e6f14b8a58ef70a815e33ae43dac7680a65e41c7751888fa08afeae903",
+      "bytes": 12405
+    },
+    {
+      "path": "guias/workflow-processos-juridicos.html",
+      "sha256": "941b4ae4a04a4bb15e9c1a18007734e7de21a774c9533b9c272b81907a688e68",
+      "bytes": 12404
+    },
+    {
+      "path": "guias/migracao-processos-juridicos.html",
+      "sha256": "574f03149d27fb0fe0c606b5c7b63c999915263c4da972921060b254bcf143a8",
+      "bytes": 12521
+    },
+    {
+      "path": "guias/ocr-laudos-saude-ocupacional.html",
+      "sha256": "e756e6be02e066e9d7ef6117eda038587db735ee088d2448ccf6f1c610019707",
+      "bytes": 12559
+    },
+    {
+      "path": "guias/indexacao-laudos-saude-ocupacional.html",
+      "sha256": "afffd9794e54e9aa944fb779f0a576d850f7db9bb8d156275a35c22e0d04dfbc",
+      "bytes": 12528
+    },
+    {
+      "path": "guias/acesso-laudos-saude-ocupacional.html",
+      "sha256": "5ce8b4d5d2694d529b1abc3d599ce48895917adc92686cef0c2aaed4772fd402",
+      "bytes": 12506
+    },
+    {
+      "path": "guias/workflow-laudos-saude-ocupacional.html",
+      "sha256": "76507a2c94b52e68988dfbf6074ae63173f41410d92f57c98b970839a470714d",
+      "bytes": 12505
+    },
+    {
+      "path": "guias/migracao-laudos-saude-ocupacional.html",
+      "sha256": "c4d18817bcfbdf835b58dd1e4dcdd8a0e136aa0a38d6fcfa915b03b254a4988a",
+      "bytes": 12622
+    },
+    {
+      "path": "guias/ocr-ordens-manutencao.html",
+      "sha256": "903c1c3ce8283fce76b8d7829323d3acd95e5d64414b306b09928a4d196e8bdf",
+      "bytes": 12488
+    },
+    {
+      "path": "guias/indexacao-ordens-manutencao.html",
+      "sha256": "49779fb43425529f5f925a69b013186a4e8d15d40b38e6d76147ffa4fa151a65",
+      "bytes": 12457
+    },
+    {
+      "path": "guias/acesso-ordens-manutencao.html",
+      "sha256": "2e1ff24daaecaa6788e650aefab6178b4e27b171027ae4bbeafd3cbe2de8763d",
+      "bytes": 12435
+    },
+    {
+      "path": "guias/workflow-ordens-manutencao.html",
+      "sha256": "bd08e5e4291452aebbf850bd8e9eefed74a1fb9bd5ed20c4d316f188b280d145",
+      "bytes": 12434
+    },
+    {
+      "path": "guias/migracao-ordens-manutencao.html",
+      "sha256": "18187066dddc05664abdc9cc32352cac06997ad51660a8bb962beb976ac70268",
+      "bytes": 12551
+    },
+    {
+      "path": "guias/ocr-desenhos-engenharia.html",
+      "sha256": "3e899b964fc5dc9af91def87d57a437201e26ecf172efd936b8aa60bf47bddc2",
+      "bytes": 12466
+    },
+    {
+      "path": "guias/indexacao-desenhos-engenharia.html",
+      "sha256": "f9dece6d402cc3bbcd85f8d5a6237a8f5b8b43e272a3529f1f364f2e1879e423",
+      "bytes": 12435
+    },
+    {
+      "path": "guias/acesso-desenhos-engenharia.html",
+      "sha256": "969a1d948efc78ed76cff1f29cbc506a50390e77e3e14c832b8ec7148b343281",
+      "bytes": 12413
+    },
+    {
+      "path": "guias/workflow-desenhos-engenharia.html",
+      "sha256": "c45abf6c037fe282666bc6764751a684a3448baf48c63297b6f50788e64d9eaf",
+      "bytes": 12412
+    },
+    {
+      "path": "guias/migracao-desenhos-engenharia.html",
+      "sha256": "0c429dd6f942715437a390e92b4be0925305c39b3768c1a3c5221799f2d5070e",
+      "bytes": 12529
+    },
+    {
+      "path": "guias/ocr-certificados-materiais.html",
+      "sha256": "c03dcc09bccde6802c2c8a5a9400098c6a0ee3edec10d4d02027c96ebfb299b9",
+      "bytes": 12496
+    },
+    {
+      "path": "guias/indexacao-certificados-materiais.html",
+      "sha256": "98db3db5b7ecf1c14176687a9d57acea8a22db4cf18fc77bc9cd0833895fb7d5",
+      "bytes": 12465
+    },
+    {
+      "path": "guias/acesso-certificados-materiais.html",
+      "sha256": "b14f79d8c4d8ab1e0b9198824b9eb9952db75ee3b200aabb051c363b8d89ad05",
+      "bytes": 12443
+    },
+    {
+      "path": "guias/workflow-certificados-materiais.html",
+      "sha256": "56dd0e8296aaab1a2d49ac34b549186733881bc1eb4fcc23548090ed5d23e641",
+      "bytes": 12442
+    },
+    {
+      "path": "guias/migracao-certificados-materiais.html",
+      "sha256": "9dbe7bb8c537615a6a41baa8a36fcf40dd0530bba4a8cb649a28d85d225c50c9",
+      "bytes": 12559
+    },
+    {
+      "path": "guias/ocr-databooks-equipamentos.html",
+      "sha256": "26a00e8effed9e55a28ffc3fd277e4daa7b74e35fadc8581e34cf68d3059e7c0",
+      "bytes": 12514
+    },
+    {
+      "path": "guias/indexacao-databooks-equipamentos.html",
+      "sha256": "8dfa36f2ad47cdab072481835222b5d74ea34819f0ece872649fecb738157559",
+      "bytes": 12483
+    },
+    {
+      "path": "guias/acesso-databooks-equipamentos.html",
+      "sha256": "f024e8ce476d42a29791df41ae2722088339f13bb24b37fddbc990f2d0f4312e",
+      "bytes": 12461
+    },
+    {
+      "path": "guias/workflow-databooks-equipamentos.html",
+      "sha256": "8386674e9f56f9a5cbffca612e78494fe2f75041b951ea74bf3bb12efdeca4c3",
+      "bytes": 12460
+    },
+    {
+      "path": "guias/migracao-databooks-equipamentos.html",
+      "sha256": "12d240a761f2e88a4b6c9609661ef2e3a06b461d6612f1e67b64581eb1ba8c19",
+      "bytes": 12577
+    },
+    {
+      "path": "guias/ocr-licencas-ambientais.html",
+      "sha256": "9cfc85bab26314d0d387ad326643ca4f466969d3eddccfd039617672fdebeb1b",
+      "bytes": 12607
+    },
+    {
+      "path": "guias/indexacao-licencas-ambientais.html",
+      "sha256": "8dc65db93c8a7d5e2675b65f2d340cc63438dd066b8f4fd635116f508ccfdbfe",
+      "bytes": 12576
+    },
+    {
+      "path": "guias/acesso-licencas-ambientais.html",
+      "sha256": "f6715d70332bbb0e5420683519f51519df68beaab42bac610924695c9d8079af",
+      "bytes": 12554
+    },
+    {
+      "path": "guias/workflow-licencas-ambientais.html",
+      "sha256": "4e20fc32c3e3d3330fbfc358301dfb77e7c80e60095035f678595049796d6a57",
+      "bytes": 12553
+    },
+    {
+      "path": "guias/migracao-licencas-ambientais.html",
+      "sha256": "503d665b7f7bf2f14481e965853208eadd7a89c24a6bae8ccd898789f863eb23",
+      "bytes": 12670
+    },
+    {
+      "path": "guias/ocr-registros-mineracao.html",
+      "sha256": "c89995036b38de815cb863df4c9d8968599d92016da8492cb14ca25c7e08600f",
+      "bytes": 12547
+    },
+    {
+      "path": "guias/indexacao-registros-mineracao.html",
+      "sha256": "2692f942ff4efa595a363c09abb27779971ba05f0806b2d3ecda0f04c952eb6a",
+      "bytes": 12516
+    },
+    {
+      "path": "guias/acesso-registros-mineracao.html",
+      "sha256": "6ed6b03629f20be4ffaa5a77a177197a93408e2710d8aad8d59a73969062d17b",
+      "bytes": 12494
+    },
+    {
+      "path": "guias/workflow-registros-mineracao.html",
+      "sha256": "e6e02778bd057f114f264d611ece762ef440c000a589fcf390416f66d73c1ebc",
+      "bytes": 12493
+    },
+    {
+      "path": "guias/migracao-registros-mineracao.html",
+      "sha256": "41b202bd736bc58ce156fd93161c1dc169a892ecb0940087daf34fadc9e3c0a4",
+      "bytes": 12610
+    },
+    {
+      "path": "guias/ocr-documentos-contabeis.html",
+      "sha256": "569a184907d96caa98f1929345146241302b1c973f60530b1a8635c4ab2593ae",
+      "bytes": 12494
+    },
+    {
+      "path": "guias/indexacao-documentos-contabeis.html",
+      "sha256": "25a7bef1a82100dba9b0c459b8a16d5bdab83b49b906e1e8f10c97b94b44179f",
+      "bytes": 12463
+    },
+    {
+      "path": "guias/acesso-documentos-contabeis.html",
+      "sha256": "56c4fd461da9e302ff53e5e7ffe17f21b22b8b10fefabf69ff8e2cfed4412b10",
+      "bytes": 12441
+    },
+    {
+      "path": "guias/workflow-documentos-contabeis.html",
+      "sha256": "7ce8be5ed129bdadb7733e285174ecf08bff33d0295e3668514577b63b24600b",
+      "bytes": 12440
+    },
+    {
+      "path": "guias/migracao-documentos-contabeis.html",
+      "sha256": "a53a82175de1735e69b2b3f508090c68501c4e35e4d21a5392d7a8591cbedd55",
+      "bytes": 12557
+    },
+    {
+      "path": "guias/ocr-notas-comprovantes.html",
+      "sha256": "13ccae49c2adedd69591f01bf7dff75185e9eca862cfe7eed71c4d5c10760df5",
+      "bytes": 12528
+    },
+    {
+      "path": "guias/indexacao-notas-comprovantes.html",
+      "sha256": "9ccc663e31513c8e6107a14d1f6a25334d5b8820cb492b9fa2077d70d9048e5e",
+      "bytes": 12497
+    },
+    {
+      "path": "guias/acesso-notas-comprovantes.html",
+      "sha256": "2979cdf7ce729dbe88bf758ce1d8b96a7d9b6f1cb57fd70cd0b59efce46cb512",
+      "bytes": 12475
+    },
+    {
+      "path": "guias/workflow-notas-comprovantes.html",
+      "sha256": "a2bacbd751fa2198709072ab26c25593655520b048455d115eb42c71ec849678",
+      "bytes": 12474
+    },
+    {
+      "path": "guias/migracao-notas-comprovantes.html",
+      "sha256": "97a42b8d3edef2a16806a5a209348e6d0ec2bf69fa88ce0832a5d5c46c9c6d18",
+      "bytes": 12591
+    },
+    {
+      "path": "guias/ocr-registros-qualidade.html",
+      "sha256": "7f5fe1e9789dbe12bebdbe7c6b49dcc4375e31ddde2bfa552625df80f34b0e50",
+      "bytes": 12493
+    },
+    {
+      "path": "guias/indexacao-registros-qualidade.html",
+      "sha256": "0a9204e9fe4ea1b506bce0873f65800749a5e37a2451cee4d02f8c2c2a902338",
+      "bytes": 12462
+    },
+    {
+      "path": "guias/acesso-registros-qualidade.html",
+      "sha256": "4ea2e6bb14470f1fcac55fe3748ca17609f24797fd9d46eda91b5e9023413c26",
+      "bytes": 12440
+    },
+    {
+      "path": "guias/workflow-registros-qualidade.html",
+      "sha256": "056e99cef1739ee08c96c9a3bcdf7aa46a773023713676eb35dee1f7bde5c844",
+      "bytes": 12439
+    },
+    {
+      "path": "guias/migracao-registros-qualidade.html",
+      "sha256": "da38fabd0cd820229b4e255e8ea3780d1abbfbc24ea123194fe41ffe1116e876",
+      "bytes": 12556
+    },
+    {
+      "path": "guias/ocr-contratos-clientes.html",
+      "sha256": "6463bdc20608eec2beea1486b15b10b6973de59430f60027fd230d0f7e43d3fe",
+      "bytes": 12464
+    },
+    {
+      "path": "guias/indexacao-contratos-clientes.html",
+      "sha256": "cf049569f180a6a2dae58872f5a6b57cd2c7ad4ac69b07010d2c08ca2a90b847",
+      "bytes": 12433
+    },
+    {
+      "path": "guias/acesso-contratos-clientes.html",
+      "sha256": "7ab41f79794cc17d061f885e69fa2a0be7b154b135a403d77fda6b705d3ccd73",
+      "bytes": 12411
+    },
+    {
+      "path": "guias/workflow-contratos-clientes.html",
+      "sha256": "cc77d716521f4ff50aa464b71a75cdfe7eb3dfa22108ec6a61db55c6e69bd5ef",
+      "bytes": 12410
+    },
+    {
+      "path": "guias/migracao-contratos-clientes.html",
+      "sha256": "c2eceb7151a5df10b0c8afa2350b0442d46d09c264d2f63047cf2e3b66265d6b",
+      "bytes": 12527
+    },
+    {
+      "path": "guias/ocr-documentos-obras.html",
+      "sha256": "e2534912657fbb4873fdd3616d83aa8fac82e456ba135440aace7a329dabc4c0",
+      "bytes": 12456
+    },
+    {
+      "path": "guias/indexacao-documentos-obras.html",
+      "sha256": "0836f6315882133d972572ba802af690117e8adce2fcac3a91a2d033434a6183",
+      "bytes": 12425
+    },
+    {
+      "path": "guias/acesso-documentos-obras.html",
+      "sha256": "74af50a0353b9efc452b08f8b55de5092ab5cf7b6eb85aee3439ac9bb205ffec",
+      "bytes": 12403
+    },
+    {
+      "path": "guias/workflow-documentos-obras.html",
+      "sha256": "44ca00e57f78a18375ab9d178ebb976184b58695da81ca5a976169ddb9dbf79b",
+      "bytes": 12402
+    },
+    {
+      "path": "guias/migracao-documentos-obras.html",
+      "sha256": "6546458470678727e5059dd05c0e891278770e49f9019a063307bdad51b1c565",
+      "bytes": 12519
+    },
+    {
+      "path": "guias/ocr-manuais-tecnicos.html",
+      "sha256": "1b5106b3769196812142cee1dfefb73bbb7137a4e52d1fde09e350aeca652a53",
+      "bytes": 12482
+    },
+    {
+      "path": "guias/indexacao-manuais-tecnicos.html",
+      "sha256": "04f0d56a8b46af79c6185d789f9ed9db55fbef05bf7a0c3601ea8eea6eef6b0e",
+      "bytes": 12451
+    },
+    {
+      "path": "guias/acesso-manuais-tecnicos.html",
+      "sha256": "fb191d83370d3f1c3c3e9709ca4a2e7e0ee4c217ff1b833b2f7ac150deff30cb",
+      "bytes": 12429
+    },
+    {
+      "path": "guias/workflow-manuais-tecnicos.html",
+      "sha256": "a3744caeb0860848bbc7080f0974ba5e2f24dfd603290910027ce68de005dca5",
+      "bytes": 12428
+    },
+    {
+      "path": "guias/migracao-manuais-tecnicos.html",
+      "sha256": "fcbd3946caf2d6da4960f1d36ed7426661163792b685c666c61ea036bf315513",
+      "bytes": 12545
+    },
+    {
+      "path": "guias/ocr-treinamentos-corporativos.html",
+      "sha256": "b0654eec33d33bf58a3d4627768a9f37cf27a21ec6336c1697001cc764faf49e",
+      "bytes": 12507
+    },
+    {
+      "path": "guias/indexacao-treinamentos-corporativos.html",
+      "sha256": "2d9e41f12f32c4a2e02955bf959fcdae199d53e03d38538193d5d22448b38e0c",
+      "bytes": 12476
+    },
+    {
+      "path": "guias/acesso-treinamentos-corporativos.html",
+      "sha256": "fb433fed57e5b16c3e14ced39ee6329da67d312afe2cf61af138ec2fa6c384f3",
+      "bytes": 12454
+    },
+    {
+      "path": "guias/workflow-treinamentos-corporativos.html",
+      "sha256": "589254d59d8c245af5d277acaaf691a32f1bc4045656a2978ca0d575eb09fd97",
+      "bytes": 12453
+    },
+    {
+      "path": "guias/migracao-treinamentos-corporativos.html",
+      "sha256": "8a6d9d107096af4aa1abb9afeb7bfbe3cb85e324d0444a7ffc97371db5d456da",
+      "bytes": 12570
+    },
+    {
+      "path": "guias/ocr-documentos-societarios.html",
+      "sha256": "5ffadba62ac0d4a59c63318201854ba0263ddfc285fb2508a6144a479175e6b4",
+      "bytes": 12509
+    },
+    {
+      "path": "guias/indexacao-documentos-societarios.html",
+      "sha256": "e22372abc1f62aa128ea56698df853f7173e2143643b0c03340a51ee56fd67df",
+      "bytes": 12478
+    },
+    {
+      "path": "guias/acesso-documentos-societarios.html",
+      "sha256": "3b0b6cb9a47040612c66ee5a5be232223d0841d13d2c74f40b5b00ce24f10cdc",
+      "bytes": 12456
+    },
+    {
+      "path": "guias/workflow-documentos-societarios.html",
+      "sha256": "c3bbc5188fc6e59cee6994b6362b2a489e7185da11721978bc8da8667a5b4f24",
+      "bytes": 12455
+    },
+    {
+      "path": "guias/migracao-documentos-societarios.html",
+      "sha256": "9e8151f267e9b323f52af2125035cc9ef41d75c6434bd21f23e56f483b546113",
+      "bytes": 12572
+    },
+    {
+      "path": "guias/ocr-pesquisa-laboratorial.html",
+      "sha256": "25902d22b3889360b052f65f778dc02ead211a39a5289289e42d7f13870dbb21",
+      "bytes": 12498
+    },
+    {
+      "path": "guias/indexacao-pesquisa-laboratorial.html",
+      "sha256": "7c7ca73145f995e512420337bec67eac347e06cbc61dfe7ad4d134bb538ecc6f",
+      "bytes": 12467
+    },
+    {
+      "path": "guias/acesso-pesquisa-laboratorial.html",
+      "sha256": "7530e8e3ddcc0e6e298575990ab92a48cf21380a274cfbbc14b2de4fc05ca904",
+      "bytes": 12445
+    },
+    {
+      "path": "guias/workflow-pesquisa-laboratorial.html",
+      "sha256": "682268df76b2f47246518a182e577f9c3c895e38249c8a0f5078c8902585ba48",
+      "bytes": 12444
+    },
+    {
+      "path": "guias/migracao-pesquisa-laboratorial.html",
+      "sha256": "eb928385837cf6529808ccb1b72df7be3f841ecca7c0db5ecc8d2cc50cbf1b0f",
+      "bytes": 12561
+    },
+    {
+      "path": "guias/ocr-arquivos-unidades.html",
+      "sha256": "4c32932e60999fc799f230ab9d7047e63ec4b5609a163a19d13487c5e1f8de1e",
+      "bytes": 12585
+    },
+    {
+      "path": "guias/indexacao-arquivos-unidades.html",
+      "sha256": "17c61e5df54b4a4d4196e30c2c55a456a6c8bf2d040e83b97c75b3ff416c6e86",
+      "bytes": 12554
+    },
+    {
+      "path": "guias/acesso-arquivos-unidades.html",
+      "sha256": "30fa5230e0efd6376b5eb5f5a68a6ee4cd3a97427f0fa49e9b64855e4308c53f",
+      "bytes": 12532
+    },
+    {
+      "path": "guias/workflow-arquivos-unidades.html",
+      "sha256": "6d9eb98dc499cc1df63cf372388ccf39f15addb6147c1c4d6dd49a835d55d358",
+      "bytes": 12531
+    },
+    {
+      "path": "guias/migracao-arquivos-unidades.html",
+      "sha256": "6fdc25c6775b61a11fbb1255930cdfec99609c98a8de2af02754a209ed500063",
+      "bytes": 12648
+    },
+    {
+      "path": "artigos/piloto-digitalizacao-empresas-mais-20-funcionarios.html",
+      "sha256": "24f0c93f4e2d03898e8aed0b9139678750c0b4040ff30fa02c67f0822de6b54b",
+      "bytes": 12438
+    },
+    {
+      "path": "artigos/tempo-busca-documental-indicadores.html",
+      "sha256": "5caf0e49b002fadfaa22bd78f38f1dd814c1c2006f6267e4c2478f863baa288a",
+      "bytes": 11740
+    },
+    {
+      "path": "artigos/ocr-contratos-campos-criticos.html",
+      "sha256": "7080b069bd60638228b873f0c4edd70c1591f97af2b4aeff9d6b9d3a85bc40b9",
+      "bytes": 11712
+    },
+    {
+      "path": "artigos/frente-verso-lotes-heterogeneos.html",
+      "sha256": "85ce08ca9f4070abb69366b1d434e644637bab44328504dde71a367a7756f280",
+      "bytes": 11574
+    },
+    {
+      "path": "artigos/metadados-mineracao-unidade-projeto.html",
+      "sha256": "a4ad705fc63a0958f1bd26efffd0702435da8ce0e79154e563de129c3f9d7b8d",
+      "bytes": 11736
+    },
+    {
+      "path": "artigos/databook-lista-mestra-tag.html",
+      "sha256": "08ed1fb8119985d7e884fe0248505b82ca1e297db14959c574ce2ac1d248d6f1",
+      "bytes": 11527
+    },
+    {
+      "path": "artigos/orcamento-guarda-documental-dados.html",
+      "sha256": "1a2e860015c3a4abe1809770389e1b1f4c71c9989ef5828901f9dbf936a773fa",
+      "bytes": 11613
+    },
+    {
+      "path": "artigos/arquivo-juridico-cliente-processo.html",
+      "sha256": "29d6ae265d429b60351b1bb1c40b3b0e6d319c842591abfbd8209ba1d0373e58",
+      "bytes": 11305
+    },
+    {
+      "path": "artigos/medicina-trabalho-separar-clinico-administrativo.html",
+      "sha256": "61e56bea32f54a2c73574cecb3073cb376d7c887a5fad95f9b9994e0bcde51c5",
+      "bytes": 11571
+    },
+    {
+      "path": "artigos/duplicidades-migracao-ged.html",
+      "sha256": "449181411c73c663564cbc12b739b7286659b0d5e85f8f7494a79cb9e683aa7d",
+      "bytes": 11433
+    },
+    {
+      "path": "artigos/amostragem-qualidade-captura-documental.html",
+      "sha256": "c2b5722256dc4c5bf86661cbe5a8ac8dae8420d912c5717a4a548d0a1c9045d0",
+      "bytes": 11355
+    },
+    {
+      "path": "artigos/acessos-escritorio-contabil.html",
+      "sha256": "aa9af29a07f9d5e7a757f889659a52973ab9b9c744d65a87b04502db04abca1f",
+      "bytes": 11322
+    },
+    {
+      "path": "artigos/saida-contrato-guarda-documentos.html",
+      "sha256": "7d1089de721f57392c3e15e9ab8fe6acca1a2e9a9550b14fd5aacceb6ff1b96d",
+      "bytes": 11436
+    },
+    {
+      "path": "artigos/consulta-documental-equipes-remotas.html",
+      "sha256": "e37ee2a84368c89ebd4a08c9736a31f97666404b69a55a33e89722660b562998",
+      "bytes": 11290
+    },
+    {
+      "path": "artigos/demonstracao-ocr-sem-dados-reais.html",
+      "sha256": "c41b19f4a0ee0e8bfe8e83c8749a45443b0af8fe6472cbc522dbe555767e2798",
+      "bytes": 11411
+    }
+  ],
+  "pages": [
+    {
+      "path": "guias/ocr-dossies-colaboradores.html",
+      "title": "OCR e controle de qualidade para dossiês de colaboradores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-dossies-colaboradores.html",
+      "title": "Metadados e indexação para dossiês de colaboradores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-dossies-colaboradores.html",
+      "title": "Permissões e consulta segura para dossiês de colaboradores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-dossies-colaboradores.html",
+      "title": "Fluxo de conferência e aprovação para dossiês de colaboradores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-dossies-colaboradores.html",
+      "title": "Migração e reconciliação do acervo para dossiês de colaboradores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-contratos-fornecedores.html",
+      "title": "OCR e controle de qualidade para contratos de fornecedores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-contratos-fornecedores.html",
+      "title": "Metadados e indexação para contratos de fornecedores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-contratos-fornecedores.html",
+      "title": "Permissões e consulta segura para contratos de fornecedores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-contratos-fornecedores.html",
+      "title": "Fluxo de conferência e aprovação para contratos de fornecedores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-contratos-fornecedores.html",
+      "title": "Migração e reconciliação do acervo para contratos de fornecedores",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-processos-juridicos.html",
+      "title": "OCR e controle de qualidade para processos jurídicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-processos-juridicos.html",
+      "title": "Metadados e indexação para processos jurídicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-processos-juridicos.html",
+      "title": "Permissões e consulta segura para processos jurídicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-processos-juridicos.html",
+      "title": "Fluxo de conferência e aprovação para processos jurídicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-processos-juridicos.html",
+      "title": "Migração e reconciliação do acervo para processos jurídicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-laudos-saude-ocupacional.html",
+      "title": "OCR e controle de qualidade para laudos de saúde ocupacional",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-laudos-saude-ocupacional.html",
+      "title": "Metadados e indexação para laudos de saúde ocupacional",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-laudos-saude-ocupacional.html",
+      "title": "Permissões e consulta segura para laudos de saúde ocupacional",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-laudos-saude-ocupacional.html",
+      "title": "Fluxo de conferência e aprovação para laudos de saúde ocupacional",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-laudos-saude-ocupacional.html",
+      "title": "Migração e reconciliação do acervo para laudos de saúde ocupacional",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-ordens-manutencao.html",
+      "title": "OCR e controle de qualidade para ordens de manutenção",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-ordens-manutencao.html",
+      "title": "Metadados e indexação para ordens de manutenção",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-ordens-manutencao.html",
+      "title": "Permissões e consulta segura para ordens de manutenção",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-ordens-manutencao.html",
+      "title": "Fluxo de conferência e aprovação para ordens de manutenção",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-ordens-manutencao.html",
+      "title": "Migração e reconciliação do acervo para ordens de manutenção",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-desenhos-engenharia.html",
+      "title": "OCR e controle de qualidade para desenhos de engenharia",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-desenhos-engenharia.html",
+      "title": "Metadados e indexação para desenhos de engenharia",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-desenhos-engenharia.html",
+      "title": "Permissões e consulta segura para desenhos de engenharia",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-desenhos-engenharia.html",
+      "title": "Fluxo de conferência e aprovação para desenhos de engenharia",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-desenhos-engenharia.html",
+      "title": "Migração e reconciliação do acervo para desenhos de engenharia",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-certificados-materiais.html",
+      "title": "OCR e controle de qualidade para certificados de materiais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-certificados-materiais.html",
+      "title": "Metadados e indexação para certificados de materiais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-certificados-materiais.html",
+      "title": "Permissões e consulta segura para certificados de materiais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-certificados-materiais.html",
+      "title": "Fluxo de conferência e aprovação para certificados de materiais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-certificados-materiais.html",
+      "title": "Migração e reconciliação do acervo para certificados de materiais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-databooks-equipamentos.html",
+      "title": "OCR e controle de qualidade para databooks de equipamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-databooks-equipamentos.html",
+      "title": "Metadados e indexação para databooks de equipamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-databooks-equipamentos.html",
+      "title": "Permissões e consulta segura para databooks de equipamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-databooks-equipamentos.html",
+      "title": "Fluxo de conferência e aprovação para databooks de equipamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-databooks-equipamentos.html",
+      "title": "Migração e reconciliação do acervo para databooks de equipamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-licencas-ambientais.html",
+      "title": "OCR e controle de qualidade para licenças e documentos ambientais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-licencas-ambientais.html",
+      "title": "Metadados e indexação para licenças e documentos ambientais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-licencas-ambientais.html",
+      "title": "Permissões e consulta segura para licenças e documentos ambientais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-licencas-ambientais.html",
+      "title": "Fluxo de conferência e aprovação para licenças e documentos ambientais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-licencas-ambientais.html",
+      "title": "Migração e reconciliação do acervo para licenças e documentos ambientais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-registros-mineracao.html",
+      "title": "OCR e controle de qualidade para registros operacionais de mineração",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-registros-mineracao.html",
+      "title": "Metadados e indexação para registros operacionais de mineração",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-registros-mineracao.html",
+      "title": "Permissões e consulta segura para registros operacionais de mineração",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-registros-mineracao.html",
+      "title": "Fluxo de conferência e aprovação para registros operacionais de mineração",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-registros-mineracao.html",
+      "title": "Migração e reconciliação do acervo para registros operacionais de mineração",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-documentos-contabeis.html",
+      "title": "OCR e controle de qualidade para documentos contábeis",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-documentos-contabeis.html",
+      "title": "Metadados e indexação para documentos contábeis",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-documentos-contabeis.html",
+      "title": "Permissões e consulta segura para documentos contábeis",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-documentos-contabeis.html",
+      "title": "Fluxo de conferência e aprovação para documentos contábeis",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-documentos-contabeis.html",
+      "title": "Migração e reconciliação do acervo para documentos contábeis",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-notas-comprovantes.html",
+      "title": "OCR e controle de qualidade para notas e comprovantes financeiros",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-notas-comprovantes.html",
+      "title": "Metadados e indexação para notas e comprovantes financeiros",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-notas-comprovantes.html",
+      "title": "Permissões e consulta segura para notas e comprovantes financeiros",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-notas-comprovantes.html",
+      "title": "Fluxo de conferência e aprovação para notas e comprovantes financeiros",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-notas-comprovantes.html",
+      "title": "Migração e reconciliação do acervo para notas e comprovantes financeiros",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-registros-qualidade.html",
+      "title": "OCR e controle de qualidade para registros de qualidade",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-registros-qualidade.html",
+      "title": "Metadados e indexação para registros de qualidade",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-registros-qualidade.html",
+      "title": "Permissões e consulta segura para registros de qualidade",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-registros-qualidade.html",
+      "title": "Fluxo de conferência e aprovação para registros de qualidade",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-registros-qualidade.html",
+      "title": "Migração e reconciliação do acervo para registros de qualidade",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-contratos-clientes.html",
+      "title": "OCR e controle de qualidade para contratos de clientes",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-contratos-clientes.html",
+      "title": "Metadados e indexação para contratos de clientes",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-contratos-clientes.html",
+      "title": "Permissões e consulta segura para contratos de clientes",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-contratos-clientes.html",
+      "title": "Fluxo de conferência e aprovação para contratos de clientes",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-contratos-clientes.html",
+      "title": "Migração e reconciliação do acervo para contratos de clientes",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-documentos-obras.html",
+      "title": "OCR e controle de qualidade para documentos de obras",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-documentos-obras.html",
+      "title": "Metadados e indexação para documentos de obras",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-documentos-obras.html",
+      "title": "Permissões e consulta segura para documentos de obras",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-documentos-obras.html",
+      "title": "Fluxo de conferência e aprovação para documentos de obras",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-documentos-obras.html",
+      "title": "Migração e reconciliação do acervo para documentos de obras",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-manuais-tecnicos.html",
+      "title": "OCR e controle de qualidade para manuais técnicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-manuais-tecnicos.html",
+      "title": "Metadados e indexação para manuais técnicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-manuais-tecnicos.html",
+      "title": "Permissões e consulta segura para manuais técnicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-manuais-tecnicos.html",
+      "title": "Fluxo de conferência e aprovação para manuais técnicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-manuais-tecnicos.html",
+      "title": "Migração e reconciliação do acervo para manuais técnicos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-treinamentos-corporativos.html",
+      "title": "OCR e controle de qualidade para registros de treinamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-treinamentos-corporativos.html",
+      "title": "Metadados e indexação para registros de treinamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-treinamentos-corporativos.html",
+      "title": "Permissões e consulta segura para registros de treinamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-treinamentos-corporativos.html",
+      "title": "Fluxo de conferência e aprovação para registros de treinamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-treinamentos-corporativos.html",
+      "title": "Migração e reconciliação do acervo para registros de treinamentos",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-documentos-societarios.html",
+      "title": "OCR e controle de qualidade para documentos societários",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-documentos-societarios.html",
+      "title": "Metadados e indexação para documentos societários",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-documentos-societarios.html",
+      "title": "Permissões e consulta segura para documentos societários",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-documentos-societarios.html",
+      "title": "Fluxo de conferência e aprovação para documentos societários",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-documentos-societarios.html",
+      "title": "Migração e reconciliação do acervo para documentos societários",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-pesquisa-laboratorial.html",
+      "title": "OCR e controle de qualidade para registros laboratoriais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-pesquisa-laboratorial.html",
+      "title": "Metadados e indexação para registros laboratoriais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-pesquisa-laboratorial.html",
+      "title": "Permissões e consulta segura para registros laboratoriais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-pesquisa-laboratorial.html",
+      "title": "Fluxo de conferência e aprovação para registros laboratoriais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-pesquisa-laboratorial.html",
+      "title": "Migração e reconciliação do acervo para registros laboratoriais",
+      "type": "guide"
+    },
+    {
+      "path": "guias/ocr-arquivos-unidades.html",
+      "title": "OCR e controle de qualidade para arquivos de múltiplas unidades",
+      "type": "guide"
+    },
+    {
+      "path": "guias/indexacao-arquivos-unidades.html",
+      "title": "Metadados e indexação para arquivos de múltiplas unidades",
+      "type": "guide"
+    },
+    {
+      "path": "guias/acesso-arquivos-unidades.html",
+      "title": "Permissões e consulta segura para arquivos de múltiplas unidades",
+      "type": "guide"
+    },
+    {
+      "path": "guias/workflow-arquivos-unidades.html",
+      "title": "Fluxo de conferência e aprovação para arquivos de múltiplas unidades",
+      "type": "guide"
+    },
+    {
+      "path": "guias/migracao-arquivos-unidades.html",
+      "title": "Migração e reconciliação do acervo para arquivos de múltiplas unidades",
+      "type": "guide"
+    },
+    {
+      "path": "artigos/piloto-digitalizacao-empresas-mais-20-funcionarios.html",
+      "title": "Como planejar um piloto de digitalização em empresas com mais de 20 funcionários",
+      "type": "article"
+    },
+    {
+      "path": "artigos/tempo-busca-documental-indicadores.html",
+      "title": "Como medir o tempo de busca documental sem confundir rapidez com qualidade",
+      "type": "article"
+    },
+    {
+      "path": "artigos/ocr-contratos-campos-criticos.html",
+      "title": "Critérios de aceite de OCR para contratos e aditivos",
+      "type": "article"
+    },
+    {
+      "path": "artigos/frente-verso-lotes-heterogeneos.html",
+      "title": "Como conferir frente e verso em lotes de digitalização heterogêneos",
+      "type": "article"
+    },
+    {
+      "path": "artigos/metadados-mineracao-unidade-projeto.html",
+      "title": "Inventário documental de mineração: como separar unidade, projeto e operação",
+      "type": "article"
+    },
+    {
+      "path": "artigos/databook-lista-mestra-tag.html",
+      "title": "Databook por tag de equipamento: como usar uma lista mestra de pendências",
+      "type": "article"
+    },
+    {
+      "path": "artigos/orcamento-guarda-documental-dados.html",
+      "title": "Quais informações enviar para dimensionar guarda documental empresarial",
+      "type": "article"
+    },
+    {
+      "path": "artigos/arquivo-juridico-cliente-processo.html",
+      "title": "Arquivo jurídico: como organizar cliente, processo e tipo de peça",
+      "type": "article"
+    },
+    {
+      "path": "artigos/medicina-trabalho-separar-clinico-administrativo.html",
+      "title": "Medicina do trabalho: separar acervo clínico e administrativo na organização documental",
+      "type": "article"
+    },
+    {
+      "path": "artigos/duplicidades-migracao-ged.html",
+      "title": "Duplicidades na migração para GED: quando arquivos iguais têm funções diferentes",
+      "type": "article"
+    },
+    {
+      "path": "artigos/amostragem-qualidade-captura-documental.html",
+      "title": "Como usar amostragem na conferência de digitalização sem esconder exceções",
+      "type": "article"
+    },
+    {
+      "path": "artigos/acessos-escritorio-contabil.html",
+      "title": "Permissões documentais em escritórios de contabilidade com múltiplos clientes",
+      "type": "article"
+    },
+    {
+      "path": "artigos/saida-contrato-guarda-documentos.html",
+      "title": "Plano de saída de um contrato de guarda documental: inventário, caixas e consultas",
+      "type": "article"
+    },
+    {
+      "path": "artigos/consulta-documental-equipes-remotas.html",
+      "title": "Consulta documental por equipes remotas: transformar pedidos informais em um fluxo controlado",
+      "type": "article"
+    },
+    {
+      "path": "artigos/demonstracao-ocr-sem-dados-reais.html",
+      "title": "Como demonstrar OCR e gestão documental sem expor documentos de clientes",
+      "type": "article"
+    }
+  ]
+}
