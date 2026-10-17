@@ -1,0 +1,171 @@
+name: Corrigir overlay mobile guarda documental
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/fix-guarda-mobile-overlay.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-fix-guarda-mobile-overlay
+  cancel-in-progress: false
+
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FTP_HOST: ftp.arquindex.com.br
+      FTP_USER: arquind2
+      FTP_PORT: '21'
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Backup, correcao isolada e upload atomico
+        run: |
+          python - <<'PY'
+          import ftplib, hashlib, io, os, posixpath
+          from datetime import datetime, timezone
+
+          filename = 'guarda_de_documentos.html'
+          marker = 'arquindex-fix-loader-overlay'
+          patch = (
+              '\n<!-- Correcao responsiva: o preloader legado nao pode cobrir a pagina -->\n'
+              '<style id="' + marker + '">'
+              '#load{display:none!important;visibility:hidden!important;opacity:0!important;'
+              'pointer-events:none!important;width:0!important;height:0!important;overflow:hidden!important}'
+              '</style>\n'
+          )
+          password = os.environ.get('FTP_PASSWORD', '')
+          if not password:
+              raise RuntimeError('Falta secret FTP_PASSWORD')
+
+          stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          with ftplib.FTP_TLS(timeout=60) as ftp:
+              ftp.connect(os.environ['FTP_HOST'], int(os.environ['FTP_PORT']))
+              ftp.login(os.environ['FTP_USER'], password)
+              ftp.prot_p()
+              ftp.set_pasv(True)
+              initial = ftp.pwd()
+              candidates = [
+                  '/public_html',
+                  'public_html',
+                  '/home/arquind2/public_html',
+                  initial,
+                  '.',
+              ]
+              root = None
+              for candidate in dict.fromkeys(candidates):
+                  try:
+                      ftp.cwd(initial)
+                      ftp.cwd(candidate)
+                      names = ftp.nlst()
+                      if filename in [posixpath.basename(x.rstrip('/')) for x in names]:
+                          root = ftp.pwd()
+                          break
+                  except ftplib.all_errors:
+                      continue
+              if root is None:
+                  raise RuntimeError('DOCUMENT_ROOT_NOT_FOUND_WITH_TARGET')
+
+              ftp.cwd(root)
+              original = bytearray()
+              ftp.retrbinary('RETR ' + filename, original.extend)
+              original_bytes = bytes(original)
+              text = original_bytes.decode('utf-8')
+              if '<html' not in text.lower() or '</head>' not in text.lower():
+                  raise RuntimeError('HTML_INVALID_BEFORE_PATCH')
+
+              if marker in text:
+                  updated = original_bytes
+                  print('PATCH_ALREADY_PRESENT', flush=True)
+              else:
+                  idx = text.lower().find('</head>')
+                  text = text[:idx] + patch + text[idx:]
+                  updated = text.encode('utf-8')
+
+              backup_root = '_backups'
+              backup_dir = backup_root + '/guarda-mobile-overlay-' + stamp
+              for directory in (backup_root, backup_dir):
+                  try:
+                      ftp.mkd(directory)
+                  except ftplib.error_perm as exc:
+                      if not str(exc).startswith('550'):
+                          raise
+              ftp.cwd(root + '/' + backup_dir)
+              ftp.storbinary('STOR ' + filename, io.BytesIO(original_bytes))
+              check_backup = bytearray()
+              ftp.retrbinary('RETR ' + filename, check_backup.extend)
+              if hashlib.sha256(original_bytes).digest() != hashlib.sha256(check_backup).digest():
+                  raise RuntimeError('BACKUP_HASH_MISMATCH')
+              print('BACKUP_VERIFIED', backup_dir + '/' + filename, flush=True)
+
+              ftp.cwd(root)
+              temp = '.' + filename + '.tmp-' + stamp
+              ftp.storbinary('STOR ' + temp, io.BytesIO(updated))
+              check_temp = bytearray()
+              ftp.retrbinary('RETR ' + temp, check_temp.extend)
+              if hashlib.sha256(updated).digest() != hashlib.sha256(check_temp).digest():
+                  raise RuntimeError('UPLOAD_HASH_MISMATCH')
+              ftp.rename(temp, filename)
+
+              final = bytearray()
+              ftp.retrbinary('RETR ' + filename, final.extend)
+              final_text = bytes(final).decode('utf-8')
+              checks = {
+                  'marker': marker in final_text,
+                  'viewport': 'name="viewport"' in final_text.lower() or "name='viewport'" in final_text.lower(),
+                  'canonical': 'rel="canonical"' in final_text.lower() or "rel='canonical'" in final_text.lower(),
+                  'h1': '<h1' in final_text.lower(),
+                  'indexable': 'noindex' not in final_text.lower(),
+                  'whatsapp': '5531973632725' in final_text,
+              }
+              if not all(checks.values()):
+                  raise RuntimeError('FTP_POSTCHECK_FAILED ' + repr(checks))
+              print('FTP_PUBLISHED_VERIFIED', root + '/' + filename, checks, flush=True)
+          PY
+
+      - name: Validar pagina publica sem cache
+        run: |
+          python - <<'PY'
+          import re, time, urllib.request
+          from datetime import datetime, timezone
+
+          url = 'https://www.arquindex.com.br/guarda_de_documentos.html'
+          marker = 'arquindex-fix-loader-overlay'
+          last = None
+          for attempt in range(1, 5):
+              try:
+                  bust = '?seo_check=' + datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
+                  req = urllib.request.Request(
+                      url + bust,
+                      headers={
+                          'User-Agent': 'Arquindex-Mobile-Fix-Check/1.0',
+                          'Cache-Control': 'no-cache',
+                      },
+                  )
+                  with urllib.request.urlopen(req, timeout=30) as response:
+                      body = response.read(800000).decode('utf-8', 'replace')
+                      checks = {
+                          'http_200': response.status == 200,
+                          'marker': marker in body,
+                          'canonical': 'https://www.arquindex.com.br/guarda_de_documentos.html' in body,
+                          'viewport': bool(re.search(r'<meta[^>]+name=["\\\']viewport["\\\']', body, re.I)),
+                          'h1': bool(re.search(r'<h1\\b', body, re.I)),
+                          'indexable': 'noindex' not in body.lower(),
+                          'whatsapp': '5531973632725' in body,
+                      }
+                      if all(checks.values()):
+                          print('PUBLIC_VERIFIED', url, checks, flush=True)
+                          raise SystemExit(0)
+                      last = 'checks=' + repr(checks)
+              except Exception as exc:
+                  last = type(exc).__name__ + ': ' + str(exc)
+              print('PUBLIC_RETRY', attempt, last, flush=True)
+              if attempt < 4:
+                  time.sleep(15)
+          raise RuntimeError('PUBLIC_VERIFICATION_FAILED ' + str(last))
+          PY
