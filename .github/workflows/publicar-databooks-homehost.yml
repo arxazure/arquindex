@@ -29,17 +29,44 @@ jobs:
           test -n "$FTP_HOST" || { echo "::error::Defina FTP_SERVER nos GitHub Actions Secrets"; exit 1; }
           test -n "$FTP_USER" || { echo "::error::Defina FTP_USERNAME nos GitHub Actions Secrets"; exit 1; }
           test -n "$FTP_PASS" || { echo "::error::Defina FTP_PASSWORD nos GitHub Actions Secrets"; exit 1; }
-      - name: Diagnosticar certificado do servidor FTP
+      - name: Detectar hostname FTPS valido
         env:
           FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
+        shell: bash
         run: |
-          echo "Verificando certificado TLS para $FTP_HOST"
-          timeout 20 openssl s_client -starttls ftp -connect "$FTP_HOST:21" -servername "$FTP_HOST" </dev/null 2>/dev/null | openssl x509 -noout -subject -ext subjectAltName || true
+          set -euo pipefail
+          # Nao desabilita a verificacao TLS: exige nome valido e o mesmo IP.
+          cert=$(timeout 25 openssl s_client -starttls ftp -connect "$FTP_HOST:21" -servername "$FTP_HOST" </dev/null 2>/dev/null | openssl x509 -noout -subject -ext subjectAltName)
+          echo "$cert"
+          selected=""
+          if echo "$cert" | grep -Eq "DNS:$FTP_HOST([,[:space:]]|$)"; then
+            selected="$FTP_HOST"
+          else
+            original_ips=$(getent ahostsv4 "$FTP_HOST" | awk '{print $1}' | sort -u)
+            while IFS= read -r candidate; do
+              case "$candidate" in ""|*"*"*) continue ;; esac
+              candidate_ips=$(getent ahostsv4 "$candidate" 2>/dev/null | awk '{print $1}' | sort -u || true)
+              [ -n "$candidate_ips" ] || continue
+              if ! comm -12 <(printf '%s\n' "$original_ips") <(printf '%s\n' "$candidate_ips") | grep -q .; then
+                continue
+              fi
+              if timeout 25 openssl s_client -starttls ftp -connect "$candidate:21" -servername "$candidate" -verify_hostname "$candidate" -verify_return_error </dev/null 2>&1 | grep -q 'Verification: OK'; then
+                selected="$candidate"
+                break
+              fi
+            done < <(echo "$cert" | grep -oE 'DNS:[A-Za-z0-9.*_-]+(\.[A-Za-z0-9.*_-]+)+' | sed 's/^DNS://' | sort -u)
+          fi
+          if [ -z "$selected" ]; then
+            echo "::error::O certificado FTPS nao tem hostname verificavel no mesmo IP. Configure vars.FTP_TLS_HOST com o hostname correto indicado pela HomeHost, ou solicite a correcao do certificado."
+            exit 1
+          fi
+          echo "FTP_DEPLOY_HOST=$selected" >> "$GITHUB_ENV"
+          echo "Servidor FTPS validado: $selected"
       - name: Instalar cliente FTP seguro
         run: sudo apt-get update -qq && sudo apt-get install -y lftp
       - name: Enviar somente a pagina solicitada
         env:
-          FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
+          FTP_HOST: ${{ env.FTP_DEPLOY_HOST }}
           FTP_USER: arquind2
           FTP_PASS: ${{ secrets.FTP_PASSWORD }}
         shell: bash
