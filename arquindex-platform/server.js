@@ -1,3 +1,4 @@
+import { renderRegional, regionalPaths, regionalBase } from "./regional-ged-replica.js";
 import http from "node:http";
 import { rmbhData, rmbhPage } from "./rmbh-pages.js";
 import { URL } from "node:url";
@@ -254,7 +255,7 @@ function layout(title,desc,body,req,extraHead=""){
  <a class="wafloat" aria-label="Fale com a Arquindex no WhatsApp" href="https://wa.me/${WHATSAPP}?text=Ol%C3%A1%20Arquindex%2C%20quero%20saber%20mais%20sobre%20os%20servi%C3%A7os">✆</a>
  <div class="cookie" id="cookie"><p>Usamos cookies essenciais e, com sua autorização, cookies opcionais para melhorar sua experiência e mensurar o desempenho. Consulte nossa Política de Privacidade e Cookies.</p><button onclick="localStorage.setItem('aq_cookie','essential');this.parentElement.remove()">Rejeitar opcionais</button><button class="accept" onclick="localStorage.setItem('aq_cookie','all');this.parentElement.remove()">Aceitar todos</button></div>
  <script>if(localStorage.getItem('aq_cookie'))document.getElementById('cookie')?.remove()</script>
- <footer><div class="foot"><div><strong>Arquindex</strong><p>Há 20 anos apoiando empresas na transformação de arquivos em informação estratégica.</p></div><div><strong>Atendimento</strong><p>WhatsApp: 31 97363-2725<br>comercial@arquindex.com.br<br>Belo Horizonte / MG</p></div><div><strong>Ecossistema Arquindex</strong><p><a style="color:#fff" href="https://arquindex.com.br/">Site oficial</a> · <a style="color:#fff" href="https://arquindex.com.br/blog.html">Blog e acervo</a> · <a style="color:#fff" href="/conteudo">Artigos técnicos</a> · <a style="color:#fff" href="/autoridade">Guias de referência</a> · <a style="color:#fff" href="/gestao-documental/">Gestão documental em 500 cidades</a> · <a style="color:#fff" href="https://arquindex.com.br/#services">Serviços do site oficial</a></p></div></div></footer></body></html>`;
+ <footer><div class="foot"><div><strong>Arquindex</strong><p>Há 20 anos apoiando empresas na transformação de arquivos em informação estratégica.</p></div><div><strong>Atendimento</strong><p>WhatsApp: 31 97363-2725<br>comercial@arquindex.com.br<br>Belo Horizonte / MG</p></div><div><strong>Ecossistema Arquindex</strong><p><a style="color:#fff" href="https://arquindex.com.br/">Site oficial</a> · <a style="color:#fff" href="https://arquindex.com.br/blog.html">Blog e acervo</a> · <a style="color:#fff" href="/conteudo">Artigos técnicos</a> · <a style="color:#fff" href="/autoridade">Guias de referência</a> · <a style="color:#fff" href="/gestao-documental/">Gestão documental em 500 cidades</a> · <a style="color:#fff" href="https://arquindex.com.br/#services">Serviços do site oficial</a></p></div></div><p><a href="/seo-regional/gestao-documental-ecm-databooks/">Índice regional de GED e Gestão Documental</a></p></footer></body></html>`;
 }
 function home(req){
  const cards=services.slice(0,12).map(([s,n,d,p])=>`<article class="card"><h3>${n}</h3><p class="muted">${d}</p><div class="price">${p}</div><p><a href="/solucoes/${s}">Conhecer solução →</a></p></article>`).join("");
@@ -413,6 +414,8 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ const replica=renderRegional(p,canonicalOrigin(req)); if(replica){res.writeHead(200,{"content-type":replica.type,"cache-control":"public, max-age=300"});return res.end(replica.body);}
+
  if(p==="/arquivardocumento.arquindex.com.br/bh.html" && u.searchParams.get("post")==="conarq-novas-normas-para-digitalizacao-de-documentos"){res.writeHead(301,{"location":"/conteudo/conarq-novas-normas-para-digitalizacao-de-documentos","cache-control":"public, max-age=3600"});return res.end();}
 
  if(p==="/atendimento-rmbh"||p==="/atendimento-rmbh/"||p.startsWith("/atendimento-rmbh/")) {
@@ -489,7 +492,7 @@ const server=http.createServer(async(req,res)=>{
  }
  if(p==="/sitemap.xml"){
   const base=canonicalOrigin(req), lastmod=new Date().toISOString().slice(0,10);
-  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path)];
+  const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path),...regionalPaths];
   const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc><lastmod>"+lastmod+"</lastmod></url>").join("")+"</urlset>";
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
