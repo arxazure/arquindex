@@ -74,6 +74,18 @@ for path in candidates[:8]:
         if path=='/sitemap.xml': raise
         print('EXISTING_MAP_UNAVAILABLE',path,type(e).__name__);continue
     existing={e.text for e in root.iter('{'+NS+'}loc')};added=0
+    if root.tag=='{'+NS+'}urlset' and path!='/sitemap.xml':
+        # Keep geographic/service-specific maps scoped to their original contents.
+        # Remove only the entries added by the first run of this script to the BH map.
+        removed=0
+        if path=='/sitemap-bh.xml':
+            for entry in list(root):
+                loc=entry.find('{'+NS+'}loc');lastmod=entry.find('{'+NS+'}lastmod')
+                if loc is not None and loc.text in set(urls) and lastmod is not None and lastmod.text=='2026-10-17':
+                    root.remove(entry);removed+=1
+        if removed:changes[path]=(old,ET.tostring(root,encoding='utf-8',xml_declaration=True))
+        print('SCOPED_SITEMAP_PRESERVED',path,'entradas_restauradas',removed)
+        continue
     if root.tag=='{'+NS+'}sitemapindex':
         targets=[BASE+p for p in MAPS];child='sitemap'
     elif root.tag=='{'+NS+'}urlset': targets=list(dict.fromkeys(urls));child='url'
