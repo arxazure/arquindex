@@ -488,9 +488,9 @@ const server=http.createServer(async(req,res)=>{
   return res.end(txt);
  }
  if(p==="/sitemap.xml"){
-  const base=canonicalOrigin(req), lastmod=new Date().toISOString().slice(0,10);
+  const base=canonicalOrigin(req);
   const paths=["/","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path)];
-  const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc><lastmod>"+lastmod+"</lastmod></url>").join("")+"</urlset>";
+  const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc></url>").join("")+"</urlset>";
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
  }
