@@ -1,0 +1,26 @@
+name: Publicar campanha engenharia Arquindex
+on:
+  push:
+    paths:
+      - '.github/workflows/publicar-campanha-engenharia.yml'
+      - 'scripts/publicar_campanha_engenharia.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-campanha-engenharia
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install Pillow
+      - name: Publicar com backup e verificar conteudo publico
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          PUBLISH_CAMPAIGN: 'true'
+        run: python scripts/publicar_campanha_engenharia.py
