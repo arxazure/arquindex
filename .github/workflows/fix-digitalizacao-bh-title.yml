@@ -1,0 +1,86 @@
+name: Corrigir title Digitalizacao BH
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/fix-digitalizacao-bh-title.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  corrigir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FTP_HOST: ftp.arquindex.com.br
+      FTP_USER: arquind2
+      FTP_PORT: '21'
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Backup e correcao atomica do title
+        run: |
+          python - <<'PY'
+          import ftplib,hashlib,io,os,posixpath,re
+          from datetime import datetime,timezone
+          filename='digitalizacao-documentos-belo-horizonte.html'
+          wanted='Digitalização de Documentos em Belo Horizonte | Arquindex'
+          pwd=os.getenv('FTP_PASSWORD','')
+          if not pwd:raise RuntimeError('Falta secret FTP_PASSWORD')
+          stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          with ftplib.FTP_TLS(timeout=60) as ftp:
+            ftp.connect(os.environ['FTP_HOST'],int(os.environ['FTP_PORT']))
+            ftp.login(os.environ['FTP_USER'],pwd);ftp.prot_p();ftp.set_pasv(True)
+            initial=ftp.pwd();root=None
+            for candidate in dict.fromkeys(['/public_html','public_html','/home/arquind2/public_html',initial,'.']):
+              try:
+                ftp.cwd(initial);ftp.cwd(candidate)
+                if filename in [posixpath.basename(x.rstrip('/')) for x in ftp.nlst()]:
+                  root=ftp.pwd();break
+              except ftplib.all_errors:pass
+            if root is None:raise RuntimeError('DOCUMENT_ROOT_NOT_FOUND_WITH_TARGET')
+            ftp.cwd(root);buf=bytearray();ftp.retrbinary('RETR '+filename,buf.extend)
+            original=bytes(buf);text=original.decode('utf-8')
+            matches=re.findall(r'<title[^>]*>(.*?)</title>',text,flags=re.I|re.S)
+            if len(matches)!=1:raise RuntimeError('TITLE_COUNT '+str(len(matches)))
+            old=re.sub(r'\s+',' ',matches[0]).strip()
+            if old==wanted:
+              updated=original;print('TITLE_ALREADY_CORRECT',old,flush=True)
+            else:
+              if old!='Digitalização de Documentos em Belo Horizonte | Arquindex | Arquindex':
+                raise RuntimeError('UNEXPECTED_TITLE '+old)
+              text=re.sub(r'<title[^>]*>.*?</title>','<title>'+wanted+'</title>',text,count=1,flags=re.I|re.S)
+              updated=text.encode('utf-8')
+              print('TITLE_CHANGED',old,'=>',wanted,flush=True)
+            backup_root='_backups';backup_dir=backup_root+'/digitalizacao-bh-title-'+stamp
+            for d in (backup_root,backup_dir):
+              try:ftp.mkd(d)
+              except ftplib.error_perm as exc:
+                if not str(exc).startswith('550'):raise
+            ftp.cwd(root+'/'+backup_dir);ftp.storbinary('STOR '+filename,io.BytesIO(original))
+            chk=bytearray();ftp.retrbinary('RETR '+filename,chk.extend)
+            if hashlib.sha256(original).digest()!=hashlib.sha256(chk).digest():raise RuntimeError('BACKUP_HASH_MISMATCH')
+            print('BACKUP_VERIFIED',backup_dir+'/'+filename,flush=True)
+            ftp.cwd(root);temp='.'+filename+'.tmp-'+stamp
+            ftp.storbinary('STOR '+temp,io.BytesIO(updated));chk=bytearray();ftp.retrbinary('RETR '+temp,chk.extend)
+            if hashlib.sha256(updated).digest()!=hashlib.sha256(chk).digest():raise RuntimeError('UPLOAD_HASH_MISMATCH')
+            ftp.rename(temp,filename);final=bytearray();ftp.retrbinary('RETR '+filename,final.extend)
+            final_text=bytes(final).decode('utf-8')
+            checks={'title':('<title>'+wanted+'</title>') in final_text,'canonical':'https://www.arquindex.com.br/'+filename in final_text,'viewport':'name="viewport"' in final_text.lower() or "name='viewport'" in final_text.lower(),'h1':'<h1' in final_text.lower(),'indexable':'noindex' not in final_text.lower(),'whatsapp':'5531973632725' in final_text}
+            if not all(checks.values()):raise RuntimeError('FTP_POSTCHECK_FAILED '+repr(checks))
+            print('FTP_PUBLISHED_VERIFIED',root+'/'+filename,checks,flush=True)
+          PY
+      - name: Validar pagina publica
+        run: |
+          python - <<'PY'
+          import urllib.request
+          url='https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html'
+          req=urllib.request.Request(url+'?seo_check=title',headers={'User-Agent':'Arquindex-SEO-Check/1.0','Cache-Control':'no-cache'})
+          with urllib.request.urlopen(req,timeout=30) as r:
+            body=r.read(900000).decode('utf-8','replace')
+            checks={'http_200':r.status==200,'title':'<title>Digitalização de Documentos em Belo Horizonte | Arquindex</title>' in body,'canonical':url in body,'viewport':'name="viewport"' in body.lower() or "name='viewport'" in body.lower(),'h1':'<h1' in body.lower(),'indexable':'noindex' not in body.lower(),'whatsapp':'5531973632725' in body}
+            if not all(checks.values()):raise RuntimeError('PUBLIC_CHECK_FAILED '+repr(checks))
+            print('PUBLIC_VERIFIED',url,checks)
+          PY
