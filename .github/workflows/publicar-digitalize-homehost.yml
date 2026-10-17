@@ -4,8 +4,8 @@ on:
   push:
     branches: [master, main]
     paths:
-      - 'blog/montagem-de-databooks-de-engenharia/index.html'
-      - 'seo-regional/gestao-documental-ecm-databooks/**'
+      - 'scripts/digitalize-pages.mjs'
+      - 'scripts/build-digitalize.mjs'
       - '.github/workflows/publicar-digitalize-homehost.yml'
   workflow_dispatch:
 
@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: publicar-databooks-homehost
+  group: publicar-digitalize-homehost
   cancel-in-progress: false
 
 jobs:
