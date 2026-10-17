@@ -21,6 +21,7 @@ const services = [
 ["prontuarios-medicos","Digitalização de Prontuários Médicos","Organização, captura, OCR e indexação de prontuários com foco em rastreabilidade, sigilo e acesso controlado.","Sob orçamento"],
 ["gestao-documental","Gestão Documental","Classificação, plano de classificação, temporalidade, retenção, destinação, governança e acesso seguro.","Sob orçamento"],
 ["organizacao-arquivos","Organização de Arquivos","Organização física e digital, inventário, endereçamento, empréstimos, temporalidade e padronização.","Sob orçamento"],
+["avaliacao-avancada-arquivos","Avaliação Avançada de Arquivos","Sessão realizada por especialistas para observar o acervo, identificar prioridades e orientar decisões de organização, digitalização, guarda e gestão eletrônica.","R$ 1.400 por sessão + taxa de deslocamento"],
 ["alfresco-incloud","Alfresco inCloud","ECM/GED em nuvem com permissões, metadados, versionamento, workflows, OCR, pesquisa e auditoria.","A partir de R$ 750"],
 ["consultoria-lgpd","Adequação LGPD","Diagnóstico, mapeamento, ROPA, RIPD quando aplicável, políticas, contratos, cookies, direitos dos titulares e governança.","A partir de R$ 550 para pequenos negócios"],
 ["dpo-terceirizado","DPO Terceirizado","Encarregado terceirizado, acompanhamento, orientação, registros, canal de titulares e governança de privacidade.","A partir de R$ 299/mês"],
