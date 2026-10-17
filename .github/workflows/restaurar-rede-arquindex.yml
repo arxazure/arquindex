@@ -1,0 +1,43 @@
+name: Restaurar registros e rede documental Arquindex
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'recovery-20261017/**'
+      - '.github/workflows/restaurar-rede-arquindex.yml'
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-recovery
+  cancel-in-progress: false
+jobs:
+  restaurar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Gerar e validar paginas e sitemaps
+        run: python recovery-20261017/build.py
+      - name: Recriar registros cPanel e publicar uma unica copia por raiz
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+          CPANEL_PASSWORD: ${{ secrets.CPANEL_PASSWORD }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python recovery-20261017/restore.py
+      - name: Preservar relatorio, pacote e originais substituidos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-restauracao-209-entradas
+          path: |
+            recovery-20261017/result.json
+            recovery-20261017/manifest.json
+            recovery-20261017/dist
+            recovery-20261017/previous-public-files.zip
+          retention-days: 30
