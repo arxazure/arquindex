@@ -1,0 +1,63 @@
+name: Publicar Databooks na HomeHost
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'blog/montagem-de-databooks-de-engenharia/index.html'
+      - '.github/workflows/publicar-databooks-homehost.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-databooks-homehost
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar credenciais FTP
+        env:
+          FTP_HOST: ${{ secrets.FTP_SERVER }}
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          test -n "$FTP_HOST" || { echo "::error::Defina FTP_SERVER nos GitHub Actions Secrets"; exit 1; }
+          test -n "$FTP_USER" || { echo "::error::Defina FTP_USERNAME nos GitHub Actions Secrets"; exit 1; }
+          test -n "$FTP_PASS" || { echo "::error::Defina FTP_PASSWORD nos GitHub Actions Secrets"; exit 1; }
+      - name: Instalar cliente FTP seguro
+        run: sudo apt-get update -qq && sudo apt-get install -y lftp
+      - name: Enviar somente a pagina solicitada
+        env:
+          FTP_HOST: ${{ secrets.FTP_SERVER }}
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<'LFTP'
+          set cmd:fail-exit yes
+          set net:max-retries 2
+          set ftp:ssl-allow yes
+          set ssl:verify-certificate yes
+          mkdir -p public_html/blog/montagem-de-databooks-de-engenharia
+          put -O public_html/blog/montagem-de-databooks-de-engenharia/ blog/montagem-de-databooks-de-engenharia/index.html
+          bye
+          LFTP
+      - name: Conferir URL publica
+        run: |
+          set -euo pipefail
+          URL=https://www.arquindex.com.br/blog/montagem-de-databooks-de-engenharia/
+          for attempt in 1 2 3; do
+            if curl --fail --location --silent --show-error --retry 2 "$URL" | grep -q 'Montagem de Databooks de Engenharia'; then
+              echo "Pagina publicada e validada: $URL"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::A URL nao apresentou o conteudo esperado."
+          exit 1
