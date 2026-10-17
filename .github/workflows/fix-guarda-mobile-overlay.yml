@@ -154,7 +154,7 @@ jobs:
                           'marker': marker in body,
                           'canonical': 'https://www.arquindex.com.br/guarda_de_documentos.html' in body,
                           'viewport': bool(re.search(r'<meta[^>]+name=["\\\']viewport["\\\']', body, re.I)),
-                          'h1': bool(re.search(r'<h1\\b', body, re.I)),
+                          'h1': '<h1' in body.lower(),
                           'indexable': 'noindex' not in body.lower(),
                           'whatsapp': '5531973632725' in body,
                       }
