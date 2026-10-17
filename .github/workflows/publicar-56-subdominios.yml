@@ -36,6 +36,7 @@ jobs:
             for name in ['robots.txt','sitemap.xml']:
               assert (f.parent/name).is_file(),(f,name)
           print('PACOTE_VALIDADO',len(sites))
+          print('PASTAS_COMPLETAS',len(sites),'ARQUIVOS_ESPERADOS',len(sites)*3)
           PY
       - name: Montar ZIP manual com 56 pastas de subdominios
         run: |
@@ -136,7 +137,7 @@ jobs:
                   got=bytearray();ftp.retrbinary('RETR '+f.name,got.extend)
                   assert hashlib.sha256(got).digest()==hashlib.sha256(data).digest()
                 ftp.cwd('..')
-                print(label,'FTP_VERIFIED',site.name)
+                print(label,'FTP_VERIFIED',site.name,'index.html sitemap.xml robots.txt')
           deploy(os.environ['HOMEHOST_HOST'],os.environ['HOMEHOST_USER'],os.environ['HOMEHOST_PASS'],'public_html','HOMEHOST')
           print('HOMEHOST_DEPLOY_FINISHED; Hostinger nao sera autenticada neste workflow')
           PY
