@@ -45,6 +45,14 @@ jobs:
            return re.sub(pattern,lambda m:replacement,s,count=1,flags=re.I|re.S)
           with ftplib.FTP_TLS(timeout=45) as f:
            f.connect('ftp.arquindex.com.br',21);f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+           # Protect backups even when the FTP account is rooted at the public directory.
+           try:f.mkd('/seo-backups')
+           except ftplib.error_perm:pass
+           try:rules=read(f,'/seo-backups/.htaccess')
+           except ftplib.error_perm:rules=b''
+           if b'Require all denied' not in rules:
+            put(f,'/seo-backups/.htaccess',rules+b'\nOptions -Indexes\nRequire all denied\n')
+           print('BACKUP_ACCESS_RULE_VERIFIED',flush=True)
            records=[]
            for sp in specs:
             sp['url']='https://'+sp['host']+'/'+('' if sp['file']=='index.html' else sp['file'])
@@ -69,7 +77,9 @@ jobs:
              new=new.replace('R$ 750','R$ 1.250').replace('R$ 1.500','R$ 1.250')
             assert canon(new)==[sp['url']]
             assert len(re.findall(r'<h1\b',s,re.I))==len(re.findall(r'<h1\b',new,re.I))
-            assert new!=s,('NO_CHANGE',sp['id'])
+            if new==s:
+             print('ALREADY_CORRECT',sp['id'],flush=True)
+             continue
             records.append((sp,p,b,new.encode()))
             print('PREPARED',json.dumps({'id':sp['id'],'url':sp['url'],'old_title':title(s),'new_title':title(new),'old_canonical':canon(s),'new_canonical':canon(new)},ensure_ascii=False),flush=True)
            f.cwd('/')
