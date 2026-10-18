@@ -25,7 +25,7 @@ jobs:
           python - <<'PY'
           import os,ftplib,io,hashlib,urllib.request,time,sys
           from pathlib import Path
-          slugs=['alfresco-ecm-automacao-documental-ia','gestao-documental-software-ged-processos-ia','como-automatizar-a-gestao-documental-processos-ia']
+          slugs=['alfresco-ecm-automacao-documental-ia','gestao-documental-software-ged-processos-ia','como-automatizar-a-gestao-documental-processos-ia','solicitar-proposta-contratacao']
           pwd=os.environ.get('FTP_PASSWORD')
           if not pwd:sys.exit('FTP_PASSWORD secret ausente')
           ftp=ftplib.FTP_TLS(os.environ['FTP_HOST'],timeout=30)
