@@ -1,0 +1,263 @@
+name: SEO ARQ-007 a ARQ-009 com funil principal
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/seo-queue-20261018-afternoon.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      FTP_HOST: ftp.arquindex.com.br
+      FTP_USER: arquind2
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Backup, melhorar tres paginas LGPD, validar e reverter em falha
+        run: |
+          python - <<'PY'
+          import ftplib, hashlib, html, io, os, posixpath, re, time, urllib.request
+          from datetime import datetime, timezone
+
+          stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          form_url='https://www.arquindex.com.br/solicitar-proposta-contratacao.html'
+          specs=[
+            {
+              'key':'ARQ-007',
+              'host':'consultoria-adequacao-lgpd-pequenas-empresas.arquindex.com.br',
+              'file':'index.html',
+              'url':'https://consultoria-adequacao-lgpd-pequenas-empresas.arquindex.com.br/',
+              'title':'Consultoria LGPD para Pequenas Empresas | Arquindex',
+              'h1':'Consultoria LGPD para pequenas empresas: escopo, entregas e acompanhamento',
+              'desc':'Entenda o escopo de uma consultoria LGPD para pequenas empresas, as entregas esperadas e quando avaliar acompanhamento por DPO terceirizado.',
+              'marker':'seo-arq007-entregas',
+              'section':'''<section id="seo-arq007-entregas" aria-labelledby="arq007-title">
+                <h2 id="arq007-title">O que uma pequena empresa deve receber da consultoria LGPD?</h2>
+                <p>O trabalho deve começar por um diagnóstico proporcional ao porte, ao setor, aos tipos de dados e aos riscos da operação. Antes da contratação, peça que a proposta identifique escopo, responsáveis, cronograma, evidências de aceite e itens que dependem da equipe interna.</p>
+                <div class="table-wrap"><table><thead><tr><th>Etapa</th><th>Entrega verificável</th><th>Pergunta de aceite</th></tr></thead><tbody>
+                <tr><td>Diagnóstico</td><td>Inventário inicial de processos, lacunas e prioridades</td><td>Quais áreas e sistemas foram avaliados?</td></tr>
+                <tr><td>Plano de ação</td><td>Medidas priorizadas, responsáveis e prazos</td><td>Como será comprovada a conclusão?</td></tr>
+                <tr><td>Documentação</td><td>Políticas e registros ajustados à operação real</td><td>Quem aprova e mantém cada documento?</td></tr>
+                <tr><td>Acompanhamento</td><td>Rotina de revisão, dúvidas e incidentes conforme contrato</td><td>O suporte é projeto pontual ou serviço continuado?</td></tr>
+                </tbody></table></div>
+                <h2>Consultoria de adequação e DPO as a Service não são a mesma coisa</h2>
+                <p>A consultoria organiza o projeto de adequação e suas entregas. O DPO terceirizado pode apoiar uma rotina contínua de governança e atendimento, conforme escopo contratado. A necessidade, a independência e as responsabilidades devem ser avaliadas caso a caso; nenhuma contratação produz conformidade automática.</p>
+                <p><a class="cta-primary" href="https://www.arquindex.com.br/solicitar-proposta-contratacao.html?utm_source=arq007&utm_medium=site&utm_campaign=lgpd-comercial">Qualificar necessidade e solicitar proposta</a></p>
+                <p><small>Prefere uma conversa direta? <a href="https://wa.me/5531973632725" rel="noopener noreferrer">Fale com a Arquindex no WhatsApp</a>.</small></p>
+                <p><small>Referências primárias: <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" rel="noopener noreferrer">Lei Geral de Proteção de Dados</a> e <a href="https://www.gov.br/anpd/pt-br" rel="noopener noreferrer">Autoridade Nacional de Proteção de Dados</a>.</small></p>
+              </section>'''
+            },
+            {
+              'key':'ARQ-008',
+              'host':'faz-consultoria-adequacao-lgpd.arquindex.com.br',
+              'file':'como-escolher.html',
+              'url':'https://faz-consultoria-adequacao-lgpd.arquindex.com.br/como-escolher.html',
+              'title':'Como Escolher Consultoria LGPD | Critérios Práticos | Arquindex',
+              'h1':'Como escolher uma consultoria LGPD: escopo, evidências e acompanhamento',
+              'desc':'Compare consultorias LGPD por escopo, entregas, responsáveis, evidências, suporte e critérios de aceite antes de contratar.',
+              'marker':'seo-arq008-comparacao',
+              'section':'''<section id="seo-arq008-comparacao" aria-labelledby="arq008-title">
+                <h2 id="arq008-title">Checklist para comparar propostas de consultoria LGPD</h2>
+                <p>Compare propostas pelo trabalho que será executado e pelas evidências previstas, não apenas por uma lista genérica de documentos. Uma proposta clara delimita unidades, processos, sistemas, fornecedores e categorias de dados incluídos.</p>
+                <ol>
+                  <li>Confirme quais áreas e tratamentos de dados entram no diagnóstico.</li>
+                  <li>Peça entregas, responsáveis, prazos e critérios de aceite por etapa.</li>
+                  <li>Verifique como riscos e prioridades serão documentados e acompanhados.</li>
+                  <li>Diferencie projeto de adequação, suporte recorrente e DPO terceirizado.</li>
+                  <li>Defina participação da direção, TI, jurídico, RH e demais áreas envolvidas.</li>
+                  <li>Confirme como alterações de escopo, incidentes e revisões serão tratadas.</li>
+                </ol>
+                <h2>Perguntas para a reunião comercial</h2>
+                <p>Quais evidências serão entregues? O que depende da equipe interna? Como o progresso será medido? Existe suporte após o diagnóstico? Como são tratados conflitos de interesse, confidencialidade e acesso a informações? As respostas devem constar da proposta ou do contrato.</p>
+                <p><a class="cta-primary" href="https://www.arquindex.com.br/solicitar-proposta-contratacao.html?utm_source=arq008&utm_medium=site&utm_campaign=lgpd-comercial">Comparar escopo e solicitar proposta</a></p>
+                <p><small>Prefere uma conversa direta? <a href="https://wa.me/5531973632725" rel="noopener noreferrer">Fale com a Arquindex no WhatsApp</a>.</small></p>
+                <p><small>Referências primárias: <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" rel="noopener noreferrer">Lei Geral de Proteção de Dados</a> e <a href="https://www.gov.br/anpd/pt-br" rel="noopener noreferrer">Autoridade Nacional de Proteção de Dados</a>.</small></p>
+              </section>'''
+            },
+            {
+              'key':'ARQ-009',
+              'host':'servicos-consultoria-adequacao-lgpd-oferece-pequenas.arquindex.com.br',
+              'file':'diagnostico-completo.html',
+              'url':'https://servicos-consultoria-adequacao-lgpd-oferece-pequenas.arquindex.com.br/diagnostico-completo.html',
+              'title':'Consultoria LGPD: Diagnóstico e Entregas | Arquindex',
+              'h1':'O que uma consultoria LGPD entrega para pequenas empresas',
+              'desc':'Veja o que pode compor o diagnóstico LGPD, o plano de ação, a documentação e o acompanhamento para pequenas empresas.',
+              'marker':'seo-arq009-diagnostico',
+              'section':'''<section id="seo-arq009-diagnostico" aria-labelledby="arq009-title">
+                <h2 id="arq009-title">Do diagnóstico ao plano executável</h2>
+                <p>Um diagnóstico útil transforma entrevistas e levantamentos em decisões priorizadas. O escopo deve ser confirmado antes do início, porque pequenas empresas variam em setor, volume de dados, fornecedores, sistemas e exposição a riscos.</p>
+                <div class="table-wrap"><table><thead><tr><th>Bloco</th><th>Resultado esperado</th><th>Dependência do cliente</th></tr></thead><tbody>
+                <tr><td>Levantamento</td><td>Processos, sistemas, documentos e terceiros relevantes</td><td>Acesso às áreas e informações do escopo</td></tr>
+                <tr><td>Análise</td><td>Lacunas e riscos contextualizados</td><td>Validação dos fatos e prioridades</td></tr>
+                <tr><td>Plano</td><td>Ações, responsáveis, prazos e evidências</td><td>Definição de responsáveis internos</td></tr>
+                <tr><td>Implementação</td><td>Documentos, controles e orientações previstos na proposta</td><td>Aprovação e adoção pelas áreas</td></tr>
+                <tr><td>Revisão</td><td>Registro de pendências e próximos ciclos</td><td>Atualização quando processos mudarem</td></tr>
+                </tbody></table></div>
+                <h2>Como avaliar se a entrega está completa</h2>
+                <p>O aceite deve considerar o escopo contratado, a rastreabilidade das recomendações e a indicação do que foi concluído, ficou pendente ou exige decisão da empresa. Modelos prontos podem apoiar o trabalho, mas precisam refletir a operação visível e não substituem implementação.</p>
+                <p><a class="cta-primary" href="https://www.arquindex.com.br/solicitar-proposta-contratacao.html?utm_source=arq009&utm_medium=site&utm_campaign=lgpd-comercial">Informar o cenário e solicitar proposta</a></p>
+                <p><small>Prefere uma conversa direta? <a href="https://wa.me/5531973632725" rel="noopener noreferrer">Fale com a Arquindex no WhatsApp</a>.</small></p>
+                <p><small>Referências primárias: <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" rel="noopener noreferrer">Lei Geral de Proteção de Dados</a> e <a href="https://www.gov.br/anpd/pt-br" rel="noopener noreferrer">Autoridade Nacional de Proteção de Dados</a>.</small></p>
+              </section>'''
+            }
+          ]
+
+          pwd=os.getenv('FTP_PASSWORD','')
+          if not pwd: raise RuntimeError('FTP_PASSWORD ausente')
+
+          def digest(data): return hashlib.sha256(data).hexdigest()
+          def read(ftp,path):
+            data=bytearray(); ftp.retrbinary('RETR '+path,data.extend); return bytes(data)
+          def ensure_dir(ftp,path):
+            current=ftp.pwd()
+            try:
+              ftp.cwd('/')
+              for part in path.strip('/').split('/'):
+                if not part: continue
+                try: ftp.mkd(part)
+                except ftplib.error_perm as exc:
+                  if not str(exc).startswith('550'): raise
+                ftp.cwd(part)
+            finally: ftp.cwd(current)
+          def atomic_put(ftp,path,data,suffix):
+            directory=posixpath.dirname(path); name=posixpath.basename(path)
+            tmp=posixpath.join(directory,'.'+name+'.tmp-'+suffix)
+            ftp.storbinary('STOR '+tmp,io.BytesIO(data))
+            if digest(read(ftp,tmp))!=digest(data): raise RuntimeError('HASH_TEMP '+path)
+            try: ftp.delete(path)
+            except ftplib.error_perm as exc:
+              if not str(exc).startswith('550'): raise
+            ftp.rename(tmp,path)
+            if digest(read(ftp,path))!=digest(data): raise RuntimeError('HASH_FINAL '+path)
+          def locate(ftp,initial,spec):
+            h=spec['host']
+            candidates=[
+              '/public_html/subdominios/'+h, '/public_html/'+h,
+              'public_html/subdominios/'+h, 'public_html/'+h,
+              '/subdominios/'+h, h
+            ]
+            for candidate in dict.fromkeys(candidates):
+              try:
+                ftp.cwd(initial); ftp.cwd(candidate)
+                names={posixpath.basename(x.rstrip('/')) for x in ftp.nlst()}
+                if spec['file'] in names: return ftp.pwd()
+              except ftplib.all_errors: pass
+            raise RuntimeError('TARGET_ROOT_NOT_FOUND '+spec['key'])
+          def replace_single(pattern,repl,text,label):
+            text,n=re.subn(pattern,repl,text,count=1,flags=re.I|re.S)
+            if n!=1: raise RuntimeError('REPLACE_FAILED '+label)
+            return text
+          def set_meta(text,spec):
+            text=replace_single(r'<title\b[^>]*>.*?</title>','<title>'+html.escape(spec['title'])+'</title>',text,spec['key']+' title')
+            text=replace_single(r'<link\b(?=[^>]*\brel=["\x27]canonical["\x27])[^>]*>',f'<link rel="canonical" href="{spec["url"]}">',text,spec['key']+' canonical')
+            text=replace_single(r'<meta\b(?=[^>]*\bname=["\x27]description["\x27])[^>]*>','<meta name="description" content="'+html.escape(spec['desc'],quote=True)+'">',text,spec['key']+' description')
+            text=replace_single(r'<h1\b[^>]*>.*?</h1>','<h1>'+html.escape(spec['h1'])+'</h1>',text,spec['key']+' h1')
+            og=r'<meta\b(?=[^>]*\bproperty=["\x27]og:url["\x27])[^>]*>'
+            if re.search(og,text,re.I|re.S):
+              text=replace_single(og,'<meta property="og:url" content="'+spec['url']+'">',text,spec['key']+' og:url')
+            else:
+              pos=text.lower().find('</head>')
+              if pos<0: raise RuntimeError('HEAD_MISSING '+spec['key'])
+              text=text[:pos]+'<meta property="og:url" content="'+spec['url']+'">\n'+text[pos:]
+            text=re.sub(r'href=["\x27]https://(?:wa\.me|api\.whatsapp\.com)[^"\x27]*["\x27]',
+                        'href="'+form_url+'?utm_source='+spec['key'].lower()+'&amp;utm_medium=site&amp;utm_campaign=lgpd-comercial"',text,flags=re.I)
+            return text
+
+          with ftplib.FTP_TLS(timeout=60) as ftp:
+            ftp.connect(os.environ['FTP_HOST'],21); ftp.login(os.environ['FTP_USER'],pwd)
+            ftp.prot_p(); ftp.set_pasv(True); initial=ftp.pwd()
+            records=[]
+            for spec in specs:
+              root=locate(ftp,initial,spec); path=posixpath.join(root,spec['file'])
+              original=read(ftp,path); source=original.decode('utf-8')
+              if '<html' not in source.lower() or '<h1' not in source.lower() or '</body>' not in source.lower():
+                raise RuntimeError('HTML_INVALID '+spec['key'])
+              if spec['marker'] in source: raise RuntimeError('ALREADY_APPLIED '+spec['key'])
+              records.append((spec,path,original,source))
+              print('TARGET_CONFIRMED',spec['key'],path,digest(original),flush=True)
+
+            backup_base='/seo-backups/queue-20261018-afternoon-'+stamp
+            ensure_dir(ftp,backup_base)
+            for spec,path,original,source in records:
+              host_dir=backup_base+'/'+spec['host']; ensure_dir(ftp,host_dir)
+              backup=host_dir+'/'+spec['file']; ftp.storbinary('STOR '+backup,io.BytesIO(original))
+              if digest(read(ftp,backup))!=digest(original): raise RuntimeError('BACKUP_HASH '+spec['key'])
+              print('BACKUP_VERIFIED',backup,digest(original),flush=True)
+
+            updated={}
+            for spec,path,original,source in records:
+              text=set_meta(source,spec)
+              pos=text.lower().rfind('</main>')
+              if pos<0: pos=text.lower().rfind('</body>')
+              if pos<0: raise RuntimeError('INSERTION_POINT '+spec['key'])
+              text=text[:pos]+spec['section']+'\n'+text[pos:]
+              data=text.encode('utf-8')
+              if data==original: raise RuntimeError('NO_CHANGE '+spec['key'])
+              updated[path]=data
+
+            written=[]
+            try:
+              for spec,path,original,source in records:
+                if read(ftp,path)!=original: raise RuntimeError('CONCURRENT_CHANGE '+spec['key'])
+              for spec,path,original,source in records:
+                atomic_put(ftp,path,updated[path],stamp); written.append((path,original))
+                final=read(ftp,path).decode('utf-8')
+                checks={
+                  'title':'<title>'+html.escape(spec['title'])+'</title>' in final,
+                  'canonical':f'href="{spec["url"]}"' in final,
+                  'og_url':f'property="og:url" content="{spec["url"]}"' in final,
+                  'h1':len(re.findall(r'<h1\b',final,re.I))==1 and spec['h1'] in html.unescape(final),
+                  'description':spec['desc'] in html.unescape(final),
+                  'viewport':'name="viewport"' in final.lower() or "name='viewport'" in final.lower(),
+                  'indexable':'noindex' not in final.lower(),
+                  'section':spec['marker'] in final,
+                  'form':form_url in final,
+                  'whatsapp_fallback':'https://wa.me/5531973632725' in final
+                }
+                if not all(checks.values()): raise RuntimeError('FTP_POSTCHECK '+spec['key']+' '+repr(checks))
+                print('FTP_PUBLISHED_VERIFIED',spec['key'],path,digest(updated[path]),checks,flush=True)
+
+              for spec,path,original,source in records:
+                last=None
+                for attempt in range(3):
+                  try:
+                    sep='&' if '?' in spec['url'] else '?'
+                    req=urllib.request.Request(spec['url']+sep+'verify='+stamp,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
+                    with urllib.request.urlopen(req,timeout=35) as response:
+                      body=response.read(4000000).decode('utf-8','replace')
+                      status=response.status
+                    checks={
+                      'http_200':status==200,
+                      'title':spec['title'] in html.unescape(body),
+                      'canonical':f'href="{spec["url"]}"' in body,
+                      'og_url':f'property="og:url" content="{spec["url"]}"' in body,
+                      'h1':len(re.findall(r'<h1\b',body,re.I))==1 and spec['h1'] in html.unescape(body),
+                      'description':spec['desc'] in html.unescape(body),
+                      'viewport':'name="viewport"' in body.lower() or "name='viewport'" in body.lower(),
+                      'indexable':'noindex' not in body.lower(),
+                      'section':spec['marker'] in body,
+                      'form':form_url in body,
+                      'whatsapp_fallback':'https://wa.me/5531973632725' in body
+                    }
+                    if not all(checks.values()): raise RuntimeError('PUBLIC_CHECKS '+repr(checks))
+                    print('PUBLIC_VERIFIED',spec['key'],spec['url'],digest(body.encode('utf-8')),checks,flush=True)
+                    last=None; break
+                  except Exception as exc:
+                    last=exc
+                    if attempt<2: time.sleep(5)
+                if last: raise last
+            except Exception:
+              for path,original in written: atomic_put(ftp,path,original,'rollback-'+stamp)
+              print('ROLLBACK_COMPLETED',','.join(path for path,_ in written),flush=True)
+              raise
+          PY
