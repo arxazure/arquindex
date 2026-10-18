@@ -1,3 +1,4 @@
+import { renderAuthorityGuide } from "./authority-guide-longform.js";
 import { renderDigitalize, digitalizePaths } from "./digitalize-pages.js";
 import { renderRegional, regionalPaths, regionalBase } from "./regional-ged-replica.js";
 import http from "node:http";
@@ -498,10 +499,11 @@ const server=http.createServer(async(req,res)=>{
   res.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(txt);
  }
+ if(p==="/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Manual técnico: digitalização, gestão documental, GED e LGPD | Arquindex","Manual técnico completo com diagnóstico, OCR, PDF/A, temporalidade, GED, LGPD, segurança e implantação corporativa.",renderAuthorityGuide(),req));}
  if(p==="/plano-autoridade-rmbh"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Digitalização, Gestão Documental, GED e LGPD na RMBH | Arquindex","Soluções documentais para empresas de Belo Horizonte, Contagem, Betim e Nova Lima.",'<section><h1>Soluções documentais para empresas da RMBH</h1><p>Digitalização com OCR e indexação, gestão documental, GED/ECM e consultoria LGPD para projetos corporativos.</p><div class="grid">'+[['Digitalização em Belo Horizonte','/solucoes/digitalizacao-documentos'],['Gestão documental em Contagem e Betim','/solucoes/gestao-documental'],['GED e ECM em Nova Lima','/solucoes/alfresco-incloud'],['Consultoria LGPD na RMBH','/solucoes/consultoria-lgpd']].map(([a,b])=>'<article class="card"><h2>'+a+'</h2><p>Diagnóstico de escopo, volume, segurança e logística de implantação.</p><a href="'+b+'">Conheça a solução</a></article>').join('')+'</div><h2>Atendimento regional</h2><p>Belo Horizonte, Contagem, Betim, Nova Lima e demais cidades da região metropolitana, conforme avaliação operacional.</p><p><a href="/contato">Solicitar avaliação comercial</a></p></section>',req));}
  if(p==="/sitemap.xml"){
   const base=canonicalOrigin(req);
-  const paths=["/","/plano-autoridade-rmbh","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path),...regionalPaths,...digitalizePaths];
+  const paths=["/","/plano-autoridade-rmbh","/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path),...regionalPaths,...digitalizePaths];
   const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc></url>").join("")+"</urlset>";
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
