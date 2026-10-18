@@ -34,7 +34,11 @@ with ftplib.FTP_TLS(timeout=50) as f:
   if old is not None:assert get(f,p)==old,'CONCURRENT_CHANGE'
   rawput(f,p,b);assert get(f,p)==b
   report.append({'path':p,'sha256':hashlib.sha256(b).hexdigest()})
- image=fetch(IMAGE);assert len(image)>10000 and image[:2]==b'\xff\xd8'
+ from PIL import Image
+ image_obj=Image.open(io.BytesIO(fetch(IMAGE+'=s1200'))).convert('RGB')
+ assert min(image_obj.size)>=250,image_obj.size
+ buf=io.BytesIO();image_obj.save(buf,format='JPEG',quality=94);image=buf.getvalue()
+ print('IMAGE_VALIDATED',image_obj.size,len(image),flush=True)
  put(base+'/assets/social/ia-evidencias-20261018.jpg',image)
  article=open('publicacao-noticias/ia-documental-evidencias-sandbox-anpd-2026.html','rb').read()
  soup=BeautifulSoup(article,'html.parser')
