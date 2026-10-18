@@ -1,352 +1,81 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Solicitar proposta e contratação | Arquindex</title>
-<meta name="description" content="Selecione serviços Arquindex, informe dados para proposta e continue com atendimento comercial pelo WhatsApp.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atendimento e proposta | Arquindex</title>
+<meta name="description" content="Atendimento em etapas: informe seus dados, escolha serviços, estime quantidades, consulte valores e continue pelo WhatsApp.">
 <meta name="robots" content="noindex,follow">
-<style>:root{font-family:system-ui,sans-serif;color:#17364a}*{box-sizing:border-box}body{margin:0;background:#f3f7f8}header{background:#103650;color:white;padding:32px 6%}main{max-width:940px;margin:24px auto;padding:0 16px}.panel{background:white;padding:25px;border-radius:14px;margin:18px 0;box-shadow:0 2px 12px #0d364017}h1{font-size:clamp(1.8rem,4vw,2.7rem)}h2{font-size:1.4rem}label{display:block;margin:13px 0 5px;font-weight:600}input:not([type=checkbox]),select,textarea{width:100%;padding:12px;border:1px solid #b8cbd0;border-radius:8px;font:inherit}.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.choices label{border:1px solid #c8d9df;border-radius:9px;padding:12px;margin:0;font-weight:500}button,.button{display:inline-block;background:#008977;color:white;border:0;border-radius:9px;padding:13px 20px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none}button:disabled{opacity:.5}small,.muted{color:#4b6874}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:600px){.row{grid-template-columns:1fr}}.hidden{display:none}.note{border-left:4px solid #008977;padding:12px;background:#edf7f5}summary{cursor:pointer;font-weight:700}footer{text-align:center;padding:24px}</style>
+<style>
+:root{font:16px/1.5 system-ui,sans-serif;color:#16394c}*{box-sizing:border-box}
+body{margin:0;background:#f1f6f7}header{background:#103650;color:white;padding:22px 5%}header p{margin:5px 0}
+main{max-width:610px;margin:20px auto;padding:0 13px}.panel{background:white;border-radius:16px;padding:22px;box-shadow:0 4px 20px #1234}
+h1{font-size:clamp(1.5rem,4vw,2rem);margin:0}h2{font-size:1.35rem;margin:8px 0 14px}
+label{display:block;font-weight:600;margin:12px 0 5px}input:not([type=checkbox]),select,textarea{display:block;width:100%;border:1px solid #b9cbd2;border-radius:9px;padding:12px;font:inherit;background:white}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 16px;font-weight:700}
+.primary{background:#078b77;color:white}.secondary{background:#eaf2f4;color:#16394c}.nav{display:flex;gap:10px;justify-content:space-between;margin-top:20px}.nav button{flex:1}
+.small{font-size:.82rem;color:#526b75}.progress{height:6px;border-radius:8px;background:#dce9e9;margin:12px 0 18px;overflow:hidden}.bar{height:100%;background:#0b9c85;width:20%;transition:width .2s}
+.step{display:none}.step.active{display:block}.service{display:block;border:1px solid #cadcdd;border-radius:10px;padding:12px;margin:8px 0;font-weight:500}.service input{margin-right:9px}
+.note{background:#eaf7f4;border-left:4px solid #0b9c85;padding:12px;border-radius:5px}.line{display:flex;justify-content:space-between;gap:15px;margin:8px 0}
+footer{text-align:center;margin:16px 0 30px}.agent{display:block;text-align:center;font-size:.86rem;margin:15px 0;color:#067b6c}.agent a{color:#067b6c}
+#floating{position:fixed;right:13px;bottom:13px;z-index:100;background:#078b77;color:white;box-shadow:0 4px 16px #0004;border-radius:40px;padding:10px 15px;text-decoration:none;font-weight:700;font-size:.85rem}
+@media(max-width:480px){main{margin:10px auto}.panel{padding:17px}header{padding:18px 5%}}
+</style>
 </head>
 <body>
-<header>
-<p>ARQUINDEX · ATENDIMENTO COMERCIAL</p>
-<h1>Monte sua solicitação e fale com um especialista</h1>
-<p>Conte o que sua empresa precisa. Apresentaremos soluções e prepararemos o próximo passo da negociação.</p>
-</header>
-<main>
-<form id="lead">
-<section class="panel" id="perfil-documental">
-<h2>Antes de começar: qual é o segmento da sua empresa?</h2>
-<label for="niche">Nicho ou setor de atuação *</label>
-<select id="niche" required>
-<option value="">Selecione o segmento</option>
-<option>Saúde: hospitais, clínicas e laboratórios</option>
-<option>RH e departamento pessoal</option>
-<option>Indústria e engenharia</option>
-<option>Construção e infraestrutura</option>
-<option>Jurídico e escritórios</option>
-<option>Contabilidade e financeiro</option>
-<option>Educação</option>
-<option>Logística e transportes</option>
-<option>Energia e mineração</option>
-<option>Órgãos públicos</option>
-<option>Comércio e serviços</option>
-<option>Outro segmento</option>
-</select>
-<label for="doctypes">Quais tipos de documentos deseja tratar? *</label>
-<textarea id="doctypes" rows="3" required maxlength="1800" placeholder="Ex.: dossiês de funcionários, fichas e prontuários de pacientes, formulários, contratos, notas fiscais, desenhos, relatórios, databooks...">
-</textarea>
-<label for="purpose">O que pretende fazer com esses documentos?</label>
-<select id="purpose">
-<option>Organizar e localizar documentos</option>
-<option>Digitalizar e tornar pesquisável</option>
-<option>Separar dossiês por pessoa ou assunto</option>
-<option>Renomear arquivos e documentos</option>
-<option>Extrair e digitar dados de formulários</option>
-<option>Descartar com segurança</option>
-<option>Implantar GED, ECM e automação</option>
-<option>Outro objetivo</option>
-</select>
-<p>
-<small>Para documentos médicos, trabalhistas ou outros dados sensíveis, descreva apenas as categorias documentais. Não inclua dados de pacientes ou funcionários neste formulário.</small>
-</p>
-</section>
-<section class="panel" id="solucoes-arquindex">
-<h2>Conheça nossas tecnologias e soluções</h2>
-<p>Da organização do acervo físico à gestão inteligente da informação: escolha o desafio da sua empresa e converse com nossos especialistas.</p>
-<div class="choices">
-<article>
-<h3>Alfresco ECM open source e inCloud ao seu alcance</h3>
-<p>Conheça a tecnologia ECM Alfresco para centralizar documentos, controlar versões, permissões, metadados e pesquisa. Avaliamos opções de implantação em nuvem ou infraestrutura própria e integrações com automação de processos, conforme edição, licenças e requisitos.</p>
-<p>
-<a href="/alfresco-ecm-automacao-documental-ia.html">Conhecer Alfresco ECM e IA</a>
-</p>
-<button type="button" data-service="GED / ECM Alfresco">Quero conhecer o Alfresco</button>
-</article>
-<article>
-<h3>Agentes de IA para arquivos em rede</h3>
-<p>Seu servidor de arquivos acumula pastas duplicadas, nomes inconsistentes e documentos difíceis de encontrar? Estudamos classificação assistida, extração de metadados, organização supervisionada e pesquisa, preservando permissões, backups e aprovação humana antes de alterações.</p>
-<button type="button" data-service="Inteligência artificial aplicada a documentos">Solicitar diagnóstico de IA</button>
-</article>
-<article>
-<h3>Planos de adequação à LGPD</h3>
-<p>Conheça planos de diagnóstico, mapeamento de dados, políticas, apoio à governança e DPO terceirizado, dimensionados conforme porte, setor, riscos e maturidade da organização. Solicite avaliação para identificar o escopo adequado à sua empresa.</p>
-<button type="button" data-service="Consultoria LGPD / DPO">Conhecer planos LGPD</button>
-</article>
-<article>
-<h3>LGPD Checklist para auditoria, DPO e TI</h3>
-<p>Solicite uma apresentação da ferramenta LGPD Checklist para apoiar levantamento de controles, registro de evidências, acompanhamento de pendências e colaboração entre auditoria, encarregado e TI. Funcionalidades, disponibilidade e condições são confirmadas na demonstração comercial.</p>
-<button type="button" data-service="Consultoria LGPD / DPO">Pedir demonstração LGPD Checklist</button>
-</article>
-<article>
-<h3>Automação de processos documentais</h3>
-<p>Fluxos de aprovação, documentos de RH, contratos, fiscal e engenharia podem ser integrados a GED/ECM, OCR e BPM para reduzir etapas manuais. Avaliamos os sistemas existentes, os riscos e os pontos de validação antes de recomendar a solução.</p>
-<p>
-<a href="/como-automatizar-a-gestao-documental-processos-ia.html">Ver guia de automação</a>
-</p>
-<button type="button" data-service="BPM e automação de processos">Solicitar solução documental</button>
-</article>
-<article>
-<h3>Precisa incinerar ou descartar documentos com segurança?</h3>
-<p>Planeje a destinação segura de documentos após análise de temporalidade, autorização de descarte, cadeia de custódia e comprovação conforme o serviço contratado. Solicite avaliação de volumes, coleta e documentação necessária.</p>
-<button type="button" data-service="Descarte seguro">Solicitar descarte seguro</button>
-</article>
-<article>
-<h3>Quer digitalizar seu arquivo ou acervo?</h3>
-<p>Transforme documentos físicos em arquivos digitais organizados e pesquisáveis, com captura, OCR, indexação e conferência de qualidade. Para dimensionar a proposta, informe quantidade aproximada de caixas ou páginas, tipo documental, local e prazo desejado.</p>
-<button type="button" data-service="Digitalização de documentos e OCR">Pedir orçamento de digitalização</button>
-</article>
-<article>
-<h3>Organização e guarda documental</h3>
-<p>Organize acervos por setor, assunto, prazo de guarda e localização física ou digital. Projetos podem incluir inventário, classificação, gestão de empréstimos, custódia e preparação para digitalização.</p>
-<button type="button" data-service="Gestão documental e organização de arquivos">Avaliar meu acervo</button>
-</article>
-</div>
-<article>
-<h3>Um especialista pode avaliar seu arquivo?</h3>
-<p>Não sabe por onde começar? Solicite uma avaliação técnica do acervo para identificar riscos, prioridades, volume, condições de conservação, oportunidades de digitalização, guarda, descarte, GED e automação. O diagnóstico orienta um plano de ação e uma proposta adequada à realidade da empresa.</p>
-<button type="button" data-service="Avaliação especializada de arquivos">Quero uma avaliação do meu arquivo</button>
-</article>
-<article>
-<h3>Precisa de suporte com seu Databook de engenharia?</h3>
-<p>Organização de documentação técnica, desenhos, certificados, relatórios, índices, revisões, pendências e entrega de databooks de obras, equipamentos e fornecedores. Solicite análise de escopo, quantidade de volumes, prazos e formato de entrega.</p>
-<button type="button" data-service="Databooks de engenharia">Solicitar suporte Databook</button>
-</article>
-<p class="note">As soluções são configuradas conforme diagnóstico. Recursos de IA, BPM, Alfresco e LGPD Checklist dependem de disponibilidade técnica e condições da proposta; não se presume automação ou conformidade automática.</p>
-</section>
-<section class="panel">
-<h2>1. Serviços desejados</h2>
-<p>Marque quantos serviços desejar.</p>
-<div class="choices" id="services">
-<label>
-<input type="checkbox" value="Digitalização de documentos e OCR"> Digitalização de documentos e OCR</label>
-<label>
-<input type="checkbox" value="Digitalização certificada"> Digitalização certificada</label>
-<label>
-<input type="checkbox" value="Gestão documental e organização de arquivos"> Gestão documental e organização</label>
-<label>
-<input type="checkbox" value="GED / ECM Alfresco"> GED / ECM Alfresco</label>
-<label>
-<input type="checkbox" value="BPM e automação de processos"> BPM e automação</label>
-<label>
-<input type="checkbox" value="Inteligência artificial aplicada a documentos"> IA para documentos</label>
-<label>
-<input type="checkbox" value="Guarda documental"> Guarda documental</label>
-<label>
-<input type="checkbox" value="Descarte seguro"> Descarte seguro</label>
-<label>
-<input type="checkbox" value="Consultoria LGPD / DPO"> Consultoria LGPD / DPO</label>
-<label>
-<input type="checkbox" value="Databooks de engenharia"> Databooks de engenharia</label>
-<label>
-<input type="checkbox" value="Avaliação especializada de arquivos"> Avaliação especializada do acervo</label>
-<label>
-<input type="checkbox" value="Renomeação e separação de dossiês"> Renomeação e separação de dossiês</label>
-<label>
-<input type="checkbox" value="Processamento e digitação de formulários"> Processamento de formulários</label>
-</div>
-<div class="row">
-<div>
-<label for="boxes">Quantidade de caixas (opcional)</label>
-<input id="boxes" type="number" min="0" step="1" placeholder="Ex.: 150">
-</div>
-<div>
-<label for="pages">Quantidade estimada de páginas (opcional)</label>
-<input id="pages" type="number" min="0" step="1" placeholder="Ex.: 50000">
-</div>
-</div>
-<label for="details">Descreva o acervo, a necessidade ou os prazos</label>
-<textarea id="details" rows="3" maxlength="1500" placeholder="Ex.: caixas de RH, implantação Alfresco, integração com ERP...">
-</textarea>
-<label for="photos">Fotos do acervo (opcional)</label>
-<input id="photos" type="file" accept="image/*" multiple>
-<p class="muted">
-<small>Por segurança, as fotos não são enviadas nem armazenadas neste formulário. Depois de abrir o WhatsApp, anexe-as diretamente na conversa. Evite fotografar documentos com dados pessoais desnecessários.</small>
-</p>
-</section>
-<section class="panel">
-<h2>2. Dados para atendimento</h2>
-<div class="row">
-<div>
-<label for="company">Empresa *</label>
-<input id="company" required maxlength="120" autocomplete="organization">
-</div>
-<div>
-<label for="cnpj">CNPJ (opcional nesta etapa)</label>
-<input id="cnpj" inputmode="numeric" maxlength="18" placeholder="00.000.000/0000-00">
-</div>
-<div>
-<label for="person">Seu nome *</label>
-<input id="person" required maxlength="100" autocomplete="name">
-</div>
-<div>
-<label for="phone">Telefone/WhatsApp *</label>
-<input id="phone" type="tel" required maxlength="25" autocomplete="tel">
-</div>
-<div>
-<label for="email">E-mail corporativo *</label>
-<input id="email" type="email" required maxlength="160" autocomplete="email">
-</div>
-<div>
-<label for="contact">Como deseja avançar?</label>
-<select id="contact">
-<option>Falar com agente comercial</option>
-<option>Receber catálogo e informações</option>
-<option>Solicitar proposta comercial</option>
-<option>Negociar condições para fechar</option>
-<option>Agendar avaliação técnica</option>
-<option>Iniciar contratação</option>
-</select>
-</div>
-</div>
-<label for="date">Data preferida para contato ou visita (opcional)</label>
-<input id="date" type="date">
-<label for="obstacle">O que falta para fecharmos a contratação?</label>
-<select id="obstacle">
-<option value="Preciso entender as soluções">Preciso entender as soluções</option>
-<option value="Preço e condições de pagamento">Preço e condições de pagamento</option>
-<option value="Escopo e prazo de execução">Escopo e prazo de execução</option>
-<option value="Aprovação interna">Aprovação interna</option>
-<option value="Visita técnica ou demonstração">Visita técnica ou demonstração</option>
-<option value="Pronto para contratar">Estou pronto para contratar</option>
-</select>
-<label>
-<input type="checkbox" id="privacy" required> Autorizo o envio dos dados informados à Arquindex via WhatsApp para contato sobre esta solicitação. *</label>
-<p>
-<small>Ao continuar, o WhatsApp abrirá com uma mensagem preenchida. Revise e envie a mensagem para iniciar o atendimento. Nenhum dado é transmitido automaticamente por este site.</small>
-</p>
-</section>
-<section class="panel">
-<h2>3. Catálogo e apresentação das soluções</h2>
-<div id="catalog" class="note">Selecione os serviços acima para ver uma apresentação direcionada.</div>
-<p>
-<a href="https://www.arquindex.com.br/alfresco-ecm-automacao-documental-ia.html">Guia Alfresco, ECM e IA</a> · <a href="https://www.arquindex.com.br/gestao-documental-software-ged-processos-ia.html">Manual GED</a> · <a href="https://www.arquindex.com.br/como-automatizar-a-gestao-documental-processos-ia.html">Guia de automação</a>
-</p>
-</section>
-<section class="panel" id="simulador">
-<h2>Simule o investimento em serviços documentais</h2>
-<p>Valores de referência informados pela Arquindex, sujeitos à conferência de escopo, logística, impostos aplicáveis e proposta formal. Não incluem digitalização, OCR, organização ou outros serviços que não estejam expressamente descritos.</p>
-<h3>Renomeação e separação de dossiês</h3>
-<p>
-<strong>R$ 0,65 por página</strong> para renomeação documental, conforme critérios definidos na proposta.</p>
-<label for="renamepages">Páginas para renomear (opcional)</label>
-<input id="renamepages" type="number" min="0" step="1" placeholder="Ex.: 10000">
-<h3>Processamento de formulários</h3>
-<p>Escolha <strong>R$ 0,25 por campo digitado</strong> ou <strong>R$ 2,50 por página</strong>. As duas modalidades são alternativas; não serão somadas para o mesmo lote.</p>
-<label for="formmode">Como deseja orçar os formulários?</label>
-<select id="formmode">
-<option value="fields">Por campo digitado — R$ 0,25</option>
-<option value="formpages">Por página processada — R$ 2,50</option>
-</select>
-<label for="formqty">Quantidade de campos ou páginas conforme modalidade</label>
-<input id="formqty" type="number" min="0" step="1" placeholder="Ex.: 1500">
-<h3>Descarte por picotamento com comprovação</h3>
-<p>
-<strong>R$ 1,50 por caixa box</strong> ou unidade equivalente de até <strong>6 kg</strong> de documentos. Frete de referência: <strong>R$ 250 por grupo de até 50 caixas</strong>, arredondado para cima. A destinação será por fragmentação/picotamento, com documentação de sigilo, privacidade e certificado de destruição conforme o serviço efetivamente executado. Picotamento não é incineração térmica: a modalidade final deve ser confirmada na proposta.</p>
-<div class="row">
-<div>
-<label for="disposeboxes">Caixas box para descarte</label>
-<input id="disposeboxes" type="number" min="0" step="1" placeholder="Ex.: 120">
-</div>
-<div>
-<label for="disposekg">Ou peso total em kg</label>
-<input id="disposekg" type="number" min="0" step="0.1" placeholder="Ex.: 720">
-</div>
-</div>
-<p>
-<small>Se informar caixas e quilos, o simulador usará a quantidade de caixas para evitar cobrança duplicada. A equivalência de 6 kg por unidade é utilizada apenas quando informado o peso.</small>
-</p>
-<div class="note">
-<strong>Estimativa preliminar:</strong> <span id="estimate">Preencha as quantidades para simular.</span>
-</div>
-<p>
-<small>O orçamento final depende de confirmação de local de coleta, distância, acessibilidade, volume, condições dos documentos e exigências contratuais.</small>
-</p>
-</section>
-<section class="panel" id="proximos-passos">
-<h2>Vamos avançar até a solução ideal?</h2>
-<p>Escolha o estágio atual da sua empresa. A equipe comercial poderá continuar o atendimento com o material e os próximos passos adequados, sem compromisso automático de contratação.</p>
-<label for="stage">Em qual etapa você está?</label>
-<select id="stage">
-<option value="Explorando soluções">Estou conhecendo as soluções</option>
-<option value="Preciso de diagnóstico técnico">Quero avaliação do acervo ou diagnóstico técnico</option>
-<option value="Quero demonstração e catálogo">Quero demonstração, guia e catálogo</option>
-<option value="Quero orçamento">Quero receber orçamento e prazo</option>
-<option value="Quero negociar">Já tenho proposta e quero negociar</option>
-<option value="Quero fechar">Estou pronto para fechar, sujeito ao contrato</option>
-</select>
-<label for="challenge">Qual é a maior dificuldade hoje?</label>
-<select id="challenge">
-<option>Arquivos desorganizados e difíceis de localizar</option>
-<option>Falta de espaço físico e necessidade de guarda</option>
-<option>Digitalização e OCR de grande volume</option>
-<option>Documentos de engenharia e Databook incompleto</option>
-<option>LGPD, auditoria e controles internos</option>
-<option>Implantar Alfresco, GED ou ECM</option>
-<option>Automatizar aprovações e rotinas com IA</option>
-<option>Descartar documentos com segurança</option>
-<option>Outro desafio</option>
-</select>
-<label for="timing">Quando pretende iniciar?</label>
-<select id="timing">
-<option>Preciso de orientação para definir</option>
-<option>Imediatamente</option>
-<option>Nos próximos 30 dias</option>
-<option>Nos próximos 90 dias</option>
-<option>Sem prazo definido</option>
-</select>
-<label for="budget">Existe uma faixa de investimento planejada? (opcional)</label>
-<select id="budget">
-<option value="A definir">Prefiro definir após o diagnóstico</option>
-<option>Até R$ 5 mil</option>
-<option>De R$ 5 mil a R$ 20 mil</option>
-<option>De R$ 20 mil a R$ 100 mil</option>
-<option>Acima de R$ 100 mil</option>
-</select>
-<label for="decision">Quem participará da decisão?</label>
-<select id="decision">
-<option>Sou responsável pela decisão</option>
-<option>Decisão com diretoria / financeiro</option>
-<option>Decisão com TI / DPO / jurídico</option>
-<option>Preciso apresentar a proposta internamente</option>
-</select>
-<div class="note">
-<strong>Próximo passo recomendado:</strong> <span id="nextstep">Apresentar soluções e identificar o melhor diagnóstico para o acervo.</span>
-</div>
-<p>
-<small>O envio do formulário inicia a conversa pelo WhatsApp; a equipe dará continuidade com catálogo, proposta, avaliação, negociação ou formalização conforme a etapa escolhida. Nenhum agendamento, assinatura ou pagamento é concluído automaticamente.</small>
-</p>
-</section>
-<section class="panel">
-<h2>4. Negociação e pré-contratação</h2>
-<p>Podemos preparar uma proposta, agendar avaliação e discutir condições de fechamento. A entrada de <strong>30%</strong> é uma condição sugerida para negociação, sujeita à proposta e ao contrato aprovados.</p>
-<label for="amount">Valor total aprovado na proposta (R$, opcional)</label>
-<input id="amount" type="number" min="0" step="0.01" placeholder="Preencher somente se já houver proposta acordada">
-<p id="deposit" class="note">Entrada de 30%: depende do valor total aprovado.</p>
-<details>
-<summary>Ver minuta orientativa de condições de contratação</summary>
-<p>
-<strong>Objeto:</strong> serviços selecionados, detalhados em proposta comercial específica. <strong>Escopo e prazos:</strong> a definir após diagnóstico e aceite. <strong>Pagamento:</strong> entrada de 30% apenas quando prevista em proposta aprovada, com saldo e vencimentos definidos em contrato. <strong>Confidencialidade e proteção de dados:</strong> conforme instrumento contratual e legislação aplicável. <strong>Início:</strong> sujeito a aceite formal, validação cadastral e confirmação das condições comerciais.</p>
-<p>
-<strong>Atenção:</strong> este texto é uma prévia informativa, não constitui contrato assinado ou título de cobrança.</p>
-</details>
-<label>
-<input id="ack" type="checkbox"> Li as condições preliminares e desejo receber a proposta/termo para assinatura formal.</label>
-<p>
-<small>Marcar esta caixa registra apenas sua intenção nesta tela; não é assinatura eletrônica nem aceite contratual válido por si só.</small>
-</p>
-<p>
-<strong>PIX:</strong> a chave, o QR Code e os dados do beneficiário devem ser apresentados pela equipe comercial após validação da proposta. Nenhum pagamento é solicitado nesta página.</p>
-</section>
-<section class="panel">
-<button type="submit">Enviar solicitação completa pelo WhatsApp</button><p style="font-size:.82rem;margin-top:12px;color:#567"><a href="https://wa.me/5531973632725" target="_blank" rel="noopener noreferrer" style="font-size:.82rem;color:#567;text-decoration:underline">Prefere não preencher o formulário? Falar diretamente no WhatsApp ↗</a></p>
-<p id="feedback" role="status">
-</p>
-</section>
-</form>
-</main>
-<footer>Arquindex · Atendimento empresarial · <a href="https://www.arquindex.com.br/">Site institucional</a>
-</footer><script>const $=id=>document.getElementById(id);const opts=[...document.querySelectorAll('#services input')];function money(n){return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}function calculate(){const num=id=>Math.max(0,Number($(id).value)||0);const ren=num('renamepages'),qty=num('formqty'),mode=$('formmode').value,boxes=num('disposeboxes')||Math.ceil(num('disposekg')/6),units=Math.ceil(boxes),freight=units?Math.ceil(units/50)*250:0,disposal=units*1.5,rename=ren*.65,forms=qty*(mode==='fields'?.25:2.5),total=rename+forms+disposal+freight;const lines=[];if(ren)lines.push('Renomeação: '+money(rename));if(qty)lines.push('Formulários: '+money(forms));if(units)lines.push('Descarte ('+units+' unidades): '+money(disposal)+' + frete '+money(freight));$('estimate').textContent=lines.length?lines.join(' | ')+' | Total indicativo: '+money(total)+' | Entrada indicativa 30%: '+money(total*.3):'Preencha as quantidades para simular.';return{ren,qty,mode,units,freight,total}}['renamepages','formmode','formqty','disposeboxes','disposekg'].forEach(id=>$(id).addEventListener('input',calculate));const stageAdvice={'Explorando soluções':'Enviar apresentação institucional e catálogo dos serviços selecionados.','Preciso de diagnóstico técnico':'Levantar local, volumes, riscos e disponibilidade para avaliação por especialista.','Quero demonstração e catálogo':'Apresentar catálogo e agendar demonstração técnica.','Quero orçamento':'Solicitar dados finais de escopo, prazo e local para elaborar proposta.','Quero negociar':'Confirmar proposta vigente, objeções, condições e responsáveis pela decisão.','Quero fechar':'Conferir escopo e dados contratuais e enviar termo formal para revisão e assinatura.'};$('stage').addEventListener('change',()=>{$('nextstep').textContent=stageAdvice[$('stage').value]});const descriptions={'Digitalização de documentos e OCR':'Captura, OCR pesquisável, indexação e conferência de qualidade.','Digitalização certificada':'Projeto com requisitos técnicos e normativos aplicáveis.','Gestão documental e organização de arquivos':'Inventário, classificação, temporalidade e acesso.','GED / ECM Alfresco':'Repositório, metadados, versões, permissões e integração.','BPM e automação de processos':'Fluxos, aprovações, prazos e indicadores.','Inteligência artificial aplicada a documentos':'Extração e classificação assistida com revisão humana.','Guarda documental':'Custódia, inventário e rastreabilidade.','Descarte seguro':'Destinação autorizada e comprovação documental.','Consultoria LGPD / DPO':'Governança de privacidade e acompanhamento.','Databooks de engenharia':'Organização e conferência de documentação técnica.','Avaliação especializada de arquivos':'Diagnóstico do acervo, prioridades e recomendações de soluções.','Renomeação e separação de dossiês':'Renomeação documental a partir dos critérios acordados; referência R$ 0,65 por página.','Processamento e digitação de formulários':'Digitação por campo ou processamento por página, conforme modalidade escolhida.'};function chosen(){return opts.filter(x=>x.checked).map(x=>x.value)}function catalog(){const a=chosen();$('catalog').innerHTML=a.length?a.map(s=>'<p><strong>'+s+'</strong> — '+descriptions[s]+'</p>').join(''):'Selecione os serviços acima para ver uma apresentação direcionada.'}opts.forEach(x=>x.addEventListener('change',catalog));document.querySelectorAll('[data-service]').forEach(b=>b.addEventListener('click',()=>{const option=opts.find(x=>x.value===b.dataset.service);if(option){option.checked=true;catalog();document.getElementById('services').scrollIntoView({behavior:'smooth',block:'center'})}}));$('amount').addEventListener('input',()=>{const n=Number($('amount').value);$('deposit').textContent=n>0?'Entrada indicativa (30%): '+(n*.3).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+' — somente após proposta e contrato aprovados.':'Entrada de 30%: depende do valor total aprovado.'});$('lead').addEventListener('submit',e=>{e.preventDefault();if(!e.target.reportValidity())return;const a=chosen();if(!a.length){$('feedback').textContent='Selecione pelo menos um serviço.';return}const val=id=>$(id).value.trim();const msg=['Olá, Arquindex! Quero atendimento comercial.','Nicho: '+val('niche'),'Tipos documentais: '+val('doctypes'),'Objetivo documental: '+val('purpose'),'Empresa: '+val('company'),'CNPJ: '+(val('cnpj')||'A informar'),'Nome: '+val('person'),'Telefone: '+val('phone'),'E-mail: '+val('email'),'Serviços: '+a.join('; '),'Caixas: '+(val('boxes')||'Não informado'),'Páginas para renomeação: '+(val('renamepages')||'Não informado'),'Formulários: '+(val('formqty')||'Não informado')+' '+(val('formmode')==='fields'?'campos':'páginas'),'Caixas para descarte: '+(val('disposeboxes')||'Não informado'),'Peso para descarte (kg): '+(val('disposekg')||'Não informado'),'Estimativa: '+$('estimate').textContent,'Páginas: '+(val('pages')||'Não informado'),'Necessidade: '+(val('details')||'Não informado'),'Objetivo: '+val('contact'),'Etapa comercial: '+val('stage'),'Desafio principal: '+val('challenge'),'Previsão de início: '+val('timing'),'Faixa de investimento: '+val('budget'),'Participantes da decisão: '+val('decision'),'Próximo passo: '+$('nextstep').textContent,'O que falta para fechar: '+val('obstacle'),'Data preferida: '+(val('date')||'A combinar'),'Fotos: '+($('photos').files.length?'Vou anexar '+$('photos').files.length+' foto(s) diretamente no WhatsApp':'Sem fotos'),'Proposta aprovada informada: '+(val('amount')?'R$ '+Number(val('amount')).toFixed(2):'Ainda não'),'Solicita termo para assinatura formal: '+($('ack').checked?'Sim':'Não'),'Por favor, envie catálogo correspondente, proposta e próximos passos.'].join('\n');const url='https://wa.me/5531973632725?text='+encodeURIComponent(msg);$('feedback').textContent='Abrindo WhatsApp. Revise e envie a mensagem para concluir a solicitação.';window.open(url,'_blank','noopener,noreferrer')});</script>
-</body>
-</html>
+<header><h1>Arquindex · Atendimento inteligente</h1><p>Descubra a solução ideal para sua empresa em poucos passos.</p></header>
+<main><div class="panel"><div id="step-label" class="small" aria-live="polite">Etapa 1 de 5</div><div class="progress"><div id="bar" class="bar"></div></div>
+<form id="wizard">
+<section class="step active" data-step="0"><h2>👋 Vamos nos conhecer?</h2><p class="small">Precisamos apenas dos dados para preparar seu atendimento.</p>
+<label for="name">Seu nome *</label><input id="name" required autocomplete="name" maxlength="100">
+<label for="company">Empresa *</label><input id="company" required autocomplete="organization" maxlength="120">
+<label for="phone">Telefone / WhatsApp *</label><input id="phone" type="tel" required autocomplete="tel" maxlength="25">
+<label for="email">E-mail *</label><input id="email" type="email" required autocomplete="email" maxlength="150">
+<label for="niche">Segmento *</label><select id="niche" required><option value="">Selecione</option><option>Saúde</option><option>RH / Departamento pessoal</option><option>Indústria / Engenharia</option><option>Jurídico</option><option>Financeiro / Contabilidade</option><option>Educação</option><option>Logística</option><option>Setor público</option><option>Comércio / Serviços</option><option>Outro</option></select>
+<label><input type="checkbox" id="consent" required> <span class="small">Autorizo incluir esses dados na mensagem de atendimento que enviarei pelo WhatsApp.</span></label></section>
+<section class="step" data-step="1"><h2>Qual serviço você precisa?</h2><p class="small">Selecione um ou mais. O próximo passo se adapta à sua escolha.</p><div id="services">
+<label class="service"><input type="checkbox" value="Digitalização de documentos e OCR">Digitalização e OCR</label>
+<label class="service"><input type="checkbox" value="Renomeação e separação de dossiês">Renomeação de dossiês</label>
+<label class="service"><input type="checkbox" value="Processamento de formulários">Processamento de formulários</label>
+<label class="service"><input type="checkbox" value="Descarte seguro por picotamento">Descarte seguro / picotamento</label>
+<label class="service"><input type="checkbox" value="GED / ECM Alfresco">Alfresco ECM / GED</label>
+<label class="service"><input type="checkbox" value="Automação de processos e IA">Automação e IA documental</label>
+<label class="service"><input type="checkbox" value="Consultoria LGPD / DPO">Consultoria LGPD / DPO</label>
+<label class="service"><input type="checkbox" value="LGPD Checklist">LGPD Checklist</label>
+<label class="service"><input type="checkbox" value="Databooks de engenharia">Databooks de engenharia</label>
+<label class="service"><input type="checkbox" value="Avaliação especializada de arquivos">Avaliação do acervo</label>
+<label class="service"><input type="checkbox" value="Guarda e gestão documental">Guarda e organização</label></div><p class="small" id="service-warning" role="alert"></p></section>
+<section class="step" data-step="2"><h2>Conte sobre sua demanda</h2><p class="small">Os campos são exibidos conforme os serviços escolhidos.</p>
+<div id="doc-fields"><label for="docs">Quais tipos de documentos?</label><textarea id="docs" rows="2" maxlength="700" placeholder="Ex.: prontuários, fichas, dossiês RH, contratos, desenhos"></textarea></div>
+<div id="box-fields" hidden><label for="boxes">Quantidade de caixas box</label><input id="boxes" type="number" min="0" step="1" placeholder="Opcional"></div>
+<div id="weight-fields" hidden><label for="kg">Peso dos documentos (kg), se não souber as caixas</label><input id="kg" type="number" min="0" step="0.1" placeholder="Opcional"></div>
+<div id="page-fields" hidden><label for="pages">Quantidade de páginas</label><input id="pages" type="number" min="0" step="1" placeholder="Opcional"></div>
+<div id="form-fields" hidden><label for="formmode">Modalidade de formulários</label><select id="formmode"><option value="field">Por campo digitado (R$ 0,25)</option><option value="page">Por página (R$ 2,50)</option></select><label for="formqty">Quantidade de campos ou páginas</label><input id="formqty" type="number" min="0" step="1" placeholder="Opcional"></div>
+<label for="details">O que precisa resolver? (opcional)</label><textarea id="details" rows="3" maxlength="1000" placeholder="Prazos, dificuldades, integração, local de coleta..."></textarea>
+<label for="timing">Quando pretende começar?</label><select id="timing"><option>A definir</option><option>Imediatamente</option><option>Até 30 dias</option><option>Até 90 dias</option></select></section>
+<section class="step" data-step="3"><h2>Conheça as soluções e valores</h2><div id="catalog"></div><div class="note"><strong>Estimativa de referência</strong><div id="prices"></div><div class="line"><strong>Total estimado</strong><strong id="total">A definir</strong></div><p class="small">Valores sujeitos à avaliação, escopo, logística e proposta formal. Serviços sem tabela não entram no cálculo.</p></div><label for="interest">Como deseja avançar?</label><select id="interest"><option>Receber proposta</option><option>Conversar com especialista</option><option>Agendar avaliação</option><option>Negociar condições</option><option>Quero contratar</option></select></section>
+<section class="step" data-step="4"><h2>Seu atendimento está pronto! 🎉</h2><div id="summary" class="note"></div><label for="obstacle">O que falta para fechar?</label><select id="obstacle"><option>Receber proposta formal</option><option>Negociar preço e pagamento</option><option>Confirmar prazo e escopo</option><option>Agendar visita técnica</option><option>Aprovação interna</option><option>Enviar contrato para assinatura</option></select><p class="small">A entrada indicativa de 30% só será cobrada se prevista na proposta aprovada. Assinatura e PIX são encaminhados após validação comercial.</p><button type="button" class="primary" id="handoff" style="width:100%">Continuar com especialista no WhatsApp ↗</button><p class="small">A conversa será preparada com seus dados, serviços, quantidades e valores. Você revisará a mensagem antes de enviá-la.</p></section>
+<div class="nav"><button type="button" id="back" class="secondary" hidden>Voltar</button><button type="button" id="next" class="primary">Continuar →</button></div>
+</form></div><p class="agent">Prefere não esperar? <a id="direct" href="https://wa.me/5531973632725" target="_blank" rel="noopener noreferrer">Falar com um atendente agora ↗</a></p></main>
+<a id="floating" href="https://wa.me/5531973632725" target="_blank" rel="noopener noreferrer">💬 Atendente</a>
+<footer class="small">Arquindex · Soluções documentais e tecnologia</footer>
+<script>
+(function(){
+const $=id=>document.getElementById(id),steps=[...document.querySelectorAll('.step')],choices=[...document.querySelectorAll('#services input')];let step=0;
+const names={'Digitalização de documentos e OCR':'Captura, OCR e indexação documental.','Renomeação e separação de dossiês':'Separação e renomeação conforme regras acordadas.','Processamento de formulários':'Digitação e extração estruturada de campos.','Descarte seguro por picotamento':'Fragmentação, controle de sigilo e certificado de destruição.','GED / ECM Alfresco':'Repositório, versões, metadados e permissões.','Automação de processos e IA':'Fluxos, classificação assistida e supervisão humana.','Consultoria LGPD / DPO':'Diagnóstico e governança de privacidade.','LGPD Checklist':'Apoio à auditoria, DPO e TI; disponibilidade mediante demonstração.','Databooks de engenharia':'Índices, revisões, certificados e documentação técnica.','Avaliação especializada de arquivos':'Diagnóstico do acervo e plano de ação.','Guarda e gestão documental':'Organização, classificação e custódia.'};
+function selected(){return choices.filter(x=>x.checked).map(x=>x.value)}
+function money(n){return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function num(id){return Math.max(0,Number($(id).value)||0)}
+function updateFields(){const s=selected().join(' ');$('box-fields').hidden=!/Digitalização|Descarte|Avaliação|Guarda/.test(s);$('weight-fields').hidden=!/Descarte/.test(s);$('page-fields').hidden=!/Digitalização|Renomeação/.test(s);$('form-fields').hidden=!/formulários/.test(s)}
+function estimate(){const s=selected(),rows=[];let sum=0;function add(label,value){if(value>0){rows.push(label+': '+money(value));sum+=value}}
+if(s.includes('Renomeação e separação de dossiês'))add('Renomeação',num('pages')*.65);
+if(s.includes('Processamento de formulários'))add('Formulários',num('formqty')*($('formmode').value==='field'?.25:2.5));
+if(s.includes('Descarte seguro por picotamento')){const n=Math.ceil(num('boxes')||num('kg')/6);if(n){add('Picotamento',n*1.5);add('Frete indicativo',Math.ceil(n/50)*250)}}
+$('prices').textContent=rows.join(' | ')||'Necessário diagnóstico para cotação.';$('total').textContent=sum?money(sum):'A definir';return sum}
+function refresh(){steps.forEach((s,i)=>s.classList.toggle('active',i===step));$('step-label').textContent='Etapa '+(step+1)+' de 5';$('bar').style.width=((step+1)*20)+'%';$('back').hidden=step===0;$('next').hidden=step===4;if(step===2)updateFields();if(step===3){$('catalog').replaceChildren();selected().forEach(s=>{const p=document.createElement('p'),b=document.createElement('strong');b.textContent=s+' — ';p.append(b,document.createTextNode(names[s]||''));$('catalog').append(p)});estimate()}if(step===4){const sum=estimate();$('summary').textContent='Empresa: '+$('company').value+' | Serviços: '+selected().join(', ')+' | Estimativa: '+(sum?money(sum):'Sob consulta')+' | Próximo passo: '+$('interest').value}}
+function validate(){if(step===0){for(const el of steps[0].querySelectorAll('input,select'))if(!el.reportValidity())return false}if(step===1&&!selected().length){$('service-warning').textContent='Escolha pelo menos um serviço.';return false}return true}
+$('next').addEventListener('click',()=>{if(!validate())return;if(step<4){step++;refresh()}});$('back').addEventListener('click',()=>{if(step>0){step--;refresh()}});choices.forEach(x=>x.addEventListener('change',()=>{$('service-warning').textContent='';updateFields()}));
+function send(){const v=id=>$(id).value.trim(),sum=estimate();const msg=['Olá, Arquindex! Concluí o pré-atendimento.','Nome: '+v('name'),'Empresa: '+v('company'),'Telefone: '+v('phone'),'E-mail: '+v('email'),'Nicho: '+v('niche'),'Serviços: '+selected().join('; '),'Documentos: '+(v('docs')||'A informar'),'Caixas: '+(v('boxes')||'A informar'),'Peso kg: '+(v('kg')||'A informar'),'Páginas: '+(v('pages')||'A informar'),'Formulários: '+(v('formqty')||'A informar')+' ('+v('formmode')+')','Demanda: '+(v('details')||'A informar'),'Prazo: '+v('timing'),'Estimativa: '+(sum?money(sum):'Sob consulta'),'Objetivo: '+v('interest'),'O que falta para fechar: '+v('obstacle'),'Solicito atendimento para continuar a proposta.'].join('\n');window.location.href='https://wa.me/5531973632725?text='+encodeURIComponent(msg)}
+$('handoff').addEventListener('click',send);refresh();
+})();
+</script>
+</body></html>
