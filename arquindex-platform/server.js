@@ -178,7 +178,7 @@ function organizationSchema(){
  return {"@context":"https://schema.org","@type":"Organization","name":"Arquindex","url":OFFICIAL,"email":"comercial@arquindex.com.br","telephone":"+55 31 97363-2725","areaServed":{"@type":"Country","name":"Brasil"},"knowsAbout":["gestão documental","digitalização de documentos","OCR","PDF/A","LGPD","DPO","Alfresco ECM","Databook","guarda documental"]};
 }
 function breadcrumbSchema(items,req){
- const o=origin(req);
+ const o=canonicalOrigin(req);
  return {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":items.map((x,i)=>({"@type":"ListItem","position":i+1,"name":x[0],"item":x[1].startsWith("http")?x[1]:o+x[1]}))};
 }
 function answerBox(title,text){return '<div class="answer"><strong>'+esc(title)+'</strong><p>'+esc(text)+'</p></div>';}
