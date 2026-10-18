@@ -74,6 +74,9 @@ with ftplib.FTP_TLS(timeout=50) as f:
    elif meta.get('type')=='file' and name.endswith('.html') and not re.match(r'(sitechecker|google[0-9a-f])',name):
     targets.append((path,url+('' if name=='index.html' else name)))
  for root,url in roots.items():walk(root,url)
+ selected=os.getenv('DESIGN_TARGET','')
+ if selected:targets=[(p,u) for p,u in targets if u==selected]
+ assert targets,'NO_TARGETS'
  assert len(targets)<=3000,('INVENTORY_TOO_LARGE',len(targets))
  print('INVENTORY',len(roots),'roots',len(targets),'pages',flush=True)
  backup='/seo-backups/identidade-'+STAMP;mkdir(f,backup)
