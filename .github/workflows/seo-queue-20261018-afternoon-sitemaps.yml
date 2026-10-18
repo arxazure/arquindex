@@ -1,0 +1,147 @@
+name: Normalizar sitemaps ARQ-007 a ARQ-009
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/seo-queue-20261018-afternoon-sitemaps.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      FTP_HOST: ftp.arquindex.com.br
+      FTP_USER: arquind2
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Validar URLs, fazer backup e publicar sitemaps absolutos
+        run: |
+          python - <<'PY'
+          import ftplib, hashlib, io, os, posixpath, re, time, urllib.parse, urllib.request
+          import xml.etree.ElementTree as ET
+          from datetime import datetime, timezone
+
+          stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          hosts=[
+            'consultoria-adequacao-lgpd-pequenas-empresas.arquindex.com.br',
+            'faz-consultoria-adequacao-lgpd.arquindex.com.br',
+            'servicos-consultoria-adequacao-lgpd-oferece-pequenas.arquindex.com.br'
+          ]
+          pwd=os.getenv('FTP_PASSWORD','')
+          if not pwd: raise RuntimeError('FTP_PASSWORD ausente')
+
+          def digest(data): return hashlib.sha256(data).hexdigest()
+          def read(ftp,path):
+            data=bytearray(); ftp.retrbinary('RETR '+path,data.extend); return bytes(data)
+          def ensure_dir(ftp,path):
+            current=ftp.pwd()
+            try:
+              ftp.cwd('/')
+              for part in path.strip('/').split('/'):
+                if not part: continue
+                try: ftp.mkd(part)
+                except ftplib.error_perm as exc:
+                  if not str(exc).startswith('550'): raise
+                ftp.cwd(part)
+            finally: ftp.cwd(current)
+          def atomic_put(ftp,path,data,suffix):
+            directory=posixpath.dirname(path); name=posixpath.basename(path)
+            tmp=posixpath.join(directory,'.'+name+'.tmp-'+suffix)
+            ftp.storbinary('STOR '+tmp,io.BytesIO(data))
+            if digest(read(ftp,tmp))!=digest(data): raise RuntimeError('HASH_TEMP '+path)
+            try: ftp.delete(path)
+            except ftplib.error_perm as exc:
+              if not str(exc).startswith('550'): raise
+            ftp.rename(tmp,path)
+            if digest(read(ftp,path))!=digest(data): raise RuntimeError('HASH_FINAL '+path)
+          def locate(ftp,initial,host):
+            candidates=['/public_html/subdominios/'+host,'/public_html/'+host,'public_html/subdominios/'+host,'public_html/'+host,'/subdominios/'+host,host]
+            for candidate in dict.fromkeys(candidates):
+              try:
+                ftp.cwd(initial); ftp.cwd(candidate)
+                if 'sitemap.xml' in {posixpath.basename(x.rstrip('/')) for x in ftp.nlst()}: return ftp.pwd()
+              except ftplib.all_errors: pass
+            raise RuntimeError('TARGET_ROOT_NOT_FOUND '+host)
+          def check_url(url):
+            last=None
+            for attempt in range(2):
+              try:
+                req=urllib.request.Request(url,headers={'User-Agent':'ArquindexSEO/1.0'})
+                with urllib.request.urlopen(req,timeout=30) as r:
+                  r.read(1024)
+                  if r.status!=200: raise RuntimeError('HTTP '+str(r.status))
+                return
+              except Exception as exc:
+                last=exc
+                if attempt==0: time.sleep(3)
+            raise RuntimeError('URL_NOT_200 '+url+' '+repr(last))
+
+          with ftplib.FTP_TLS(timeout=60) as ftp:
+            ftp.connect(os.environ['FTP_HOST'],21); ftp.login(os.environ['FTP_USER'],pwd)
+            ftp.prot_p(); ftp.set_pasv(True); initial=ftp.pwd()
+            records=[]
+            for host in hosts:
+              root=locate(ftp,initial,host); path=posixpath.join(root,'sitemap.xml')
+              original=read(ftp,path); text=original.decode('utf-8')
+              ET.fromstring(text)
+              def repl(m):
+                loc=m.group(1).strip()
+                if loc=='/index.html': absolute='https://'+host+'/'
+                elif loc.startswith('/'): absolute='https://'+host+loc
+                else: absolute=loc
+                return '<loc>'+absolute+'</loc>'
+              updated=re.sub(r'<loc>\s*([^<]+?)\s*</loc>',repl,text,flags=re.I)
+              root_xml=ET.fromstring(updated)
+              locs=[(e.text or '').strip() for e in root_xml.findall('.//{*}loc')]
+              if not locs: raise RuntimeError('EMPTY_SITEMAP '+host)
+              if len(locs)!=len(set(locs)): raise RuntimeError('DUPLICATE_LOC '+host)
+              for loc in locs:
+                p=urllib.parse.urlparse(loc)
+                if p.scheme!='https' or p.netloc!=host: raise RuntimeError('BAD_LOC '+loc)
+                check_url(loc)
+              data=updated.encode('utf-8')
+              if data==original: raise RuntimeError('NO_CHANGE '+host)
+              records.append((host,path,original,data,locs))
+              print('SITEMAP_TARGET_CONFIRMED',host,path,len(locs),digest(original),flush=True)
+
+            backup_base='/seo-backups/queue-20261018-afternoon-sitemaps-'+stamp
+            ensure_dir(ftp,backup_base)
+            for host,path,original,data,locs in records:
+              d=backup_base+'/'+host; ensure_dir(ftp,d); backup=d+'/sitemap.xml'
+              ftp.storbinary('STOR '+backup,io.BytesIO(original))
+              if digest(read(ftp,backup))!=digest(original): raise RuntimeError('BACKUP_HASH '+host)
+              print('SITEMAP_BACKUP_VERIFIED',backup,digest(original),flush=True)
+
+            written=[]
+            try:
+              for host,path,original,data,locs in records:
+                if read(ftp,path)!=original: raise RuntimeError('CONCURRENT_CHANGE '+host)
+              for host,path,original,data,locs in records:
+                atomic_put(ftp,path,data,stamp); written.append((path,original))
+                final=read(ftp,path); ET.fromstring(final)
+                if final!=data: raise RuntimeError('FTP_MISMATCH '+host)
+                print('SITEMAP_FTP_VERIFIED',host,digest(final),len(locs),flush=True)
+              for host,path,original,data,locs in records:
+                public='https://'+host+'/sitemap.xml?verify='+stamp
+                req=urllib.request.Request(public,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
+                with urllib.request.urlopen(req,timeout=35) as r:
+                  body=r.read(1000000)
+                  if r.status!=200: raise RuntimeError('SITEMAP_HTTP '+str(r.status))
+                parsed=ET.fromstring(body)
+                public_locs=[(e.text or '').strip() for e in parsed.findall('.//{*}loc')]
+                if public_locs!=locs: raise RuntimeError('PUBLIC_LOC_MISMATCH '+host)
+                print('SITEMAP_PUBLIC_VERIFIED',host,'HTTP 200',digest(body),len(public_locs),flush=True)
+            except Exception:
+              for path,original in written: atomic_put(ftp,path,original,'rollback-'+stamp)
+              print('SITEMAP_ROLLBACK_COMPLETED',','.join(path for path,_ in written),flush=True)
+              raise
+          PY
