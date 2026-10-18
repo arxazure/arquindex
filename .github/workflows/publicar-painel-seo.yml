@@ -53,7 +53,7 @@ jobs:
           required={'overview','ranking','competitors','cannibal','opportunities','actions','publications','sources','actionform','csv'}
           assert required <= p.ids, 'Missing UI modules: '+str(required-p.ids)
           assert p.buttons>=10,'Insufficient actionable controls'
-          Path('/tmp/arquindex-panel.js').write_text('\\n'.join(p.scripts))
+          Path('/tmp/arquindex-panel.js').write_text(chr(10).join(p.scripts))
           print('STRUCTURE_OK',len(p.ids),'ids',p.buttons,'buttons')
           PY
           node --check /tmp/arquindex-panel.js
