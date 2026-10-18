@@ -54,11 +54,14 @@ jobs:
            await browser.close();
            fs.writeFileSync(process.env.RUNNER_TEMP+'/arq-mobile/report.json',JSON.stringify(results,null,2));
            console.log('MOBILE_AUDIT_RESULT',JSON.stringify(results));
+           const failed=results.filter(x=>x.error||x.status!==200||x.scrollWidth>x.clientWidth+1||x.canonical?.length!==1||(x.id==='ARQ-010'||x.id==='ARQ-011')&&!x.expectedArticleInEmbed);
+           if(failed.length){console.error('MOBILE_ACCEPTANCE_FAILED',failed.map(x=>x.id));process.exitCode=1;}
           })().catch(e=>{console.error(e);process.exitCode=1});
           
           JS
       - name: Guardar evidencias de diagnostico
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: arquindex-mobile-audit-20261018
           path: |
