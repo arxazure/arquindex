@@ -1,0 +1,105 @@
+name: Publicar pagina nacional Arquindex via FTPS
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-nacional/solucoes-documentais-brasil.html'
+      - 'assets/js/arquindex-conversions-v1.js'
+      - '.github/workflows/publicar-solucoes-nacionais.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-nacional-ftps
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: FTPS deploy with verified backups and public readback
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import ftplib, io, os, time, urllib.request
+          assert os.environ.get('FTP_PASSWORD'), 'Missing FTP_PASSWORD secret'
+          mapping = [
+            ('seo-nacional/solucoes-documentais-brasil.html','solucoes-documentais-brasil.html'),
+            ('assets/js/arquindex-conversions-v1.js','assets/js/arquindex-conversions-v1.js')
+          ]
+          ftp=ftplib.FTP_TLS(timeout=35)
+          ftp.connect(os.environ['FTP_HOST'],21)
+          ftp.login(os.environ['FTP_USERNAME'],os.environ['FTP_PASSWORD'])
+          ftp.prot_p()
+          ftp.cwd('public_html')
+          root=ftp.pwd()
+          stamp=time.strftime('%Y%m%dT%H%M%SZ',time.gmtime())
+          changed=[]
+          def read(name):
+            b=bytearray()
+            try: ftp.retrbinary('RETR '+name,b.extend)
+            except ftplib.error_perm as e:
+              if not str(e).startswith('550'): raise
+              return None
+            return bytes(b)
+          def put(name,data):
+            ftp.storbinary('STOR '+name,io.BytesIO(data))
+            assert read(name)==data,'Remote byte verification failed: '+name
+          try:
+            try: ftp.mkd('assets')
+            except ftplib.error_perm: pass
+            try: ftp.mkd('assets/js')
+            except ftplib.error_perm: pass
+            for src,dst in mapping:
+              data=open(src,'rb').read()
+              assert len(data)>500 and (b'<html' in data if dst.endswith('.html') else b'arquindex:lead-confirmed' in data)
+              old=read(dst)
+              if old==data:
+                print('UNCHANGED',dst)
+                continue
+              if old is not None:
+                # Backups outside public_html; do not expose old content publicly.
+                ftp.cwd(root)
+                ftp.cwd('..')
+                try: ftp.mkd('seo-backups')
+                except ftplib.error_perm: pass
+                ftp.cwd('seo-backups')
+                backup=dst.replace('/','_')+'.'+stamp+'.bak'
+                put(backup,old)
+                ftp.cwd(root)
+              changed.append((dst,old))
+              put(dst,data)
+              print('UPLOADED',dst,len(data))
+            ftp.quit()
+            for _,dst in mapping:
+              url='https://www.arquindex.com.br/'+dst
+              for attempt in range(4):
+                try:
+                  req=urllib.request.Request(url,headers={'Cache-Control':'no-cache','User-Agent':'ArquindexDeployCheck/1'})
+                  with urllib.request.urlopen(req,timeout=25) as response:
+                    body=response.read(300000)
+                    assert response.status==200
+                    assert ('Soluções documentais' in body.decode('utf-8','replace') if dst.endswith('.html') else b'contact_whatsapp_click' in body)
+                    print('PUBLIC_OK',url)
+                    break
+                except Exception:
+                  if attempt==3: raise
+                  time.sleep(8)
+          except Exception:
+            try:
+              ftp=ftplib.FTP_TLS(timeout=35)
+              ftp.connect(os.environ['FTP_HOST'],21)
+              ftp.login(os.environ['FTP_USERNAME'],os.environ['FTP_PASSWORD'])
+              ftp.prot_p()
+              ftp.cwd('public_html')
+              for dst,old in reversed(changed):
+                if old is None: ftp.delete(dst)
+                else: put(dst,old)
+              ftp.quit()
+              print('ROLLBACK_COMPLETE')
+            finally: raise
+          PY
