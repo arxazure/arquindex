@@ -1,0 +1,27 @@
+name: Arquindex SEO audit daily
+on:
+  schedule:
+    - cron: '15 10 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit published sitemap and pages
+        run: python3 painel-seo/audit_public_pages.py
+      - name: Commit evidence
+        run: |
+          git config user.name "arquindex-seo-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add painel-seo/auditoria-publica.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(seo): daily public site audit"
+            git push
+          fi
