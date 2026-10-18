@@ -73,6 +73,8 @@ with ftplib.FTP_TLS(timeout=50) as f:
    if meta.get('type')=='dir' and depth<2:walk(path,url+name+'/',depth+1)
    elif meta.get('type')=='file' and name.endswith('.html') and not re.match(r'(sitechecker|google[0-9a-f])',name):
     targets.append((path,url+('' if name=='index.html' else name)))
+ selected=os.getenv('DESIGN_TARGET','')
+ if selected:roots={p:u for p,u in roots.items() if selected.startswith(u)}
  for root,url in roots.items():walk(root,url)
  selected=os.getenv('DESIGN_TARGET','')
  if selected:targets=[(p,u) for p,u in targets if u==selected]
