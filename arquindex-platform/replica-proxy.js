@@ -32,6 +32,14 @@ export async function serveReplica(req, res) {
     res.end("Method not allowed");
     return true;
   }
+  // Recover legacy malformed links without changing existing canonical URLs.
+  // For example: /gestao-documental/gestao-documental/blog -> /gestao-documental/blog.
+  if (local.pathname === BASE_PATH + BASE_PATH || local.pathname.startsWith(BASE_PATH + BASE_PATH + "/")) {
+    const normalized = BASE_PATH + local.pathname.slice((BASE_PATH + BASE_PATH).length);
+    res.writeHead(301, { "location": normalized + local.search, "cache-control": "public, max-age=3600" });
+    res.end();
+    return true;
+  }
   const upstreamPath = local.pathname.slice(BASE_PATH.length) || "/";
   const upstream = new URL(SOURCE + upstreamPath);
   upstream.search = local.search;
