@@ -1,0 +1,23 @@
+name: Corrigir Arqui na pagina principal Homehost
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/corrigir-arqui-homehost.yml'
+      - 'scripts/publicar-arqui-homehost.py'
+      - 'conteudo/publicacao/_atendimento-flutuante.html'
+permissions:
+  contents: read
+concurrency:
+  group: homehost-arqui
+  cancel-in-progress: false
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar robo na home e remover duplicacoes
+        run: python scripts/publicar-arqui-homehost.py
