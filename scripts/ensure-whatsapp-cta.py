@@ -20,7 +20,7 @@ def run(root,check):
         if file.suffix.lower()!=".html":continue
         try:
             raw=file.read_text(encoding="utf-8")
-            if MARK in raw:skipped+=1;continue
+            if MARK in raw or "id=\"arq-floating\"" in raw or "id=\"arq-floating-style\"" in raw:skipped+=1;continue
             if not re.search(r"</body\s*>",raw,re.I):errors+=1;print("SEM_BODY",file);continue
             updated=re.sub(r"</head\s*>",lambda m:CSS+"\n"+m.group(),raw,count=1,flags=re.I)
             updated=re.sub(r"</body\s*>",lambda m:LINK+"\n"+m.group(),updated,count=1,flags=re.I)
