@@ -1,9 +1,12 @@
 name: Verificar design ARQ-007
-# Diagnosticar elementos que excedem a largura mobile
+# Validar grade corrigida, menu e identidade visual
 on:
   push:
     branches: [master]
     paths: ['.github/workflows/verificar-design-arq007.yml']
+  workflow_run:
+    workflows: ['Identidade visual ARQ-007']
+    types: [completed]
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,7 +29,7 @@ jobs:
             browser=p.chromium.launch()
             for label,width,height in [('mobile',390,844),('desktop',1440,1000)]:
               page=browser.new_page(viewport={'width':width,'height':height})
-              page.goto(url,wait_until='domcontentloaded')
+              page.goto(url+'?visual=20261018-final',wait_until='domcontentloaded')
               page.wait_for_selector('body[data-aq-brand]',timeout=180000)
               page.locator('.aq-logo').first.wait_for()
               page.screenshot(path='visual/'+label+'.png',full_page=False)
