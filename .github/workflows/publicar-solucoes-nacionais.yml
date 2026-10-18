@@ -1,4 +1,5 @@
 name: Publicar pagina nacional Arquindex via FTPS
+# Publicacao solicitada em 2026-10-18; push na master aciona este workflow.
 on:
   push:
     branches: [master]
