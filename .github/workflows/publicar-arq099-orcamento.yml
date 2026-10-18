@@ -1,0 +1,101 @@
+name: Publicar guia de orçamento ARQ-099
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/publicar-arq099-orcamento.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Publicar com backup e verificar pagina e sitemap
+        run: |
+          python - <<'PY'
+          import ftplib,io,os,re,html,json,hashlib,urllib.request,xml.etree.ElementTree as ET
+          from datetime import datetime,timezone
+          URL='https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/custo-beneficio.html'
+          HOST='empresas-digitalizacao-documentos-regiao.arquindex.com.br'
+          PAGE="<!doctype html><html lang=\"pt-BR\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Digitalização de Documentos: Custo-benefício | Arquindex</title>\n<meta name=\"description\" content=\"Entenda como preparação, volume, formatos, OCR, indexação e conferência compõem o orçamento de digitalização. Compare propostas pelo escopo e solicite avaliação.\">\n<meta name=\"robots\" content=\"index,follow,max-image-preview:large\"><link rel=\"canonical\" href=\"https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/custo-beneficio.html\">\n<meta property=\"og:title\" content=\"Quanto custa digitalizar documentos?\"><meta property=\"og:description\" content=\"Um guia para comparar escopo, preço por imagem e entregáveis antes de contratar.\"><meta property=\"og:url\" content=\"https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/custo-beneficio.html\"><meta property=\"og:type\" content=\"website\">\n<style>body{margin:0;font:18px/1.7 system-ui,sans-serif;color:#163149;background:#f5f8fb}header,footer{background:#09243d;color:#fff;padding:24px}header a,footer a{color:#b7e6ff}main{max-width:960px;margin:auto;padding:32px 24px}h1{font-size:clamp(30px,5vw,46px);line-height:1.2}h2{line-height:1.3;margin-top:42px}a{color:#005b89}nav{display:flex;gap:20px;flex-wrap:wrap}table{width:100%;border-collapse:collapse;font-size:16px}td,th{padding:12px;border:1px solid #bbcbd6;text-align:left;vertical-align:top}th{background:#e2edf4}.box{padding:24px;background:#e3f2fb;border-left:5px solid #007caa}.cta{display:inline-block;background:#006892;color:white;padding:12px 20px;border-radius:6px}.small{font-size:15px}section{scroll-margin-top:20px}.table{overflow-x:auto}</style>\n<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"WebPage\",\"name\":\"Quanto custa digitalizar documentos?\",\"url\":\"https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/custo-beneficio.html\",\"description\":\"Guia de orçamento e comparação de escopo de digitalização de documentos.\",\"dateModified\":\"2026-10-18\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"Arquindex\",\"url\":\"https://www.arquindex.com.br/\"}}</script></head>\n<body><header><nav><strong>Arquindex</strong><a href=\"https://www.arquindex.com.br/digitalizacao.html\">Digitalização</a><a href=\"https://www.arquindex.com.br/gestao-documental.html\">Gestão documental</a><a href=\"https://www.arquindex.com.br/noticias.html\">Artigos e notícias</a></nav></header>\n<main id=\"arq099-orcamento-20261018\"><p class=\"small\">Guia de contratação · Conteúdo editorial Arquindex · Atualizado em 18/10/2026</p>\n<h1>Quanto custa digitalizar documentos?</h1>\n<p class=\"box\">O orçamento depende do volume, do estado físico e dos formatos do acervo, da preparação, do OCR, dos campos de indexação, da conferência e da entrega. Para comparar fornecedores, peça a mesma unidade de cobrança, os mesmos serviços e critérios de aceite. Uma amostra representativa ajuda a estimar o trabalho.</p>\n<p>Digitalize seus documentos com um escopo definido: antes de comparar preço por página, determine como o arquivo será localizado e utilizado depois da captura. A Arquindex atende projetos empresariais em Belo Horizonte; coleta, local de execução e condições logísticas são definidos na proposta.</p>\n<p><a class=\"cta\" href=\"https://wa.me/5531973632725?text=Gostaria%20de%20um%20or%C3%A7amento%20de%20digitaliza%C3%A7%C3%A3o\">Solicitar avaliação do acervo</a></p>\n<h2>1. Preço por página: qual é a unidade de cobrança?</h2>\n<p>Folha, página, face e imagem não são necessariamente a mesma unidade comercial. Uma folha com informação dos dois lados pode gerar duas imagens. A proposta deve explicar se o valor é por imagem capturada, folha física, documento ou lote, como são tratadas páginas em branco e se há quantidade mínima.</p>\n<p>Também confira quais etapas estão incluídas. Capturar folhas já preparadas exige um trabalho diferente de organizar pastas, retirar grampos, separar anexos, digitalizar, nomear arquivos e conferir campos. O menor valor unitário não permite concluir qual proposta tem o menor custo total.</p>\n<h2>2. Como levantar o volume sem adivinhar o conteúdo das caixas</h2>\n<p>Informe quantidades de caixas, pastas e documentos, mas evite converter todas as caixas pelo mesmo número fixo de folhas. Escolha amostras de áreas e períodos diferentes. Registre frente e verso, formatos mistos, folhas grampeadas e documentos encadernados. Separe volume confirmado de estimativa e combine como será medida a quantidade executada.</p>\n<p>Uma amostra deve representar as exceções: contratos com aditivos, dossiês de RH, documentos fiscais e conjuntos com anexos podem exigir divisão e nomenclatura distintas. Preserve os vínculos e a sequência que explicam cada documento.</p>\n<h2>3. Preparação e conservação influenciam o esforço</h2>\n<p>Grampos, clipes, dobras, envelopes, folhas coladas e anexos pequenos alteram o preparo. Documentos frágeis precisam de avaliação antes de passar por alimentação automática. Higienização operacional não equivale a restauração: intervenção especializada deve ter escopo próprio e capacidade confirmada.</p>\n<p>Defina se o fornecedor devolve a documentação na ordem original, como identifica ocorrências e quem autoriza desmontagem de pastas ou encadernações. Esses pontos afetam prazo, mão de obra e rastreabilidade.</p>\n<h2>4. Formatos diferentes pedem avaliação específica</h2>\n<div class=\"table\"><table><thead><tr><th>Material a informar</th><th>O que esclarecer no orçamento</th></tr></thead><tbody>\n<tr><td>Folhas soltas A4/A3</td><td>Frente e verso, cor, grampos, sequência e documentos por arquivo.</td></tr>\n<tr><td>Livros e encadernados</td><td>Forma de abertura, preservação da lombada e autorização para eventual desmontagem.</td></tr>\n<tr><td>Plantas e grandes formatos</td><td>Dimensões reais, legibilidade de detalhes e capacidade do equipamento.</td></tr>\n<tr><td>Fotos, slides e negativos</td><td>Suporte, finalidade, resolução e disponibilidade de serviço especializado a confirmar.</td></tr>\n<tr><td>Documentos históricos ou frágeis</td><td>Conservação, manuseio e necessidade de avaliação especializada.</td></tr></tbody></table></div>\n<p>A tabela serve para dimensionar a necessidade. A inclusão de um material nela não confirma oferta de captura especializada pela Arquindex; disponibilidade, equipamento e método precisam ser confirmados antes da contratação.</p>\n<h2>5. OCR, extração de campos e indexação são entregas distintas</h2>\n<p>OCR adiciona texto para pesquisa. Ele não garante leitura perfeita de manuscritos, carimbos, números ou tabelas. Extração de campos, como matrícula, data, valor e número de contrato, exige regras de validação. A indexação pode usar dados informados pelo cliente, leitura humana ou processamento automatizado com conferência.</p>\n<p>Especifique quais campos serão preenchidos e quais erros são aceitáveis. Para dados críticos, combine tratamento de exceções e validação. Veja o serviço de <a href=\"https://www.arquindex.com.br/digitalizacao-com-ocr.html\">digitalização com OCR</a>.</p>\n<h2>6. PDF pesquisável, PDF/A e TIFF: escolha conforme o uso</h2>\n<p>PDF pesquisável combina imagem e texto reconhecido. PDF/A é um perfil para reprodução e preservação; não equivale a assinatura digital. TIFF pode ser necessário em determinados fluxos de imagem. Defina formato, compressão, tamanho máximo, organização das pastas e compatibilidade com o sistema de destino.</p>\n<p>Quando houver GED, informe previamente metadados, nomenclatura, permissões e estrutura de importação. Uma entrega por pastas tem escopo diferente de uma carga validada em sistema. Consulte <a href=\"https://www.arquindex.com.br/gestao-documental.html\">gestão documental e organização do acervo</a>.</p>\n<h2>7. Conferência e aceite devem constar da proposta</h2>\n<p>Defina como verificar completude, legibilidade, ordem, orientação, arquivos corrompidos e preenchimento de metadados. A conferência por amostragem e a conferência integral têm esforços diferentes. Determine quais classes documentais precisam de controle adicional, quem aprova o piloto e como o fornecedor corrige falhas.</p>\n<p>Peça relatório de execução, relação dos lotes entregues e registro das exceções. Combine o prazo para conferência do cliente e os critérios para aceite; não use uma promessa genérica de qualidade como substituto desses critérios.</p>\n<h2>8. Coleta, local de execução e proteção dos documentos</h2>\n<p>O orçamento deve indicar coleta e devolução, responsáveis pela custódia, acondicionamento, protocolos e local de execução. Se houver dados pessoais, alinhe acesso, confidencialidade e responsabilidades de tratamento ao contexto do projeto. Atendimento em outra cidade, despesas de transporte e execução no cliente dependem de confirmação comercial.</p>\n<h2>9. Checklist para solicitar propostas comparáveis</h2>\n<ul><li>Volume estimado, amostra e unidade de medição.</li><li>Tipos documentais, dimensões, frente e verso e estado físico.</li><li>Preparação, remontagem e manutenção da ordem.</li><li>OCR, campos de indexação e validação de dados críticos.</li><li>Formato, nomes de arquivos, pastas e eventual integração.</li><li>Critérios de conferência, correção e aceite.</li><li>Coleta, custódia, local de execução e prazo.</li><li>Exclusões, quantidade mínima, custos adicionais e condições de pagamento.</li></ul>\n<p>Um projeto-piloto permite conferir a entrega antes de contratar a escala. Seu tamanho e eventual custo devem ser combinados na proposta; não há garantia de piloto gratuito.</p>\n<h2>10. Digitalização e descarte exigem decisões diferentes</h2>\n<p>O Decreto nº 10.278, de 18 de março de 2020, trata de técnica e requisitos para digitalização em seu âmbito de aplicação, com exceções e requisitos específicos. Não basta gerar um PDF para afirmar equivalência jurídica. A Resolução CONARQ nº 48, de 10 de novembro de 2021, estabelece diretrizes para procedimentos técnicos, observado o Decreto.</p>\n<p>Não presuma autorização para eliminar originais após a captura. Natureza do documento, temporalidade, finalidade e regras aplicáveis precisam ser avaliadas antes da destinação. Assinatura, metadados e controles devem ser dimensionados conforme o caso, sem promessa universal de validade jurídica.</p>\n<h2>Fontes e continuidade</h2>\n<ul><li><a href=\"https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm\">Decreto nº 10.278/2020 — texto oficial</a>, de 18/03/2020.</li><li><a href=\"https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-48-de-10-de-novembro-de-2021\">Resolução CONARQ nº 48/2021</a>, de 10/11/2021.</li></ul>\n<p>Este é um guia de contratação, baseado em referências técnicas existentes; não constitui notícia de alteração normativa. Para entender o processo completo, consulte <a href=\"https://www.arquindex.com.br/digitalizacao.html\">digitalização de documentos para empresas</a> e o <a href=\"https://www.arquindex.com.br/noticias.html\">índice de artigos da Arquindex</a>.</p>\n<p><a class=\"cta\" href=\"https://wa.me/5531973632725?text=Gostaria%20de%20avaliar%20o%20escopo%20da%20digitaliza%C3%A7%C3%A3o\">Conversar sobre meu projeto</a></p>\n</main><footer>Arquindex · Belo Horizonte · <a href=\"mailto:comercial@arquindex.com.br\">comercial@arquindex.com.br</a> · <a href=\"https://wa.me/5531973632725\">31 97363-2725</a></footer></body></html>"
+          stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          def read(f,p):
+           b=bytearray();f.retrbinary('RETR '+p,b.extend);return bytes(b)
+          def put(f,p,b):
+           f.storbinary('STOR '+p,io.BytesIO(b));assert read(f,p)==b,'READBACK_FAILED'
+          def public(u):
+           req=urllib.request.Request(u,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
+           with urllib.request.urlopen(req,timeout=40) as r:
+            assert r.status==200
+            return r.read()
+          def canonical(b):
+           s=b.decode('utf8')
+           tags=re.findall(r'<link\b[^>]*>',s,re.I)
+           for tag in tags:
+            a={k.lower():html.unescape(v) for k,q,v in re.findall(r'([\w:-]+)\s*=\s*(["\x27])(.*?)\2',tag,re.S)}
+            if a.get('rel','').lower()=='canonical':return a.get('href')
+          live=public(URL)
+          assert canonical(live)==URL,'LIVE_CANONICAL_CHANGED'
+          with ftplib.FTP_TLS(timeout=60) as f:
+           f.connect('ftp.arquindex.com.br',21);f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+           matches=[]
+           for root in ['/public_html/'+HOST,'/public_html/subdominios/'+HOST,'/home/arquind2/public_html/'+HOST,'/'+HOST]:
+            try:
+             b=read(f,root+'/custo-beneficio.html')
+             if canonical(b)==URL and len(b)==len(live): matches.append((root,b))
+            except ftplib.error_perm:pass
+           assert len(matches)==1,('ROOT_NOT_UNIQUE',len(matches))
+           root,original=matches[0];path=root+'/custo-beneficio.html'
+           try:f.mkd('/seo-backups')
+           except ftplib.error_perm:pass
+           put(f,'/seo-backups/.htaccess',b'Options -Indexes\nRequire all denied\n')
+           backup='/seo-backups/arq099-'+stamp+'.html'
+           put(f,backup,original)
+           print('BACKUP_VERIFIED',backup,hashlib.sha256(original).hexdigest(),flush=True)
+           oldtitle=html.unescape(re.search(r'<title[^>]*>(.*?)</title>',original.decode('utf8'),re.I|re.S).group(1))
+           print('TITLE_BEFORE',oldtitle,flush=True)
+           target=PAGE.encode('utf8')
+           assert read(f,path)==original,'CONCURRENT_CHANGE'
+           smpath=root+'/sitemap.xml'
+           try:smold=read(f,smpath)
+           except ftplib.error_perm:smold=None
+           ns='http://www.sitemaps.org/schemas/sitemap/0.9';ET.register_namespace('',ns)
+           if smold:
+            tree=ET.fromstring(smold);assert tree.tag=='{'+ns+'}urlset','NOT_URLSET'
+            put(f,'/seo-backups/arq099-sitemap-'+stamp+'.xml',smold)
+           else:tree=ET.Element('{'+ns+'}urlset')
+           entries=[e for e in tree.findall('{'+ns+'}url') if e.findtext('{'+ns+'}loc')==URL]
+           if not entries:
+            e=ET.SubElement(tree,'{'+ns+'}url');ET.SubElement(e,'{'+ns+'}loc').text=URL;entries=[e]
+           for e in entries:
+            lm=e.find('{'+ns+'}lastmod')
+            if lm is None:lm=ET.SubElement(e,'{'+ns+'}lastmod')
+            lm.text='2026-10-18'
+           smnew=ET.tostring(tree,encoding='utf-8',xml_declaration=True)
+           try:
+            put(f,path,target)
+            actual=public(URL+'?verify='+stamp)
+            assert canonical(actual)==URL
+            assert b'arq099-orcamento-20261018' in actual
+            assert len(re.findall(b'<h1\\b',actual,re.I))==1
+            assert b'noindex' not in actual.lower()
+            assert 'melhor empresa do mercado' not in actual.decode('utf8')
+            print('PAGE_PUBLIC_VERIFIED',URL,'HTTP 200',hashlib.sha256(target).hexdigest(),flush=True)
+            put(f,smpath,smnew)
+            smpublic=public('https://'+HOST+'/sitemap.xml?verify='+stamp)
+            ET.fromstring(smpublic);assert URL.encode() in smpublic
+            print('SITEMAP_PUBLIC_VERIFIED','https://'+HOST+'/sitemap.xml',flush=True)
+           except Exception:
+            put(f,path,original)
+            if smold is not None:put(f,smpath,smold)
+            print('ROLLBACK_COMPLETED',flush=True);raise
+           print('TITLE_AFTER','Digitalização de Documentos: Custo-benefício | Arquindex',flush=True)
+           print('H1_AFTER','Quanto custa digitalizar documentos?',flush=True)
+          
+          PY
