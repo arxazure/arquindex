@@ -16,6 +16,7 @@ function rewriteText(input) {
   return output
     .replace(/((?:href|src|action)=["'])\/(?!\/)/gi, "$1" + BASE_PATH + "/")
     .replaceAll('codex-preview" content="development', 'codex-preview" content="production')
+    .replace(/(?:\/gestao-documental){2,}(?=\/|[\"'?#]|$)/g, BASE_PATH)
     .replaceAll(marker, CANONICAL_BASE + "/");
 }
 
