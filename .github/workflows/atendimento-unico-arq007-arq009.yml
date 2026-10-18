@@ -1,0 +1,33 @@
+name: Atendimento único ARQ-007 a ARQ-009
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/atendimento-unico-arq007-arq009.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      ATENDIMENTO_TARGETS: https://consultoria-adequacao-lgpd-pequenas-empresas.arquindex.com.br/,https://faz-consultoria-adequacao-lgpd.arquindex.com.br/como-escolher.html,https://servicos-consultoria-adequacao-lgpd-oferece-pequenas.arquindex.com.br/diagnostico-completo.html
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - name: Remover widgets antigos e publicar exatamente um atendimento
+        run: python scripts/aplicar-atendimento-unico.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: atendimento-unico-arq007-arq009
+          path: design-report/
