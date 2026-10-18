@@ -1,0 +1,108 @@
+name: Corrigir canonicas ARQ-010 ARQ-099 e metadados DPO
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/seo-audit-fixes-20261018.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Corrigir com backup e validacao publica
+        run: |
+          python - <<'PY'
+          import ftplib,io,os,posixpath,re,html,json,hashlib,time,urllib.request
+          from datetime import datetime,timezone
+          stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          specs=[
+           dict(id='ARQ-010',host='governanca.arquindex.com.br',file='bh.html',title='Governança de Dados e Documentos em BH | Arquindex'),
+           dict(id='ARQ-099',host='empresas-digitalizacao-documentos-regiao.arquindex.com.br',file='custo-beneficio.html',title='Digitalização de Documentos: Custo-benefício | Arquindex'),
+           dict(id='ARQ-011',host='7-motivos-contar-dpo-terceirizado.arquindex.com.br',file='index.html')
+          ]
+          def read(f,p):
+           b=bytearray();f.retrbinary('RETR '+p,b.extend);return bytes(b)
+          def put(f,p,b):f.storbinary('STOR '+p,io.BytesIO(b));assert read(f,p)==b,'FTP_READBACK_FAILED'
+          def attrs(tag):
+           return {k.lower():html.unescape(v) for k,q,v in re.findall(r'([\w:-]+)\s*=\s*(["\x27])(.*?)\2',tag,re.S)}
+          def canon(s):
+           return [attrs(t).get('href') for t in re.findall(r'<link\b[^>]*>',s,re.I) if attrs(t).get('rel','').lower()=='canonical']
+          def title(s):
+           x=re.findall(r'<title\b[^>]*>(.*?)</title>',s,re.I|re.S);assert len(x)==1;return html.unescape(x[0])
+          def public(u):
+           req=urllib.request.Request(u,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
+           with urllib.request.urlopen(req,timeout=30) as r:
+            assert r.status==200;return r.read().decode('utf8')
+          def replace1(pattern,replacement,s):
+           assert len(re.findall(pattern,s,re.I|re.S))==1,'AMBIGUOUS_TAG'
+           return re.sub(pattern,lambda m:replacement,s,count=1,flags=re.I|re.S)
+          with ftplib.FTP_TLS(timeout=45) as f:
+           f.connect('ftp.arquindex.com.br',21);f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+           records=[]
+           for sp in specs:
+            sp['url']='https://'+sp['host']+'/'+('' if sp['file']=='index.html' else sp['file'])
+            live=public(sp['url']);matches=[]
+            for root in ['/public_html/'+sp['host'],'/public_html/subdominios/'+sp['host']]:
+             try:
+              p=root+'/'+sp['file'];b=read(f,p);s=b.decode('utf8')
+              if title(s)==title(live) and canon(s)==canon(live):matches.append((p,b,s))
+             except ftplib.error_perm:pass
+            assert len(matches)==1,('ROOT_NOT_UNIQUE',sp['id'],len(matches))
+            p,b,s=matches[0];new=s
+            if 'title' in sp:
+             new=replace1(r'<title\b[^>]*>.*?</title>','<title>'+html.escape(sp['title'])+'</title>',new)
+            new=replace1(r'<link\b(?=[^>]*\brel=["\x27]canonical["\x27])[^>]*>','<link rel="canonical" href="'+sp['url']+'">',new)
+            new=re.sub(r'<meta\b(?=[^>]*\bproperty=["\x27]og:url["\x27])[^>]*>',lambda m:'<meta property="og:url" content="'+sp['url']+'">',new,flags=re.I)
+            if sp['id'] in ('ARQ-010','ARQ-099'):
+             new=new.replace('5531999999999','5531973632725')
+             new=re.sub(r'<a\b[^>]*href=["\x27][^"\x27]*(?:googleb9fa38c37f423597|sitechecker5e8991ab0e9e7199188accf65b36dd02)\.html["\x27][^>]*>.*?</a>','',new,flags=re.I|re.S)
+            else:
+             new=new.replace('R$ 750','R$ 1.250').replace('R$ 1.500','R$ 1.250')
+            assert canon(new)==[sp['url']]
+            assert len(re.findall(r'<h1\b',s,re.I))==len(re.findall(r'<h1\b',new,re.I))
+            assert new!=s,('NO_CHANGE',sp['id'])
+            records.append((sp,p,b,new.encode()))
+            print('PREPARED',json.dumps({'id':sp['id'],'url':sp['url'],'old_title':title(s),'new_title':title(new),'old_canonical':canon(s),'new_canonical':canon(new)},ensure_ascii=False),flush=True)
+           f.cwd('/')
+           for d in ['seo-backups','seo-backups/audit-fixes-'+stamp]:
+            try:f.mkd(d)
+            except ftplib.error_perm:
+             f.cwd('/'+d);f.cwd('/')
+           for sp,p,b,new in records:put(f,'/seo-backups/audit-fixes-'+stamp+'/'+sp['host']+'--'+sp['file'],b)
+           print('BACKUPS_VERIFIED',stamp,flush=True)
+           written=[]
+           try:
+            for sp,p,b,new in records:
+             assert read(f,p)==b,('CONCURRENT_CHANGE',sp['id'])
+             written.append((p,b))
+             put(f,p,new)
+            for sp,p,b,new in records:
+             last=None
+             for attempt in range(3):
+              try:
+               s=public(sp['url'])
+               assert canon(s)==[sp['url']],'PUBLIC_CANONICAL'
+               assert title(s)==title(new.decode()),'PUBLIC_TITLE'
+               assert 'noindex' not in s.lower(),'PUBLIC_NOINDEX'
+               if sp['id']=='ARQ-011':
+                assert 'R$ 750' not in s and 'R$ 1.500' not in s
+                assert attrs(re.search(r'<meta\b(?=[^>]*\bproperty=["\x27]og:url["\x27])[^>]*>',s,re.I)[0]).get('content')==sp['url']
+               print('PUBLIC_VERIFIED',sp['id'],sp['url'],hashlib.sha256(new).hexdigest(),flush=True)
+               last=None;break
+              except Exception as e:
+               last=e
+               if attempt<2:time.sleep(3)
+             if last:raise last
+           except Exception:
+            for p,b in written:put(f,p,b)
+            print('ROLLBACK_VERIFIED',flush=True);raise
+           print('COMPLETE',len(records),flush=True)
+          
+          PY
