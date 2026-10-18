@@ -1,0 +1,75 @@
+name: Verificar identidade e atendimento ARQ-007 a ARQ-009
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/verificar-identidade-atendimento-arq007-arq009.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - run: pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Validar mobile, desktop e atendimento único
+        run: |
+          mkdir -p visual-atendimento
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          urls=[
+            ('ARQ-007','https://consultoria-adequacao-lgpd-pequenas-empresas.arquindex.com.br/'),
+            ('ARQ-008','https://faz-consultoria-adequacao-lgpd.arquindex.com.br/como-escolher.html'),
+            ('ARQ-009','https://servicos-consultoria-adequacao-lgpd-oferece-pequenas.arquindex.com.br/diagnostico-completo.html')
+          ]
+          results=[]
+          with sync_playwright() as p:
+            browser=p.chromium.launch()
+            for key,url in urls:
+              for label,width,height in [('mobile',390,844),('desktop',1440,1000)]:
+                page=browser.new_page(viewport={'width':width,'height':height})
+                response=page.goto(url+'?visual=20261018-atendimento',wait_until='domcontentloaded',timeout=180000)
+                assert response and response.status==200,(key,label,response.status if response else None)
+                page.wait_for_selector('body[data-aq-brand]',timeout=180000)
+                page.wait_for_selector('#arq-float-toggle',timeout=180000)
+                values=page.evaluate("""() => ({
+                  width:innerWidth,
+                  scrollWidth:document.documentElement.scrollWidth,
+                  header:document.querySelectorAll('header.aq-header').length,
+                  footer:document.querySelectorAll('footer.aq-footer').length,
+                  logo:document.querySelector('.aq-logo')?.naturalWidth||0,
+                  h1:document.querySelectorAll('h1').length,
+                  widget:document.querySelectorAll('#arq-floating').length,
+                  toggle:document.querySelectorAll('#arq-float-toggle').length,
+                  old:document.querySelectorAll('#whatsapp_chat_widget,#wa-widget-send-button,.aq-brand-wa').length,
+                  canonical:document.querySelectorAll('link[rel="canonical"]').length,
+                  noindex:!!document.querySelector('meta[name="robots"][content*="noindex" i]')
+                })""")
+                assert values['header']==1 and values['footer']==1 and values['logo']>0,values
+                assert values['h1']==1 and values['canonical']==1 and not values['noindex'],values
+                assert values['widget']==1 and values['toggle']==1 and values['old']==0,values
+                assert values['scrollWidth']<=width+2,values
+                page.locator('#arq-float-toggle').click()
+                assert page.locator('#arq-floating .arq-pop').is_visible()
+                assert page.locator('#arq-float-chat').is_visible()
+                assert page.locator('#arq-floating a[href*="wa.me"]').count()==1
+                assert page.locator('#arq-floating a[href*="solicitar-proposta-contratacao"]').count()==1
+                page.screenshot(path=f'visual-atendimento/{key.lower()}-{label}.png',full_page=False)
+                results.append({'id':key,'screen':label,'http':response.status,**values,'panel':'opened'})
+                page.close()
+            browser.close()
+          Path('visual-atendimento/checks.json').write_text(json.dumps(results,ensure_ascii=False,indent=2),'utf-8')
+          print('VISUAL_VERIFIED',json.dumps(results,ensure_ascii=False),flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-atendimento-arq007-arq009
+          path: visual-atendimento/
