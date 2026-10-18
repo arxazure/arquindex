@@ -1,0 +1,58 @@
+name: Publicar Arquindex Connect SEO
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'painel-seo/**'
+      - '.github/workflows/publicar-painel-seo.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar estrutura e funcoes principais
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('painel-seo/index.html')
+          s=p.read_text()
+          for k in ('Central de crescimento orgânico','Canibalização','Concorrentes','Central de ações','csvParse','localStorage','Publicações'):
+              assert k in s, f'Falta componente {k}'
+          assert len(s)>15000
+          print('QUALITY_GATE_OK')
+          PY
+      - name: Publicar com FTPS
+        env:
+          FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
+          FTP_USER: arquind2
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$FTP_PASS"
+          python3 - <<'PY'
+          import ftplib,os,io
+          ftp=ftplib.FTP_TLS(os.environ['FTP_HOST'],timeout=35)
+          ftp.login(os.environ['FTP_USER'],os.environ['FTP_PASS'])
+          ftp.prot_p()
+          ftp.cwd('public_html')
+          try: ftp.mkd('painel-seo')
+          except ftplib.error_perm: pass
+          data=open('painel-seo/index.html','rb').read()
+          ftp.storbinary('STOR painel-seo/index.html',io.BytesIO(data))
+          got=bytearray()
+          ftp.retrbinary('RETR painel-seo/index.html',got.extend)
+          assert got==data,'FTP integrity mismatch'
+          print('UPLOAD_VERIFIED')
+          ftp.quit()
+          PY
+      - name: Verificar resposta HTTP publica
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 https://www.arquindex.com.br/painel-seo/ -o /tmp/painel.html
+          grep -q 'Central de crescimento orgânico' /tmp/painel.html
+          grep -q 'Canibalização' /tmp/painel.html
+          echo "PUBLIC_OK https://www.arquindex.com.br/painel-seo/"
