@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '.github/workflows/publicar-alfresco-ia-homehost.yml'
+      - 'conteudo/publicacao/alfresco-ecm-automacao-documental-ia.html'
   workflow_dispatch:
 permissions:
   contents: read
