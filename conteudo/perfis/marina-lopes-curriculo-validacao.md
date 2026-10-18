@@ -31,6 +31,13 @@ Marina Lopes atua como Gerente de Projetos com referência a práticas de gerenc
 
 **Marina Lopes — Gerente de Projetos (metodologias PMI) e Gestão da Informação na Arquindex.** Profissional com cerca de 20 anos de atuação em gestão da informação e projetos documentais, formação em Engenharia de Produção e especializações em gestão, dados e tecnologia. Trabalha com gestão documental, Alfresco, processos, análise de dados e automação aplicada à informação empresarial.
 
+
+## Experiência em projetos corporativos
+
+Na atuação pela Arquindex, Marina Lopes informa ter exercido funções de gestão de projetos de gestão da informação em iniciativas para **Usiminas, FCA (Fiat Chrysler Automobiles), Cemig e Petrobras**. As atividades envolveram projetos de informação e documentação corporativa. O escopo, os períodos e as atribuições específicas de cada contrato devem ser confirmados nos registros internos antes de detalhamento público.
+
+**Nota institucional:** mencionar essas empresas como referências de projetos executados pela Arquindex não significa vínculo empregatício direto de Marina com elas, endosso, parceria vigente ou autorização para uso de logotipos.
+
 ## Evidências necessárias antes da publicação
 
 1. Diploma e instituição do mestrado e de cada doutorado/PhD; indicar se concluído, em curso ou curso de extensão.
