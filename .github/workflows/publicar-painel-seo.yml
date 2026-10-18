@@ -25,6 +25,39 @@ jobs:
           assert len(s)>15000
           print('QUALITY_GATE_OK')
           PY
+      - name: Validar JavaScript e acessibilidade estrutural
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          html=Path('painel-seo/index.html').read_text()
+          class Check(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids=set()
+                  self.buttons=0
+                  self.scripts=[]
+                  self.capture=False
+              def handle_starttag(self,tag,attrs):
+                  d=dict(attrs)
+                  if 'id' in d: self.ids.add(d['id'])
+                  if tag=='button': self.buttons+=1
+                  if tag=='script' and not d.get('src'): self.capture=True
+              def handle_endtag(self,tag):
+                  if tag=='script': self.capture=False
+              def handle_data(self,data):
+                  if self.capture: self.scripts.append(data)
+          p=Check()
+          p.feed(html)
+          required={'overview','ranking','competitors','cannibal','opportunities','actions','publications','sources','actionform','csv'}
+          assert required <= p.ids, 'Missing UI modules: '+str(required-p.ids)
+          assert p.buttons>=10,'Insufficient actionable controls'
+          Path('/tmp/arquindex-panel.js').write_text('\\n'.join(p.scripts))
+          print('STRUCTURE_OK',len(p.ids),'ids',p.buttons,'buttons')
+          PY
+          node --check /tmp/arquindex-panel.js
+          echo JS_SYNTAX_OK
       - name: Publicar com FTPS
         env:
           FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
