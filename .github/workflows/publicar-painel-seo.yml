@@ -83,13 +83,21 @@ jobs:
           ftp.storbinary('STOR painel-seo/index.html',io.BytesIO(data))
           js=open('painel-seo/app.js','rb').read()
           ftp.storbinary('STOR painel-seo/app.js',io.BytesIO(js))
+          for name in ('modelo-importacao.csv','exemplo-ficticio.csv'):
+              payload=open('painel-seo/'+name,'rb').read()
+              ftp.storbinary('STOR painel-seo/'+name,io.BytesIO(payload))
           got=bytearray()
           ftp.retrbinary('RETR painel-seo/index.html',got.extend)
           assert got==data,'FTP HTML integrity mismatch'
           js_got=bytearray()
           ftp.retrbinary('RETR painel-seo/app.js',js_got.extend)
           assert js_got==js,'FTP JavaScript integrity mismatch'
-          print('UPLOAD_VERIFIED')
+          for name in ('modelo-importacao.csv','exemplo-ficticio.csv'):
+              expected=open('painel-seo/'+name,'rb').read()
+              received=bytearray()
+              ftp.retrbinary('RETR painel-seo/'+name,received.extend)
+              assert received==expected,'FTP CSV integrity mismatch: '+name
+          print('UPLOAD_VERIFIED_HTML_JS_CSV')
           ftp.quit()
           PY
       - name: Verificar resposta HTTP publica
