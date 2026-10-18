@@ -1,0 +1,26 @@
+name: Publicar IA evidencias ANPD
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/publicar-ia-evidencias-20261018.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - run: python scripts/publicar-ia-evidencias-20261018.py
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ia-evidencias-publicacao
+          path: publish-report/
