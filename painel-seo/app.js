@@ -62,6 +62,24 @@ function createAuditActions(){
 }
 loadPublicAudit();
 
+async function loadDirectGsc(){
+ const el=document.getElementById('gsc-direct-status');
+ if(el)el.textContent='Consultando relatório oficial do Google no GitHub...';
+ try{
+  const response=await fetch('https://raw.githubusercontent.com/arxazure/arquindex/master/painel-seo/gsc-real.json?t='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw Error('Coleta oficial ainda não executada');
+  const payload=await response.json();
+  if(payload.source!=='Google Search Console API OAuth'||!Array.isArray(payload.rows))throw Error('Relatório inválido');
+  const rows=payload.rows.filter(r=>r&&typeof r.query==='string'&&typeof r.page==='string');
+  data.ranking=rows.map(r=>({query:r.query,page:r.page,clicks:Number(r.clicks)||0,impressions:Number(r.impressions)||0,position:Number(r.position)||0}));
+  data.importedAt=payload.generated_at;
+  save();
+  const count=generateSeoActions();
+  if(el)el.textContent=rows.length+' registros reais importados de '+(payload.properties||[]).length+' propriedades; '+count+' novas ações.';
+ }catch(err){if(el)el.textContent='Coleta direta indisponível: '+err.message+'. Os dados existentes foram preservados.'}
+}
+
+
 ;
 
 /* Navegacao independente: funciona mesmo se os modulos de dados falharem. */
