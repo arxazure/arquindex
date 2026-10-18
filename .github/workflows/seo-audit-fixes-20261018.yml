@@ -49,11 +49,13 @@ jobs:
            for sp in specs:
             sp['url']='https://'+sp['host']+'/'+('' if sp['file']=='index.html' else sp['file'])
             live=public(sp['url']);matches=[]
-            for root in ['/public_html/'+sp['host'],'/public_html/subdominios/'+sp['host']]:
+            for root in ['/public_html/'+sp['host'],'/public_html/subdominios/'+sp['host'],'/home/arquind2/public_html/'+sp['host'],'/'+sp['host']]:
              try:
               p=root+'/'+sp['file'];b=read(f,p);s=b.decode('utf8')
+              print('ROOT_CANDIDATE',sp['id'],p,title(s),canon(s),'LIVE',title(live),canon(live),flush=True)
               if title(s)==title(live) and canon(s)==canon(live):matches.append((p,b,s))
-             except ftplib.error_perm:pass
+             except ftplib.error_perm:print('ROOT_NOT_FOUND',sp['id'],root,flush=True)
+            matches=list({p:(p,b,s) for p,b,s in matches}.values())
             assert len(matches)==1,('ROOT_NOT_UNIQUE',sp['id'],len(matches))
             p,b,s=matches[0];new=s
             if 'title' in sp:
