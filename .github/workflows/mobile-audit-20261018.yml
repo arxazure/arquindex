@@ -1,0 +1,66 @@
+name: Auditoria mobile de parametros e paginas BH
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/mobile-audit-20261018.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Preparar navegador de diagnostico
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium || true)
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-mobile" playwright --no-audit --no-fund
+      - name: Testar quatro URLs em viewport mobile sem enviar formularios
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-mobile/node_modules/playwright');
+          const fs=require('fs');
+          (async()=>{
+           const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+           const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,deviceScaleFactor:1});
+           const urls=[
+           ['ARQ-010','https://governanca.arquindex.com.br/bh.html?post=como-digitalizar-documentos-em-qualquer-impressora','Como digitalizar documentos em qualquer impressora'],
+           ['ARQ-011','https://7-motivos-contar-dpo-terceirizado.arquindex.com.br/?post=ocr-para-documentos','OCR para documentos: onde gera valor real'],
+           ['ARQ-050','https://www.arquindex.com.br/digitalize/belo-horizonte/',''],
+           ['ARQ-047','https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/belo-horizonte/','']
+           ];
+           const results=[];
+           for(const [id,url,expected] of urls){
+            const page=await context.newPage();const failures=[];const provider=[];
+            page.on('requestfailed',r=>{if(r.url().includes('trysoro'))failures.push({url:r.url(),error:r.failure()})});
+            page.on('response',r=>{if(r.url().includes('trysoro'))provider.push({url:r.url(),status:r.status()})});
+            try{
+             const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
+             await page.waitForTimeout(3000);
+             if(await page.locator('#soro-blog').count())await page.locator('#soro-blog').scrollIntoViewIfNeeded();
+             await page.waitForTimeout(6000);
+             const d=await page.evaluate((expected)=>{
+              const e=document.querySelector('#soro-blog');
+              const b=e?.getBoundingClientRect();
+              return {viewport:innerWidth,clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.innerText),canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),description:document.querySelector('meta[name=description]')?.content,embedText:e?.innerText.slice(0,1400),embedBox:b?{width:b.width,height:b.height}:null,expectedArticleInDOM:expected?document.body.innerText.includes(expected):null,expectedArticleInEmbed:expected?Boolean(e?.innerText.includes(expected)):null,fixedElements:[...document.querySelectorAll('body *')].filter(e=>getComputedStyle(e).position==='fixed'&&e.getBoundingClientRect().width>150&&e.getBoundingClientRect().height>100).slice(0,6).map(e=>({tag:e.tagName,id:e.id,width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height,text:e.innerText?.slice(0,150)}))};
+             },expected);
+             await page.screenshot({path:process.env.RUNNER_TEMP+'/arq-mobile/'+id+'.png'});
+             results.push({id,url,status:response.status(),finalURL:page.url(),...d,provider,failures});
+            }catch(e){results.push({id,url,error:e.message,provider,failures});}
+            await page.close();
+           }
+           await browser.close();
+           fs.writeFileSync(process.env.RUNNER_TEMP+'/arq-mobile/report.json',JSON.stringify(results,null,2));
+           console.log('MOBILE_AUDIT_RESULT',JSON.stringify(results));
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          
+          JS
+      - name: Guardar evidencias de diagnostico
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-mobile-audit-20261018
+          path: |
+            ${{ runner.temp }}/arq-mobile/report.json
+            ${{ runner.temp }}/arq-mobile/*.png
