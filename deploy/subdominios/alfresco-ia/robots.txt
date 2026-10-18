@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://alfresco-ia.arquindex.com.br/sitemap.xml
