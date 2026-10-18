@@ -1,0 +1,77 @@
+name: Publicar pagina tecnica Alfresco Homehost com verificacao
+on:
+  push:
+    paths:
+      - '.github/workflows/publicar-alfresco-ia-homehost.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar e publicar apenas pagina tecnica
+        run: |
+          python - <<'PY'
+          import os,ftplib,io,urllib.request,time,hashlib,sys,re
+          from pathlib import Path
+          src=Path('conteudo/publicacao/alfresco-ecm-automacao-documental-ia.html')
+          if not src.is_file():sys.exit('SOURCE_MISSING')
+          data=src.read_text(encoding='utf-8')
+          target='alfresco-ecm-automacao-documental-ia.html'
+          url='https://www.arquindex.com.br/'+target
+          if '<meta name="robots" content="noindex,follow">' not in data:sys.exit('UNEXPECTED_SOURCE')
+          data=data.replace('<meta name="robots" content="noindex,follow">','<meta name="robots" content="index,follow"><link rel="canonical" href="'+url+'">')
+          data=data.replace('Conteúdo técnico em revisão para publicação.','Conteúdo técnico informativo.')
+          assert data.count('<h1>')==1 and data.count('<title>')==1 and url in data
+          payload=data.encode('utf-8')
+          pwd=os.getenv('FTP_PASSWORD')
+          if not pwd:sys.exit('BLOCKED_FTP_SECRET_MISSING')
+          ftp=ftplib.FTP('ftp.arquindex.com.br',timeout=30)
+          ftp.login('arquind2',pwd)
+          print('FTP_AUTH_OK')
+          candidates=['public_html','/public_html','/home/arquind2/public_html','.']
+          root=None
+          for p in candidates:
+            try:
+              ftp.cwd('/');ftp.cwd(p)
+              names=ftp.nlst()
+              if 'robots.txt' in [x.split('/')[-1] for x in names] or 'index.html' in [x.split('/')[-1] for x in names]:
+                root=ftp.pwd();break
+            except ftplib.all_errors:pass
+          if not root:sys.exit('BLOCKED_PUBLIC_ROOT_NOT_VERIFIED')
+          ftp.cwd(root)
+          existing=bytearray()
+          try:
+            ftp.retrbinary('RETR '+target,existing.extend)
+            if existing:
+              print('EXISTING_PAGE_REVIEW_REQUIRED',target,hashlib.sha256(existing).hexdigest())
+              sys.exit('ABORT_NO_OVERWRITE')
+          except ftplib.error_perm as e:
+            if not str(e).startswith('550'):raise
+          print('PUBLIC_ROOT_VERIFIED',root)
+          ftp.storbinary('STOR '+target,io.BytesIO(payload))
+          print('FTP_UPLOADED',target,hashlib.sha256(payload).hexdigest())
+          verified=False
+          for attempt in range(3):
+            try:
+              req=urllib.request.Request(url,headers={'User-Agent':'ArquindexDeployVerifier/1.0'})
+              with urllib.request.urlopen(req,timeout=25) as res:
+                live=res.read().decode('utf-8','replace')
+                verified=(res.status==200 and ('rel="canonical" href="'+url+'"') in live and '<h1>' in live and 'noindex' not in live and 'wa.me/5531973632725' in live)
+                print('HTTP_STATUS',res.status,'CANONICAL',url,'VALID',verified)
+                if verified:break
+            except Exception as e:print('HTTP_VERIFY_RETRY',attempt+1,type(e).__name__)
+            time.sleep(5)
+          if not verified:
+            ftp.cwd(root)
+            try:ftp.delete(target);print('ROLLBACK_DELETED_NEW_FILE',target)
+            except ftplib.all_errors:print('ROLLBACK_MANUAL_REQUIRED')
+            sys.exit('PUBLIC_VERIFY_FAILED')
+          print('PUBLIC_VERIFIED',url)
+          ftp.quit()
+          PY
