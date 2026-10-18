@@ -89,7 +89,7 @@ def transform(original):
     checks={
         'one_widget':rendered.count('id="arq-floating"')==1,
         'one_toggle':rendered.count('id="arq-float-toggle"')==1,
-        'no_brand_float':'aq-brand-wa' not in rendered,
+        'no_brand_float':len(soup.select('.aq-brand-wa'))==0,
         'no_old_config':'__arqWhatsappOptions' not in rendered,
         'no_old_loader':'whatsapp_replace_crisp' not in rendered and 'watiWidget.js' not in rendered,
         'chat_option':'Conversar no chat' in rendered,
@@ -149,7 +149,7 @@ with ftplib.FTP_TLS(timeout=60) as ftp:
                         'http_200':status==200,
                         'one_widget':text.count('id="arq-floating"')==1,
                         'one_toggle':text.count('id="arq-float-toggle"')==1,
-                        'no_brand_float':'aq-brand-wa' not in text,
+                        'no_brand_float':len(BeautifulSoup(text,'html.parser').select('.aq-brand-wa'))==0,
                         'no_old_config':'__arqWhatsappOptions' not in text,
                         'no_old_loader':'whatsapp_replace_crisp' not in text and 'watiWidget.js' not in text,
                         'chat_option':'Conversar no chat' in text,
