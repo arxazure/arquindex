@@ -1,0 +1,48 @@
+name: Verificar design ARQ-007
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/verificar-design-arq007.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - run: pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Capturas e verificacao responsiva
+        run: |
+          mkdir -p visual
+          python - <<'PY'
+          import json
+          from playwright.sync_api import sync_playwright
+          url='https://consultoria-adequacao-lgpd-pequenas-empresas.arquindex.com.br/'
+          results=[]
+          with sync_playwright() as p:
+            browser=p.chromium.launch()
+            for label,width,height in [('mobile',390,844),('desktop',1440,1000)]:
+              page=browser.new_page(viewport={'width':width,'height':height})
+              page.goto(url,wait_until='domcontentloaded')
+              page.wait_for_selector('body[data-aq-brand]',timeout=180000)
+              page.locator('.aq-logo').first.wait_for()
+              page.screenshot(path='visual/'+label+'.png',full_page=False)
+              values=page.evaluate("""() => ({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,header:document.querySelectorAll('header.aq-header').length,logo:document.querySelector('.aq-logo').naturalWidth,h1:document.querySelectorAll('h1').length,background:getComputedStyle(document.body).backgroundColor,menu:!!document.querySelector('.aq-toggle')})""")
+              assert values['header']==1 and values['logo']>0 and values['h1']==1,values
+              assert values['scrollWidth']<=width+2,values
+              if label=='mobile':
+                page.locator('.aq-toggle').click()
+                assert page.locator('#aq-nav').is_visible()
+              results.append({'screen':label,**values})
+              page.close()
+            browser.close()
+          with open('visual/checks.json','w') as f:json.dump(results,f,indent=2)
+          print(json.dumps(results))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-arq007
+          path: visual/
