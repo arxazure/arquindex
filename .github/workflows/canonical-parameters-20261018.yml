@@ -1,0 +1,54 @@
+name: Corrigir canonicas duplicadas de artigos incorporados
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/canonical-parameters-20261018.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Backup, publicar normalizacao e verificar arquivos publicos
+        run: |
+          python - <<'PY'
+          import ftplib,io,os,json,hashlib,urllib.request
+          from datetime import datetime,timezone
+          guard="<script id=\"arquindex-parameter-canonical-20261018\">\n(function(){\n var expected={\"ocr-para-documentos\":\"OCR para documentos: onde gera valor real\",\"como-digitalizar-documentos-em-qualquer-impressora\":\"Como digitalizar documentos em qualquer impressora\"};\n function normalize(){\n  var p=new URLSearchParams(location.search),slug=p.get(\"post\"),blog=document.getElementById(\"soro-blog\");\n  if(!slug||!expected[slug]||!blog||!blog.querySelector(\"h1\")||blog.innerText.indexOf(expected[slug])<0)return;\n  var target=new URL(location.href);target.search=\"\";target.searchParams.set(\"post\",slug);target.hash=\"\";\n  var links=Array.from(document.querySelectorAll('link[rel=\"canonical\"]'));\n  if(!links.length){var link=document.createElement(\"link\");link.rel=\"canonical\";document.head.appendChild(link);links=[link];}\n  if(links[0].href!==target.href)links[0].href=target.href;\n  links.slice(1).forEach(function(link){link.remove();});\n }\n function start(){normalize();new MutationObserver(normalize).observe(document.documentElement,{childList:true,subtree:true});}\n if(document.readyState===\"loading\")document.addEventListener(\"DOMContentLoaded\",start,{once:true});else start();\n})();\n</script>"
+          specs=[('governanca.arquindex.com.br','bh.html'),('7-motivos-contar-dpo-terceirizado.arquindex.com.br','index.html')]
+          def read(f,p):
+           b=bytearray();f.retrbinary('RETR '+p,b.extend);return bytes(b)
+          def put(f,p,b):f.storbinary('STOR '+p,io.BytesIO(b));assert read(f,p)==b
+          def public(u):
+           with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'}),timeout=30) as r:assert r.status==200;return r.read()
+          with ftplib.FTP_TLS(timeout=35) as f:
+           f.connect('ftp.arquindex.com.br',21);f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+           assert b'Require all denied' in read(f,'/seo-backups/.htaccess')
+           records=[]
+           for host,name in specs:
+            p='/'+host+'/'+name;u='https://'+host+'/'+('' if name=='index.html' else name)
+            old=read(f,p);assert old==public(u),'SOURCE_PUBLIC_MISMATCH'
+            s=old.decode()
+            if 'id="arquindex-parameter-canonical-20261018"' in s:print('ALREADY_APPLIED',host);continue
+            assert '</head>' in s.lower() and 'soro-blog' in s
+            i=s.lower().index('</head>');new=(s[:i]+guard+'\n'+s[i:]).encode()
+            records.append((p,u,host,old,new))
+           stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+           for p,u,host,old,new in records:put(f,'/seo-backups/canonical-parameter-'+host+'-'+stamp+'.html',old)
+           written=[]
+           try:
+            for p,u,host,old,new in records:
+             assert read(f,p)==old,'CONCURRENT_CHANGE';written.append((p,old));put(f,p,new);assert public(u)==new,'PUBLIC_MISMATCH'
+             print('PUBLIC_VERIFIED',u,hashlib.sha256(new).hexdigest(),flush=True)
+           except Exception:
+            for p,old in written:put(f,p,old)
+            print('ROLLBACK_VERIFIED');raise
+          
+          PY
