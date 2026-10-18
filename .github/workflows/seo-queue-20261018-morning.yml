@@ -1,0 +1,226 @@
+name: Corrigir ARQ-003 ARQ-006 e integrar Alfresco BH
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/seo-queue-20261018-morning.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FTP_HOST: ftp.arquindex.com.br
+      FTP_USER: arquind2
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Backup, corrigir tres paginas, validar e reverter em falha
+        run: |
+          python - <<'PY'
+          import ftplib, hashlib, html, io, os, posixpath, re, time, urllib.request
+          from datetime import datetime, timezone
+
+          stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          marker='seo-queue-20261018-alfresco-bh'
+          specs=[
+            {
+              'key':'ARQ-003',
+              'host':'digitalizardocumentos.arquindex.com.br',
+              'file':'bh.html',
+              'url':'https://digitalizardocumentos.arquindex.com.br/bh.html',
+              'title':'Digitalização de Documentos em BH | Arquindex',
+              'h1':'Digitalização de documentos para empresas em Belo Horizonte',
+              'desc':'Digitalização de documentos em Belo Horizonte para empresas: preparação, captura, OCR, indexação, conferência e entrega organizada. Solicite avaliação à Arquindex.'
+            },
+            {
+              'key':'ARQ-006',
+              'host':'ged.arquindex.com.br',
+              'file':'empresas.html',
+              'url':'https://ged.arquindex.com.br/empresas.html',
+              'title':'Sistema GED para Empresas | Arquindex',
+              'h1':'Sistema GED para empresas: organização, acesso e controle',
+              'desc':'Sistema GED para empresas: classificação, metadados, permissões, versões e recuperação de documentos. Avalie a implantação com a Arquindex.'
+            },
+            {
+              'key':'PILAR-ALFRESCO-BH',
+              'host':'www.arquindex.com.br',
+              'file':'alfresco-incloud-gestao-arquivos.html',
+              'url':'https://www.arquindex.com.br/alfresco-incloud-gestao-arquivos.html',
+              'title':'Alfresco InCloud: GED e ECM para Empresas | Arquindex',
+              'section':'''<section id="seo-queue-20261018-alfresco-bh" aria-labelledby="alfresco-bh-link-title">
+            <h2 id="alfresco-bh-link-title">Implantação de Alfresco e gestão documental em Belo Horizonte</h2>
+            <p>Empresas que precisam organizar documentos, controlar versões, permissões e fluxos podem consultar a página de <a href="https://www.arquindex.com.br/alfresco-belo-horizonte.html">implantação de Alfresco em Belo Horizonte</a>. O diagnóstico considera repositórios existentes, metadados, perfis de acesso, integrações e critérios de aceite; a definição da arquitetura depende do ambiente e do escopo confirmado.</p>
+            <p>Quando o projeto também envolver acervo físico, consulte <a href="https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html">digitalização de documentos em Belo Horizonte</a> e <a href="https://www.arquindex.com.br/gestao-documental-belo-horizonte.html">gestão documental em Belo Horizonte</a>. Para tratamentos com dados pessoais, veja a <a href="https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html">consultoria LGPD em Belo Horizonte</a>.</p>
+          </section>'''
+            }
+          ]
+
+          pwd=os.getenv('FTP_PASSWORD','')
+          if not pwd: raise RuntimeError('FTP_PASSWORD ausente')
+
+          def digest(data): return hashlib.sha256(data).hexdigest()
+          def read(ftp,path):
+            data=bytearray(); ftp.retrbinary('RETR '+path,data.extend); return bytes(data)
+          def ensure_dir(ftp,path):
+            current=ftp.pwd()
+            try:
+              ftp.cwd('/')
+              for part in path.strip('/').split('/'):
+                if not part: continue
+                try: ftp.mkd(part)
+                except ftplib.error_perm as exc:
+                  if not str(exc).startswith('550'): raise
+                ftp.cwd(part)
+            finally:
+              ftp.cwd(current)
+          def atomic_put(ftp,path,data,suffix):
+            directory=posixpath.dirname(path); name=posixpath.basename(path)
+            tmp=posixpath.join(directory,'.'+name+'.tmp-'+suffix)
+            ftp.storbinary('STOR '+tmp,io.BytesIO(data))
+            if digest(read(ftp,tmp))!=digest(data): raise RuntimeError('HASH_TEMP '+path)
+            try: ftp.delete(path)
+            except ftplib.error_perm as exc:
+              if not str(exc).startswith('550'): raise
+            ftp.rename(tmp,path)
+            if digest(read(ftp,path))!=digest(data): raise RuntimeError('HASH_FINAL '+path)
+
+          def locate(ftp,initial,spec):
+            if spec['host']=='www.arquindex.com.br':
+              candidates=['/public_html','public_html','/home/arquind2/public_html',initial]
+            else:
+              h=spec['host']
+              candidates=[
+                '/public_html/subdominios/'+h,
+                '/public_html/'+h,
+                'public_html/subdominios/'+h,
+                'public_html/'+h,
+                '/subdominios/'+h,
+                h
+              ]
+            for candidate in dict.fromkeys(candidates):
+              try:
+                ftp.cwd(initial); ftp.cwd(candidate)
+                names={posixpath.basename(x.rstrip('/')) for x in ftp.nlst()}
+                if spec['file'] in names: return ftp.pwd()
+              except ftplib.all_errors:
+                pass
+            raise RuntimeError('TARGET_ROOT_NOT_FOUND '+spec['key'])
+
+          def replace_single(pattern,repl,text,label):
+            text,n=re.subn(pattern,repl,text,count=1,flags=re.I|re.S)
+            if n!=1: raise RuntimeError('REPLACE_FAILED '+label)
+            return text
+
+          with ftplib.FTP_TLS(timeout=60) as ftp:
+            ftp.connect(os.environ['FTP_HOST'],21)
+            ftp.login(os.environ['FTP_USER'],pwd)
+            ftp.prot_p(); ftp.set_pasv(True)
+            initial=ftp.pwd()
+            records=[]
+            for spec in specs:
+              root=locate(ftp,initial,spec)
+              path=posixpath.join(root,spec['file'])
+              original=read(ftp,path)
+              source=original.decode('utf-8')
+              if '<html' not in source.lower() or '<h1' not in source.lower() or '</body>' not in source.lower():
+                raise RuntimeError('HTML_INVALID '+spec['key'])
+              records.append((spec,root,path,original,source))
+              print('TARGET_CONFIRMED',spec['key'],path,flush=True)
+
+            backup_base='/seo-backups/queue-20261018-'+stamp
+            ensure_dir(ftp,backup_base)
+            for spec,root,path,original,source in records:
+              host_dir=backup_base+'/'+spec['host']
+              ensure_dir(ftp,host_dir)
+              backup=host_dir+'/'+spec['file']
+              ftp.storbinary('STOR '+backup,io.BytesIO(original))
+              if digest(read(ftp,backup))!=digest(original): raise RuntimeError('BACKUP_HASH '+spec['key'])
+              print('BACKUP_VERIFIED',backup,flush=True)
+
+            updated={}
+            for spec,root,path,original,source in records:
+              text=source
+              text=replace_single(r'<title\b[^>]*>.*?</title>','<title>'+html.escape(spec['title'])+'</title>',text,spec['key']+' title')
+              if spec['key'] in ('ARQ-003','ARQ-006'):
+                text=replace_single(r'<link\b[^>]*rel=["\x27]canonical["\x27][^>]*>',f'<link rel="canonical" href="{spec["url"]}">',text,spec['key']+' canonical')
+                text=replace_single(r'<h1\b[^>]*>.*?</h1>','<h1>'+html.escape(spec['h1'])+'</h1>',text,spec['key']+' h1')
+                text=replace_single(r'(<meta\s+name=["\x27]description["\x27]\s+content=["\x27])[^"\x27]*(["\x27])',lambda m:m.group(1)+html.escape(spec['desc'],quote=True)+m.group(2),text,spec['key']+' description')
+                text=text.replace('5531999999999','5531973632725')
+              else:
+                if marker not in text:
+                  pos=text.lower().rfind('</main>')
+                  if pos<0: pos=text.lower().rfind('</body>')
+                  if pos<0: raise RuntimeError('INSERTION_POINT '+spec['key'])
+                  text=text[:pos]+spec['section']+'\n'+text[pos:]
+              data=text.encode('utf-8')
+              if data==original: raise RuntimeError('NO_CHANGE '+spec['key'])
+              updated[path]=data
+
+            written=[]
+            try:
+              for spec,root,path,original,source in records:
+                if read(ftp,path)!=original: raise RuntimeError('CONCURRENT_CHANGE '+spec['key'])
+              for spec,root,path,original,source in records:
+                atomic_put(ftp,path,updated[path],stamp)
+                written.append((path,original))
+                final=read(ftp,path).decode('utf-8')
+                checks={
+                  'title':('<title>'+html.escape(spec['title'])+'</title>') in final,
+                  'h1':len(re.findall(r'<h1\b',final,re.I))==1,
+                  'viewport':'name="viewport"' in final.lower() or "name='viewport'" in final.lower(),
+                  'indexable':'noindex' not in final.lower(),
+                  'whatsapp':'5531973632725' in final
+                }
+                if spec['key'] in ('ARQ-003','ARQ-006'):
+                  checks['canonical']=spec['url'] in final
+                  checks['old_whatsapp_removed']='5531999999999' not in final
+                else:
+                  checks['marker']=marker in final
+                  checks['alfresco_bh_link']='https://www.arquindex.com.br/alfresco-belo-horizonte.html' in final
+                if not all(checks.values()): raise RuntimeError('FTP_POSTCHECK '+spec['key']+' '+repr(checks))
+                print('FTP_PUBLISHED_VERIFIED',spec['key'],path,checks,flush=True)
+
+              for spec,root,path,original,source in records:
+                last=None
+                for attempt in range(3):
+                  try:
+                    sep='&' if '?' in spec['url'] else '?'
+                    req=urllib.request.Request(spec['url']+sep+'verify='+stamp,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
+                    with urllib.request.urlopen(req,timeout=35) as response:
+                      body=response.read(3000000).decode('utf-8','replace')
+                      if response.status!=200: raise RuntimeError('HTTP '+str(response.status))
+                    checks={
+                      'title':html.escape(spec['title']) in body or spec['title'] in html.unescape(body),
+                      'h1':len(re.findall(r'<h1\b',body,re.I))==1,
+                      'viewport':'name="viewport"' in body.lower() or "name='viewport'" in body.lower(),
+                      'indexable':'noindex' not in body.lower(),
+                      'whatsapp':'5531973632725' in body
+                    }
+                    if spec['key'] in ('ARQ-003','ARQ-006'):
+                      checks['canonical']=spec['url'] in body
+                      checks['old_whatsapp_removed']='5531999999999' not in body
+                    else:
+                      checks['marker']=marker in body
+                      checks['alfresco_bh_link']='https://www.arquindex.com.br/alfresco-belo-horizonte.html' in body
+                    if not all(checks.values()): raise RuntimeError('PUBLIC_CHECKS '+repr(checks))
+                    print('PUBLIC_VERIFIED',spec['key'],spec['url'],checks,flush=True)
+                    last=None; break
+                  except Exception as exc:
+                    last=exc
+                    if attempt<2: time.sleep(4)
+                if last: raise last
+            except Exception:
+              for path,original in written:
+                atomic_put(ftp,path,original,'rollback-'+stamp)
+              print('ROLLBACK_COMPLETED',','.join(path for path,_ in written),flush=True)
+              raise
+          PY
