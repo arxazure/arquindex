@@ -1,6 +1,7 @@
 import { renderDigitalize, digitalizePaths } from "./digitalize-pages.js";
 import { renderRegional, regionalPaths, regionalBase } from "./regional-ged-replica.js";
 import http from "node:http";
+import { alfrescoIaPage } from "./alfresco-ia-pages.js";
 import { rmbhData, rmbhPage } from "./rmbh-pages.js";
 import { URL } from "node:url";
 import { serveReplica } from "./replica-proxy.js";
@@ -415,6 +416,7 @@ function sitemap(req,index){
 }
 const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ const alfrescoPage=alfrescoIaPage(p); if(alfrescoPage){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(alfrescoPage);}
  const digitalize=renderDigitalize(p,canonicalOrigin(req)); if(digitalize){res.writeHead(200,{"content-type":digitalize.type,"cache-control":"public, max-age=300"});return res.end(digitalize.body);}
 
  const replica=renderRegional(p,canonicalOrigin(req)); if(replica){res.writeHead(200,{"content-type":replica.type,"cache-control":"public, max-age=300"});return res.end(replica.body);}
