@@ -1,0 +1,49 @@
+name: Publicar landing pages Databooks
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'databooks-engenharia/index.html'
+      - 'databooks-mineracao/index.html'
+      - '.github/workflows/publicar-landingpages-databooks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enviar paginas por FTPS
+        env:
+          FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
+          FTP_USER: arquind2
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$FTP_PASS"
+          python3 - <<'PY'
+          import ftplib,os,io
+          ftp=ftplib.FTP_TLS(os.environ['FTP_HOST'],timeout=35)
+          ftp.login(os.environ['FTP_USER'],os.environ['FTP_PASS'])
+          ftp.prot_p()
+          ftp.cwd('public_html')
+          for slug in ('databooks-engenharia','databooks-mineracao'):
+              try: ftp.mkd(slug)
+              except ftplib.error_perm: pass
+              data=open(slug+'/index.html','rb').read()
+              ftp.storbinary('STOR '+slug+'/index.html',io.BytesIO(data))
+              got=bytearray()
+              ftp.retrbinary('RETR '+slug+'/index.html',got.extend)
+              assert got==data,'Upload mismatch '+slug
+              print('UPLOAD_VERIFIED',slug)
+          ftp.quit()
+          PY
+      - name: Conferir URLs publicas
+        run: |
+          set -euo pipefail
+          for slug in databooks-engenharia databooks-mineracao; do
+            curl -fsSL --retry 3 "https://www.arquindex.com.br/$slug/" | grep -q '<html'
+            echo "PUBLIC_OK https://www.arquindex.com.br/$slug/"
+          done
