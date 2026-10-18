@@ -153,7 +153,7 @@ jobs:
               if spec['key'] in ('ARQ-003','ARQ-006'):
                 text=replace_single(r'<link\b[^>]*rel=["\x27]canonical["\x27][^>]*>',f'<link rel="canonical" href="{spec["url"]}">',text,spec['key']+' canonical')
                 text=replace_single(r'<h1\b[^>]*>.*?</h1>','<h1>'+html.escape(spec['h1'])+'</h1>',text,spec['key']+' h1')
-                text=replace_single(r'(<meta\s+name=["\x27]description["\x27]\s+content=["\x27])[^"\x27]*(["\x27])',lambda m:m.group(1)+html.escape(spec['desc'],quote=True)+m.group(2),text,spec['key']+' description')
+                text=replace_single(r'<meta\b(?=[^>]*\bname=["\x27]description["\x27])[^>]*>','<meta name="description" content="'+html.escape(spec['desc'],quote=True)+'">',text,spec['key']+' description')
                 text=text.replace('5531999999999','5531973632725')
               else:
                 if marker not in text:
