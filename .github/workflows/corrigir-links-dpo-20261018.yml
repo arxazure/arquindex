@@ -1,0 +1,68 @@
+name: Corrigir links de servicos na pagina DPO
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/corrigir-links-dpo-20261018.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - name: Backup e corrigir apenas destinos confirmados
+        run: |
+          python - <<'PY'
+          import ftplib,io,os,re,json,hashlib,urllib.request,urllib.parse,urllib.error
+          from datetime import datetime,timezone
+          H='7-motivos-contar-dpo-terceirizado.arquindex.com.br'
+          U='https://'+H+'/'
+          targets={p:'https://www.arquindex.com.br/'+p for p in ['digitalizacao.html','lgpd-consultoria.html','gestao-documental.html']}
+          def fetch(u):
+           with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'}),timeout=30) as r:
+            assert r.status==200;return r.read()
+          def read(f,p):
+           b=bytearray();f.retrbinary('RETR '+p,b.extend);return bytes(b)
+          def put(f,p,b):
+           f.storbinary('STOR '+p,io.BytesIO(b));assert read(f,p)==b
+          for p,u in targets.items():
+           s=fetch(u).decode()
+           assert re.search(r'<link\b[^>]*canonical[^>]*'+re.escape(u),s,re.I),'TARGET_CANONICAL'
+           assert 'noindex' not in s.lower()
+           print('DESTINATION_VERIFIED',u,flush=True)
+          with ftplib.FTP_TLS(timeout=35) as f:
+           f.connect('ftp.arquindex.com.br',21);f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+           path='/'+H+'/index.html';old=read(f,path);s=old.decode()
+           assert s==fetch(U).decode(),'SOURCE_PUBLIC_MISMATCH'
+           counts={}
+           def anchor(m):
+            tag=m[0]
+            def href(h):
+             raw=h[2];u=urllib.parse.urlsplit(urllib.parse.urljoin(U,raw));p=u.path.lstrip('/')
+             if u.hostname!=H or p not in targets:return h[0]
+             new=targets[p]+('?' +u.query if u.query else '')+('#'+u.fragment if u.fragment else '')
+             counts[p]=counts.get(p,0)+1
+             return 'href='+h[1]+new+h[1]
+            return re.sub(r'\bhref\s*=\s*(["\x27])(.*?)\1',href,tag,flags=re.I|re.S)
+           new=re.sub(r'<a\b[^>]*>',anchor,s,flags=re.I).encode()
+           if not counts:print('ALREADY_CORRECT');raise SystemExit(0)
+           assert set(counts)==set(targets),'UNEXPECTED_LINK_SCOPE'
+           assert re.findall(r'<title.*?</title>',s,re.I)==re.findall(r'<title.*?</title>',new.decode(),re.I)
+           assert b'Require all denied' in read(f,'/seo-backups/.htaccess'),'BACKUP_PROTECTION'
+           stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+           put(f,'/seo-backups/dpo-links-'+stamp+'.html',old)
+           assert read(f,path)==old,'CONCURRENT_CHANGE'
+           try:
+            put(f,path,new)
+            assert fetch(U)==new,'PUBLIC_MISMATCH'
+           except Exception:
+            put(f,path,old);assert fetch(U)==old;print('ROLLBACK_VERIFIED');raise
+           print('PUBLIC_VERIFIED',json.dumps({'url':U,'replaced_links':counts,'total':sum(counts.values()),'hash':hashlib.sha256(new).hexdigest()}),flush=True)
+          
+          PY
