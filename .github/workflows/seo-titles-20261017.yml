@@ -1,0 +1,93 @@
+name: Ajustar titulos SEO BH 2026-10-17
+on:
+  push:
+    paths:
+      - '.github/workflows/seo-titles-20261017.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-titles
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Ajustar metadados com backup e verificar
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python - <<'PY'
+          import os, ftplib, io, re, html, json, time, urllib.request, datetime
+          from zoneinfo import ZoneInfo
+          
+          base = 'https://www.arquindex.com.br/'
+          specs = {
+           'alfresco-belo-horizonte.html': ('Alfresco em BH: Implantação de GED e ECM | Arquindex', 'Implantação e migração de Alfresco em Belo Horizonte: metadados, permissões, organização documental e testes. Solicite um diagnóstico à Arquindex.', ['alfresco','migra']),
+           'gestao-documental-belo-horizonte.html': ('Gestão Documental em BH: Organização e GED | Arquindex', 'Gestão documental em Belo Horizonte: diagnóstico do acervo, classificação, temporalidade, acesso e implantação de GED. Conheça os projetos da Arquindex.', ['classifica','documental']),
+           'consultoria-lgpd-belo-horizonte.html': ('Consultoria LGPD em BH: Diagnóstico e Adequação | Arquindex', 'Consultoria LGPD em Belo Horizonte: inventário de dados, riscos, contratos, direitos dos titulares e plano de adequação. Solicite uma avaliação à Arquindex.', ['lgpd','invent'])
+          }
+          assert os.environ.get('FTP_PASSWORD'), 'FTP_PASSWORD ausente'
+          f=ftplib.FTP(os.environ['FTP_HOST'], timeout=40)
+          f.login(os.environ['FTP_USERNAME'], os.environ['FTP_PASSWORD'])
+          f.cwd('public_html');root=f.pwd()
+          def read(p):
+           b=bytearray();f.retrbinary('RETR '+p,b.extend);return bytes(b)
+          def put(p,b):f.storbinary('STOR '+p,io.BytesIO(b))
+          original={};changes={};report=[]
+          for p,(title,desc,keywords) in specs.items():
+           original[p]=read(p);s=original[p].decode('utf-8')
+           assert all(k in s.lower() for k in keywords), ('Conteudo incompatível',p)
+           assert len(re.findall(r'<title\b',s,re.I))==1, ('Title ambíguo',p)
+           assert len(re.findall(r'<meta\s+name=[\"\x27]description[\"\x27]',s,re.I))==1, ('Description ambígua',p)
+           assert base+p in s, ('Canonical ausente',p)
+           old=html.unescape(re.search(r'<title[^>]*>(.*?)</title>',s,re.S|re.I).group(1))
+           s=re.sub(r'<title[^>]*>.*?</title>','<title>'+html.escape(title)+'</title>',s,count=1,flags=re.S|re.I)
+           s,n=re.subn(r'(<meta\s+name="description"\s+content=")[^"]*(")',lambda m:m[1]+html.escape(desc,quote=True)+m[2],s,count=1,flags=re.I)
+           assert n==1, ('Meta inesperada',p)
+           if s.encode('utf-8')!=original[p]:changes[p]=s.encode('utf-8')
+           report.append({'url':base+p,'old_title':old,'new_title':title,'changed':p in changes})
+          
+          # Backups stay outside the public document root. No page body is overwritten.
+          if changes:
+           f.cwd('..')
+           try:f.mkd('seo-backups')
+           except ftplib.error_perm:
+            f.cwd('seo-backups');f.cwd('..')
+           f.cwd('seo-backups')
+           folder='titles-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+           f.mkd(folder);f.cwd(folder)
+           for p in changes:put(p,original[p])
+           backup=f.pwd();f.cwd(root)
+           print('BACKUP_CREATED',backup,flush=True)
+          written=[]
+          try:
+           for p,b in changes.items():
+            assert read(p)==original[p], ('Mudança concorrente',p)
+            written.append(p);put(p,b);assert read(p)==b
+           for p,(title,desc,_) in specs.items():
+            last=None
+            for attempt in range(3):
+             try:
+              req=urllib.request.Request(base+p,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
+              with urllib.request.urlopen(req,timeout=30) as r:
+               text=r.read().decode('utf-8');assert r.status==200
+              assert html.unescape(re.search(r'<title[^>]*>(.*?)</title>',text,re.S|re.I).group(1))==title
+              assert desc in html.unescape(text)
+              last=None;break
+             except Exception as e:
+              last=e
+              if attempt<2:time.sleep(3)
+            if last:raise last
+            print('PUBLIC_TITLE_VERIFIED',base+p,title,flush=True)
+          except Exception:
+           for p in written:put(p,original[p])
+           print('ROLLED_BACK',written,flush=True)
+           raise
+          finally:
+           f.quit()
+          print('TITLE_REPORT',json.dumps(report,ensure_ascii=False),flush=True)
+          PY
