@@ -23,6 +23,45 @@ function generateSeoActions(){
  return created;
 }
 function render(){const rows=data.ranking,acts=data.actions;const clicks=rows.length?rows.reduce((s,r)=>s+r.clicks,0):null;$('clicks').textContent=clicks===null?'—':clicks.toLocaleString('pt-BR');$('top10').textContent=rows.length?new Set(rows.filter(r=>r.query&&r.position<=10).map(r=>r.query)).size:'—';$('clicksnote').textContent=data.importedAt?'CSV importado '+new Date(data.importedAt).toLocaleDateString('pt-BR'):'Importe dados do Search Console';$('date').textContent=data.importedAt?'Última importação: '+new Date(data.importedAt).toLocaleString('pt-BR'):'Sem dados de busca';$('openactions').textContent=acts.filter(a=>!['Publicada','Validada com mídia'].includes(a.status)).length;$('verified').textContent=acts.filter(a=>a.url&&['Publicada','Validada com mídia'].includes(a.status)).length;const pr=acts.filter(a=>a.priority==='Alta'&&!['Publicada','Validada com mídia'].includes(a.status));$('priority').innerHTML=pr.length?pr.slice(0,7).map(a=>'<p><span class="pill">'+esc(a.priority)+'</span> <b>'+esc(a.title)+'</b> <button class="btn secondary" onclick="editAction(\''+a.id+'\')">Abrir</button></p>').join(''):'<div class="empty">Nenhuma ação de alta prioridade cadastrada. Use “Criar ação” para iniciar.</div>';$('rankrows').innerHTML=rows.length?rows.slice(0,500).map(r=>'<tr><td>'+esc(r.query)+'</td><td>'+esc(r.page)+'</td><td>'+r.clicks+'</td><td>'+r.impressions+'</td><td>'+r.position.toFixed(1)+'</td><td><button class="btn secondary" data-q="'+esc(r.query)+'">Criar ação</button></td></tr>').join(''):'<tr><td colspan="6">Nenhum CSV importado</td></tr>';document.querySelectorAll('#rankrows button').forEach(b=>b.onclick=()=>makeAction('Analisar consulta: '+b.dataset.q));$('comprows').innerHTML=data.competitors.length?data.competitors.map((c,i)=>'<tr><td>'+esc(c.name)+'</td><td>'+ (c.url?'<a target="_blank" rel="noopener" href="'+esc(c.url)+'">Visitar site</a>':'—')+'</td><td>'+esc(c.notes||'Sem observações')+'</td><td><button class="btn secondary" onclick="setCompNote('+i+')">Anotar</button> <button class="btn dark" onclick="makeAction(\'Analisar concorrente: '+esc(c.name).replace(/'/g,'')+'\')">Criar ação</button></td></tr>').join(''):'<tr><td colspan="4">Cadastre as empresas concorrentes indicadas</td></tr>';const grouped={};rows.filter(r=>r.query&&r.page).forEach(r=>(grouped[r.query]??=[]).push(r.page));const can=Object.entries(grouped).map(([q,p])=>({q,p:[...new Set(p)]})).filter(x=>x.p.length>1);$('cannrows').innerHTML=can.length?can.slice(0,100).map(x=>'<tr><td>'+esc(x.q)+'</td><td>'+x.p.length+'</td><td>'+x.p.map(esc).join('<hr>')+'</td><td><button class="btn dark" data-q="'+esc(x.q)+'">Investigar</button></td></tr>').join(''):'<tr><td colspan="4">Nenhum conflito identificado; é necessário CSV contendo consulta e URL para essa análise</td></tr>';document.querySelectorAll('#cannrows button').forEach(b=>b.onclick=()=>makeAction('Investigar canibalização: '+b.dataset.q));const opp=rows.filter(r=>r.query&&r.impressions>0&&r.position>=4&&r.position<=20).sort((a,b)=>b.impressions-a.impressions);$('opprows').innerHTML=opp.length?opp.slice(0,100).map(r=>'<tr><td>'+esc(r.query)+'</td><td>'+r.impressions+'</td><td>'+r.position.toFixed(1)+'</td><td>'+esc(r.page)+'</td><td><button class="btn dark" data-q="'+esc(r.query)+'">Criar ação</button></td></tr>').join(''):'<tr><td colspan="5">Nenhuma oportunidade identificada com os dados disponíveis</td></tr>';document.querySelectorAll('#opprows button').forEach(b=>b.onclick=()=>makeAction('Otimizar busca: '+b.dataset.q));const filter=$('filter').value;$('actionrows').innerHTML=acts.filter(a=>!filter||a.priority===filter).map(a=>'<tr><td><span class="pill">'+esc(a.priority)+'</span></td><td><b>'+esc(a.title)+'</b><div class="hint">'+esc(a.notes||'')+'</div></td><td>'+esc(a.channel)+'</td><td>'+esc(a.status)+'</td><td>'+(a.url?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener">Abrir comprovante</a>':'—')+'</td><td><button class="btn secondary" onclick="editAction(\''+a.id+'\')">Editar</button></td></tr>').join('')||'<tr><td colspan="6">Nenhuma ação cadastrada</td></tr>';$('pubrows').innerHTML=acts.filter(a=>['Site','LinkedIn','Instagram','Google Business','Blogger','Bing / IndexNow'].includes(a.channel)).map(a=>'<tr><td>'+esc(a.title)+'</td><td>'+esc(a.channel)+'</td><td><span class="pill '+(a.url?'green':'red')+'">'+esc(a.status)+'</span></td><td>'+(a.url?'<a target="_blank" rel="noopener" href="'+esc(a.url)+'">Abrir</a>':'Sem comprovante')+'</td></tr>').join('')||'<tr><td colspan="4">Sem registros de publicação</td></tr>'}function exportData(){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='arquindex-connect-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}async function importBackup(e){const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.actions)||!Array.isArray(d.ranking)||!Array.isArray(d.competitors))throw Error();if(!confirm('Substituir os dados locais pelo backup selecionado?'))return;data=d;save()}catch{alert('Arquivo de backup inválido')}}render();
+
+let publicAudit=null;
+async function loadPublicAudit(force=false){
+ const status=document.getElementById('audit-status'),table=document.getElementById('auditrows');
+ if(!status||!table)return;
+ status.textContent='Consultando auditoria pública...';
+ try{
+  const url='https://raw.githubusercontent.com/arxazure/arquindex/master/painel-seo/auditoria-publica.json'+(force?'?t='+Date.now():'');
+  const response=await fetch(url,{cache:'no-store'});
+  if(!response.ok)throw new Error('Relatório ainda não disponível (HTTP '+response.status+'). Execute o workflow no GitHub Actions.');
+  const report=await response.json();
+  if(!Array.isArray(report.issues))throw new Error('Formato de relatório inválido');
+  publicAudit=report;
+  status.textContent='Coleta: '+(report.generated_at||'sem data')+' | '+report.scanned+' páginas verificadas | '+report.issues_count+' páginas com problemas. Fonte: HTML público, não Google Search Console.';
+  table.innerHTML=report.issues.length?report.issues.slice(0,150).map(x=>'<tr><td><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.url)+'</a></td><td>'+x.issues.map(esc).join('<hr>')+'</td></tr>').join(''):'<tr><td colspan="2">Nenhum problema registrado na coleta.</td></tr>';
+ }catch(err){
+  status.textContent='Auditoria indisponível: '+err.message;
+  table.innerHTML='<tr><td colspan="2">Nenhuma evidência carregada. Não serão criadas ações fictícias.</td></tr>';
+ }
+}
+function createAuditActions(){
+ if(!publicAudit||!Array.isArray(publicAudit.issues)){alert('Carregue primeiro um relatório real de auditoria.');return}
+ const seen=new Set(data.actions.map(a=>a.sourceKey).filter(Boolean));
+ let count=0;
+ for(const entry of publicAudit.issues){
+  if(!entry.url||!Array.isArray(entry.issues))continue;
+  for(const issue of entry.issues){
+   const key='audit:'+entry.url+':'+issue;
+   if(seen.has(key))continue;
+   const priority=/Falha ao acessar|HTTP|Noindex/i.test(issue)?'Alta':'Média';
+   data.actions.push({id:'audit-'+Date.now()+'-'+count,sourceKey:key,title:'Corrigir '+issue,priority,channel:'SEO técnico',status:'Planejada',notes:'Evidência da auditoria pública '+(publicAudit.generated_at||'')+'. Página: '+entry.url,url:entry.url});
+   seen.add(key);count++;
+  }
+ }
+ if(count)save();
+ const status=document.getElementById('audit-status');if(status)status.textContent+=' | '+count+' novas ações criadas.';
+}
+loadPublicAudit();
+
 ;
 
 /* Navegacao independente: funciona mesmo se os modulos de dados falharem. */
