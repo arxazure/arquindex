@@ -58,26 +58,30 @@ with ftplib.FTP_TLS(timeout=50) as f:
  def listing(path):
   try:return list(f.mlsd(path))
   except ftplib.all_errors:return []
- roots={}
- for parent in [base,base+'/subdominios']:
-  for name,meta in listing(parent):
-   if name.endswith('.arquindex.com.br') and meta.get('type')=='dir':
-    roots[parent+'/'+name]='https://'+name+'/'
- roots[base+'/noticias']='https://www.arquindex.com.br/noticias/'
- roots[base+'/blog']='https://www.arquindex.com.br/blog/'
- targets=[]
- def walk(root,url,depth=0):
-  for name,meta in listing(root):
-   if name.startswith('.') or name in ['assets','node_modules','seo-backups']:continue
-   path=root+'/'+name
-   if meta.get('type')=='dir' and depth<2:walk(path,url+name+'/',depth+1)
-   elif meta.get('type')=='file' and name.endswith('.html') and not re.match(r'(sitechecker|google[0-9a-f])',name):
-    targets.append((path,url+('' if name=='index.html' else name)))
  selected=os.getenv('DESIGN_TARGET','')
- if selected:roots={p:u for p,u in roots.items() if selected.startswith(u)}
- for root,url in roots.items():walk(root,url)
- selected=os.getenv('DESIGN_TARGET','')
- if selected:targets=[(p,u) for p,u in targets if u==selected]
+ roots={};targets=[]
+ if selected:
+  from urllib.parse import urlsplit
+  parsed=urlsplit(selected);host=parsed.hostname;filename=parsed.path.lstrip('/') or 'index.html'
+  for root in [base+'/subdominios/'+host,base+'/'+host,'/subdominios/'+host,'/'+host]:
+   try:
+    b=get(f,root+'/'+filename)
+    if selected in b.decode('utf8') and '<html' in b.decode('utf8').lower():
+     targets=[(root+'/'+filename,selected)];roots[root]='https://'+host+'/';break
+   except ftplib.error_perm:pass
+ else:
+  for parent in [base,base+'/subdominios']:
+   for name,meta in listing(parent):
+    if name.endswith('.arquindex.com.br') and meta.get('type')=='dir':roots[parent+'/'+name]='https://'+name+'/'
+  roots[base+'/noticias']='https://www.arquindex.com.br/noticias/'
+  roots[base+'/blog']='https://www.arquindex.com.br/blog/'
+  def walk(root,url,depth=0):
+   for name,meta in listing(root):
+    if name.startswith('.') or name in ['assets','node_modules','seo-backups']:continue
+    path=root+'/'+name
+    if meta.get('type')=='dir' and depth<2:walk(path,url+name+'/',depth+1)
+    elif meta.get('type')=='file' and name.endswith('.html') and not re.match(r'(sitechecker|google[0-9a-f])',name):targets.append((path,url+('' if name=='index.html' else name)))
+  for root,url in roots.items():walk(root,url)
  assert targets,'NO_TARGETS'
  assert len(targets)<=3000,('INVENTORY_TOO_LARGE',len(targets))
  print('INVENTORY',len(roots),'roots',len(targets),'pages',flush=True)
