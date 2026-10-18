@@ -53,6 +53,9 @@ jobs:
             src=Path('conteudo/publicacao')/(slug+'.html')
             if not src.exists():sys.exit('SOURCE_MISSING '+str(src))
             data=src.read_text('utf-8')
+            widget=Path('conteudo/publicacao/_atendimento-flutuante.html').read_text('utf-8')
+            if 'id="arq-floating"' not in data:
+              data=data.replace('</body>',widget+'</body>')
             url='https://www.arquindex.com.br/'+slug+'.html'
             data=data.replace('<meta name="robots" content="noindex,follow">','<meta name="robots" content="index,follow"><link rel="canonical" href="'+url+'">')
             if 'rel="canonical"' not in data:data=data.replace('</head>','<link rel="canonical" href="'+url+'"></head>')
