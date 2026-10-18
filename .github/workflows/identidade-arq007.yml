@@ -26,3 +26,5 @@ jobs:
         with:
           name: identidade-arq007
           path: design-report/
+
+# Republicar ajustes responsivos e tipografia
