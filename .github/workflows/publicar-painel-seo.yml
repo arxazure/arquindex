@@ -56,7 +56,9 @@ jobs:
           Path('/tmp/arquindex-panel.js').write_text(chr(10).join(p.scripts))
           print('STRUCTURE_OK',len(p.ids),'ids',p.buttons,'buttons')
           PY
-          node --check /tmp/arquindex-panel.js
+          test -s painel-seo/app.js
+          node --check painel-seo/app.js
+          grep -q 'src="./app.js' painel-seo/index.html
           echo JS_SYNTAX_OK
       - name: Publicar com FTPS
         env:
@@ -76,9 +78,14 @@ jobs:
           except ftplib.error_perm: pass
           data=open('painel-seo/index.html','rb').read()
           ftp.storbinary('STOR painel-seo/index.html',io.BytesIO(data))
+          js=open('painel-seo/app.js','rb').read()
+          ftp.storbinary('STOR painel-seo/app.js',io.BytesIO(js))
           got=bytearray()
           ftp.retrbinary('RETR painel-seo/index.html',got.extend)
-          assert got==data,'FTP integrity mismatch'
+          assert got==data,'FTP HTML integrity mismatch'
+          js_got=bytearray()
+          ftp.retrbinary('RETR painel-seo/app.js',js_got.extend)
+          assert js_got==js,'FTP JavaScript integrity mismatch'
           print('UPLOAD_VERIFIED')
           ftp.quit()
           PY
@@ -88,4 +95,7 @@ jobs:
           curl -fsSL --retry 3 https://www.arquindex.com.br/painel-seo/ -o /tmp/painel.html
           grep -q 'Central de crescimento orgânico' /tmp/painel.html
           grep -q 'Canibalização' /tmp/painel.html
-          echo "PUBLIC_OK https://www.arquindex.com.br/painel-seo/"
+          curl -fsSL --retry 3 https://www.arquindex.com.br/painel-seo/app.js -o /tmp/painel-app.js
+          node --check /tmp/painel-app.js
+          grep -q 'function render()' /tmp/painel-app.js
+          echo "PUBLIC_OK HTML_AND_JS https://www.arquindex.com.br/painel-seo/"
