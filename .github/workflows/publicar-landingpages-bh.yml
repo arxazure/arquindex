@@ -1,0 +1,51 @@
+name: Publicar landing pages BH Arquindex
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'alfresco-belo-horizonte/index.html'
+      - 'gestao-documental-belo-horizonte/index.html'
+      - 'consultoria-lgpd-belo-horizonte/index.html'
+      - '.github/workflows/publicar-landingpages-bh.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enviar paginas via FTPS com TLS validado
+        env:
+          FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
+          FTP_USER: arquind2
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$FTP_PASS"
+          python3 - <<'PY'
+          import ftplib,os,io
+          host=os.environ['FTP_HOST']
+          ftp=ftplib.FTP_TLS(host,timeout=35)
+          ftp.login(os.environ['FTP_USER'],os.environ['FTP_PASS'])
+          ftp.prot_p()
+          ftp.cwd('public_html')
+          for slug in ('alfresco-belo-horizonte','gestao-documental-belo-horizonte','consultoria-lgpd-belo-horizonte'):
+              try: ftp.mkd(slug)
+              except ftplib.error_perm: pass
+              data=open(slug+'/index.html','rb').read()
+              ftp.storbinary('STOR '+slug+'/index.html',io.BytesIO(data))
+              check=bytearray()
+              ftp.retrbinary('RETR '+slug+'/index.html',check.extend)
+              assert check==data,'Remote bytes differ: '+slug
+              print('UPLOAD_VERIFIED',slug)
+          ftp.quit()
+          PY
+      - name: Verificar publicacao HTTP
+        run: |
+          set -euo pipefail
+          for slug in alfresco-belo-horizonte gestao-documental-belo-horizonte consultoria-lgpd-belo-horizonte; do
+            curl --fail --location --silent --show-error --retry 3 "https://www.arquindex.com.br/$slug/" | grep -qi '<html'
+            echo "PUBLIC_OK https://www.arquindex.com.br/$slug/"
+          done
