@@ -55,7 +55,17 @@ Propriedade: sc-domain:arquindex.com.br. Período atual: 2026-09-18 a 2026-10-15
 As alterações foram publicadas em 2026-10-18 e não podem explicar métricas consolidadas anteriores.
 
 ## Sitemap e submissões
-Nenhuma URL nova foi criada nesta rodada. Os canonicals corrigidos são das próprias páginas existentes, portanto não houve atualização ou reenvio de sitemap. Nenhuma submissão ao Google, Bing ou IndexNow foi alegada.
+A verificação posterior encontrou XMLs acessíveis e anunciados nos três robots.txt, porém com elementos <loc> relativos. Como parte das mesmas três melhorias:
+- todas as URLs listadas foram testadas com HTTP 200 antes da escrita;
+- os 12, 17 e 11 elementos <loc> foram normalizados para HTTPS absoluto no próprio host;
+- /index.html foi consolidado como a raiz canônica apenas no sitemap ARQ-007;
+- os XMLs foram parseados antes e depois, sem duplicatas, e confirmados publicamente com HTTP 200;
+- workflow: https://github.com/arxazure/arquindex/actions/runs/39151252789
+- job: 117745189645
+- commit executor: https://github.com/arxazure/arquindex/commit/365d1327ff84eeb612932cc521d1ec043dc2774f
+- backup: /seo-backups/queue-20261018-afternoon-sitemaps-20261018T174821Z/
+
+Nenhuma URL nova foi criada. Não houve submissão ao Google, Bing ou IndexNow, e nenhuma indexação foi alegada.
 
 ## Próximo cursor
 - Retomar em ARQ-010.
