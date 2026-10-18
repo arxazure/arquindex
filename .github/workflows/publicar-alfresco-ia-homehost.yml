@@ -50,6 +50,8 @@ jobs:
           try:
             ftp.retrbinary('RETR '+target,existing.extend)
             if existing:
+              if hashlib.sha256(existing).digest()==hashlib.sha256(payload).digest():
+                print('ALREADY_CURRENT',target);sys.exit(0)
               print('EXISTING_PAGE_REVIEW_REQUIRED',target,hashlib.sha256(existing).hexdigest())
               sys.exit('ABORT_NO_OVERWRITE')
           except ftplib.error_perm as e:
