@@ -1,5 +1,5 @@
 name: Verificar design ARQ-007
-# Verificar após publicação confirmada 39154592038
+# Diagnosticar elementos que excedem a largura mobile
 on:
   push:
     branches: [master]
@@ -32,6 +32,7 @@ jobs:
               page.screenshot(path='visual/'+label+'.png',full_page=False)
               values=page.evaluate("""() => ({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,header:document.querySelectorAll('header.aq-header').length,logo:document.querySelector('.aq-logo').naturalWidth,h1:document.querySelectorAll('h1').length,background:getComputedStyle(document.body).backgroundColor,menu:!!document.querySelector('.aq-toggle')})""")
               assert values['header']==1 and values['logo']>0 and values['h1']==1,values
+              print('OVERFLOW',label,page.evaluate("() => [...document.querySelectorAll('body *')].map(e=>({tag:e.tagName,cls:e.className,id:e.id,right:e.getBoundingClientRect().right,width:e.getBoundingClientRect().width})).filter(e=>e.right>innerWidth+2)"),flush=True)
               assert values['scrollWidth']<=width+2,values
               if label=='mobile':
                 page.locator('.aq-toggle').click()
