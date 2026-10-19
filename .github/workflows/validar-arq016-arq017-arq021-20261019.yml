@@ -1,0 +1,70 @@
+name: Validar ARQ-016 ARQ-017 ARQ-021 2026-10-19
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/validar-arq016-arq017-arq021-20261019.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Preparar navegador
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium || true)
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-verify" playwright --no-audit --no-fund
+      - name: Validar mobile e desktop
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-verify/node_modules/playwright');
+          const fs=require('fs');
+          (async()=>{
+            const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+            const urls=[
+              ['ARQ-016','https://cedoc-compras-maua.arquindex.com.br/custo.html?post=ocr-para-documentos-corporativos-na-pratica&visual=20261019'],
+              ['ARQ-017','https://ia.arquindex.com.br/custo.html?post=relatorio-de-impacto-o-que-e&visual=20261019'],
+              ['ARQ-021','https://digitalizacao-documentos-beneficios.arquindex.com.br/passo-a-passo.html?post=organizacao-de-arquivo-morto&visual=20261019']
+            ];
+            const out=[];
+            for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+              const context=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+              for(const [id,url] of urls){
+                const page=await context.newPage();
+                const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});
+                await page.waitForTimeout(5000);
+                const d=await page.evaluate((id)=>({
+                  title:document.title,
+                  canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),
+                  h1:[...document.querySelectorAll('h1')].map(x=>x.innerText.trim()),
+                  description:document.querySelector('meta[name=description]')?.content||'',
+                  clientWidth:document.documentElement.clientWidth,
+                  scrollWidth:document.documentElement.scrollWidth,
+                  logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),
+                  widget:document.querySelectorAll('#arq-floating').length,
+                  old:document.querySelectorAll('.aq-brand-wa,#wa-widget-send-button').length,
+                  menu:!!document.querySelector('#aq-nav'),
+                  aeo:!!document.querySelector('[data-aq-aeo="'+id+'"]'),
+                  whatsapp:[...document.querySelectorAll('a')].some(a=>a.href.includes('5531973632725')),
+                  proposal:[...document.querySelectorAll('a')].some(a=>a.href.includes('solicitar-proposta-contratacao')),
+                  noindex:/noindex/i.test(document.querySelector('meta[name=robots]')?.content||'')
+                }),id);
+                const row={id,viewport:vp.name,status:response.status(),...d};out.push(row);
+                if(row.status!==200||row.canonical.length!==1||row.h1.length!==1||row.scrollWidth>row.clientWidth+1||row.noindex||!row.logo||row.widget!==1||row.old!==0||!row.menu||!row.aeo||!row.whatsapp||!row.proposal)throw new Error('ACCEPTANCE '+JSON.stringify(row));
+                await page.close();
+              }
+              await context.close();
+            }
+            await browser.close();
+            fs.writeFileSync(process.env.RUNNER_TEMP+'/arq-verify/report.json',JSON.stringify(out,null,2));
+            console.log('VISUAL_VERIFIED',JSON.stringify(out));
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validacao-arq016-arq017-arq021-20261019
+          path: ${{ runner.temp }}/arq-verify/report.json
