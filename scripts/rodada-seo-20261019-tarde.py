@@ -62,7 +62,7 @@ with ftplib.FTP_TLS(timeout=60) as f:
   var article=Array.from(blog.querySelectorAll("h1")).find(function(h){{return h.textContent.trim()===c.article;}});
   if(!article)return;
   Array.from(document.querySelectorAll("h1")).forEach(function(h){{if(h===article||blog.contains(h))return;var p=document.createElement("p");p.className=(h.className?h.className+" ":"")+"aq-context-title";p.innerHTML=h.innerHTML;h.replaceWith(p);}});
-  var can=document.querySelector('link[rel="canonical"]');if(can)can.href=c.canonical;
+  var cans=Array.from(document.querySelectorAll('link[rel="canonical"]'));var can=cans.shift();if(can)can.href=c.canonical;cans.forEach(function(x){x.remove();});
   if(!document.querySelector('[data-aq-aeo="{t['id']}"]'))article.closest("article,section,div").insertAdjacentHTML("beforeend",c.section);
  }}
  function start(){{apply();new MutationObserver(apply).observe(document.documentElement,{{childList:true,subtree:true}});}}
