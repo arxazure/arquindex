@@ -74,7 +74,8 @@ with ftplib.FTP_TLS(timeout=50) as f:
   for root in [base+'/subdominios/'+host,base+'/'+host,'/subdominios/'+host,'/'+host]:
    try:
     b=get(f,root+'/'+filename)
-    if selected in b.decode('utf8') and '<html' in b.decode('utf8').lower():
+    decoded=b.decode('utf8','ignore')
+    if '<html' in decoded.lower() and 'arquindex' in decoded.lower():
      targets=[(root+'/'+filename,selected)];roots[root]='https://'+host+'/';break
    except ftplib.error_perm:pass
  else:
