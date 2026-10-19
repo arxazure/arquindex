@@ -53,3 +53,11 @@ Hashes públicos:
 
 ## Próximo cursor
 ARQ-022. Auditar ARQ-022 a ARQ-027 e reservar pelo menos uma página ainda não trabalhada.
+
+## Consolidação final da rodada
+- Canonical única consolidada no workflow https://github.com/arxazure/arquindex/actions/runs/39299680181 (commit `eb2081b579c3e012b4f64bd4e8ae90ae8815882b`).
+- O validador detectou overflow móvel real na ARQ-017: 414 px de conteúdo em viewport de 390 px. A primeira tentativa de correção falhou antes de escrever por erro de criação do diretório de backup.
+- Correção responsiva da tabela AEO da ARQ-017 publicada com backup pelo workflow https://github.com/arxazure/arquindex/actions/runs/39301121187 (commit `49ea199f9c6f970da62a107e56b342b13050f916`).
+- Validação final concluída com sucesso: https://github.com/arxazure/arquindex/actions/runs/39301212577.
+- Em ARQ-016, ARQ-017 e ARQ-021, nos viewports 390×844 e 1440×900: HTTP 200, `scrollWidth == clientWidth`, canonical única, um H1, sem `noindex`, logo/menu oficiais, atendimento único, WhatsApp, proposta e bloco AEO.
+- Tentativas intermediárias com falha permaneceram registradas para rastreabilidade; nenhuma delas deixou conteúdo parcial após a consolidação final.
