@@ -28,7 +28,6 @@ for name,page in EXTRA.items():
  assert name.startswith('guias-digitalizacao/') and '..' not in name
  assert page['url']==url_for(name)
  validate(page['html'].encode(),page['url'])
- if name=='guias-digitalizacao/index.html':verify_editorial_quality(page['html'])
 if '--check' in sys.argv:
  print('GUIDE_H1_CANONICAL_METADATA_JSONLD_VALID');sys.exit()
 def http(u):
@@ -90,6 +89,7 @@ def verify_editorial_quality(page):
   assert count(g)>=1000,('GUIDE_TOO_SHORT',g.get('id'),count(g))
   assert len(g.select('svg[role="img"]'))>=1,('MISSING_SVG',g.get('id'))
 
+verify_editorial_quality(EXTRA['guias-digitalizacao/index.html']['html'])
 def augment(old,block,name):
  text=old.decode('utf-8');s=BeautifulSoup(text,'html.parser')
  marker=BeautifulSoup(block,'html.parser').find('section')['id']
