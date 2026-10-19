@@ -2,6 +2,7 @@ import { renderAuthorityGuide } from "./authority-guide-longform.js";
 import { renderDigitalize, digitalizePaths } from "./digitalize-pages.js";
 import { renderRegional, regionalPaths, regionalBase } from "./regional-ged-replica.js";
 import http from "node:http";
+import { alfrescoLandingHtml } from "./alfresco-campaign.js";
 import { alfrescoIaPage } from "./alfresco-ia-pages.js";
 import { rmbhData, rmbhPage } from "./rmbh-pages.js";
 import { URL } from "node:url";
@@ -420,6 +421,7 @@ const server=http.createServer(async(req,res)=>{
  const originalEnd=res.end.bind(res);
  res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return originalEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(p==="/alfresco-ecm-open-source"||p==="/alfresco-ecm-open-source/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(alfrescoLandingHtml);}
  const alfrescoPage=alfrescoIaPage(p); if(alfrescoPage){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(alfrescoPage);}
  const digitalize=renderDigitalize(p,canonicalOrigin(req)); if(digitalize){res.writeHead(200,{"content-type":digitalize.type,"cache-control":"public, max-age=300"});return res.end(digitalize.body);}
 
