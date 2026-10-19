@@ -1,4 +1,4 @@
-name: Rodada SEO ARQ-016 ARQ-017 ARQ-021 2026-10-19 tarde v4
+name: Consolidar canonical ARQ-016 ARQ-017 ARQ-021 2026-10-19
 on:
   push:
     branches: [master]
@@ -13,26 +13,11 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 8
     env:
       FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
       - run: pip install beautifulsoup4
-      - name: Aplicar identidade somente nos tres arquivos confirmados
-        run: |
-          for target in             "https://cedoc-compras-maua.arquindex.com.br/custo.html"             "https://ia.arquindex.com.br/custo.html"             "https://digitalizacao-documentos-beneficios.arquindex.com.br/passo-a-passo.html"
-          do
-            DESIGN_TARGET="$target" python scripts/padronizar-identidade-arquindex.py
-          done
-      - name: Publicar atendimento unico
-        env:
-          ATENDIMENTO_TARGETS: https://cedoc-compras-maua.arquindex.com.br/custo.html?post=ocr-para-documentos-corporativos-na-pratica,https://ia.arquindex.com.br/custo.html?post=relatorio-de-impacto-o-que-e,https://digitalizacao-documentos-beneficios.arquindex.com.br/passo-a-passo.html?post=organizacao-de-arquivo-morto
-        run: python scripts/aplicar-atendimento-unico.py
-      - name: Corrigir canonicals H1 e respostas AEO
+      - name: Consolidar canonical única nos três artigos
         run: python scripts/rodada-seo-20261019-tarde.py
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: rodada-seo-20261019-tarde
-          path: design-report/*.json
