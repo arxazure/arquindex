@@ -56,7 +56,7 @@ try:
  with ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=45) as f:
   f.connect('h59.servidorhh.com',21);
   assert f.sock.getpeername()[0] in expected_ips, 'PROVIDER_IP_MISMATCH'
- f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+  f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
   # A raiz corresponde ao mecanismo existente; nao descobrir outras raizes.
   homepage=get(f,'/public_html/index.html')
   assert b'arquindex' in homepage.lower(), 'WRONG_DOCUMENT_ROOT'
