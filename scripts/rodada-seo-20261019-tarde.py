@@ -52,7 +52,7 @@ with ftplib.FTP_TLS(timeout=60) as f:
     path,old=locate(f,base,t)
     text=old.decode('utf-8')
     marker='arquindex-aeo-'+t['id'].lower()+'-20261019'
-    text=text.replace("var can=document.querySelector('link[rel=\\\"canonical\\\"]');if(can)can.href=c.canonical;","var cans=Array.from(document.querySelectorAll('link[rel=\\\"canonical\\\"]'));var can=cans.shift();if(can)can.href=c.canonical;cans.forEach(function(x){x.remove();});")
+    text=text.replace("""var can=document.querySelector('link[rel="canonical"]');if(can)can.href=c.canonical;""","""var cans=Array.from(document.querySelectorAll('link[rel="canonical"]'));var can=cans.shift();if(can)can.href=c.canonical;cans.forEach(function(x){x.remove();});""")
     if marker not in text:
       payload=json.dumps(dict(slug=t['slug'],article=t['article'],canonical='https://'+t['host']+'/'+t['file']+'?post='+t['slug'],section=t['section']),ensure_ascii=False)
       script=f'''<script id="{marker}">
