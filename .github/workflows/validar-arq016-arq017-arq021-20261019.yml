@@ -22,8 +22,9 @@ jobs:
           node <<'JS'
           const {chromium}=require(process.env.RUNNER_TEMP+'/arq-verify/node_modules/playwright');
           const fs=require('fs');
+          let browser;
           (async()=>{
-            const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+            browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
             const urls=[
               ['ARQ-016','https://cedoc-compras-maua.arquindex.com.br/custo.html?post=ocr-para-documentos-corporativos-na-pratica&visual=20261019'],
               ['ARQ-017','https://ia.arquindex.com.br/custo.html?post=relatorio-de-impacto-o-que-e&visual=20261019'],
@@ -61,7 +62,7 @@ jobs:
             await browser.close();
             fs.writeFileSync(process.env.RUNNER_TEMP+'/arq-verify/report.json',JSON.stringify(out,null,2));
             console.log('VISUAL_VERIFIED',JSON.stringify(out));
-          })().catch(e=>{console.error(e);process.exitCode=1});
+          })().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1});
           JS
       - uses: actions/upload-artifact@v4
         if: always()
