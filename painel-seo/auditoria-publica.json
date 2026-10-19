@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-10-19T16:59:33.269202+00:00",
+  "source": "Live public HTML + sitemap.xml; not Google Search Console",
+  "sitemap_status": "ok",
+  "scanned": 1,
+  "issues_count": 1,
+  "issues": [
+    {
+      "url": "https://www.arquindex.com.br/",
+      "issues": [
+        "Meta description ausente"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://www.arquindex.com.br/",
+      "issues": [
+        "Meta description ausente"
+      ],
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/",
+      "title": "Arquindex | Digitalização de Documentos, Gestão Documental, LGPD e Databooks em Belo Horizonte | Arquindex",
+      "description": "",
+      "canonical": "https://www.arquindex.com.br/"
+    }
+  ]
+}
