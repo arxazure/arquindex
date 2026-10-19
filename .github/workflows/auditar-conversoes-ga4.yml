@@ -1,0 +1,23 @@
+name: Auditar GA4 publico sem enviar eventos
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/auditar-conversoes-ga4.yml'
+      - 'scripts/audit_ga4_public.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ler HTML e JavaScript sem executar Analytics
+        run: python3 scripts/audit_ga4_public.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ga4-public-audit
+          path: ga4-public-audit.json
+          retention-days: 30
