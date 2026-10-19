@@ -1,0 +1,21 @@
+name: Corrigir overflow mobile ARQ-017 2026-10-19
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/corrigir-mobile-arq017-20261019.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Corrigir overflow com backup e verificação pública
+        run: python scripts/corrigir-mobile-arq017-20261019.py
