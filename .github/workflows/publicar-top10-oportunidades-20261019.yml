@@ -1,0 +1,34 @@
+name: Publicar oportunidades Top10 2026-10-19
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo/top10-oportunidades-20261019/**'
+      - 'scripts/publish-top10-opportunities.py'
+      - '.github/workflows/publicar-top10-oportunidades-20261019.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - name: Validar guia e sintaxe antes de acessar hospedagem
+        run: |
+          python -m py_compile scripts/publish-top10-opportunities.py
+          python scripts/publish-top10-opportunities.py --check
+      - name: Publicar guia e fortalecer tres paginas com backup e rollback
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python scripts/publish-top10-opportunities.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: top10-oportunidades-publicacao
+          path: publish-report/
