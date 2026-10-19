@@ -51,7 +51,7 @@ Fontes primárias:
 - https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm
 
 ## Backup, commits e workflows
-- Backup da identidade ARQ-010: `/seo-backups/identidade-20261019T114316Z/` (diretório protegido; caminho inferido do timestamp da etapa, consultar artefato se necessário).
+- Backup da identidade ARQ-010: registrado no artefato `rodada-seo-20261019-manha` do workflow; o caminho não foi reproduzido no resumo de logs e não é presumido aqui.
 - Backup do atendimento ARQ-010: `/seo-backups/atendimento-unico-20261019T114338Z/bcd9558195880cc056be.html`.
 - Backup final conjunto: `/seo-backups/rodada-20261019-manha-20261019T114356Z/`.
 - Commit da publicação: https://github.com/arxazure/arquindex/commit/5ebe41798123b59fd7adcea23afdc8444b756ba1
