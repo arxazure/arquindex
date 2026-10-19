@@ -84,8 +84,10 @@ Bing Webmaster, mesmos períodos:
 - Recorte anterior: 13 linhas, 25 impressões e 6 cliques.
 - A composição de consultas mudou e as amostras são pequenas; não há causalidade demonstrada.
 
-## Sitemap, submissões e redes
-- Nenhuma URL nova foi criada e as duas canônicas já existiam; sitemap não foi alterado.
+## Sitemap, robots, submissões e redes
+- `governanca.arquindex.com.br/robots.txt` permite rastreamento e anuncia `/sitemap.xml`. O sitemap lista `/bh.html`, mas não a variante parametrizada; como a URL do artigo já existia e nenhuma URL nova foi criada, não houve inclusão automática sem decisão de arquitetura.
+- O guia CONARQ já consta em `https://www.arquindex.com.br/sitemap-blog-original.xml`, anunciado pelo índice principal; o XML foi lido publicamente e a URL foi encontrada.
+- Nenhuma URL nova foi criada e as duas canônicas já existiam; nenhum sitemap foi alterado.
 - Não houve reenvio ao Google, Bing ou IndexNow. Nenhuma indexação foi alegada.
 - Nenhuma publicação social foi criada nesta rotina, evitando duplicação com a fila social.
 
