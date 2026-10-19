@@ -2,6 +2,8 @@ import { renderAuthorityGuide } from "./authority-guide-longform.js";
 import { renderDigitalize, digitalizePaths } from "./digitalize-pages.js";
 import { renderRegional, regionalPaths, regionalBase } from "./regional-ged-replica.js";
 import http from "node:http";
+import { sectorPages } from "./sector-digitalization.js";
+import { opportunityGuideHtml, opportunityBlocks } from "./top10-opportunities.js";
 import { alfrescoLandingHtml } from "./alfresco-campaign.js";
 import { alfrescoIaPage } from "./alfresco-ia-pages.js";
 import { rmbhData, rmbhPage } from "./rmbh-pages.js";
@@ -21,7 +23,7 @@ const BASE = (process.env.SITE_BASE_URL || "").replace(/\/$/,"");
 const WHATSAPP = "5531973632725";
 
 const services = [
-["digitalizacao-documentos","Digitalização de Documentos","Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.","A partir de R$ 0,09 por página"],
+["digitalizacao-documentos","Digitalização de Documentos","Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.","A partir de R$ 0,10 por página"],
 ["digitalizacao-certificada","Digitalização Certificada","Projeto de digitalização alinhado aos requisitos técnicos do Decreto 10.278/2020, com integridade, metadados e controle de qualidade.","Sob orçamento"],
 ["prontuarios-medicos","Digitalização de Prontuários Médicos","Organização, captura, OCR e indexação de prontuários com foco em rastreabilidade, sigilo e acesso controlado.","Sob orçamento"],
 ["gestao-documental","Gestão Documental","Classificação, plano de classificação, temporalidade, retenção, destinação, governança e acesso seguro.","Sob orçamento"],
@@ -418,9 +420,21 @@ function sitemap(req,index){
 }
 const ARQUI_WIDGET = `<style id="arqui-railway-style">#arqui-railway{position:fixed;bottom:16px;right:16px;z-index:99999;font:14px system-ui}#arqui-railway button{background:#078b77;color:white;border:0;border-radius:32px;padding:13px 18px;font-weight:700;box-shadow:0 4px 16px #0004;cursor:pointer}#arqui-railway .menu{display:none;position:absolute;bottom:58px;right:0;background:white;color:#183849;padding:15px;border-radius:14px;box-shadow:0 6px 24px #0004;width:min(290px,calc(100vw - 32px))}#arqui-railway[data-open=true] .menu{display:block}#arqui-railway a{display:block;padding:10px;color:#087b70}</style><div id="arqui-railway" data-open="false"><div class="menu"><strong>🤖 Arqui · Atendimento</strong><p>Como prefere começar?</p><a href="https://www.arquindex.com.br/solicitar-proposta-contratacao.html">Conversar com o robô</a><a href="https://wa.me/5531973632725">Ir direto ao WhatsApp</a></div><button type="button" aria-label="Abrir atendimento Arqui" onclick="var e=document.getElementById('arqui-railway');e.dataset.open=e.dataset.open==='true'?'false':'true'">🤖 Atendimento</button></div><script>(function(){function d(){document.querySelectorAll('a[href*=\\\"wa.me/\\\"]').forEach(a=>{if(a.closest('#arqui-railway'))return;let s=getComputedStyle(a),p=a.parentElement;if(s.position==='fixed'||p&&getComputedStyle(p).position==='fixed'){(s.position==='fixed'?a:p).style.setProperty('display','none','important')}})}document.readyState==='loading'?document.addEventListener('DOMContentLoaded',d):d()})();</script>`;
 const server=http.createServer(async(req,res)=>{
- const originalEnd=res.end.bind(res);
- res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return originalEnd(body,...args)};
+ const contentEnd=res.end.bind(res);
+ res.end=(body,...args)=>{
+  const block=opportunityBlocks[new URL(req.url,"http://localhost").pathname];
+  if(block&&typeof body==='string'&&!body.includes('id="top10-')){
+   const heading=body.search(/<h1\b/i),close=body.indexOf('</section>',heading);
+   if(heading>=0&&close>=0)body=body.slice(0,close+10)+block+body.slice(close+10);
+  }
+  return contentEnd(body,...args);
+ };
+ const enhancedEnd=res.end.bind(res);
+ res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return enhancedEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ const sector=sectorPages[p]; if(sector){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(sector);}
+ if(p==="/guias-digitalizacao"||p==="/guias-digitalizacao/index.html"){res.writeHead(301,{location:"/guias-digitalizacao/"});return res.end();}
+ if(p==="/onde-digitalizar-documentos.html"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(opportunityGuideHtml);}
  if(p==="/alfresco-ecm-open-source"||p==="/alfresco-ecm-open-source/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(alfrescoLandingHtml);}
  const alfrescoPage=alfrescoIaPage(p); if(alfrescoPage){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(alfrescoPage);}
  const digitalize=renderDigitalize(p,canonicalOrigin(req)); if(digitalize){res.writeHead(200,{"content-type":digitalize.type,"cache-control":"public, max-age=300"});return res.end(digitalize.body);}
@@ -563,5 +577,6 @@ async function notifyIndexNowForPublishedPages(){
 if(process.env.NODE_ENV==="production"&&process.env.INDEXNOW_AUTO_SUBMIT==="true"&&BASE===OFFICIAL){
  setTimeout(()=>{notifyIndexNowForPublishedPages().catch(err=>console.warn("IndexNow error",String(err)));},12000);
 }
+
 
 
