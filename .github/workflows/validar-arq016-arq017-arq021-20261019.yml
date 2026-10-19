@@ -1,4 +1,4 @@
-name: Validar ARQ-016 ARQ-017 ARQ-021 2026-10-19 final
+name: Validar ARQ-016 ARQ-017 ARQ-021 2026-10-19 pós-mobile
 on:
   push:
     branches: [master]
