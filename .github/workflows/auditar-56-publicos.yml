@@ -1,0 +1,36 @@
+name: Auditar 56 subdominios publicos
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'scripts/audit_56_public.py'
+      - '.github/workflows/auditar-56-publicos.yml'
+permissions:
+  contents: read
+  issues: write
+jobs:
+  auditoria:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4
+      - name: Auditar DNS TLS HTTP SEO e links sem publicar
+        env:
+          AUDIT_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python scripts/audit_56_public.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: auditoria-publica-56
+          path: audit-56/
+      - name: Registrar resultados na issue 10
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat audit-56/report.md >> "$GITHUB_STEP_SUMMARY"
+          gh issue comment 10 --repo "$GITHUB_REPOSITORY" --body-file audit-56/report.md
