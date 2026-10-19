@@ -73,8 +73,8 @@ async function loadDirectGsc(){
   const rows=payload.rows.filter(r=>r&&typeof r.query==='string'&&typeof r.page==='string');
   data.ranking=rows.map(r=>({query:r.query,page:r.page,clicks:Number(r.clicks)||0,impressions:Number(r.impressions)||0,position:Number(r.position)||0}));
   data.importedAt=payload.generated_at;
-  save();
   const count=generateSeoActions();
+  save();
   if(el)el.textContent=rows.length+' registros reais importados de '+(payload.properties||[]).length+' propriedades; '+count+' novas ações.';
  }catch(err){if(el)el.textContent='Coleta direta indisponível: '+err.message+'. Os dados existentes foram preservados.'}
 }
