@@ -6,6 +6,7 @@ ROOT='https://www.arquindex.com.br/'
 BASE='/public_html/'
 P=json.loads(pathlib.Path('seo/top10-oportunidades-20261019/payload.json').read_text())
 NEW='onde-digitalizar-documentos.html'
+KNOWN_GUIDE_SHA256={"https://www.arquindex.com.br/guias-digitalizacao/documentos-empresas.html":"5e80a5d56437fe2e55293d717c13fb98a41f89019280a67cac0d6967f8ac2fa7","https://www.arquindex.com.br/guias-digitalizacao/prontuarios-medicos.html":"3d2ae11d7fc30841abf102d4ffe6dc5ad026c5739e7f12405e4f326ecb30a05e","https://www.arquindex.com.br/guias-digitalizacao/documentos-funcionarios.html":"a69a7dde9839c4473f773402e3328e4d6d4de7ce1792b7ecb2c1b474202bfba5","https://www.arquindex.com.br/guias-digitalizacao/documentos-sesmt.html":"a649611fe168f521c570d4fcb9d109afd0f5b0beccb9c20b0878411d1d14f562","https://www.arquindex.com.br/guias-digitalizacao/dossie-funcionario.html":"f996c1f64fe5511a25f970de6e054eef631ece954be7be694d306299ec613b0c","https://www.arquindex.com.br/guias-digitalizacao/livros-cartorio.html":"bcd97ba6cb940913b60f32fb131b8412a1fe3ea81dd27eafc9ad77f236a9436c","https://www.arquindex.com.br/guias-digitalizacao/fichas-pacientes.html":"c29fcab4882258c7ae9b52660d8e222ec4491cb95537d6771acad0331a16a0dd","https://www.arquindex.com.br/guias-digitalizacao/contratos.html":"08758fd38395a7ac441bec172d62cd14327965301c11dc24f38b2d33423cde20","https://www.arquindex.com.br/guias-digitalizacao/":"93be49f8fe90f15a8e87688a213c46c0d6becc89e73b7c379c58d27d7afa06fa"}
 EXTRA=json.loads(pathlib.Path('seo/top10-oportunidades-20261019/pages.json').read_text())
 def url_for(name):
  return ROOT+('' if name=='index.html' else name[:-10] if name.endswith('/index.html') else name)
@@ -27,6 +28,7 @@ for name,page in EXTRA.items():
  assert name.startswith('guias-digitalizacao/') and '..' not in name
  assert page['url']==url_for(name)
  validate(page['html'].encode(),page['url'])
+ if name=='guias-digitalizacao/index.html':verify_editorial_quality(page['html'])
 if '--check' in sys.argv:
  print('GUIDE_H1_CANONICAL_METADATA_JSONLD_VALID');sys.exit()
 def http(u):
@@ -46,6 +48,48 @@ def meta_update(text,name,value,prop=False):
   m=matches[0];old=BeautifulSoup(m[0],'html.parser').find('meta');old['content']=value
   return text[:m.start()]+str(old)+text[m.end():]
  return text
+def repair_related_links(text):
+ heading=re.search(r'<h[2-5]\b[^>]*>\s*Conte[uú]dos relacionados\s*</h[2-5]\s*>',text,re.I)
+ if not heading:return text,0
+ following=text[heading.end():]
+ bound=re.search(r'</section\s*>|<h[2-5]\b',following,re.I)
+ area_end=heading.end()+(bound.start() if bound else min(len(following),16000))
+ section=text[heading.end():area_end]
+ target=[
+  ('guias-digitalizacao/documentos-empresas.html','Digitalização de documentos para empresas'),
+  ('guias-digitalizacao/prontuarios-medicos.html','Digitalização de prontuários médicos'),
+  ('guias-digitalizacao/documentos-funcionarios.html','Digitalização de documentos de funcionários'),
+  ('guias-digitalizacao/documentos-sesmt.html','Digitalização de documentos do SESMT'),
+  ('guias-digitalizacao/dossie-funcionario.html','Digitalização de dossiês de funcionários'),
+  ('guias-digitalizacao/livros-cartorio.html','Digitalização de livros de cartório'),
+  ('guias-digitalizacao/fichas-pacientes.html','Digitalização de fichas de pacientes'),
+  ('guias-digitalizacao/contratos.html','Digitalização de contratos')
+ ]
+ pattern=r'<a\b[^>]*\bhref=(["\x27])(?:https?://(?:www\.)?arquindex\.com\.br)?/?index\.html\1[^>]*>\s*Index\s*</a>'
+ matches=list(re.finditer(pattern,section,re.I))
+ if not matches:raise RuntimeError('RELATED_HEADING_FOUND_BUT_NO_INDEX_LINKS')
+ if len(matches)!=8:raise RuntimeError('REVIEW_RELATED_INDEX_COUNT_'+str(len(matches)))
+ state={'i':0}
+ def replace(match):
+  path,title=target[state['i']];state['i']+=1
+  tag=match.group()
+  tag=re.sub(r'\bhref=(["\x27])[^"\x27]*\1','href="'+ROOT+path+'"',tag,count=1,flags=re.I)
+  tag=re.sub(r'>\s*Index\s*</a>', '>'+title+'</a>',tag,count=1,flags=re.I)
+  return tag
+ changed=re.sub(pattern,replace,section,flags=re.I)
+ return text[:heading.end()]+changed+text[area_end:],8
+
+def verify_editorial_quality(page):
+ main=BeautifulSoup(page,'html.parser').find('main')
+ assert main is not None,'HUB_MISSING_MAIN'
+ count=lambda e:len(re.findall(r'\b[\wÀ-ÿ]+\b',e.get_text(' ',strip=True),re.UNICODE))
+ assert count(main)>=3000,('HUB_TOO_SHORT',count(main))
+ guides=main.select('section[data-step-guide]')
+ assert len(guides)==3,('HUB_GUIDE_COUNT',len(guides))
+ for g in guides:
+  assert count(g)>=1000,('GUIDE_TOO_SHORT',g.get('id'),count(g))
+  assert len(g.select('svg[role="img"]'))>=1,('MISSING_SVG',g.get('id'))
+
 def augment(old,block,name):
  text=old.decode('utf-8');s=BeautifulSoup(text,'html.parser')
  marker=BeautifulSoup(block,'html.parser').find('section')['id']
@@ -59,6 +103,7 @@ def augment(old,block,name):
   else:
    main_end=re.search(r'</main\s*>',text,re.I);assert main_end;at=main_end.start()
   text=text[:at]+'\n'+block+'\n'+text[at:]
+ if name=='index.html':text,repaired=repair_related_links(text)
  if name in P['metadata']:
   meta=P['metadata'][name]
   text,n=re.subn(r'<title\b[^>]*>.*?</title>',lambda _:'<title>'+meta['title']+'</title>',text,count=1,flags=re.I|re.S);assert n==1
@@ -95,8 +140,8 @@ try:
    except ftplib.error_perm as e:
     if not str(e).startswith('550'):raise
     before[name]=None
-   if before[name] is not None:
-    assert before[name]==page['html'].encode(), 'EXISTING_DESTINATION_NEEDS_REVIEW '+name
+   if before[name] is not None and before[name]!=page['html'].encode():
+    assert digest(before[name])==KNOWN_GUIDE_SHA256.get(page['url']), 'EXISTING_DESTINATION_NEEDS_REVIEW '+name
    planned[name]=page['html'].encode()
   ns='http://www.sitemaps.org/schemas/sitemap/0.9';ET.register_namespace('',ns)
   rootname='sitemap.xml';before[rootname]=get(f,BASE+rootname);root=ET.fromstring(before[rootname])
@@ -139,6 +184,7 @@ try:
   try:
    # Todas as verificacoes anteriores precedem a primeira alteracao publica.
    for name,data in planned.items():
+    if before[name]==data:continue
     if before[name] is not None:assert get(f,BASE+name)==before[name],('CONCURRENT_CHANGE',name)
     else:
      try:get(f,BASE+name)
