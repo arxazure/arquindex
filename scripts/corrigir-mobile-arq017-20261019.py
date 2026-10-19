@@ -16,6 +16,17 @@ def put(f,p,data,label):
  d=posixpath.dirname(p);n=posixpath.basename(p);tmp=d+'/.tmp-'+n+'-'+label
  f.storbinary('STOR '+tmp,io.BytesIO(data));assert get(f,tmp)==data
  f.delete(p);f.rename(tmp,p);assert get(f,p)==data
+def mkdir(f,p):
+ cur=f.pwd()
+ try:
+  f.cwd('/')
+  for part in p.strip('/').split('/'):
+   if not part:continue
+   try:f.mkd(part)
+   except ftplib.error_perm as e:
+    if not str(e).startswith('550'):raise
+   f.cwd(part)
+ finally:f.cwd(cur)
 def locate(f,base):
  for root in [base+'/subdominios/'+HOST,base+'/'+HOST,'/subdominios/'+HOST,'/'+HOST]:
   p=root+'/'+FILE
@@ -39,9 +50,7 @@ with ftplib.FTP_TLS(timeout=60) as f:
  else:
   i=text.lower().rindex('</head>');new=(text[:i]+CSS+'\n'+text[i:]).encode('utf-8')
  backup=base+'/seo-backups/arq017-mobile-'+STAMP
- try:f.mkd(backup)
- except ftplib.error_perm as e:
-  if not str(e).startswith('550'):raise
+ mkdir(f,backup)
  f.storbinary('STOR '+backup+'/.htaccess',io.BytesIO(b'Options -Indexes\nRequire all denied\n'))
  bp=backup+'/custo-'+hashlib.sha256(old).hexdigest()[:12]+'.html'
  f.storbinary('STOR '+bp,io.BytesIO(old));assert get(f,bp)==old
