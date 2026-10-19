@@ -1,4 +1,4 @@
-name: Consolidar canonical ARQ-016 ARQ-017 ARQ-021 2026-10-19
+name: Consolidar canonical ARQ-016 ARQ-017 ARQ-021 2026-10-19 final
 on:
   push:
     branches: [master]
