@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-19",
+  "content_commit": "68c4c1443e51166e330256ba44ce8a6343248471",
+  "branch": "master",
+  "manifest": "seo/lotes/2026-10-19-100paginas/manifest.json",
+  "readback_confirmed": true,
+  "quality": {
+    "run_id": 39250918106,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/arxazure/arquindex/actions/runs/39250918106",
+    "main_words": 3661,
+    "tests_passed": 4,
+    "not_a_deploy": true
+  },
+  "preflight": {
+    "run_id": 39249890644,
+    "status": "completed",
+    "conclusion": "success",
+    "mode": "read_only",
+    "publication_allowed": false,
+    "blocker": "SSLCertVerificationError: certificate hostname mismatch for ftp.arquindex.com.br",
+    "https_pages_200": 7,
+    "robots_200": true,
+    "sitemap_200": true
+  },
+  "publication": {
+    "new": 0,
+    "updated": 0,
+    "new_deficit": 100,
+    "drafts_existing": 1,
+    "production_untouched": true,
+    "backup_not_created": true
+  },
+  "search_submission": {
+    "google": 0,
+    "bing": 0,
+    "indexnow": 0,
+    "indexing_confirmed": 0
+  },
+  "private_top10": {
+    "prior_settings_read": true,
+    "updated": false,
+    "error": "GET failed connecting to configured browser proxy, port 8889"
+  },
+  "next_step": "Hosting provider must correct certificate for configured FTPS hostname or supply documented validated endpoint; no TLS bypass permitted. Then resume gated origin integration and distinct-intent editorial backlog."
+}
