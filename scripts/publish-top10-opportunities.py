@@ -6,6 +6,9 @@ ROOT='https://www.arquindex.com.br/'
 BASE='/public_html/'
 P=json.loads(pathlib.Path('seo/top10-oportunidades-20261019/payload.json').read_text())
 NEW='onde-digitalizar-documentos.html'
+EXTRA=json.loads(pathlib.Path('seo/top10-oportunidades-20261019/pages.json').read_text())
+def url_for(name):
+ return ROOT+('' if name=='index.html' else name[:-10] if name.endswith('/index.html') else name)
 STAMP=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
 def digest(b):return hashlib.sha256(b).hexdigest()
 def validate(b,url,marker=None):
@@ -20,6 +23,10 @@ def validate(b,url,marker=None):
  for tag in s.find_all('script',type='application/ld+json'):json.loads(tag.string or tag.text)
  return s
 validate(P['html'].encode(),P['url'])
+for name,page in EXTRA.items():
+ assert name.startswith('guias-digitalizacao/') and '..' not in name
+ assert page['url']==url_for(name)
+ validate(page['html'].encode(),page['url'])
 if '--check' in sys.argv:
  print('GUIDE_H1_CANONICAL_METADATA_JSONLD_VALID');sys.exit()
 def http(u):
@@ -58,7 +65,7 @@ def augment(old,block,name):
   text=meta_update(text,'description',meta['description'])
   text=meta_update(text,'og:title',meta['title'],True)
   text=meta_update(text,'og:description',meta['description'],True)
- data=text.encode();url=ROOT+('' if name=='index.html' else name)
+ data=text.encode();url=url_for(name)
  after=validate(data,url,marker)
  # Nenhum script existente, rastreador, formulário ou H1 pode desaparecer.
  assert [str(x) for x in s.find_all('script')]==[str(x) for x in after.find_all('script')],('SCRIPTS_CHANGED',name)
@@ -83,6 +90,14 @@ try:
   if before[NEW] is not None:
    assert b'top10-onde-digitalizar-20261019' in before[NEW] or before[NEW]==P['html'].encode(), 'DESTINATION_ALREADY_EXISTS_REVIEW_REQUIRED'
   planned[NEW]=P['html'].encode()
+  for name,page in EXTRA.items():
+   try:before[name]=get(f,BASE+name)
+   except ftplib.error_perm as e:
+    if not str(e).startswith('550'):raise
+    before[name]=None
+   if before[name] is not None:
+    assert before[name]==page['html'].encode(), 'EXISTING_DESTINATION_NEEDS_REVIEW '+name
+   planned[name]=page['html'].encode()
   ns='http://www.sitemaps.org/schemas/sitemap/0.9';ET.register_namespace('',ns)
   rootname='sitemap.xml';before[rootname]=get(f,BASE+rootname);root=ET.fromstring(before[rootname])
   childname='sitemap-top10-oportunidades-20261019.xml'
@@ -92,25 +107,34 @@ try:
     if not str(e).startswith('550'):raise
     before[childname]=None
    child=ET.Element('{'+ns+'}urlset')
-   for u in [P['url'],ROOT,ROOT+'digitalizacao.html',ROOT+'guarda_de_documentos.html']:
+   for u in [P['url'],ROOT,ROOT+'digitalizacao.html',ROOT+'guarda_de_documentos.html']+[x['url'] for x in EXTRA.values()]:
     el=ET.SubElement(child,'{'+ns+'}url');ET.SubElement(el,'{'+ns+'}loc').text=u;ET.SubElement(el,'{'+ns+'}lastmod').text='2026-10-19'
    planned[childname]=ET.tostring(child,encoding='utf-8',xml_declaration=True)
    childurl=ROOT+childname
    if childurl not in [x.text for x in root.iter('{'+ns+'}loc')]:
     el=ET.SubElement(root,'{'+ns+'}sitemap');ET.SubElement(el,'{'+ns+'}loc').text=childurl
   elif root.tag=='{'+ns+'}urlset':
-   if P['url'] not in [x.text for x in root.iter('{'+ns+'}loc')]:
-    el=ET.SubElement(root,'{'+ns+'}url');ET.SubElement(el,'{'+ns+'}loc').text=P['url'];ET.SubElement(el,'{'+ns+'}lastmod').text='2026-10-19'
+   for u in [P['url']]+[x['url'] for x in EXTRA.values()]:
+    if u not in [x.text for x in root.iter('{'+ns+'}loc')]:
+     el=ET.SubElement(root,'{'+ns+'}url');ET.SubElement(el,'{'+ns+'}loc').text=u;ET.SubElement(el,'{'+ns+'}lastmod').text='2026-10-19'
   else:raise RuntimeError('UNEXPECTED_SITEMAP')
   planned[rootname]=ET.tostring(root,encoding='utf-8',xml_declaration=True)
   assert set(x.text for x in ET.fromstring(before[rootname]).iter('{'+ns+'}loc')).issubset(x.text for x in root.iter('{'+ns+'}loc'))
   robot=urllib.robotparser.RobotFileParser();robot.parse(http(ROOT+'robots.txt')[3].decode().splitlines());assert robot.can_fetch('Googlebot',P['url'])
+  assert all(robot.can_fetch('Googlebot',x['url']) for x in EXTRA.values()), 'ROBOTS_BLOCKS_NEW_COLLECTION'
   backup='/seo-backups/top10-oportunidades-'+STAMP
   try:f.mkd('/seo-backups')
   except ftplib.error_perm:pass
   f.mkd(backup);put(f,backup+'/.htaccess',b'Require all denied\n');report['backup']=backup
   for name,old in before.items():
-   if old is not None:put(f,backup+'/'+name+'.bak',old)
+   if old is not None:put(f,backup+'/'+hashlib.sha256(name.encode()).hexdigest()+'.bak',old)
+  put(f,backup+'/manifest.json',json.dumps({name:hashlib.sha256(name.encode()).hexdigest()+'.bak' for name,old in before.items() if old is not None}).encode())
+  # Criar apenas o diretorio da nova colecao, sem mover ou excluir paginas.
+  try:f.cwd(BASE+'guias-digitalizacao')
+  except ftplib.error_perm as e:
+   if not str(e).startswith('550'):raise
+   f.mkd(BASE+'guias-digitalizacao');f.cwd(BASE+'guias-digitalizacao')
+  f.cwd('/')
   applied=[]
   try:
    # Todas as verificacoes anteriores precedem a primeira alteracao publica.
@@ -123,7 +147,7 @@ try:
      else:raise RuntimeError('NEW_DESTINATION_CREATED_CONCURRENTLY '+name)
     applied.append(name);put(f,BASE+name,data);assert get(f,BASE+name)==data
    for name,data in planned.items():
-    url=ROOT+('' if name=='index.html' else name);status,final,headers,public=http(url)
+    url=url_for(name);status,final,headers,public=http(url)
     assert status==200 and final==url and public==data,('PUBLIC_BYTES_MISMATCH',url)
     if name.endswith('.html'):
      validate(public,url,markers.get(name));assert 'noindex' not in headers.get('X-Robots-Tag','').lower()
