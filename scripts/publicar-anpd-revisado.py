@@ -1,5 +1,5 @@
 """Publica somente o artigo ANPD; preserva paginas e restaura em falha."""
-import os, io, ssl, ftplib, hashlib, json, pathlib, urllib.request, urllib.robotparser
+import os, io, ssl, socket, ftplib, hashlib, json, pathlib, urllib.request, urllib.robotparser
 from html.parser import HTMLParser
 from datetime import datetime, timezone
 URL = 'https://www.arquindex.com.br/noticias/anpd-dosimetria-sancoes-lgpd-2026.html'
@@ -50,8 +50,13 @@ try:
   report['links'].append(item)
   if u.startswith('https://www.arquindex.com.br/'):
    assert item.get('status')==200, 'COMMERCIAL_LINK_UNAVAILABLE '+u
+ expected_ips=set(socket.gethostbyname_ex('ftp.arquindex.com.br')[2])
+ provider_ips=set(socket.gethostbyname_ex('h59.servidorhh.com')[2])
+ assert expected_ips & provider_ips, 'PROVIDER_DNS_MISMATCH'
  with ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=45) as f:
-  f.connect('ftp.arquindex.com.br',21);f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+  f.connect('h59.servidorhh.com',21);
+  assert f.sock.getpeername()[0] in expected_ips, 'PROVIDER_IP_MISMATCH'
+ f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
   # A raiz corresponde ao mecanismo existente; nao descobrir outras raizes.
   homepage=get(f,'/public_html/index.html')
   assert b'arquindex' in homepage.lower(), 'WRONG_DOCUMENT_ROOT'
