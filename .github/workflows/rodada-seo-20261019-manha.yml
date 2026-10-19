@@ -1,0 +1,222 @@
+name: Rodada SEO ARQ-010 e guia CONARQ 2026-10-19
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/rodada-seo-20261019-manha.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - name: Aplicar identidade oficial somente na ARQ-010
+        env:
+          DESIGN_TARGET: https://governanca.arquindex.com.br/bh.html?post=como-digitalizar-documentos-em-qualquer-impressora
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Publicar atendimento unico somente na ARQ-010
+        env:
+          ATENDIMENTO_TARGETS: https://governanca.arquindex.com.br/bh.html?post=como-digitalizar-documentos-em-qualquer-impressora
+        run: python scripts/aplicar-atendimento-unico.py
+      - name: Corrigir H1 parametrizado e revisar guia CONARQ
+        run: |
+          python - <<'PY'
+          import ftplib,io,os,posixpath,hashlib,json,re,time,urllib.request
+          from datetime import datetime,timezone
+          from bs4 import BeautifulSoup
+          STAMP=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+          PASSWORD=os.environ['FTP_PASSWORD']
+          ARQ_URL='https://governanca.arquindex.com.br/bh.html?post=como-digitalizar-documentos-em-qualquer-impressora'
+          GUIDE_URL='https://www.arquindex.com.br/blog-original/conarq-novas-normas-para-digitalizacao-de-documentos/'
+          def get(f,p):
+              b=bytearray(); f.retrbinary('RETR '+p,b.extend); return bytes(b)
+          def put_atomic(f,p,data,label):
+              d=posixpath.dirname(p); n=posixpath.basename(p); t=d+'/."'+n+'".tmp-'+label
+              t=t.replace('/."','/.').replace('".tmp','.tmp')
+              f.storbinary('STOR '+t,io.BytesIO(data)); assert get(f,t)==data
+              try:f.delete(p)
+              except ftplib.error_perm as e:
+                  if not str(e).startswith('550'):raise
+              f.rename(t,p); assert get(f,p)==data
+          def mkdir(f,p):
+              cwd=f.pwd()
+              try:
+                  f.cwd('/')
+                  for part in p.strip('/').split('/'):
+                      if not part:continue
+                      try:f.mkd(part)
+                      except ftplib.error_perm as e:
+                          if not str(e).startswith('550'):raise
+                      f.cwd(part)
+              finally:f.cwd(cwd)
+          def public(url):
+              sep='&' if '?' in url else '?'
+              req=urllib.request.Request(url+sep+'verify='+STAMP,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'})
+              with urllib.request.urlopen(req,timeout=40) as r:return r.status,r.read(5000000)
+          with ftplib.FTP_TLS(timeout=60) as f:
+              f.connect('ftp.arquindex.com.br',21); f.login('arquind2',PASSWORD); f.prot_p(); f.set_pasv(True)
+              base=None
+              for cand in ['/public_html','/home/arquind2/public_html']:
+                  try:
+                      if b'arquindex' in get(f,cand+'/index.html').lower():base=cand;break
+                  except ftplib.all_errors:pass
+              assert base,'PUBLIC_ROOT_NOT_FOUND'
+              def locate(candidates):
+                  for p in candidates:
+                      try:
+                          b=get(f,p)
+                          if b'<html' in b.lower():return p,b
+                      except ftplib.all_errors:pass
+                  raise RuntimeError('TARGET_NOT_FOUND '+repr(candidates))
+              arq_path,arq_old=locate([
+                  base+'/subdominios/governanca.arquindex.com.br/bh.html',
+                  base+'/governanca.arquindex.com.br/bh.html',
+                  '/subdominios/governanca.arquindex.com.br/bh.html',
+                  '/governanca.arquindex.com.br/bh.html'])
+              guide_path,guide_old=locate([
+                  base+'/blog-original/conarq-novas-normas-para-digitalizacao-de-documentos/index.html',
+                  base+'/blog-original/conarq-novas-normas-para-digitalizacao-de-documentos.html'])
+              backup='/seo-backups/rodada-20261019-manha-'+STAMP
+              mkdir(f,backup)
+              f.storbinary('STOR '+backup+'/.htaccess',io.BytesIO(b'Options -Indexes\nRequire all denied\n'))
+              for label,path,data in [('arq010',arq_path,arq_old),('guia-conarq',guide_path,guide_old)]:
+                  bp=backup+'/'+label+'-'+hashlib.sha256(path.encode()).hexdigest()[:12]+'.html'
+                  f.storbinary('STOR '+bp,io.BytesIO(data)); assert get(f,bp)==data
+                  print('BACKUP_VERIFIED',label,bp,hashlib.sha256(data).hexdigest(),flush=True)
+              arq_text=arq_old.decode('utf-8')
+              guard_id='arquindex-arq010-single-h1-20261019'
+              if guard_id not in arq_text:
+                  guard='''<script id="arquindex-arq010-single-h1-20261019">
+          (function(){
+            var slug="como-digitalizar-documentos-em-qualquer-impressora";
+            function apply(){
+              if(new URLSearchParams(location.search).get("post")!==slug)return;
+              var blog=document.getElementById("soro-blog");
+              if(!blog)return;
+              var article=Array.from(blog.querySelectorAll("h1")).find(function(h){return h.textContent.trim()==="Como digitalizar documentos em qualquer impressora";});
+              if(!article)return;
+              Array.from(document.querySelectorAll("h1")).forEach(function(h){
+                if(h===article||blog.contains(h))return;
+                var p=document.createElement("p");
+                p.className=(h.className? h.className+" ":"")+"aq-context-title";
+                p.innerHTML=h.innerHTML;
+                h.replaceWith(p);
+              });
+            }
+            function start(){apply();new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});}
+            if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
+          })();
+          </script>'''
+                  assert '</body>' in arq_text.lower()
+                  i=arq_text.lower().rindex('</body>')
+                  arq_text=arq_text[:i]+guard+'\n'+arq_text[i:]
+              arq_new=arq_text.encode('utf-8')
+              soup=BeautifulSoup(guide_old.decode('utf-8'),'html.parser')
+              mark='arquindex-conarq-revisao-20261019'
+              if not soup.find(id=mark):
+                  assert soup.title and soup.find('h1')
+                  old_title=soup.title.get_text(' ',strip=True)
+                  old_h1=soup.find('h1').get_text(' ',strip=True)
+                  soup.title.string='CONARQ na Digitalização: Requisitos e Proposta | Arquindex'
+                  desc=soup.find('meta',attrs={'name':re.compile('^description$',re.I)})
+                  assert desc
+                  desc['content']='Identifique referências, entregáveis e critérios de conferência na proposta de digitalização. Entenda os limites da validade jurídica e compare o escopo.'
+                  soup.find('h1').string='CONARQ na digitalização: o que conferir antes de contratar'
+                  first_h2=next((h for h in soup.find_all('h2') if 'O que mudou com o CONARQ' in h.get_text()),None)
+                  assert first_h2
+                  first_h2.string='Quais referências se aplicam ao projeto de digitalização'
+                  cur=first_h2.find_next_sibling()
+                  while cur and cur.name!='h2':
+                      nxt=cur.find_next_sibling(); cur.decompose(); cur=nxt
+                  paragraphs=[
+                    'A Resolução CONARQ nº 48 é de 10 de novembro de 2021 e entrou em vigor em 19 de novembro de 2021. Ela não é uma novidade de 2026. A resolução adota diretrizes para digitalização de documentos arquivísticos permanentes e relaciona os efeitos legais ao atendimento dos requisitos aplicáveis e ao Decreto nº 10.278/2020.',
+                    'O Decreto nº 10.278, de 18 de março de 2020, disciplina técnica e requisitos para a digitalização de documentos públicos ou privados. O enquadramento depende do tipo documental, da finalidade e das exceções do próprio decreto; por isso, não existe promessa genérica de validade jurídica para qualquer arquivo escaneado.',
+                    'Antes de contratar, identifique o acervo, a finalidade de uso, os requisitos aplicáveis e as evidências de conferência. OCR, PDF/A, assinatura, metadados, guarda e descarte são decisões diferentes e devem aparecer separadamente no escopo.'
+                  ]
+                  anchor=first_h2
+                  for txt in paragraphs:
+                      p=soup.new_tag('p');p.string=txt;anchor.insert_after(p);anchor=p
+                  target=next((h for h in soup.find_all('h2') if 'O que as empresas precisam revisar' in h.get_text()),None)
+                  assert target
+                  sec=soup.new_tag('section',id=mark)
+                  h=soup.new_tag('h2');h.string='Matriz para comparar propostas de digitalização';sec.append(h)
+                  p=soup.new_tag('p');p.string='Compare propostas pelo mesmo escopo. Preço por página só é comparável quando preparação, formatos, OCR, metadados, conferência, entrega e exceções estão definidos.';sec.append(p)
+                  table=soup.new_tag('table')
+                  thead=soup.new_tag('thead');tr=soup.new_tag('tr')
+                  for x in ['Item do acervo','Requisito a confirmar','Entrega prevista','Evidência de conferência','Incluído ou adicional']:
+                      th=soup.new_tag('th');th.string=x;tr.append(th)
+                  thead.append(tr);table.append(thead);tbody=soup.new_tag('tbody')
+                  rows=[
+                    ['Documentos textuais','Resolução, cor e formato conforme finalidade','Imagens ou PDF definido no projeto','Amostra aprovada e relatório de qualidade','Registrar na proposta'],
+                    ['OCR e campos críticos','Documentos elegíveis e nível de revisão','PDF pesquisável e/ou dados estruturados','Teste de busca e conferência dos campos acordados','Separar captura de OCR'],
+                    ['Metadados e indexação','Campos, vocabulário e vínculo ao original','Planilha, banco ou carga no GED','Amostra de recuperação por identificador','Definir campos obrigatórios'],
+                    ['Exceções e originais','Frágeis, grandes formatos, rasuras e temporalidade','Fluxo de exceção e decisão documentada','Registro do tratamento e autorização','Não presumir descarte']
+                  ]
+                  for row in rows:
+                      tr=soup.new_tag('tr')
+                      for x in row:
+                          td=soup.new_tag('td');td.string=x;tr.append(td)
+                      tbody.append(tr)
+                  table.append(tbody);sec.append(table)
+                  h3=soup.new_tag('h3');h3.string='Fontes primárias e limites';sec.append(h3)
+                  ul=soup.new_tag('ul')
+                  for label,href in [
+                    ('Resolução CONARQ nº 48, de 10/11/2021','https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-48-de-10-de-novembro-de-2021'),
+                    ('Decreto nº 10.278, de 18/03/2020','https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm')]:
+                      li=soup.new_tag('li');a=soup.new_tag('a',href=href);a.string=label;li.append(a);ul.append(li)
+                  sec.append(ul)
+                  p=soup.new_tag('p');p.string='Conteúdo revisado em 19/10/2026. A aplicação jurídica depende do documento e da finalidade; a avaliação do caso concreto deve envolver os responsáveis competentes.';sec.append(p)
+                  cta=soup.new_tag('p')
+                  for label,href in [
+                    ('Conheça o serviço de digitalização','https://www.arquindex.com.br/digitalizacao.html'),
+                    ('Veja os fatores de custo do projeto','https://www.arquindex.com.br/blog-original/quanto-custa-digitalizar-documentos/'),
+                    ('Solicite uma avaliação do acervo','https://www.arquindex.com.br/solicitar-proposta-contratacao.html?utm_source=site&utm_medium=artigo&utm_campaign=conarq_requisitos_20261019')]:
+                      a=soup.new_tag('a',href=href);a.string=label;cta.append(a);cta.append(' · ')
+                  sec.append(cta)
+                  target.insert_before(sec)
+                  assert old_title!=soup.title.get_text(' ',strip=True) and old_h1!=soup.find('h1').get_text(' ',strip=True)
+              guide_new=str(soup).encode('utf-8')
+              written=[]
+              try:
+                  assert get(f,arq_path)==arq_old and get(f,guide_path)==guide_old,'CONCURRENT_CHANGE'
+                  put_atomic(f,arq_path,arq_new,STAMP);written.append((arq_path,arq_old))
+                  put_atomic(f,guide_path,guide_new,STAMP);written.append((guide_path,guide_old))
+                  print('FTP_PUBLISHED_VERIFIED','ARQ-010',hashlib.sha256(arq_new).hexdigest(),flush=True)
+                  print('FTP_PUBLISHED_VERIFIED','GUIDE-CONARQ',hashlib.sha256(guide_new).hexdigest(),flush=True)
+                  for label,url,need in [
+                    ('ARQ-010',ARQ_URL,guard_id.encode()),
+                    ('GUIDE-CONARQ',GUIDE_URL,mark.encode())]:
+                      last=None
+                      for attempt in range(3):
+                          try:
+                              code,body=public(url);assert code==200 and need in body
+                              if label=='GUIDE-CONARQ':
+                                  text=body.decode('utf-8','replace')
+                                  assert 'CONARQ na Digitalização: Requisitos e Proposta | Arquindex' in text
+                                  assert 'https://www.arquindex.com.br/blog-original/conarq-novas-normas-para-digitalizacao-de-documentos/' in text
+                                  assert 'noindex' not in text.lower()
+                              print('PUBLIC_VERIFIED',label,url,hashlib.sha256(body).hexdigest(),flush=True)
+                              last=None;break
+                          except Exception as exc:
+                              last=exc
+                              if attempt<2:time.sleep(5)
+                      if last:raise last
+              except Exception:
+                  for p,old in reversed(written):put_atomic(f,p,old,'rollback-'+STAMP)
+                  print('ROLLBACK_COMPLETED',flush=True);raise
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rodada-seo-20261019-manha
+          path: |
+            design-report/*.json
