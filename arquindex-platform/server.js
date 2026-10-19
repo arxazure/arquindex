@@ -2,6 +2,7 @@ import { renderAuthorityGuide } from "./authority-guide-longform.js";
 import { renderDigitalize, digitalizePaths } from "./digitalize-pages.js";
 import { renderRegional, regionalPaths, regionalBase } from "./regional-ged-replica.js";
 import http from "node:http";
+import { sectorPages } from "./sector-digitalization.js";
 import { opportunityGuideHtml, opportunityBlocks } from "./top10-opportunities.js";
 import { alfrescoLandingHtml } from "./alfresco-campaign.js";
 import { alfrescoIaPage } from "./alfresco-ia-pages.js";
@@ -431,6 +432,8 @@ const server=http.createServer(async(req,res)=>{
  const enhancedEnd=res.end.bind(res);
  res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return enhancedEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ const sector=sectorPages[p]; if(sector){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(sector);}
+ if(p==="/guias-digitalizacao"||p==="/guias-digitalizacao/index.html"){res.writeHead(301,{location:"/guias-digitalizacao/"});return res.end();}
  if(p==="/onde-digitalizar-documentos.html"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(opportunityGuideHtml);}
  if(p==="/alfresco-ecm-open-source"||p==="/alfresco-ecm-open-source/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(alfrescoLandingHtml);}
  const alfrescoPage=alfrescoIaPage(p); if(alfrescoPage){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(alfrescoPage);}
