@@ -1,0 +1,216 @@
+[
+  {
+    "url": "https://www.arquindex.com.br/",
+    "final_url": "https://www.arquindex.com.br/",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "sha256": "e0951e2bda6532fe0c9bd9f9b9dfc82f4fc8cb02d6f36b2681b1dfa8606a2f8d",
+    "tracker_tags": 0,
+    "tracker_urls": [],
+    "analytics_scripts": [],
+    "measurement_ids": [],
+    "gtm_ids": [],
+    "config_calls": [
+      "AW-17029507720",
+      "AW-17020939105"
+    ],
+    "inline_gtag": true,
+    "lead_dispatch": false,
+    "forms": [],
+    "contact_links": {
+      "whatsapp": 9,
+      "email": 1
+    },
+    "duplicate_script_urls": [],
+    "local_scripts": [
+      "https://www.arquindex.com.br/assets/arquindex-restored/bootstrap.js",
+      "https://www.arquindex.com.br/assets/arquindex-restored/theme.js?v=f206660c62",
+      "https://www.arquindex.com.br/assets/arquindex-restored/home-sections-b671469a28.js"
+    ],
+    "tag_loader_urls_in_source": [
+      "https://www.googletagmanager.com/gtag/js?id=AW-17029507720"
+    ],
+    "local_script_checks": [
+      {
+        "url": "https://www.arquindex.com.br/assets/arquindex-restored/bootstrap.js",
+        "measurement_ids": [],
+        "has_gtag_or_gtm": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/assets/arquindex-restored/theme.js?v=f206660c62",
+        "measurement_ids": [],
+        "has_gtag_or_gtm": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/assets/arquindex-restored/home-sections-b671469a28.js",
+        "measurement_ids": [],
+        "has_gtag_or_gtm": false
+      }
+    ]
+  },
+  {
+    "url": "https://www.arquindex.com.br/solucoes-documentais-brasil.html",
+    "final_url": "https://www.arquindex.com.br/solucoes-documentais-brasil.html",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "sha256": "bf5360f800cb25370a62855107440c50d4cb86d310f5f7a9c6871cd298044e33",
+    "tracker_tags": 1,
+    "tracker_urls": [
+      "https://www.arquindex.com.br/assets/js/arquindex-conversions-v1.js"
+    ],
+    "analytics_scripts": [],
+    "measurement_ids": [],
+    "gtm_ids": [],
+    "config_calls": [],
+    "inline_gtag": false,
+    "lead_dispatch": false,
+    "forms": [],
+    "contact_links": {
+      "whatsapp": 3,
+      "email": 1
+    },
+    "duplicate_script_urls": [],
+    "local_scripts": [],
+    "tag_loader_urls_in_source": [],
+    "local_script_checks": []
+  },
+  {
+    "url": "https://www.arquindex.com.br/assets/js/arquindex-conversions-v1.js",
+    "final_url": "https://www.arquindex.com.br/assets/js/arquindex-conversions-v1.js",
+    "status": 200,
+    "content_type": "application/javascript; charset=UTF-8",
+    "sha256": "de4f4c779f48fc271ee0104e69096a5b8d957b2d067e4359583217f49b30af40",
+    "tracker_tags": 0,
+    "tracker_urls": [],
+    "analytics_scripts": [],
+    "measurement_ids": [],
+    "gtm_ids": [],
+    "config_calls": [],
+    "inline_gtag": false,
+    "lead_dispatch": true,
+    "forms": [],
+    "contact_links": {},
+    "duplicate_script_urls": [],
+    "matches_repo_bytes": true,
+    "local_scripts": [],
+    "tag_loader_urls_in_source": [],
+    "local_script_checks": []
+  },
+  {
+    "url": "https://www.arquindex.com.br/alfresco-belo-horizonte/",
+    "final_url": "https://www.arquindex.com.br/alfresco-belo-horizonte/",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "sha256": "641f09f1ada2dd333107bd15703373eaacb87677b6da61bcee7e5f1008b7b8bc",
+    "tracker_tags": 1,
+    "tracker_urls": [
+      "https://www.arquindex.com.br/assets/js/arquindex-conversions-v1.js"
+    ],
+    "analytics_scripts": [],
+    "measurement_ids": [],
+    "gtm_ids": [],
+    "config_calls": [],
+    "inline_gtag": false,
+    "lead_dispatch": false,
+    "forms": [],
+    "contact_links": {
+      "whatsapp": 2,
+      "email": 1
+    },
+    "duplicate_script_urls": [],
+    "local_scripts": [],
+    "tag_loader_urls_in_source": [],
+    "local_script_checks": []
+  },
+  {
+    "url": "https://www.arquindex.com.br/gestao-documental-belo-horizonte/",
+    "final_url": "https://www.arquindex.com.br/gestao-documental-belo-horizonte/",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "sha256": "6de9d1812bc2dae4529212211e1f4547287bd130068162809bc731845fbc383e",
+    "tracker_tags": 1,
+    "tracker_urls": [
+      "https://www.arquindex.com.br/assets/js/arquindex-conversions-v1.js"
+    ],
+    "analytics_scripts": [],
+    "measurement_ids": [],
+    "gtm_ids": [],
+    "config_calls": [],
+    "inline_gtag": false,
+    "lead_dispatch": false,
+    "forms": [],
+    "contact_links": {
+      "whatsapp": 2,
+      "email": 1
+    },
+    "duplicate_script_urls": [],
+    "local_scripts": [],
+    "tag_loader_urls_in_source": [],
+    "local_script_checks": []
+  },
+  {
+    "url": "https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte/",
+    "final_url": "https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte/",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "sha256": "1e2a4a7d05f6803d55870e02fe1db845c749e05f05938b325f56430fc0c99308",
+    "tracker_tags": 1,
+    "tracker_urls": [
+      "https://www.arquindex.com.br/assets/js/arquindex-conversions-v1.js"
+    ],
+    "analytics_scripts": [],
+    "measurement_ids": [],
+    "gtm_ids": [],
+    "config_calls": [],
+    "inline_gtag": false,
+    "lead_dispatch": false,
+    "forms": [],
+    "contact_links": {
+      "whatsapp": 2,
+      "email": 1
+    },
+    "duplicate_script_urls": [],
+    "local_scripts": [],
+    "tag_loader_urls_in_source": [],
+    "local_script_checks": []
+  },
+  {
+    "url": "https://www.arquindex.com.br/blog/montagem-de-databooks-de-engenharia/",
+    "final_url": "https://www.arquindex.com.br/blog/montagem-de-databooks-de-engenharia/",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "sha256": "aec1e91dae7c5340dc9ca3802762b46faa3c3501082decafbc5f83f8b7440604",
+    "tracker_tags": 0,
+    "tracker_urls": [],
+    "analytics_scripts": [],
+    "measurement_ids": [],
+    "gtm_ids": [],
+    "config_calls": [],
+    "inline_gtag": false,
+    "lead_dispatch": false,
+    "forms": [
+      {
+        "id": "lead",
+        "action": "",
+        "method": ""
+      }
+    ],
+    "contact_links": {},
+    "duplicate_script_urls": [],
+    "local_scripts": [],
+    "tag_loader_urls_in_source": [],
+    "local_script_checks": [],
+    "form_integration_evidence": [
+      "oficial</a></footer><script>document.getElementById('lead').addEventListener('submit',function(e){e.preventDefault();const v=id=>document.getElementById(id).value.trim();const msg='Olá, solicito diagnóstico documental gratuito.\\nNome: '+v('nome')+'\\nEmpresa: '+v('empresa')+'\\nE-mail: '+v('email')+'\\nWhatsApp: '+v('telefone",
+      "e')+'\\nServiço: '+v('servico')+'\\nDetalhes: '+v('detalhes');window.open('https://wa.me/5531973632725?text='+encodeURIComponent(msg),'_blank','noopener,noreferrer');});</script></body></html>"
+    ]
+  },
+  {
+    "url": "https://guardadocumentalembh.arquindex.com.br/",
+    "error": "URLError: <urlopen error [Errno -2] Name or service not known>"
+  },
+  {
+    "url": "https://digitalizacaodedocumentosembh.arquindex.com.br/",
+    "error": "URLError: <urlopen error [Errno -2] Name or service not known>"
+  }
+]
