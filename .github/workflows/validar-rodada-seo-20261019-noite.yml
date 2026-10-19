@@ -1,4 +1,4 @@
-name: Validar ARQ-022 ARQ-024 ARQ-025 2026-10-19 noite
+name: Validar ARQ-022 ARQ-024 ARQ-025 2026-10-19 noite final
 on:
   push:
     branches: [master]
