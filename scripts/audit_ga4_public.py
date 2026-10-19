@@ -60,6 +60,20 @@ def fetch(url):
         local = [src for src in scripts if urlsplit(src).netloc == urlsplit(final).netloc
                  and not urlsplit(src).path.endswith('/arquindex-conversions-v1.js')][:15]
         result['local_scripts'] = local
+        result['tag_loader_urls_in_source'] = sorted(set(re.findall(r'https://(?:www\.)?(?:googletagmanager\.com|google-analytics\.com)/[^\s<>\"\x27]+', s)))
+        result['local_script_checks'] = []
+        for src in local:
+            try:
+                with urllib.request.urlopen(src, timeout=12) as asset:
+                    js = asset.read(500000).decode('utf-8', 'replace')
+                result['local_script_checks'].append(dict(url=src,
+                    measurement_ids=sorted(set(re.findall(r'\bG-[A-Z0-9]{6,}\b', js))),
+                    has_gtag_or_gtm=bool(re.search(r'gtag|googletagmanager|GTM-', js))))
+            except Exception as e:
+                result['local_script_checks'].append(dict(url=src,error=str(e)))
+        if p.forms:
+            result['form_integration_evidence'] = [s[max(0,m.start()-60):m.end()+240]
+                for m in list(re.finditer(r'addEventListener\([\x27\"]submit|fetch\(|arquindex:lead-confirmed|location\.assign|window\.open', s))[:8]]
         return result
     except Exception as e:
         return {'url':url, 'error':type(e).__name__ + ': ' + str(e)}
