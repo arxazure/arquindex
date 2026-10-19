@@ -1,0 +1,86 @@
+{
+  "url": "https://www.arquindex.com.br/noticias/anpd-dosimetria-sancoes-lgpd-2026.html",
+  "sha256": "3faff2516aaaa6fd717f5fd60d13ad0000739f889f897721a542ff64860174db",
+  "public_verified": true,
+  "links": [
+    {
+      "url": "https://brasilparticipativo.presidencia.gov.br/processes/regulamento-de-dosimetria/f/5854/",
+      "status": 200,
+      "final_url": "https://brasilparticipativo.presidencia.gov.br/processes/regulamento-de-dosimetria/f/5854/"
+    },
+    {
+      "url": "https://www.arquindex.com.br/",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/"
+    },
+    {
+      "url": "https://www.arquindex.com.br/digitalizacao.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/digitalizacao.html"
+    },
+    {
+      "url": "https://www.arquindex.com.br/gestao_documental_documentos.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/gestao_documental_documentos.html"
+    },
+    {
+      "url": "https://www.arquindex.com.br/lgpd-consultoria.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/lgpd-consultoria.html"
+    },
+    {
+      "url": "https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd",
+      "status": 200,
+      "final_url": "https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd"
+    },
+    {
+      "url": "https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-2-de-27-de-janeiro-de-2022",
+      "status": 200,
+      "final_url": "https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-2-de-27-de-janeiro-de-2022"
+    },
+    {
+      "url": "https://www.gov.br/anpd/pt-br/acesso-a-informacao/participacao-social/audiencias-e-consultas-publicas/audiencias-publicas",
+      "status": 200,
+      "final_url": "https://www.gov.br/anpd/pt-br/acesso-a-informacao/participacao-social/audiencias-e-consultas-publicas/audiencias-publicas"
+    },
+    {
+      "url": "https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-consulta-publica-dosimetria-e-sancoes",
+      "status": 200,
+      "final_url": "https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-consulta-publica-dosimetria-e-sancoes"
+    },
+    {
+      "url": "https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-publica-regulamento-de-dosimetria/Resolucaon4CDANPD24.02.2023.pdf/@@download/file",
+      "status": 200,
+      "final_url": "https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-publica-regulamento-de-dosimetria/Resolucaon4CDANPD24.02.2023.pdf/@@download/file"
+    },
+    {
+      "url": "https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia_da_atuacao_do_encarregado_anpd.pdf",
+      "status": 200,
+      "final_url": "https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia_da_atuacao_do_encarregado_anpd.pdf"
+    },
+    {
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm",
+      "error": "RemoteDisconnected"
+    },
+    {
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm",
+      "error": "RemoteDisconnected"
+    }
+  ],
+  "backup": "/seo-backups/anpd-20261019T124044Z",
+  "http": 200,
+  "canonical": "https://www.arquindex.com.br/noticias/anpd-dosimetria-sancoes-lgpd-2026.html",
+  "robots_allowed": true,
+  "x_robots_tag": null,
+  "sha256_public": "3faff2516aaaa6fd717f5fd60d13ad0000739f889f897721a542ff64860174db",
+  "workflow": "https://github.com/arxazure/arquindex/actions/runs/39253855153",
+  "pr": "https://github.com/arxazure/arquindex/pull/9",
+  "verification_utc": "2026-10-19T12:40:58Z",
+  "google_indexing_verified": false,
+  "bing_indexing_verified": false,
+  "notes": [
+    "Links do Planalto falharam no runner com RemoteDisconnected; textos legais foram lidos pelo mecanismo de consulta web.",
+    "Conferência de fontes oficiais não equivale a parecer jurídico humano.",
+    "Somente artigo alterado na hospedagem; homepage permaneceu idêntica; rascunho do PR permanece noindex."
+  ]
+}
