@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import socket
+import sys
 import ssl
 import urllib.parse as up
 import urllib.robotparser
@@ -52,8 +53,8 @@ def audit(entry):
         a[key] = fetch(url)
     page = a['page']
     if page.get('status') != 200: a['issues'].append('HTTPS sem HTTP 200')
-    if page.get('url') != base: a['issues'].append('Destino HTTPS diferente da raiz esperada')
-    if a['http'].get('url') != base or not a['http'].get('redirects'): a['issues'].append('HTTP não redireciona à raiz HTTPS')
+    if page.get('url') and page['url'] != base: a['issues'].append('Destino HTTPS diferente da raiz esperada')
+    if a['http'].get('status') and (a['http'].get('url') != base or not a['http'].get('redirects')): a['issues'].append('HTTP não redireciona à raiz HTTPS')
     if page.get('status') == 200:
         a['html'] = parsed(page['text']); local = parsed((ROOT/host/'index.html').read_text())
         a['expected'] = local
@@ -100,11 +101,18 @@ def audit(entry):
                     if t.get('status')!=200 or t.get('url')!=url: a['issues'].append('URL sitemap não retorna 200 direto')
         except ET.ParseError as e:
             a['sitemap_error']=str(e); a['issues'].append('XML sitemap inválido')
-    a['classification']='funcional nos testes técnicos' if not a['issues'] else 'falha ou divergência; revisar evidência'
+    a['classification']=('DNS indisponível; demais camadas não verificáveis' if not a.get('dns') else ('conteúdo de outro destino/alias; preservar aplicação' if a.get('html',{}).get('canonical')==['https://www.arquindex.com.br/'] else ('funcional nos testes técnicos' if not a['issues'] else 'falha ou divergência; revisar evidência')))
+    if not a.get('dns'):
+        a['issues']=['DNS indisponível; TLS/HTTP/conteúdo/SEO não verificáveis']
     for k in ['page','http','robots','sitemap']:
         a[k].pop('text',None)
     print(host, a['classification'], a['issues'], flush=True)
     return a
+
+def public_gate(results, preflight=False):
+    if preflight:
+        return len(results)==56 and all(a.get('dns') and a['tls']['valid'] and a['page'].get('status')==200 and a['page'].get('url')=='https://'+a['host']+'/' and a.get('html',{}).get('canonical')==['https://'+a['host']+'/'] for a in results)
+    return len(results)==56 and all(not a['issues'] for a in results)
 
 def main():
     entries=json.loads((ROOT/'manifest.json').read_text())
@@ -121,4 +129,7 @@ def main():
     for a in results:
         lines.append('| https://'+a['host']+'/ | '+(', '.join(a.get('dns',[])) or 'erro')+' | '+('válido' if a['tls']['valid'] else 'erro')+' | '+str(a['page'].get('status','erro'))+' / '+str(a['http'].get('status','erro'))+' | '+('; '.join(a['issues']) or 'funcional nos testes técnicos')+' |')
     (OUT/'report.md').write_text('\n'.join(lines)+'\n')
+    if '--gate' in sys.argv or '--preflight-gate' in sys.argv:
+        if not public_gate(results, '--preflight-gate' in sys.argv):
+            raise SystemExit('PUBLIC_VALIDATION_FAILED: publicação não aprovada; consulte audit-56/results.json')
 if __name__=='__main__': main()

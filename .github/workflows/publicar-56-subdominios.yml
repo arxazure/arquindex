@@ -21,6 +21,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Instalar dependencias da auditoria publica
+        run: |
+          pip install requests beautifulsoup4
+          python -m unittest discover -s tests -p test_audit_56.py
+      - name: Bloquear envio sem DNS TLS HTTP e raiz propria dos 56 hosts
+        run: python scripts/audit_56_public.py --preflight-gate
       - name: Verificar pacote completo antes de qualquer upload
         run: |
           python - <<'PY'
@@ -84,12 +90,12 @@ jobs:
           HOMEHOST_PORT: '21'
         run: |
           python - <<'PY'
-          import os,ftplib,pathlib,io,hashlib,time
+          import os,ftplib,pathlib,io,hashlib,time,ssl
           root=pathlib.Path('seo-regional/56-sites')
           sites=sorted(root.glob('*.arquindex.com.br'))
           def deploy(host,user,password,base,label):
             assert host and user and password, f'{label}: credenciais FTP ausentes'
-            with ftplib.FTP_TLS(timeout=45) as ftp:
+            with ftplib.FTP_TLS(timeout=45,context=ssl.create_default_context()) as ftp:
               ftp.connect(host,port=int(os.getenv('HOMEHOST_PORT','21') if label=='HOMEHOST' else '21'))
               print(label,'FTP_LOGIN_ATTEMPT',host,user,flush=True)
               ftp.login(user,password)
@@ -141,6 +147,14 @@ jobs:
           deploy(os.environ['HOMEHOST_HOST'],os.environ['HOMEHOST_USER'],os.environ['HOMEHOST_PASS'],'public_html','HOMEHOST')
           print('HOMEHOST_DEPLOY_FINISHED; Hostinger nao sera autenticada neste workflow')
           PY
+      - name: Confirmar publicamente todos os 56 subdominios apos upload
+        run: python scripts/audit_56_public.py --gate
+      - name: Preservar evidencias individuais inclusive em falha
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validacao-publica-56
+          path: audit-56/
       - name: Confirmar formulario no dominio publico de guarda BH
         run: |
           python - <<'PYCODE'
