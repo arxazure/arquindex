@@ -3,6 +3,7 @@ on:
   push:
     branches: [master]
     paths:
+      - '.github/workflows/publicar-noticia-anpd-20261018.yml'
       - 'publicacao-noticias/anpd-dosimetria-sancoes-lgpd-2026.html'
   workflow_dispatch:
 permissions:
@@ -19,7 +20,7 @@ jobs:
       - name: Publicar somente artigo com FTPS backup e verificacao publica
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: python scripts/publicar-anpd-revisado.py
+        run: python scripts/diagnosticar-certificado-anpd.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
