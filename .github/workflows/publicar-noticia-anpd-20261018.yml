@@ -4,6 +4,7 @@ on:
     branches: [master]
     paths:
       - '.github/workflows/publicar-noticia-anpd-20261018.yml'
+      - 'scripts/publicar-anpd-revisado.py'
       - 'publicacao-noticias/anpd-dosimetria-sancoes-lgpd-2026.html'
   workflow_dispatch:
 permissions:
