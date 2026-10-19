@@ -1,0 +1,221 @@
+{
+  "checked_at": "2026-10-19T12:09:47.623818+00:00",
+  "mode": "read_only",
+  "commit": "a3f914c1f8ff298aed6531ffa9c087d2d1c0022c",
+  "public": [
+    {
+      "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "x_robots_tag": null,
+      "sha256": "9aca1a8687be57eacea0ab6de964552c721656feed60a9f92ca2d96f28ddb79e",
+      "title": [
+        "Guarda de Documentos em Belo Horizonte | Arquindex"
+      ],
+      "canonicals": [
+        "<link rel=\"canonical\" href=\"https://www.arquindex.com.br/guarda_de_documentos.html\">"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\">"
+      ],
+      "h1_count": 1,
+      "existing_marker": true,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+      "x_robots_tag": null,
+      "sha256": "59d039c28366c85535d8fbc13a3d02dc482fde14d91f3c8a2d3faa982f8c1a4a",
+      "title": [
+        "Gestão de Dossiê do Funcionário - Documentação de Colaboradores - 31 3245-1937 / 97363-2725 | Arquindex | Arquindex"
+      ],
+      "canonicals": [
+        "<link rel=\"canonical\" href=\"https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html\">"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\">"
+      ],
+      "h1_count": 1,
+      "existing_marker": false,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://www.arquindex.com.br/digitalizacao.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/digitalizacao.html",
+      "x_robots_tag": null,
+      "sha256": "d175059c064d1f12d06cb985242267ff744b5f04bb6cf1602e521d9f097adf9e",
+      "title": [
+        "Empresa de Digitalização de Documentos e OCR | Arquindex"
+      ],
+      "canonicals": [
+        "<link rel=\"canonical\" href=\"https://www.arquindex.com.br/digitalizacao.html\">"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\">"
+      ],
+      "h1_count": 1,
+      "existing_marker": false,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+      "x_robots_tag": null,
+      "sha256": "951eb488447972387e2d5294d5290896e948d6d6f4d3bae5508550a7399abef0",
+      "title": [
+        "Digitalização com OCR e PDF Pesquisável | Arquindex"
+      ],
+      "canonicals": [
+        "<link rel=\"canonical\" href=\"https://www.arquindex.com.br/digitalizacao-com-ocr.html\">"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\">"
+      ],
+      "h1_count": 1,
+      "existing_marker": true,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+      "x_robots_tag": null,
+      "sha256": "945ed8a1e2f368ce95671c98a05a514b32d8537b20eb75375949c75d90193b34",
+      "title": [
+        "Serviços de montagem de databooks 31 97363-2725 / 3245-1937 Arquindex | Arquindex | Arquindex"
+      ],
+      "canonicals": [
+        "<link rel=\"canonical\" href=\"https://www.arquindex.com.br/montagem_databook_organizar.html\">"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\">"
+      ],
+      "h1_count": 1,
+      "existing_marker": false,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://www.arquindex.com.br/lgpd-consultoria.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/lgpd-consultoria.html",
+      "x_robots_tag": null,
+      "sha256": "57c1349c88ee571efcf2dfc59c789b3fc429be694dec104b348ac850fd238217",
+      "title": [
+        "Consultoria de Adequação LGPD em Belo Horizonte | Arquindex"
+      ],
+      "canonicals": [
+        "<link rel=\"canonical\" href=\"https://www.arquindex.com.br/lgpd-consultoria.html\">"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\">"
+      ],
+      "h1_count": 1,
+      "existing_marker": false,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-incloud-gestao-arquivos.html",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/alfresco-incloud-gestao-arquivos.html",
+      "x_robots_tag": null,
+      "sha256": "0890af42f62402ae1bb49d36f49a9889ef5ed8ea99e7c6dd1db31f9666ea86be",
+      "title": [
+        "Alfresco InCloud: GED e ECM para Empresas | Arquindex"
+      ],
+      "canonicals": [
+        "<link rel=\"canonical\" href=\"https://www.arquindex.com.br/alfresco-incloud-gestao-arquivos.html\">"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\">"
+      ],
+      "h1_count": 1,
+      "existing_marker": false,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://www.arquindex.com.br/robots.txt",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/robots.txt",
+      "x_robots_tag": null,
+      "sha256": "47ad7a63eb10561c482e0ba2ca7e3cfd6c8fbc9845b19d6250ba1d8af82c9803",
+      "title": [],
+      "canonicals": [],
+      "robots_meta": [],
+      "h1_count": 0,
+      "existing_marker": false,
+      "suspect_terms": [],
+      "text": "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: Googlebot\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: Bingbot\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: OAI-SearchBot\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: ChatGPT-User\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: GPTBot\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: Claude-SearchBot\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: Claude-User\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: ClaudeBot\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: PerplexityBot\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: Perplexity-User\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nUser-agent: Google-Extended\nAllow: /\nDisallow: /admin\nDisallow: /painel\nDisallow: /api/\nDisallow: /portal/\nDisallow: /portal-cliente\nDisallow: /producao/\nDisallow: /arquivos-internos/\nDisallow: /uploads/\nDisallow: /levantamento/\nDisallow: /proposta/\nDisallow: /contrato/\nDisallow: /.env\nDisallow: /.git/\nDisallow: /.local/\n\nSitemap: https://www.arquindex.com.br/sitemap.xml\nSitemap: https://www.arquindex.com.br/gestao-documental/sitemap.xml\nSitemap: https://www.arquindex.com.br/noticias/sitemap.xml\nSitemap: https://www.arquindex.com.br/atendimento-rmbh/sitemap.xml\nSitemap: https://www.arquindex.com.br/sitemap-bh.xml\nSitemap: https://www.arquindex.com.br/digitalize/sitemap.xml\nSitemap: https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/sitemap.xml\n"
+    },
+    {
+      "url": "https://www.arquindex.com.br/sitemap.xml",
+      "status": 200,
+      "final_url": "https://www.arquindex.com.br/sitemap.xml",
+      "x_robots_tag": null,
+      "sha256": "0011440487515b11e0aaa59bd89b8ad4c58e5cdb7648835e3d926352bbc550e3",
+      "title": [],
+      "canonicals": [],
+      "robots_meta": [],
+      "h1_count": 0,
+      "existing_marker": false,
+      "suspect_terms": [],
+      "text": "<?xml version='1.0' encoding='utf-8'?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n  <sitemap><loc>https://www.arquindex.com.br/sitemap-artigos.xml</loc></sitemap>\n  <sitemap><loc>https://www.arquindex.com.br/sitemap-localidades.xml</loc></sitemap>\n  <sitemap><loc>https://www.arquindex.com.br/sitemap-guias.xml</loc></sitemap>\n  <sitemap><loc>https://www.arquindex.com.br/sitemap-paginas.xml</loc></sitemap>\n<sitemap><loc>https://www.arquindex.com.br/sitemap-legado.xml</loc></sitemap><sitemap><loc>https://www.arquindex.com.br/sitemap-blog-original.xml</loc></sitemap><sitemap><loc>https://www.arquindex.com.br/sitemap-campanha-engenharia.xml</loc></sitemap><sitemap><loc>https://www.arquindex.com.br/digitalize/sitemap.xml</loc><lastmod>2026-10-17</lastmod></sitemap><sitemap><loc>https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/sitemap.xml</loc><lastmod>2026-10-17</lastmod></sitemap><sitemap><loc>https://www.arquindex.com.br/central-de-servicos/sitemap.xml</loc></sitemap><sitemap><loc>https://www.arquindex.com.br/sitemap-noticias-20261018.xml</loc></sitemap></sitemapindex>"
+    },
+    {
+      "url": "https://digitalizar.arquindex.com.br/",
+      "status": 200,
+      "final_url": "https://digitalizar.arquindex.com.br/",
+      "x_robots_tag": null,
+      "sha256": "fdd0a0bcc020b6e6a78c8d66989283f72215f15d630b5faa771055edf9d08a4e",
+      "title": [
+        "Digitalizar | digitalização de documentos em Belo Horizonte | Arquindex"
+      ],
+      "canonicals": [
+        "<link href=\"https://digitalizar.arquindex.com.br/\" rel=\"canonical\"/>"
+      ],
+      "robots_meta": [
+        "<meta content=\"index,follow,max-image-preview:large\" name=\"robots\"/>"
+      ],
+      "h1_count": 1,
+      "existing_marker": false,
+      "suspect_terms": []
+    },
+    {
+      "url": "https://digitalizar.arquindex.com.br/robots.txt",
+      "status": 200,
+      "final_url": "https://digitalizar.arquindex.com.br/robots.txt",
+      "x_robots_tag": null,
+      "sha256": "db8113b6a05f72833ce49ec5d0336aa4cd63f4ead0d1b3a60674cf5350ec4e0d",
+      "title": [],
+      "canonicals": [],
+      "robots_meta": [],
+      "h1_count": 0,
+      "existing_marker": false,
+      "suspect_terms": [],
+      "text": "User-agent: *\nAllow: /\n\nSitemap: https://digitalizar.arquindex.com.br/sitemap.xml\n"
+    },
+    {
+      "url": "https://arquindex-web-production.up.railway.app/sitemap.xml",
+      "status": 200,
+      "final_url": "https://arquindex-web-production.up.railway.app/sitemap.xml",
+      "x_robots_tag": null,
+      "sha256": "5a9db89537d71b55082a29060f25585710d59826129c96d800765346a5aa3cef",
+      "title": [],
+      "canonicals": [],
+      "robots_meta": [],
+      "h1_count": 0,
+      "existing_marker": false,
+      "suspect_terms": [],
+      "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><url><loc>https://arquindex-web-production.up.railway.app/</loc></url><url><loc>https://arquindex-web-production.up.railway.app/plano-autoridade-rmbh</loc></url><url><loc>https://arquindex-web-production.up.railway.app/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores</loc></url><url><loc>https://arquindex-web-production.up.railway.app/biblioteca-normativa</loc></url><url><loc>https://arquindex-web-production.up.railway.app/metodologia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/contato</loc></url><url><loc>https://arquindex-web-production.up.railway.app/llms.txt</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/digitalizacao-documentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/digitalizacao-certificada</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/prontuarios-medicos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/gestao-documental</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/organizacao-arquivos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/avaliacao-avancada-arquivos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/alfresco-incloud</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/consultoria-lgpd</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/dpo-terceirizado</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/databook</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/digitacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/guarda-documental</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/incineracao-segura</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/storage-documental</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/seguranca-informacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/livros-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/meio-ambiente</loc></url><url><loc>https://arquindex-web-production.up.railway.app/solucoes/treinamentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/lgpd-anpd-2026-resposta-incidentes-acervos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/conarq-novas-normas-para-digitalizacao-de-documentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/empresa-guarda-documentos-como-escolher</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/classificacao-documentos-ocr</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/rastreabilidade-digitalizacao-cadeia-custodia-ocr-hash</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/digitalizacao-certificada-decreto-10278</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/ocr-pdfa-diferencas</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/prontuarios-medicos-digitais</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/preco-digitalizacao-documentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/digitalizacao-grandes-acervos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/alfresco-aplicacoes-empresas</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/alfresco-nuvem-ou-local</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/alfresco-workflow-contratos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/alfresco-active-directory</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/alfresco-databook-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/lgpd-anpd-2026</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/dpo-terceirizado-responsabilidades</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/ropa-inventario-dados</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/incidentes-lgpd-comunicacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/lgpd-clinicas-hospitais</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/tabela-temporalidade-documental</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/como-organizar-arquivo-fisico-empresarial</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/metadados-indexacao-documental</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/controle-qualidade-digitalizacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/pdfa-preservacao-documentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/alfresco-permissoes-acesso</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/alfresco-migracao-documentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/lgpd-retencao-descarte-dados</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/lgpd-fornecedores-operadores</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/lgpd-cookies-sites</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/databook-engenharia-organizacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/documentos-engenharia-revisoes</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/digitalizacao-cartorios-livros</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/guarda-documental-terceirizada</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/descarte-seguro-documentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/agenda-anpd-2027-2028-lgpd-ia-governanca</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/gestao-documental-estudos-usuarios-conarq-60</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/piloto-digitalizacao-empresas-mais-20-funcionarios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/tempo-busca-documental-indicadores</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/ocr-contratos-campos-criticos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/frente-verso-lotes-heterogeneos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/metadados-mineracao-unidade-projeto</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/databook-lista-mestra-tag</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/orcamento-guarda-documental-dados</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/arquivo-juridico-cliente-processo</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/medicina-trabalho-separar-clinico-administrativo</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/duplicidades-migracao-ged</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/amostragem-qualidade-captura-documental</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/acessos-escritorio-contabil</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/saida-contrato-guarda-documentos</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/consulta-documental-equipes-remotas</loc></url><url><loc>https://arquindex-web-production.up.railway.app/conteudo/demonstracao-ocr-sem-dados-reais</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/databook-engenharia-industrial</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/databook-mineracao-siderurgia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/digitalizacao-certificada-decreto-10278-empresas</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/digitalizacao-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/guarda-documental-corporativa</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/alfresco-ecm-ged-corporativo</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/alfresco-engenharia-databook</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/lgpd-adequacao-empresas</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/dpo-terceirizado-governanca</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/gestao-documental-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/autoridade/digitalizacao-prontuarios-lgpd</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/digitalizacao-documentos-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/gestao-documental-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/organizacao-arquivos-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/consultoria-lgpd-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/dpo-terceirizado-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/alfresco-incloud-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/databook-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/guarda-documental-para-financeiro</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-rh-departamento-pessoal</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-juridico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-saude</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-engenharia</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-industria</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-mineracao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-farmaceutico</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-educacao</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-cartorios</loc></url><url><loc>https://arquindex-web-production.up.railway.app/setores/incineracao-segura-para-financeiro</loc></u"
+    }
+  ],
+  "ftps": {
+    "error_type": "SSLCertVerificationError",
+    "error": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'ftp.arquindex.com.br'. (_ssl.c:1000)",
+    "publication_allowed": false
+  }
+}
+

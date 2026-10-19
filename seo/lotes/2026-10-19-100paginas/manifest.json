@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "run_date": "2026-10-19",
+  "batch": "arquindex-100paginas-20261019",
+  "goal": {
+    "new_pages_published": 100,
+    "min_main_words": 3000,
+    "additional_to_technical_articles": 15
+  },
+  "actual": {
+    "new_pages_produced": 0,
+    "new_pages_published": 0,
+    "existing_pages_updated_published": 0,
+    "existing_update_drafts_validated": 1,
+    "new_page_deficit": 100,
+    "not_produced_new_pages": 100,
+    "not_claimed_as_fully_ready_pages": 100
+  },
+  "origin": {
+    "repo": "arxazure/arquindex",
+    "branch": "master",
+    "public_base": "https://www.arquindex.com.br/",
+    "publication_root": "public_html (workflow configuration and prior deploy logs; fresh FTP root read prevented before authentication by TLS mismatch)",
+    "preflight_commit": "a3f914c1f8ff298aed6531ffa9c087d2d1c0022c",
+    "preflight_run": "https://github.com/arxazure/arquindex/actions/runs/39249890644",
+    "preflight_result": "audit_completed_publication_not_allowed",
+    "production_commit": null,
+    "new_backup": null,
+    "reason_no_backup": "FTPS certificate verification failed before credentials or read/write operations; no production mutation attempted"
+  },
+  "railway": {
+    "project": "f652d9de-5f85-404f-baec-a48d552d9163",
+    "service": "57fb4cbc-213b-462c-9c66-920b4d620137",
+    "environment": "5ba32ff7-5386-4867-8250-2a87def0d9d4",
+    "branch": "railway-production-2026",
+    "root": "/arquindex-platform",
+    "deployment_id": "29bfc12d-966d-491a-94ed-2f2accc6ee7a",
+    "deployment_status": "SUCCESS",
+    "deployment_commit": "24798d471b44bcda93a31691560f359531bec792",
+    "changed_this_run": false,
+    "reason": "No alternate canonical publication introduced to work around blocked HomeHost update"
+  },
+  "entries": [
+    {
+      "id": "AX100-20261019-GUARDA",
+      "title": "Guarda de documentos empresariais: manual de contratação, consulta e rastreabilidade",
+      "intent": "Contratação e operação de custódia empresarial com inventário, consultas, acesso e destinação",
+      "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "kind": "existing_update",
+      "words_main": 3661,
+      "word_count_scope": "#guarda-conteudo-principal only; excludes contact, sources, menus, footer, author boilerplate, JSON-LD",
+      "sources": [
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm",
+          "title": "Lei 13.709/2018 — LGPD",
+          "verified": "2026-10-19"
+        },
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm",
+          "title": "Decreto 10.278/2020",
+          "verified": "2026-10-19"
+        },
+        {
+          "url": "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-48-de-10-de-novembro-de-2021",
+          "title": "Resolução CONARQ 48/2021",
+          "verified": "2026-10-19"
+        },
+        {
+          "url": "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-conarq-no-60-de-14-de-setembro-de-2026",
+          "title": "Resolução CONARQ 60, de 14/09/2026",
+          "verified": "2026-10-19"
+        },
+        {
+          "url": "https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-publica-3o-relatorio-parcial-de-monitoramento-do-sandbox-regulatorio-em-ia",
+          "title": "ANPD, 16/10/2026 — terceiro relatório parcial do Sandbox IA",
+          "verified": "2026-10-19"
+        }
+      ],
+      "state": "draft_validated_publication_blocked_tls",
+      "content_file": "seo/lotes/2026-10-19-100paginas/guarda-documental.html",
+      "content_sha256": "dcd9282ecd1691601a4eec17cf625e94dcef3e8bd0675d17102e1b02b1d2274f",
+      "faq_answers": 8,
+      "public_status_before": 200,
+      "canonical": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "title_policy": "Preserve currently indexed title: Guarda de Documentos em Belo Horizonte | Arquindex; no daily retitling",
+      "proposed_description": "Entenda inventário, coleta, consultas, acesso, qualidade e destinação na guarda de documentos empresariais. Compare escopo e peça uma avaliação.",
+      "schema_plan": {
+        "type": "Service",
+        "note": "Not injected: schema must be reviewed against actual visible offer and existing page markup after secure publication is restored. No certification/rating/review schema."
+      },
+      "qa_pending": [
+        "Integrate within current main content without duplicate paragraphs or headings",
+        "Revalidate source file SHA at origin; verify recoverable backup before change",
+        "Inspect mobile rendering, existing schema, internal targets and unique canonical",
+        "Update correct child sitemap lastmod only after live content confirmation"
+      ],
+      "cases": {
+        "confirmed": [],
+        "proposals": [],
+        "hypothetical": "Explicit fictional BH/Contagem company; no volumes, revenue, performance claims or client names",
+        "pending": "Authorized documentary case evidence absent"
+      }
+    },
+    {
+      "id": "AX100-20261019-COLABORADORES",
+      "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+      "title": "Gestão de dossiês e documentos de colaboradores",
+      "intent": "Acesso, classificação e retenção de dossiês",
+      "kind": "existing_update",
+      "words_main": null,
+      "sources": [],
+      "state": "audited_not_written",
+      "public_status_before": 200,
+      "counted_new": false,
+      "counted_updated": false
+    },
+    {
+      "id": "AX100-20261019-DIGITALIZACAO",
+      "url": "https://www.arquindex.com.br/digitalizacao.html",
+      "title": "Digitalização empresarial de documentos",
+      "intent": "Projeto, preparação, captura e entregáveis",
+      "kind": "existing_update",
+      "words_main": null,
+      "sources": [],
+      "state": "audited_not_written",
+      "public_status_before": 200,
+      "counted_new": false,
+      "counted_updated": false
+    },
+    {
+      "id": "AX100-20261019-OCR",
+      "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+      "title": "OCR e PDF pesquisável",
+      "intent": "Qualidade do reconhecimento, indexação e conferência",
+      "kind": "existing_update",
+      "words_main": null,
+      "sources": [],
+      "state": "audited_not_written",
+      "public_status_before": 200,
+      "counted_new": false,
+      "counted_updated": false
+    },
+    {
+      "id": "AX100-20261019-DATABOOK",
+      "url": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+      "title": "Montagem de Databooks",
+      "intent": "Índice, revisões, pendências e conferência técnica",
+      "kind": "existing_update",
+      "words_main": null,
+      "sources": [],
+      "state": "audited_not_written",
+      "public_status_before": 200,
+      "counted_new": false,
+      "counted_updated": false
+    },
+    {
+      "id": "AX100-20261019-LGPD",
+      "url": "https://www.arquindex.com.br/lgpd-consultoria.html",
+      "title": "Consultoria LGPD",
+      "intent": "Escopo, entregáveis e governança de privacidade",
+      "kind": "existing_update",
+      "words_main": null,
+      "sources": [],
+      "state": "audited_not_written",
+      "public_status_before": 200,
+      "counted_new": false,
+      "counted_updated": false
+    },
+    {
+      "id": "AX100-20261019-ALFRESCO",
+      "url": "https://www.arquindex.com.br/alfresco-incloud-gestao-arquivos.html",
+      "title": "Alfresco InCloud GED ECM",
+      "intent": "Modelo documental, permissões e operação",
+      "kind": "existing_update",
+      "words_main": null,
+      "sources": [],
+      "state": "audited_not_written",
+      "public_status_before": 200,
+      "counted_new": false,
+      "counted_updated": false
+    }
+  ],
+  "reservations": {
+    "canonical_urls": [
+      "https://www.arquindex.com.br/guarda_de_documentos.html"
+    ],
+    "owner": "100-page batch existing-first update draft",
+    "technical_article_credit": 0,
+    "blogger_credit": 0,
+    "rule": "Do not reuse this draft in either new-page quota or 15-article quota. No Blogger mirror canonical introduced.",
+    "cross_automation_acknowledgement": "pending; repository manifest is written, no other automation claim was made"
+  },
+  "submissions": {
+    "sitemap_changed": false,
+    "sitemap_submitted": false,
+    "urls_sent_google": 0,
+    "urls_sent_bing": 0,
+    "urls_sent_indexnow": 0,
+    "indexing_confirmed": 0,
+    "reason": "No new or changed public content verified this run; no submission attempted. GSC Wizard subscription blocked."
+  },
+  "blockers": [
+    "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'ftp.arquindex.com.br'. (_ssl.c:1000)",
+    "Full current-origin intent/canonical inventory required before approving 100 distinct new pages; no mechanical municipality variants created",
+    "One existing-page draft produced; 100 new 3000-word pages were not produced"
+  ],
+  "resume": {
+    "existing_queue_cursor": "ARQ-016 (preserved; other routine advanced to it today)",
+    "first_action": "Correct FTPS certificate or have hosting provider confirm documented TLS-valid endpoint; rerun unchanged strict validation",
+    "publication_gates": [
+      "Verify configured publication origin without alternate-host guessing or disabling TLS",
+      "Read latest origin content; prepare recoverable backup; verify backup bytes",
+      "Integrate and render draft; validate useful principal word count and duplication",
+      "Publish idempotently with concurrent-change guard and rollback; verify HTTP 200 and exact new content",
+      "Only then update sitemap and submit through authorized available integrations"
+    ],
+    "unallocated_new_intents": 100
+  }
+}
+

@@ -1,0 +1,355 @@
+{
+  "date": "2026-10-19",
+  "property": "sc-domain:arquindex.com.br",
+  "source": "Windsor.ai searchconsole",
+  "gsc_wizard_error": "payment_required: trial ended or no active subscription",
+  "vibeseo": "tools unavailable; no numbers attributed to VibeSEO",
+  "latest_date_returned": "2026-10-17",
+  "maturity": "Reporting lag respected (D-2). Connector does not expose dataState=final; dates can be revised. No country/device filter; web report uses connector defaults.",
+  "windows": {
+    "7": {
+      "current": {
+        "start": "2026-10-11",
+        "end": "2026-10-17",
+        "rows": 7,
+        "clicks": 19,
+        "impressions": 1330,
+        "ctr": 1.4285714285714286,
+        "position": 19.988723233082705
+      },
+      "previous": {
+        "start": "2026-10-04",
+        "end": "2026-10-10",
+        "rows": 7,
+        "clicks": 26,
+        "impressions": 1937,
+        "ctr": 1.342281879194631,
+        "position": 16.142463397005677
+      }
+    },
+    "14": {
+      "current": {
+        "start": "2026-10-04",
+        "end": "2026-10-17",
+        "rows": 14,
+        "clicks": 45,
+        "impressions": 3267,
+        "ctr": 1.3774104683195594,
+        "position": 17.708280838689927
+      },
+      "previous": {
+        "start": "2026-09-20",
+        "end": "2026-10-03",
+        "rows": 14,
+        "clicks": 38,
+        "impressions": 1167,
+        "ctr": 3.2562125107112254,
+        "position": 23.075404370179946
+      }
+    },
+    "28": {
+      "current": {
+        "start": "2026-09-20",
+        "end": "2026-10-17",
+        "rows": 28,
+        "clicks": 83,
+        "impressions": 4434,
+        "ctr": 1.8718989625620206,
+        "position": 19.120872891294542
+      },
+      "previous": {
+        "start": "2026-08-23",
+        "end": "2026-09-19",
+        "rows": 28,
+        "clicks": 198,
+        "impressions": 13713,
+        "ctr": 1.4438853642528986,
+        "position": 20.777441610150948
+      }
+    }
+  },
+  "query_windows": {
+    "digitalização de documentos": {
+      "7": {
+        "current": {
+          "start": "2026-10-11",
+          "end": "2026-10-17",
+          "rows": 5,
+          "clicks": 1,
+          "impressions": 7,
+          "ctr": 14.285714285714285,
+          "position": 2.2857142857142856
+        },
+        "previous": {
+          "start": "2026-10-04",
+          "end": "2026-10-10",
+          "rows": 4,
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 2.2857
+        }
+      },
+      "14": {
+        "current": {
+          "start": "2026-10-04",
+          "end": "2026-10-17",
+          "rows": 9,
+          "clicks": 1,
+          "impressions": 14,
+          "ctr": 7.142857142857142,
+          "position": 2.285707142857143
+        },
+        "previous": {
+          "start": "2026-09-20",
+          "end": "2026-10-03",
+          "rows": 7,
+          "clicks": 1,
+          "impressions": 18,
+          "ctr": 5.555555555555555,
+          "position": 2.2222222222222223
+        }
+      },
+      "28": {
+        "current": {
+          "start": "2026-09-20",
+          "end": "2026-10-17",
+          "rows": 16,
+          "clicks": 2,
+          "impressions": 32,
+          "ctr": 6.25,
+          "position": 2.249996875
+        },
+        "previous": {
+          "start": "2026-08-23",
+          "end": "2026-09-19",
+          "rows": 28,
+          "clicks": 0,
+          "impressions": 325,
+          "ctr": 0,
+          "position": 39.852306769230765
+        }
+      }
+    },
+    "empresa de guarda de documentos": {
+      "7": {
+        "current": {
+          "start": "2026-10-11",
+          "end": "2026-10-17",
+          "rows": 7,
+          "clicks": 0,
+          "impressions": 17,
+          "ctr": 0,
+          "position": 10.647058823529411
+        },
+        "previous": {
+          "start": "2026-10-04",
+          "end": "2026-10-10",
+          "rows": 6,
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 11.692307692307692
+        }
+      },
+      "14": {
+        "current": {
+          "start": "2026-10-04",
+          "end": "2026-10-17",
+          "rows": 13,
+          "clicks": 0,
+          "impressions": 30,
+          "ctr": 0,
+          "position": 11.1
+        },
+        "previous": {
+          "start": "2026-09-20",
+          "end": "2026-10-03",
+          "rows": 6,
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 12.727263636363636
+        }
+      },
+      "28": {
+        "current": {
+          "start": "2026-09-20",
+          "end": "2026-10-17",
+          "rows": 19,
+          "clicks": 0,
+          "impressions": 41,
+          "ctr": 0,
+          "position": 11.536582926829269
+        },
+        "previous": {
+          "start": "2026-08-23",
+          "end": "2026-09-19",
+          "rows": 26,
+          "clicks": 1,
+          "impressions": 45,
+          "ctr": 2.2222222222222223,
+          "position": 13.46667111111111
+        }
+      }
+    },
+    "guarda de documentos belo horizonte": {
+      "7": {
+        "current": {
+          "start": "2026-10-11",
+          "end": "2026-10-17",
+          "rows": 5,
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 4.3077000000000005
+        },
+        "previous": {
+          "start": "2026-10-04",
+          "end": "2026-10-10",
+          "rows": 4,
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 15.166666666666666
+        }
+      },
+      "14": {
+        "current": {
+          "start": "2026-10-04",
+          "end": "2026-10-17",
+          "rows": 9,
+          "clicks": 0,
+          "impressions": 19,
+          "ctr": 0,
+          "position": 7.736847368421053
+        },
+        "previous": {
+          "start": "2026-09-20",
+          "end": "2026-10-03",
+          "rows": 2,
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 3.6666666666666665
+        }
+      },
+      "28": {
+        "current": {
+          "start": "2026-09-20",
+          "end": "2026-10-17",
+          "rows": 11,
+          "clicks": 0,
+          "impressions": 22,
+          "ctr": 0,
+          "position": 7.181822727272728
+        },
+        "previous": {
+          "start": "2026-08-23",
+          "end": "2026-09-19",
+          "rows": 15,
+          "clicks": 0,
+          "impressions": 34,
+          "ctr": 0,
+          "position": 26.676464705882353
+        }
+      }
+    }
+  },
+  "page_window": {
+    "start": "2026-09-20",
+    "end": "2026-10-17"
+  },
+  "priority_pages": [
+    {
+      "page": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+      "clicks": 1,
+      "impressions": 22,
+      "position": 7.9545
+    },
+    {
+      "page": "https://www.arquindex.com.br/digitalizacao.html",
+      "clicks": 1,
+      "impressions": 81,
+      "position": 17.8025
+    },
+    {
+      "page": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+      "clicks": 1,
+      "impressions": 61,
+      "position": 14.5082
+    },
+    {
+      "page": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+      "clicks": 0,
+      "impressions": 83,
+      "position": 9.7952
+    },
+    {
+      "page": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "clicks": 0,
+      "impressions": 355,
+      "position": 18.2423
+    },
+    {
+      "page": "https://www.arquindex.com.br/lgpd-consultoria.html",
+      "clicks": 0,
+      "impressions": 80,
+      "position": 31.225
+    }
+  ],
+  "bing": {
+    "source": "Windsor.ai bing_webmaster",
+    "property": "https://arquindex.com.br/",
+    "current28": {
+      "start": "2026-09-18",
+      "end": "2026-10-15",
+      "returned_days": 22,
+      "clicks": 5,
+      "impressions": 133,
+      "ctr": 3.7593984962406015
+    },
+    "previous28": {
+      "start": "2026-08-21",
+      "end": "2026-09-17",
+      "returned_days": 21,
+      "clicks": 14,
+      "impressions": 150,
+      "ctr": 9.333333333333334
+    },
+    "current7": {
+      "start": "2026-10-09",
+      "end": "2026-10-15",
+      "returned_days": 4,
+      "clicks": 1,
+      "impressions": 30,
+      "ctr": 3.3333333333333335
+    },
+    "previous7": {
+      "start": "2026-10-02",
+      "end": "2026-10-08",
+      "returned_days": 6,
+      "clicks": 0,
+      "impressions": 25,
+      "ctr": 0
+    },
+    "note": "Sums of returned date rows, independent of GSC. Latest request 16–17/10 returned no rows: not interpreted as proof of zero. No position/page fields available."
+  },
+  "digitalizar": {
+    "observed_http": 200,
+    "modified": false,
+    "observations": "Fresh query+page data for 22/08–16/10 include noncommercial terms p2wnz and azraelzer0d4y before 19/09. Search terms do not prove current compromise or a causal explanation of traffic loss. Current HTML has no tested suspect strings; absence is not a security audit. Preserve URL pending history and inspection.",
+    "current28": {
+      "page": "https://digitalizar.arquindex.com.br/",
+      "clicks": 0,
+      "impressions": 59,
+      "position": 55.9153
+    }
+  },
+  "panel": {
+    "read_existing_settings": "Confirmed through Arquindex Connect status; prior growth data preserved",
+    "new_write": "not_performed",
+    "reason": "Direct GET failed: curl (7) could not connect to configured browser-proxy port 8889. Available purpose-built status connector has no metrics write method. No private access bypass, no redeploy."
+  }
+}
+

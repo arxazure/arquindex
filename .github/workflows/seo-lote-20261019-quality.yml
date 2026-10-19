@@ -1,0 +1,36 @@
+name: Validar lote longo SEO sem publicar
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo/lotes/2026-10-19-100paginas/**'
+      - 'seo-rotinas/existing-first-20261018.py'
+      - 'seo-rotinas/test_existing_first_tls.py'
+      - '.github/workflows/seo-lote-20261019-quality.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conferir conteúdo principal sem menus ou JSON-LD
+        run: python3 seo/lotes/2026-10-19-100paginas/validate_lote.py
+      - name: Testar FTPS validado e escrita idempotente
+        run: python3 -m unittest discover -s seo-rotinas -p 'test_*.py' -v
+      - name: Validar manifesto e contagens reais
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('seo/lotes/2026-10-19-100paginas/manifest.json').read_text())
+          assert m['actual']['new_pages_published']==0
+          assert m['actual']['existing_pages_updated_published']==0
+          assert m['actual']['new_page_deficit']==100
+          assert m['actual']['existing_update_drafts_validated']==1
+          assert m['submissions']['urls_sent_indexnow']==0
+          assert len({x['url'] for x in m['entries']})==len(m['entries'])
+          print('QUALITY_PASSED_NOT_A_DEPLOY; new=0 updated=0 deficit=100 draft=1')
+          PY

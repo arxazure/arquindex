@@ -5,6 +5,7 @@ import io
 import os
 import re
 import sys
+import ssl
 import time
 import urllib.request
 from datetime import datetime, timezone
@@ -58,7 +59,7 @@ CONTENT = {
 def connect():
     if not all((FTP_HOST, FTP_USER, FTP_PASSWORD)):
         raise RuntimeError("Missing required FTP environment variables")
-    ftp = ftplib.FTP_TLS(timeout=35)
+    ftp = ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=35)
     ftp.connect(FTP_HOST, 21)
     ftp.login(FTP_USER, FTP_PASSWORD)
     ftp.prot_p()  # Require encrypted data transfers. Never disable certificate verification.
@@ -179,3 +180,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
