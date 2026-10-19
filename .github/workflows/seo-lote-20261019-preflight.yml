@@ -1,0 +1,89 @@
+name: Auditoria segura do lote SEO 2026-10-19
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/seo-lote-20261019-preflight.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-existing-first
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preflight somente leitura HTTPS e FTPS validado
+        env:
+          FTP_HOST: ftp.arquindex.com.br
+          FTP_USERNAME: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import concurrent.futures,ftplib,hashlib,json,os,re,ssl,urllib.request,urllib.error
+          from pathlib import Path
+          from datetime import datetime,timezone
+          targets=[
+           'https://www.arquindex.com.br/guarda_de_documentos.html',
+           'https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html',
+           'https://www.arquindex.com.br/digitalizacao.html',
+           'https://www.arquindex.com.br/digitalizacao-com-ocr.html',
+           'https://www.arquindex.com.br/montagem_databook_organizar.html',
+           'https://www.arquindex.com.br/lgpd-consultoria.html',
+           'https://www.arquindex.com.br/alfresco-incloud-gestao-arquivos.html',
+           'https://www.arquindex.com.br/robots.txt',
+           'https://www.arquindex.com.br/sitemap.xml',
+           'https://digitalizar.arquindex.com.br/',
+           'https://digitalizar.arquindex.com.br/robots.txt',
+           'https://arquindex-web-production.up.railway.app/sitemap.xml']
+          def get(url):
+              r={'url':url}
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'ArquindexQualityCheck/2026-10-19','Cache-Control':'no-cache'})
+                  with urllib.request.urlopen(req,timeout=35,context=ssl.create_default_context()) as h:
+                      b=h.read(6000000); r.update(status=h.status,final_url=h.geturl(),x_robots_tag=h.headers.get('X-Robots-Tag'),sha256=hashlib.sha256(b).hexdigest())
+                  html=b.decode('utf-8',errors='replace')
+                  r['title']=re.findall(r'<title[^>]*>(.*?)</title>',html,re.I|re.S)[:1]
+                  r['canonicals']=re.findall(r'<link[^>]*rel=["\x27]canonical["\x27][^>]*>',html,re.I)
+                  r['robots_meta']=re.findall(r'<meta[^>]*name=["\x27]robots["\x27][^>]*>',html,re.I)
+                  r['h1_count']=len(re.findall(r'<h1\b',html,re.I))
+                  r['existing_marker']='arquindex-seo-existing-first-20261018' in html
+                  r['suspect_terms']=[t for t in ['azraelzer0d4y','p2wnz','hacked by'] if t in html.lower()]
+                  if url.endswith(('.xml','.txt')):r['text']=html[:20000]
+              except Exception as e:r.update(error_type=type(e).__name__,error=str(e)[:350])
+              return r
+          report={'checked_at':datetime.now(timezone.utc).isoformat(),'mode':'read_only','commit':os.getenv('GITHUB_SHA'),'public':[]}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+              report['public']=list(pool.map(get,targets))
+          f=None
+          try:
+              ctx=ssl.create_default_context()
+              assert ctx.check_hostname and ctx.verify_mode==ssl.CERT_REQUIRED
+              f=ftplib.FTP_TLS(context=ctx,timeout=35)
+              f.connect(os.environ['FTP_HOST'],21)
+              f.auth()
+              report['ftps']={'tls_verified':True,'protocol':f.sock.version()}
+              if not os.environ.get('FTP_PASSWORD'):raise RuntimeError('FTP_PASSWORD not configured')
+              f.login(os.environ['FTP_USERNAME'],os.environ['FTP_PASSWORD']);f.prot_p();f.cwd('public_html')
+              report['ftps']['public_root']=f.pwd()
+              for n in ['digitalizacao-com-ocr.html','guarda_de_documentos.html']:
+                  buf=bytearray();f.retrbinary('RETR '+n,buf.extend)
+                  report['ftps'][n]={'bytes':len(buf),'sha256':hashlib.sha256(buf).hexdigest()}
+              f.quit();f=None
+          except Exception as e:
+              report.setdefault('ftps',{}).update(error_type=type(e).__name__,error=str(e)[:350],publication_allowed=False)
+          finally:
+              if f:
+                  try:f.close()
+                  except Exception:pass
+          Path('seo-lote-preflight.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          print(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-lote-20261019-preflight
+          path: seo-lote-preflight.json
+          retention-days: 30
