@@ -36,3 +36,5 @@ jobs:
         with:
           name: evidencias-rodada-seo-20261020-noite
           path: design-report/
+
+# rerun apos suporte ao dominio principal
