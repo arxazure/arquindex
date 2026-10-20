@@ -1,0 +1,38 @@
+name: Melhorar ARQ-043 ARQ-044 ARQ-045 2026-10-20 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/rodada-seo-20261020-noite.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - name: Identidade ARQ-043
+        env:
+          DESIGN_TARGET: https://www.arquindex.com.br/alfresco-belo-horizonte.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-044
+        env:
+          DESIGN_TARGET: https://www.arquindex.com.br/gestao-documental-belo-horizonte.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-045
+        env:
+          DESIGN_TARGET: https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Publicar AEO e atendimento
+        run: python scripts/rodada-seo-20261020-noite.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidencias-rodada-seo-20261020-noite
+          path: design-report/
