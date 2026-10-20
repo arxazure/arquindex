@@ -32,7 +32,7 @@ jobs:
         run: python scripts/padronizar-identidade-arquindex.py
       - name: Consolidar atendimento unico
         env:
-          ATENDIMENTO_TARGETS: https://instalacao-lgpd-sp.arquindex.com.br/empresas.html,https://software-reconhecimento-texto-documentos-digitalizados.arquindex.com.br/guia-completo.html,https://digitalizar-arquivos-bh.arquindex.com.br/
+          ATENDIMENTO_TARGETS: https://instalacao-lgpd-sp.arquindex.com.br/empresas.html,https://software-reconhecimento-texto-documentos-digitalizados.arquindex.com.br/guia-completo.html
         run: python scripts/aplicar-atendimento-unico.py
       - name: Publicar conteudo AEO e canonicals
         run: python scripts/rodada-seo-20261020-manha.py
