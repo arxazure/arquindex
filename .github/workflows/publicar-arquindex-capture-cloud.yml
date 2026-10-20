@@ -1,73 +1,113 @@
 name: Publicar Arquindex Capture Cloud
 on:
   push:
-    branches: [master]
+    branches:
+      - master
     paths:
       - 'arquindex-capture-cloud.html'
       - '.github/workflows/publicar-arquindex-capture-cloud.yml'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: publicar-arquindex-capture-cloud
+  cancel-in-progress: false
 jobs:
   publicar:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Verificar conteudo e preco sob consulta
+      - name: Validar landing page e precos
+        shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-          p=Path('arquindex-capture-cloud.html').read_text(encoding='utf-8')
-          for term in ('100 GB','300 GB','500 GB','1.000 GB','2.000 GB','Sob consulta','baixarCatalogo'):
-              assert term in p,term
+          page=Path('arquindex-capture-cloud.html').read_text(encoding='utf-8')
+          for term in ('100 GB','300 GB','500 GB','1.000 GB','R$ 499','R$ 849','R$ 1.099','R$ 1.549','R$ 599','R$ 899','baixarCatalogo'):
+              assert term in page, f'Termo ausente: {term}'
+          print('VALIDACAO_COMERCIAL_OK')
           PY
-      - name: Publicar somente pagina Capture via FTPS
+      - name: Publicar landing page na HomeHost FTPS
         env:
+          FTP_HOST: ${{ vars.FTP_HOST }}
+          FTP_USER: ${{ vars.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
+        shell: bash
         run: |
           python - <<'PY'
-          import ftplib,os,ssl,hashlib,io
+          import ftplib,os,ssl,io,hashlib,posixpath
           from pathlib import Path
-          assert os.environ.get('FTP_PASSWORD'),'FTP_PASSWORD ausente'
+          host=os.getenv('FTP_HOST') or 'ftp.arquindex.com.br'
+          user=os.getenv('FTP_USER') or 'arquind2'
+          password=os.getenv('FTP_PASSWORD')
+          if not password:
+              raise RuntimeError('GitHub Actions secret FTP_PASSWORD ausente. Configurar Settings > Secrets and variables > Actions.')
           data=Path('arquindex-capture-cloud.html').read_bytes()
-          with ftplib.FTP_TLS(timeout=45,context=ssl.create_default_context()) as ftp:
-              ftp.connect('ftp.arquindex.com.br',21)
-              ftp.login('arquind2',os.environ['FTP_PASSWORD'])
+          name='arquindex-capture-cloud.html'
+          with ftplib.FTP_TLS(timeout=40,context=ssl.create_default_context()) as ftp:
+              ftp.connect(host,21)
+              ftp.login(user,password)
               ftp.prot_p()
               ftp.set_pasv(True)
-              initial=ftp.pwd()
-              ok=False
-              for path in ('public_html','/home/arquind2/public_html','/public_html','.'):
+              base=ftp.pwd()
+              candidates=[os.getenv('FTP_REMOTE_DIR'), 'public_html', 'www', 'htdocs', '/public_html', '/home/arquind2/public_html', '.']
+              found=None
+              for candidate in dict.fromkeys(x for x in candidates if x):
                   try:
-                      ftp.cwd(initial)
-                      if path!='.':ftp.cwd(path)
-                      names=set(Path(x).name for x in ftp.nlst())
+                      ftp.cwd(base)
+                      ftp.cwd(candidate)
+                      current=ftp.pwd()
+                      names={posixpath.basename(item.rstrip('/')) for item in ftp.nlst()}
                       if 'index.html' in names or 'index.php' in names:
-                          ok=True
+                          found=current
+                          print('DIRETORIO_PUBLICO_VALIDADO',current)
                           break
-                  except ftplib.all_errors:
-                      continue
-              assert ok,'Raiz publica nao identificada'
-              ftp.storbinary('STOR arquindex-capture-cloud.html',io.BytesIO(data))
-              verification=io.BytesIO()
-              ftp.retrbinary('RETR arquindex-capture-cloud.html',verification.write)
-              assert hashlib.sha256(data).digest()==hashlib.sha256(verification.getvalue()).digest()
-          print('UPLOAD_FTPS_VALIDADO')
+                      print('DIRETORIO_SEM_INDICE',current)
+                  except ftplib.all_errors as exc:
+                      print('DIRETORIO_INACESSIVEL',candidate,type(exc).__name__)
+              if found is None:
+                  raise RuntimeError('Nenhuma raiz publica com index.html/index.php encontrada. Configure vars.FTP_REMOTE_DIR com o caminho correto; upload impedido para evitar publicar na pasta errada.')
+              ftp.cwd(found)
+              tmp=name+'.uploading'
+              ftp.storbinary('STOR '+tmp,io.BytesIO(data))
+              back=io.BytesIO()
+              ftp.retrbinary('RETR '+tmp,back.write)
+              if hashlib.sha256(back.getvalue()).digest()!=hashlib.sha256(data).digest():
+                  ftp.delete(tmp)
+                  raise RuntimeError('Upload temporario nao confere com arquivo local')
+              try:
+                  ftp.rename(tmp,name)
+              except ftplib.error_perm:
+                  # Alguns servidores FTP nao aceitam renomear sobre arquivo existente.
+                  ftp.storbinary('STOR '+name,io.BytesIO(data))
+                  ftp.delete(tmp)
+              back=io.BytesIO()
+              ftp.retrbinary('RETR '+name,back.write)
+              assert hashlib.sha256(back.getvalue()).digest()==hashlib.sha256(data).digest(),'Hash remoto divergente'
+              print('PUBLICACAO_FTPS_OK',found,name,len(data))
           PY
-      - name: Teste publico
+      - name: Confirmar pagina pelo HTTPS
+        shell: bash
         run: |
           python - <<'PY'
-          import urllib.request,time
+          import urllib.request,time,hashlib
+          from pathlib import Path
           url='https://www.arquindex.com.br/arquindex-capture-cloud.html'
-          for i in range(5):
+          local=Path('arquindex-capture-cloud.html').read_bytes()
+          for attempt in range(6):
               try:
-                  req=urllib.request.Request(url,headers={'User-Agent':'Arquindex-Deploy-Check'})
-                  with urllib.request.urlopen(req,timeout=25) as r:
-                      page=r.read().decode('utf-8','replace')
-                      assert r.status==200 and 'CAPTURE CLOUD' in page and '100 GB' in page
-                      print('PAGINA_PUBLICA_OK',url)
-                      break
-              except Exception:
-                  if i==4:raise
-                  time.sleep(10)
+                  req=urllib.request.Request(url+'?v='+hashlib.sha256(local).hexdigest()[:12],headers={'User-Agent':'Arquindex-Deploy-Check','Cache-Control':'no-cache'})
+                  with urllib.request.urlopen(req,timeout=20) as r:
+                      remote=r.read()
+                      if r.status==200 and hashlib.sha256(remote).digest()==hashlib.sha256(local).digest():
+                          print('PUBLICACAO_HTTPS_CONFIRMADA',url)
+                          break
+                      print('HTTP_DIFERENTE',r.status,'tentativa',attempt+1)
+              except Exception as exc:
+                  print('HTTPS_AINDA_NAO_CONFIRMADO',type(exc).__name__,'tentativa',attempt+1)
+              if attempt==5:
+                  raise RuntimeError('FTPS validado, mas pagina HTTPS nao corresponde: verificar cache/CDN, dominio e document root')
+              time.sleep(10)
           PY
