@@ -71,7 +71,8 @@ with ftplib.FTP_TLS(timeout=50) as f:
  if selected:
   from urllib.parse import urlsplit
   parsed=urlsplit(selected);host=parsed.hostname;filename=parsed.path.lstrip('/') or 'index.html'
-  for root in [base+'/subdominios/'+host,base+'/'+host,'/subdominios/'+host,'/'+host]:
+  candidate_roots=[base] if host in ['www.arquindex.com.br','arquindex.com.br'] else [base+'/subdominios/'+host,base+'/'+host,'/subdominios/'+host,'/'+host]
+  for root in candidate_roots:
    try:
     b=get(f,root+'/'+filename)
     decoded=b.decode('utf8','ignore')
