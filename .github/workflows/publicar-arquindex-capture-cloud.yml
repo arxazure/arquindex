@@ -68,7 +68,14 @@ jobs:
                   except ftplib.all_errors as exc:
                       print('DIRETORIO_INACESSIVEL',candidate,type(exc).__name__)
               if found is None:
-                  raise RuntimeError('Nenhuma raiz publica com index.html/index.php encontrada. Configure vars.FTP_REMOTE_DIR com o caminho correto; upload impedido para evitar publicar na pasta errada.')
+                  explicit=os.getenv('FTP_REMOTE_DIR')
+                  if explicit:
+                      ftp.cwd(base)
+                      ftp.cwd(explicit)
+                      found=ftp.pwd()
+                      print('DIRETORIO_EXPLICITO_SELECIONADO',found)
+                  else:
+                      raise RuntimeError('Raiz publica nao identificada. Configure a variavel FTP_REMOTE_DIR no GitHub Actions com a pasta publica da HomeHost, por exemplo public_html. Nenhum arquivo foi enviado.')
               ftp.cwd(found)
               tmp=name+'.uploading'
               ftp.storbinary('STOR '+tmp,io.BytesIO(data))
