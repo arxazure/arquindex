@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-20",
+  "scope": "Arquindex technical maintenance; Merchant read-only audit; no commercial catalogue writes",
+  "audit": {
+    "checked_at": "2026-10-20T10:31:02.193440+00:00",
+    "method": "Verified-TLS GET requests, bounded sample; timings are total fetch duration, not Core Web Vitals",
+    "counts": {
+      "priority_pages": 21,
+      "assets": 21,
+      "internal_links": 35,
+      "child_sitemaps": 12,
+      "total_checks": 89
+    },
+    "http_errors_in_sample": 0,
+    "directory_listings_in_sample": 0,
+    "notes": [
+      "No global site-health guarantee; not an exhaustive crawl.",
+      "SVG titles are not duplicate HTML document titles.",
+      "JSON-LD was checked for JSON syntax, not full search-feature eligibility or correspondence of every claim.",
+      "Some legacy titles repeat the Arquindex brand and some descriptions are truncated; left unchanged to preserve content and traffic while origin writes remain blocked."
+    ]
+  },
+  "regression": {
+    "tests_passed": 4,
+    "candidate_syntax": "server.js, sector-digitalization.js, top10-opportunities.js passed node --check",
+    "candidate_http_smoke_routes": 18,
+    "candidate_http_smoke": "Passed: HTTP 200, one H1 and canonical per HTML, parseable JSON-LD; isolated test environment, IndexNow disabled",
+    "homehost_sector_guides_checked": 10,
+    "homehost_sector_guides_http_200": 10
+  },
+  "replica": {
+    "category": "/gestao-documental/blog/categoria/lgpd-governanca",
+    "railway_status": 200,
+    "upstream_status": 200,
+    "legacy_doubled_prefix_final_status": 200,
+    "legacy_doubled_prefix_final_path": "/gestao-documental/blog/categoria/lgpd-governanca",
+    "note": "Prior 403 did not reproduce. This audit's GET followed redirects; existing four tests assert the 301/query preservation separately. No repair of Cloudflare access was made in this run."
+  },
+  "railway": {
+    "project": "f652d9de-5f85-404f-baec-a48d552d9163",
+    "service": "57fb4cbc-213b-462c-9c66-920b4d620137",
+    "environment": "5ba32ff7-5386-4867-8250-2a87def0d9d4",
+    "branch": "railway-production-2026",
+    "branch_head": "7d1413c4c6c7996438b6ff613125bca666432e15",
+    "live_commit": "37f79c013e83710467e9877ea97767ef0e0d10a0",
+    "live_deployment": "3c68ff8a-2f24-43a0-b9e3-16a90797541e",
+    "live_status": "SUCCESS",
+    "pending_source_changes": 4,
+    "pending_patch": "23045367-bcf9-4511-be50-3d9859353f9e",
+    "pending_state": "STAGED",
+    "new_deploy_confirmed": false,
+    "interruption": "Execution interrupted during the deployment step; read-only recovery confirms no new deployment and unchanged pending patch. No deployment mutation resent.",
+    "rollback_available": true,
+    "rollback_snapshot": "38202721-4be7-426d-aeb9-2daa87dce574"
+  },
+  "homehost": {
+    "changed": false,
+    "files_deleted": 0,
+    "production_backup_created": false,
+    "reason": "No origin mutations were attempted; certificate verification failed before authenticated FTP operations.",
+    "preflight_run": "https://github.com/arxazure/arquindex/actions/runs/39408964805",
+    "preflight_commit": "57169ea0bf2b929a4aa6b5df0bad97ea3059b37a",
+    "checked_at": "2026-10-20T10:35:09.039625+00:00",
+    "error_type": "SSLCertVerificationError",
+    "error": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'ftp.arquindex.com.br'. (_ssl.c:1000)",
+    "publication_allowed": false
+  },
+  "merchant": {
+    "account_requested": "101490673",
+    "url": "https://merchants.google.com/mc/products/diagnostics?a=101490673&marketingMethod=16&priorityFixes=true",
+    "browser_error": "Browser bootstrap failed: Mcp error -32001 Unknown tool browser.js",
+    "account_identity_confirmed": false,
+    "domain_verified_claimed_confirmed": false,
+    "counts_revalidated": false,
+    "login_state": "Not observable; do not infer signed-out state",
+    "items_changed": 0,
+    "items_deleted": 0,
+    "sources_reactivated": 0,
+    "windsor_used": false,
+    "commercial_owner": "Radar de mercado",
+    "baseline_17oct": "Not repeated as current metrics"
+  },
+  "changes_this_run": {
+    "github": "Read-only strict-TLS preflight workflow added and executed successfully as an audit; success of audit does not mean publication allowed.",
+    "production_files": 0,
+    "databases": 0,
+    "merchant_items": 0
+  },
+  "next_steps": [
+    "Resolve and confirm Railway pending source connection, then deploy the tested branch and verify deployment SHA plus public content; no blind retries of interrupted mutations.",
+    "Hosting provider must fix certificate coverage for the configured FTPS hostname or document an authorized TLS-valid endpoint; do not disable certificate checks.",
+    "Restore the requested connected authenticated browser to inspect exact Merchant account 101490673; commercial writes remain with Radar de mercado.",
+    "Revisit repeated legacy title suffixes and truncated descriptions only after a secure, backed-up origin write path is available."
+  ]
+}
