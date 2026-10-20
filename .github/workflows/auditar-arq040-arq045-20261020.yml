@@ -1,0 +1,32 @@
+name: Auditar ARQ-040 a ARQ-045 2026-10-20 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/auditar-arq040-arq045-20261020.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pip install requests beautifulsoup4
+      - name: Auditar seis URLs
+        run: |
+          python - <<'PY'
+          import json,requests
+          from bs4 import BeautifulSoup
+          urls=[
+          ('ARQ-040','http://www.digitalizar-mapeamento-bh.arquindex.com.br/'),
+          ('ARQ-041','https://governanca.arquindex.com.br/bh.html'),
+          ('ARQ-042','https://www.arquindex.com.br/digitalizacao-documentos-belo-horizonte.html'),
+          ('ARQ-043','https://www.arquindex.com.br/alfresco-belo-horizonte.html'),
+          ('ARQ-044','https://www.arquindex.com.br/gestao-documental-belo-horizonte.html'),
+          ('ARQ-045','https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte.html')]
+          for id,url in urls:
+            try:
+              r=requests.get(url,timeout=30,allow_redirects=True,headers={'User-Agent':'ArquindexSEO/1.0'})
+              s=BeautifulSoup(r.text,'html.parser')
+              out={'id':id,'request':url,'final':r.url,'status':r.status_code,'title':s.title.get_text(' ',strip=True) if s.title else None,'h1':[x.get_text(' ',strip=True) for x in s.find_all('h1')],'description':(s.find('meta',attrs={'name':'description'}) or {}).get('content'),'canonical':[x.get('href') for x in s.find_all('link',rel=lambda v:v and 'canonical' in v)],'robots':(s.find('meta',attrs={'name':'robots'}) or {}).get('content'),'logo':bool(s.select('img[src*="arquindex-logo-oficial"]')),'widget':len(s.select('#arq-floating')),'old_widgets':len(s.select('.aq-brand-wa,#wa-widget-send-button')),'aeo':len(s.select('[data-aq-aeo]')),'links':len(s.find_all('a')),'words':len(s.get_text(' ',strip=True).split())}
+              print('AUDIT',json.dumps(out,ensure_ascii=False),flush=True)
+            except Exception as e: print('AUDIT_ERROR',id,repr(e),flush=True)
+          PY
