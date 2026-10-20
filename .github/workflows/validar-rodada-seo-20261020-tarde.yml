@@ -29,3 +29,5 @@ jobs:
           const row={id,vp:vp.name,status:response?.status(),...d};out.push(row);console.log('CHECK',JSON.stringify(row));if(row.status!==200||row.canonical.length!==1||row.h1.length!==1||!row.description||row.sw>row.cw+2||!row.logo||row.widget!==1||!row.menu||!row.aeo||!row.whatsapp||!row.proposal||row.noindex)throw new Error('FAIL '+id+' '+vp.name);}
           await context.close();}await browser.close();console.log('VISUAL_VERIFIED',JSON.stringify(out));})().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1});
           JS
+
+# rerun apos correcao ARQ-038
