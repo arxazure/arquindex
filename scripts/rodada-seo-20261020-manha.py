@@ -1,5 +1,6 @@
 import ftplib, hashlib, io, json, os, posixpath, time, urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
 from bs4 import BeautifulSoup
 
 STAMP = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
@@ -24,6 +25,7 @@ TARGETS = [
 ]
 
 STYLE = '''<style id="arquindex-aeo-20261020">.aq-aeo-answer{max-width:1120px;margin:36px auto;padding:28px;border:1px solid #d9e2ef;border-radius:16px;background:#fff;color:#0c1b33}.aq-aeo-answer h2{color:#0b3d91}.aq-aeo-answer table{width:100%;border-collapse:collapse;margin:18px 0}.aq-aeo-answer th,.aq-aeo-answer td{padding:12px;border:1px solid #d9e2ef;text-align:left;vertical-align:top}.aq-aeo-answer th{background:#eaf0f8}@media(max-width:760px){.aq-aeo-answer{margin:24px 16px;padding:20px}.aq-aeo-answer table{display:block;overflow-x:auto}.aq-aeo-answer th,.aq-aeo-answer td{min-width:145px}}</style>'''
+WIDGET = Path('conteudo/publicacao/_atendimento-flutuante.html').read_text('utf-8')
 
 def get(ftp, path):
     data = bytearray(); ftp.retrbinary('RETR ' + path, data.extend); return bytes(data)
@@ -79,10 +81,19 @@ def static_transform(target, original):
     for canonical in soup.find_all('link', rel=lambda value: value and 'canonical' in value): canonical.decompose()
     soup.head.append(soup.new_tag('link', rel='canonical', href=target['canonical']))
     soup.head.append(BeautifulSoup(STYLE, 'html.parser'))
+    for selector in ['#arq-floating-style','#arq-floating','#arq-floating-script','#arq-dedup-floats','.aq-brand-wa']:
+        for node in soup.select(selector): node.decompose()
+    for node in list(soup.find_all('script')):
+        src=(node.get('src') or '').lower(); text=node.string or node.get_text() or ''
+        if ('__arqWhatsappOptions' in text or 'whatsapp_replace_crisp/jquery.js' in src or 'whatsapp_replace_crisp/user_main.js' in src or 'watiwidget.js' in src): node.decompose()
+    fragment=BeautifulSoup(WIDGET,'html.parser')
+    for node in list(fragment.contents): soup.body.append(node)
     section = BeautifulSoup(target['section'], 'html.parser')
     footer = soup.find('footer')
     if footer: footer.insert_before(section)
     else: soup.body.append(section)
+    rendered=str(soup)
+    assert rendered.count('id="arq-floating"') == 1 and 'Conversar no chat' in rendered
     return str(soup).encode('utf-8')
 
 with ftplib.FTP_TLS(timeout=60) as ftp:
