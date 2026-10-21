@@ -3,10 +3,23 @@
   "meta_diaria": 2,
   "meta_acumulada_desde_2026_10_20": 4,
   "novos_artigos_qualificados_produzidos_no_dia": 2,
-  "novos_artigos_publicados_e_verificados_no_dia": 0,
+  "novos_artigos_publicados_e_verificados_no_dia": 2,
   "deficit_autoria_acumulado": 2,
-  "deficit_publicacao_acumulado": 4,
-  "estado": "aguardando_commit_deploy_e_verificacao",
+  "deficit_publicacao_acumulado": 2,
+  "estado": "publicado_e_verificado",
+  "github": {
+    "pull_request": "https://github.com/arxazure/arquindex/pull/19",
+    "commit_integrado": "24a795034c2d946ad2daf9863ef48e6c3ad4746b",
+    "workflow": "https://github.com/arxazure/arquindex/actions/runs/39605433486",
+    "conclusao": "success"
+  },
+  "deploy": {
+    "destino": "HomeHost",
+    "backup_recuperavel": "/seo-backups/artigos-20261021-20261021T130859Z",
+    "sitemap": "https://www.arquindex.com.br/sitemap-artigos.xml",
+    "http": 200,
+    "canonical_e_robots": "verificados"
+  },
   "destino_canonico": "https://www.arquindex.com.br/",
   "blog_prioritario": {
     "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
@@ -22,7 +35,8 @@
       "palavras_texto_principal": 1993,
       "url": "https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/",
       "arquivo": "artigos-tecnicos/2026-10-21/temporalidade-no-alfresco-eventos-retencao-bloqueio/index.html",
-      "estado": "pronto_para_publicacao",
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "cbc547057279cf405706486e49b960e8bff2db44caf47f70bb06d0256e797ee9",
       "fontes_principais": ["CONARQ e-ARQ Brasil v2", "Resolução CONARQ 50/2022", "Resolução CONARQ 40/2014 alterada", "Lei 8.159/1991", "Alfresco Governance Services Docs"]
     },
     {
@@ -30,7 +44,8 @@
       "palavras_texto_principal": 2107,
       "url": "https://www.arquindex.com.br/blog/indice-mestre-databook-completude-aprovacao/",
       "arquivo": "artigos-tecnicos/2026-10-21/indice-mestre-databook-completude-aprovacao/index.html",
-      "estado": "pronto_para_publicacao",
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "8088caaf9b0c8cbb4fa62e50db9544864cf00388c826e69510b802703f700f56",
       "fontes_principais": ["ANP SGSO", "ANP Gerenciamento da Integridade Estrutural", "ANP Manuais e cargas da fase de produção", "Petrobras Catálogo de Padronização"]
     }
   ]
