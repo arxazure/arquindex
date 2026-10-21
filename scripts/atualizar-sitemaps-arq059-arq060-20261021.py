@@ -1,4 +1,5 @@
 import ftplib,hashlib,io,os,posixpath,time,urllib.request,xml.etree.ElementTree as ET
+from urllib.parse import urljoin
 from datetime import datetime,timezone
 STAMP=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
 TARGETS=[('digitalizar-digitalizacao-especializada.arquindex.com.br','https://digitalizar-digitalizacao-especializada.arquindex.com.br/'),('digitalizacao-ocr-empresas.arquindex.com.br','https://digitalizacao-ocr-empresas.arquindex.com.br/empresas.html')]
@@ -48,7 +49,8 @@ with ftplib.FTP_TLS(timeout=60) as f:
  rec=[]
  for host,target in TARGETS:
   path,old=locate(f,base,host);new=transform(old,target);root=ET.fromstring(new);locs=[e.text.strip() for e in root.iter() if e.tag.endswith('loc') and e.text];assert len(locs)==len(set(locs))
-  for u in locs:st,_=check(u);assert st==200,(u,st)
+  for u in locs:
+   absolute=urljoin('https://'+host+'/',u);st,_=check(absolute);assert st==200,(absolute,st)
   rec.append((host,target,path,old,new));print('PREFLIGHT_VALID',host,len(locs),flush=True)
  backup='/seo-backups/sitemaps-rodada-20261021-noite-'+STAMP;mkdir(f,backup);f.storbinary('STOR '+backup+'/.htaccess',io.BytesIO(b'Options -Indexes\nRequire all denied\n'))
  for host,target,path,old,new in rec:
