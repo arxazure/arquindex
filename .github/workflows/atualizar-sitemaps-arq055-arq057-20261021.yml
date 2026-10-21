@@ -17,3 +17,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python scripts/atualizar-sitemaps-arq055-arq057-20261021.py
+
+# reexecucao apos correcao do tratamento de erro
