@@ -33,3 +33,5 @@ jobs:
             await c.close();}
           await browser.close();console.log('PUBLICATION_VERIFIED');})().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1});
           JS
+
+# segunda tentativa apos conclusao do deploy 39695535120
