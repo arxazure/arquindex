@@ -1,0 +1,35 @@
+name: Validar ARQ-054 ARQ-055 ARQ-057 2026-10-21 tarde
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/validar-rodada-seo-20261021-tarde.yml']
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-verify" playwright --no-audit --no-fund
+      - name: Validar mobile e desktop
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-verify/node_modules/playwright');let browser;
+          (async()=>{browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+          const urls=[
+            ['ARQ-054','https://aplicativos-facilitam-digitalizacao-documentos-pelo-celular.arquindex.com.br/faq.html?v=20261021tarde','Digitalização pelo celular: limites e conferência | Arquindex'],
+            ['ARQ-055','https://arquivo.arquindex.com.br/bh.html?v=20261021tarde','Guarda de Documentos em BH: Consulta e Controle | Arquindex'],
+            ['ARQ-057','https://solucoes-ocr-sp.arquindex.com.br/vantagens.html?v=20261021tarde','OCR de Documentos em São Paulo: Pesquisa e Revisão | Arquindex']
+          ];
+          for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+            const c=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+            for(const [id,url,expectedTitle] of urls){const p=await c.newPage();const r=await p.goto(url,{waitUntil:'domcontentloaded',timeout:45000});await p.waitForTimeout(2400);
+              const d=await p.evaluate(id=>({title:document.title,canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),description:document.querySelector('meta[name=description]')?.content||'',cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth,logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),widget:document.querySelectorAll('#arq-floating').length,menu:!!document.querySelector('#aq-nav'),aeo:!!document.querySelector('[data-aq-aeo="'+id+'"]'),whatsapp:[...document.querySelectorAll('a')].some(a=>a.href.includes('5531973632725')),proposal:[...document.querySelectorAll('a')].some(a=>a.href.includes('solicitar-proposta-contratacao')),noindex:/noindex/i.test(document.querySelector('meta[name=robots]')?.content||'')}),id);
+              const row={id,vp:vp.name,status:r?.status(),...d};console.log('CHECK',JSON.stringify(row));
+              const expected=url.split('?')[0];if(row.status!==200||row.title!==expectedTitle||row.canonical.length!==1||row.canonical[0]!==expected||row.h1.length!==1||!row.description||row.sw>row.cw+2||!row.logo||row.widget!==1||!row.menu||!row.aeo||!row.whatsapp||!row.proposal||row.noindex)throw Error('FAIL '+id+' '+vp.name);
+            }await c.close();}
+          await browser.close();console.log('VISUAL_VERIFIED');})().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1});
+          JS
