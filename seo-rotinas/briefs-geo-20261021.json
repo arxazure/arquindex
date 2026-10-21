@@ -71,47 +71,52 @@
     }
   ],
   "homepage_showcase": {
-    "status": "approval_of_evidence_and_photos_pending",
+    "status": "user_authorized_for_publication_pending_asset_and_deploy_validation",
     "heading": "Projetos e experiências em gestão documental",
     "design_rule": "Preservar CSS e layout atual, usar cartões existentes e imagens somente autorizadas",
     "entries": [
       {
         "name": "Drogaria Araujo",
         "description": "Digitalização e processamento de cupons de venda e formulários da Farmácia Popular",
-        "status": "user_reported_needs_publication_evidence"
+        "status": "user_authorized_pending_homepage_deploy"
       },
       {
         "name": "Drogaria Araujo",
         "description": "Digitalização de documentação do Departamento Pessoal",
-        "status": "user_reported_needs_publication_evidence"
+        "status": "user_authorized_pending_homepage_deploy"
       },
       {
         "name": "CBMM",
         "description": "Digitalização de Databooks de engenharia e acervo técnico",
-        "status": "user_reported_needs_publication_evidence"
+        "status": "user_authorized_pending_homepage_deploy"
       },
       {
         "name": "Belocal — Grupo Lhoist",
         "description": "Digitalização de plantas técnicas de engenharia, fábrica e manutenção",
-        "status": "user_reported_needs_publication_evidence"
+        "status": "user_authorized_pending_homepage_deploy"
       },
       {
         "name": "Cemig Igarapé",
         "description": "Digitalização de acervo técnico de manutenção da planta",
-        "status": "user_reported_needs_publication_evidence"
+        "status": "user_authorized_pending_homepage_deploy"
       },
       {
         "name": "Catta Preta Advogados",
         "description": "Virtualização de acervo de processos",
-        "status": "user_reported_needs_publication_evidence"
+        "status": "user_authorized_pending_homepage_deploy"
       },
       {
         "name": "Tereza Mafra Advocacia",
         "description": "Virtualização de acervo de processos",
-        "status": "user_reported_needs_publication_evidence"
+        "status": "user_authorized_pending_homepage_deploy"
       }
     ],
-    "note": "Não divulgar nomes, fotografias de instalações, marcas e detalhes de projetos sem conferir direito de uso, autorização comercial e fatos."
+    "note": "Autorização do usuário confirmada. Não inventar fotos ou associar imagens ilustrativas a instalações reais; selecionar somente arquivos autorizados e verificar conteúdo antes do deploy.",
+    "authorization": {
+      "confirmed_by_user": true,
+      "date": "2026-10-21",
+      "scope": "Divulgação dos nomes dos clientes e descrições fornecidas, com fotos de uso autorizado, na vitrine de projetos da homepage da Arquindex"
+    }
   },
   "counted_as_new_pages": 0
 }
