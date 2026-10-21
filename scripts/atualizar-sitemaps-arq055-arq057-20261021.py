@@ -27,7 +27,7 @@ def locate(f,base,host):
   p=root+'/sitemap.xml'
   try:
    b=get(f,p);ET.fromstring(b);return p,b
-  except (ftplib.all_errors,ET.ParseError):pass
+  except ftplib.all_errors + (ET.ParseError,):pass
  raise RuntimeError('SITEMAP_NOT_FOUND '+host)
 def transform(old,target):
  root=ET.fromstring(old);ns=''
