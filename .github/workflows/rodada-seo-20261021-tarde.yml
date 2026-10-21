@@ -1,0 +1,38 @@
+name: Melhorar ARQ-054 ARQ-055 ARQ-057 2026-10-21 tarde
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/rodada-seo-20261021-tarde.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - name: Identidade ARQ-054
+        env:
+          DESIGN_TARGET: https://aplicativos-facilitam-digitalizacao-documentos-pelo-celular.arquindex.com.br/faq.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-055
+        env:
+          DESIGN_TARGET: https://arquivo.arquindex.com.br/bh.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-057
+        env:
+          DESIGN_TARGET: https://solucoes-ocr-sp.arquindex.com.br/vantagens.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Publicar SEO AEO links e atendimento
+        run: python scripts/rodada-seo-20261021-tarde.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidencias-rodada-seo-20261021-tarde
+          path: design-report/
