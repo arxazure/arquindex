@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-21",
+  "project": "Arquindex",
+  "publication_status": "editorial_review_not_published",
+  "word_requirement_main": 3000,
+  "targets": [
+    {
+      "slug": "padrao-indexacao-conarq-prontuarios-rh",
+      "title": "Indexação de prontuários de RH: como aplicar diretrizes arquivísticas do CONARQ",
+      "intent": "Como classificar e indexar dossiês de funcionários com segurança",
+      "status": "research_and_draft_pending",
+      "answer": "Não existe um padrão único de indexação CONARQ para todos os prontuários de RH. A organização deve definir classes documentais, metadados e regras de temporalidade segundo suas atividades e obrigações aplicáveis, preservando vínculo, contexto, integridade, controle de acesso e rastreabilidade. O plano de classificação e a tabela de temporalidade precisam ser aprovados pelas instâncias competentes no contexto de cada organização.",
+      "outline": [
+        "Diagnóstico do dossiê e cadeia de custódia",
+        "Classificação e tipologias de RH e SESMT",
+        "Dicionário de metadados e exemplos hipotéticos",
+        "OCR e conferência de homônimos",
+        "LGPD e acesso restrito",
+        "Temporalidade e descarte autorizado",
+        "Passo a passo e FAQ"
+      ],
+      "sources": [
+        "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/portarias-federais/portaria-an-mgi-no-174-de-23-de-setembro-de-2024",
+        "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-27-de-16-de-junho-de-2008",
+        "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm"
+      ]
+    },
+    {
+      "slug": "decreto-10278-eliminacao-papel-fiscal",
+      "title": "Decreto 10.278/2020 e documentos fiscais: digitalização, retenção e eliminação segura",
+      "intent": "Quando documentos fiscais digitalizados podem ter original descartado",
+      "status": "research_and_draft_pending",
+      "answer": "O Decreto 10.278/2020 define requisitos para a digitalização abrangida por sua regulamentação, mas não dispensa a análise dos prazos de conservação e das normas fiscais aplicáveis. Antes de eliminar papel, a empresa deve identificar a espécie documental, verificar requisitos técnicos, confirmar obrigações tributárias e eventuais exceções, documentar a autorização e preservar evidências de integridade e rastreabilidade.",
+      "outline": [
+        "Escopo e limites do decreto",
+        "Documentos fiscais e obrigações específicas",
+        "Captura e metadados",
+        "Integridade e assinatura quando exigidas",
+        "Validação e auditoria",
+        "Retenção e destinação",
+        "Exemplo hipotético e checklist",
+        "FAQ"
+      ],
+      "sources": [
+        "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm",
+        "https://www.planalto.gov.br/ccivil_03/leis/l8159.htm",
+        "https://www.gov.br/conarq/pt-br"
+      ]
+    },
+    {
+      "slug": "databooks-engenharia-auditorias-anm-industria",
+      "title": "Databooks de engenharia para auditorias industriais e documentação de mineração",
+      "intent": "Como organizar documentação técnica de engenharia com rastreabilidade para auditoria",
+      "status": "research_and_draft_pending",
+      "answer": "Um Databook auditável reúne registros técnicos em estrutura controlada, com identificação de obra, disciplina, equipamento, revisão, responsável e evidências de aprovação. Na mineração, as obrigações documentais variam conforme atividade e instalação; a ANM possui exigências específicas para certos processos, inclusive segurança de barragens. A estrutura do Databook deve mapear os requisitos realmente aplicáveis, sem presumir um modelo regulatório único.",
+      "outline": [
+        "Matriz de requisitos e escopo",
+        "Índice por disciplina e equipamento",
+        "Revisões e documentos obsoletos",
+        "Rastreabilidade de ensaios e certificados",
+        "Controle de pendências",
+        "Auditoria e evidências ANM quando aplicáveis",
+        "OCR e integração ECM",
+        "Exemplo hipotético e FAQ"
+      ],
+      "sources": [
+        "https://www.gov.br/anm/pt-br/acesso-a-informacao/perguntas-frequentes/barragens/",
+        "https://www.gov.br/anm/pt-br/assuntos/barragens/relatorios-anuais-de-seguranca-da-barragens-de-mineracao-2",
+        "https://www.gov.br/anm/pt-br/assuntos/noticias/conheca-as-3-modalidades-de-fiscalizacao-empreendidas-pela-agencia"
+      ]
+    }
+  ],
+  "homepage_showcase": {
+    "status": "approval_of_evidence_and_photos_pending",
+    "heading": "Projetos e experiências em gestão documental",
+    "design_rule": "Preservar CSS e layout atual, usar cartões existentes e imagens somente autorizadas",
+    "entries": [
+      {
+        "name": "Drogaria Araujo",
+        "description": "Digitalização e processamento de cupons de venda e formulários da Farmácia Popular",
+        "status": "user_reported_needs_publication_evidence"
+      },
+      {
+        "name": "Drogaria Araujo",
+        "description": "Digitalização de documentação do Departamento Pessoal",
+        "status": "user_reported_needs_publication_evidence"
+      },
+      {
+        "name": "CBMM",
+        "description": "Digitalização de Databooks de engenharia e acervo técnico",
+        "status": "user_reported_needs_publication_evidence"
+      },
+      {
+        "name": "Belocal — Grupo Lhoist",
+        "description": "Digitalização de plantas técnicas de engenharia, fábrica e manutenção",
+        "status": "user_reported_needs_publication_evidence"
+      },
+      {
+        "name": "Cemig Igarapé",
+        "description": "Digitalização de acervo técnico de manutenção da planta",
+        "status": "user_reported_needs_publication_evidence"
+      },
+      {
+        "name": "Catta Preta Advogados",
+        "description": "Virtualização de acervo de processos",
+        "status": "user_reported_needs_publication_evidence"
+      },
+      {
+        "name": "Tereza Mafra Advocacia",
+        "description": "Virtualização de acervo de processos",
+        "status": "user_reported_needs_publication_evidence"
+      }
+    ],
+    "note": "Não divulgar nomes, fotografias de instalações, marcas e detalhes de projetos sem conferir direito de uso, autorização comercial e fatos."
+  },
+  "counted_as_new_pages": 0
+}
