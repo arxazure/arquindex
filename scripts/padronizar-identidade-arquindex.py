@@ -70,7 +70,7 @@ with ftplib.FTP_TLS(timeout=50) as f:
  roots={};targets=[]
  if selected:
   from urllib.parse import urlsplit
-  parsed=urlsplit(selected);host=parsed.hostname;filename=parsed.path.lstrip('/') or 'index.html'
+  parsed=urlsplit(selected);host=parsed.hostname;raw_path=parsed.path.lstrip('/');filename=(raw_path+'index.html') if (not raw_path or raw_path.endswith('/')) else raw_path
   candidate_roots=[base] if host in ['www.arquindex.com.br','arquindex.com.br'] else [base+'/subdominios/'+host,base+'/'+host,'/subdominios/'+host,'/'+host]
   for root in candidate_roots:
    try:
