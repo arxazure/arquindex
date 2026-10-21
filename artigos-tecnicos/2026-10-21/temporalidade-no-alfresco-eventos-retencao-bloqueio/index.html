@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Temporalidade no Alfresco: retenção sem exclusão automática | Arquindex</title>
+  <meta name="description" content="Como traduzir tabela de temporalidade em metadados, eventos, retenção, bloqueios e revisão no Alfresco sem transformar prazo vencido em exclusão automática.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Arquindex">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Temporalidade no Alfresco: eventos, retenção e bloqueio sem exclusão automática">
+  <meta property="og:description" content="Guia técnico para transformar instrumentos arquivísticos em controles verificáveis no Alfresco.">
+  <meta property="og:url" content="https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/">
+  <meta name="twitter:card" content="summary">
+  <style>
+    :root{--navy:#071a33;--blue:#0b4f86;--teal:#087f88;--ink:#17283b;--muted:#536579;--line:#d9e2ea;--paper:#fff;--bg:#f3f6f9;--soft:#eaf3f5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.72 Arial,Helvetica,sans-serif}a{color:#075b91}header{background:var(--navy);color:#fff}.top{max-width:1120px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.brand{color:#fff;text-decoration:none;font-weight:900;letter-spacing:2px;font-size:24px}.top nav{display:flex;gap:18px;flex-wrap:wrap}.top nav a{color:#dceaf7}.hero{background:linear-gradient(120deg,#071a33,#0b4f86 64%,#087f88);color:#fff;padding:64px 24px}.hero>div,.layout{max-width:1120px;margin:auto}.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.hero h1{max-width:920px;font-size:clamp(34px,5vw,58px);line-height:1.08;margin:12px 0 18px}.hero .lead{max-width:850px;font-size:21px;line-height:1.55}.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:32px;padding:32px 20px 60px}article,.toc{background:var(--paper);border:1px solid var(--line);border-radius:15px}article{padding:clamp(24px,5vw,58px)}.toc{position:sticky;top:18px;height:max-content;padding:22px}.toc strong{display:block;margin-bottom:10px}.toc a{display:block;padding:6px 0;font-size:14px}.answer,.note{background:var(--soft);border-left:5px solid var(--teal);padding:20px 22px;border-radius:8px}.meta{color:var(--muted);font-size:14px}.marker{font-size:12px;color:var(--muted)}h2{font-size:29px;line-height:1.25;color:var(--navy);margin-top:46px;scroll-margin-top:20px}h3{font-size:21px;line-height:1.35;color:#164c70;margin-top:28px}table{border-collapse:collapse;width:100%;min-width:650px}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:#e8f0f6}.scroll{overflow:auto}ol li,ul li{margin-bottom:8px}.checklist li{list-style:"✓  ";padding-left:4px}details{border-bottom:1px solid var(--line);padding:15px 0}summary{font-weight:700;cursor:pointer}.cta{background:var(--navy);color:#fff;padding:25px;border-radius:12px;margin-top:38px}.cta a{color:#fff}.button{display:inline-block;background:var(--teal);color:#fff!important;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:700;margin:7px 8px 0 0}footer{background:#061326;color:#d8e3ef;padding:30px 24px}footer>div{max-width:1120px;margin:auto}footer a{color:#bfe8ee}@media(max-width:860px){.layout{display:block}.toc{position:static;margin-bottom:20px}.hero{padding-top:44px}.top nav{font-size:14px}}
+  </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.arquindex.com.br/#organization","name":"Arquindex","url":"https://www.arquindex.com.br/","email":"comercial@arquindex.com.br","telephone":"+55 31 97363-2725"},{"@type":"Article","headline":"Temporalidade no Alfresco: eventos, retenção e bloqueio sem exclusão automática","description":"Como traduzir tabela de temporalidade em metadados, eventos, retenção, bloqueios e revisão no Alfresco sem transformar prazo vencido em exclusão automática.","datePublished":"2026-10-21","dateModified":"2026-10-21","inLanguage":"pt-BR","author":{"@id":"https://www.arquindex.com.br/#organization"},"publisher":{"@id":"https://www.arquindex.com.br/#organization"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://www.arquindex.com.br/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.arquindex.com.br/blog/"},{"@type":"ListItem","position":3,"name":"Temporalidade no Alfresco","item":"https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/"}]}]}</script>
+</head>
+<body>
+<header><div class="top"><a class="brand" href="https://www.arquindex.com.br/">ARQUINDEX</a><nav aria-label="Principal"><a href="https://www.arquindex.com.br/servicos/">Soluções</a><a href="https://www.arquindex.com.br/blog/">Artigos</a><a href="https://www.arquindex.com.br/alfresco-ecm/">Alfresco ECM</a><a href="https://www.arquindex.com.br/contato-orcamento/">Contato</a></nav></div></header>
+<main>
+  <section class="hero"><div><p class="eyebrow">Gestão arquivística · ECM · Alfresco</p><h1>Temporalidade no Alfresco: eventos, retenção e bloqueio sem exclusão automática</h1><p class="lead">Um guia para transformar a tabela de temporalidade em metadados e controles verificáveis, sem confundir prazo vencido com autorização para eliminar.</p></div></section>
+  <div class="layout">
+    <article id="artigo">
+      <p class="meta">Autoria institucional: Arquindex · Publicado em 21/10/2026 · Atualizado em 21/10/2026 · Leitura técnica e informativa</p>
+      <p class="marker">ARQ-ARTICLE-20261021-ALFRESCO-TEMPORALIDADE</p>
+      <p class="answer"><strong>Resposta direta:</strong> no Alfresco, a temporalidade deve começar pela classe documental e pelo evento que inicia a contagem. O sistema pode calcular datas, alertar responsáveis, impedir alterações, abrir uma revisão e registrar decisões. Ele não deve apagar automaticamente um documento apenas porque uma data chegou. A eliminação depende do instrumento aplicável, da competência de quem decide, de impedimentos jurídicos ou operacionais e das evidências exigidas para a destinação.</p>
+
+      <h2 id="problema">Por que um prazo cadastrado não é uma política de temporalidade</h2>
+      <p>É comum receber uma planilha com colunas como “tipo documental”, “cinco anos” e “eliminar” e tentar convertê-la diretamente em uma regra de pasta. Esse atalho ignora perguntas essenciais. Cinco anos contados de qual fato? Da produção, do encerramento do processo, do desligamento do empregado, do fim da vigência contratual ou da aprovação de um relatório? O documento está na fase corrente ou intermediária? Existe uma ação judicial, auditoria, investigação, garantia, obrigação contratual ou ordem de preservação que suspenda a contagem? Quem pode confirmar a destinação?</p>
+      <p>A tabela de temporalidade e destinação é um instrumento de gestão. O software ajuda a executá-lo, mas não cria por conta própria a autoridade arquivística nem substitui a avaliação que fundamentou os prazos. No setor público, a Lei nº 8.159/1991 e os procedimentos do CONARQ definem responsabilidades específicas. A Resolução CONARQ nº 40/2014, com alterações da Resolução nº 44/2020, trata da eliminação de documentos digitais e não digitais no âmbito do SINAR e condiciona o procedimento às instâncias e instrumentos competentes. Empresas privadas também precisam separar obrigações legais, regulatórias, fiscais, trabalhistas, contratuais e necessidades de defesa; não devem copiar automaticamente a tabela de outro órgão.</p>
+      <p>Por isso, a primeira decisão de projeto não é “qual ação do Alfresco apaga o arquivo?”, e sim “qual evidência prova que o evento ocorreu, qual regra passou a valer e quem pode decidir a etapa seguinte?”. Essa inversão reduz exclusões indevidas e torna a automação auditável.</p>
+
+      <h2 id="camadas">As seis camadas que precisam continuar separadas</h2>
+      <div class="scroll"><table><thead><tr><th>Camada</th><th>Pergunta de controle</th><th>Representação possível no Alfresco</th></tr></thead><tbody>
+        <tr><td>Classificação</td><td>A qual função, atividade e série o documento pertence?</td><td>Tipo, aspecto, propriedade controlada ou associação à classe.</td></tr>
+        <tr><td>Evento</td><td>Que fato inicia ou reinicia a contagem?</td><td>Data de encerramento, aprovação, desligamento ou término de vigência, com origem registrada.</td></tr>
+        <tr><td>Prazo</td><td>Quanto tempo permanece em cada fase e por quê?</td><td>Regra versionada ligada à classe documental.</td></tr>
+        <tr><td>Impedimento</td><td>Existe motivo para suspender a destinação?</td><td>Bloqueio, “legal hold”, aspecto de suspensão, tarefa aberta ou status de exceção.</td></tr>
+        <tr><td>Decisão</td><td>Quem avaliou e aprovou a destinação?</td><td>Workflow, registro de aprovação, justificativa e trilha de auditoria.</td></tr>
+        <tr><td>Execução</td><td>O que foi transferido, recolhido ou eliminado?</td><td>Lote de destinação, relatório, manifesto, hash e registro de resultado.</td></tr>
+      </tbody></table></div>
+      <p>Tags podem ajudar a localizar documentos, mas são frágeis como único mecanismo de temporalidade. Um usuário pode digitar variações, apagar a tag ou aplicá-la ao item errado. Prefira propriedades com valores controlados, validação, permissões e histórico. Categorias também não substituem um plano de classificação formal; elas podem apoiar navegação, desde que a relação com a classe seja definida e governada.</p>
+
+      <h2 id="modelo">Modelo de metadados para uma implementação verificável</h2>
+      <h3>Identidade arquivística</h3>
+      <p>Registre identificador persistente, classe, tipo documental, unidade produtora, processo ou dossiê relacionado, data de produção e responsável pelo registro. O identificador não deve depender apenas do nome do arquivo. Renomear “contrato_final_final2.pdf” não pode romper o vínculo com seu histórico, anexos e aditivos.</p>
+      <h3>Evento e origem da data</h3>
+      <p>Crie campos separados para o tipo de evento, a data do evento e a fonte da confirmação. Um contrato pode ter “término da vigência” como evento; um dossiê funcional pode depender do desligamento; um projeto de engenharia pode aguardar o aceite definitivo. A data calculada de destinação deve ser derivada, e não digitada livremente por qualquer usuário. Se o evento ainda não aconteceu, o sistema deve mostrar “aguardando evento”, em vez de inventar uma data.</p>
+      <h3>Regra e versão</h3>
+      <p>Guarde o código da regra, a versão do instrumento, sua data de aprovação e os prazos aplicados. Quando uma tabela muda, o histórico precisa explicar qual versão sustentou cada cálculo. Recalcular silenciosamente todo o acervo pode antecipar ou adiar destinações sem análise. O plano de migração deve identificar documentos afetados, comparar resultados e exigir aprovação antes da atualização em massa.</p>
+      <h3>Estado e bloqueio</h3>
+      <p>Use estados claros, por exemplo: ativo, aguardando evento, em retenção corrente, em retenção intermediária, elegível para revisão, suspenso, aprovado para transferência, aprovado para eliminação, destinado e erro. O bloqueio precisa ter motivo, responsável, data, abrangência e critério de liberação. Um campo booleano chamado “não apagar” não é suficiente quando ninguém sabe por que foi marcado ou quando deve ser revisto.</p>
+
+      <h2 id="processo">Procedimento em nove etapas</h2>
+      <ol>
+        <li><strong>Delimite o acervo.</strong> Liste classes, sistemas de origem, documentos físicos correspondentes e unidades responsáveis. Não comece pelo repositório inteiro.</li>
+        <li><strong>Valide o instrumento.</strong> Confirme autoria, aprovação, abrangência, versão, eventos, prazos e destinações. Registre lacunas para decisão, sem preenchê-las por suposição.</li>
+        <li><strong>Modele os metadados.</strong> Defina tipos, aspectos, campos obrigatórios, vocabulários, relacionamentos e regras de edição. Documente o dicionário de dados.</li>
+        <li><strong>Mapeie eventos confiáveis.</strong> Determine se a data virá de um usuário autorizado, de um workflow, de integração com RH/ERP ou de aceite formal. Trate cancelamentos e reaberturas.</li>
+        <li><strong>Calcule sem executar.</strong> Na primeira fase, gere somente datas previstas e relatórios de elegibilidade. Compare uma amostra com cálculo manual.</li>
+        <li><strong>Implemente bloqueios.</strong> Teste processos judiciais, auditorias, contratos suspensos, investigação e indisponibilidade do aprovador. Um bloqueio deve prevalecer sobre a data calculada.</li>
+        <li><strong>Crie o workflow de revisão.</strong> A tarefa deve mostrar documento, classe, regra, evento, prazos, impedimentos, decisão sugerida e evidências. Permita devolver para correção.</li>
+        <li><strong>Gere o lote de destinação.</strong> Agrupe itens aprovados, produza relação verificável e aplique as formalidades cabíveis antes da execução.</li>
+        <li><strong>Execute e reconcilie.</strong> Compare o que foi autorizado com o que foi efetivamente processado. Registre falhas, itens não encontrados, hashes e responsável pela conclusão.</li>
+      </ol>
+      <p>O e-ARQ Brasil, versão 2, aprovado pela Resolução CONARQ nº 50/2022, oferece um modelo de requisitos para sistemas informatizados de gestão arquivística. Ele é referência especialmente para integrantes do SINAR, mas também ajuda equipes privadas a formular requisitos de captura, classificação, acesso, auditoria, preservação e destinação. Isso não significa que instalar Alfresco transforme automaticamente o ambiente em SIGAD aderente; a avaliação depende de configuração, processos, integrações, governança e evidências.</p>
+
+      <h2 id="alfresco">Alfresco Content Services e Governance Services: não são a mesma coisa</h2>
+      <p>Alfresco Content Services oferece repositório, metadados, permissões, versionamento, pesquisa, regras, APIs e recursos de auditoria que podem sustentar um projeto documental. Alfresco Governance Services acrescenta funções específicas de records management, classificação, retenção e disposição. A disponibilidade varia conforme edição, versão, licenciamento e arquitetura. Antes de prometer “temporalidade nativa”, registre exatamente quais componentes estão instalados e suportados.</p>
+      <p>Em uma implantação Community ou em uma versão legada, parte do comportamento pode ser construída com modelo de conteúdo, regras, jobs, workflows e extensões. Essa alternativa exige testes e manutenção cuidadosos. Uma regra de pasta simples pode mover ou transformar um arquivo, mas não equivale a uma agenda de retenção governada. Da mesma forma, um script executado pelo administrador não substitui segregação de funções e aprovação documental.</p>
+      <p>Para novos projetos, mantenha ambientes de desenvolvimento, homologação e produção. Use documentos sintéticos para testar datas antigas, eventos futuros, bloqueios, duplicidades e falhas. Registre versão do código, configuração, parâmetros e resultado. Um teste visual com um único arquivo não demonstra que milhares de documentos serão tratados corretamente.</p>
+
+      <h2 id="seguranca">Permissões, auditoria e continuidade</h2>
+      <p>Separe quem cadastra a classe, quem altera a regra, quem confirma o evento, quem aprova a destinação e quem executa a ação final. Contas técnicas devem ter escopo mínimo e credenciais protegidas. Alterações em propriedades críticas precisam aparecer na trilha de auditoria ou em registro complementar imutável. Logs também podem conter dados pessoais e informações sensíveis; defina acesso e retenção para eles.</p>
+      <p>Faça backup e teste restauração antes de ativar rotinas de destinação. Backup não é justificativa para eliminar sem autorização, nem deve se transformar em retenção infinita de tudo. A política precisa explicar como cópias de segurança expiram, como bloqueios alcançam réplicas relevantes e como uma restauração evita reintroduzir documentos já destinados sem controle.</p>
+      <p>Monitore filas, tarefas vencidas, documentos sem classe, datas ausentes, regras desativadas e falhas de integração. Indicadores úteis incluem percentual classificado, eventos confirmados, itens elegíveis, bloqueios ativos, tempo de aprovação, erros de execução e reconciliações pendentes. “Quantidade apagada” não deve ser o principal indicador de sucesso.</p>
+
+      <h2 id="erros">Erros comuns que o projeto deve impedir</h2>
+      <ul>
+        <li>Contar o prazo desde o upload quando a tabela determina outro evento.</li>
+        <li>Aplicar regra de uma classe a todos os documentos de uma pasta.</li>
+        <li>Permitir que qualquer usuário altere a data inicial ou retire o bloqueio.</li>
+        <li>Apagar anexos sem avaliar o vínculo com o processo ou documento principal.</li>
+        <li>Confundir lixeira, exclusão lógica e destruição definitiva.</li>
+        <li>Recalcular o acervo após mudança de tabela sem relatório de impacto.</li>
+        <li>Usar automação para encobrir lacunas do instrumento de temporalidade.</li>
+        <li>Prometer aderência ao e-ARQ apenas com base no nome do produto.</li>
+        <li>Executar em massa sem amostra, homologação, backup e plano de reversão.</li>
+      </ul>
+
+      <h2 id="checklist">Checklist de aceite</h2>
+      <ul class="checklist">
+        <li>Classe, evento, prazo, destinação e versão da regra estão visíveis.</li>
+        <li>Documentos sem evento não recebem data fictícia.</li>
+        <li>Bloqueio suspende a elegibilidade e exige justificativa para liberação.</li>
+        <li>Perfis e segregação de funções foram testados com usuários reais de homologação.</li>
+        <li>Alterações de metadados críticos deixam evidência consultável.</li>
+        <li>Workflow permite aprovar, rejeitar, devolver e registrar exceção.</li>
+        <li>Lote autorizado é reconciliado com o resultado executado.</li>
+        <li>Restauração e reversão foram testadas antes da produção.</li>
+        <li>O manual distingue obrigação legal, política interna e requisito contratual.</li>
+        <li>Responsável por revisar regras e versões está formalmente definido.</li>
+      </ul>
+
+      <h2 id="faq">Perguntas frequentes</h2>
+      <details><summary>O Alfresco pode excluir documentos automaticamente?</summary><p>Tecnicamente, componentes, regras ou extensões podem executar ações automáticas. A questão de governança é se isso deve ocorrer sem revisão. Para temporalidade, a abordagem mais segura é calcular elegibilidade, aplicar bloqueios, abrir aprovação e executar somente depois das verificações e autorizações aplicáveis.</p></details>
+      <details><summary>Uma tag de prazo resolve a temporalidade?</summary><p>Não. A tag não explica evento, versão da regra, impedimento, autoridade decisória nem execução. Ela pode apoiar pesquisa, mas o controle exige metadados estruturados e processo documentado.</p></details>
+      <details><summary>PDF/A muda o prazo de guarda?</summary><p>Não. PDF/A é uma família de formatos voltada à preservação e reprodução de longo prazo. O formato não define temporalidade, não autoriza eliminação e não substitui classificação, metadados ou assinatura quando exigida.</p></details>
+      <details><summary>A LGPD exige apagar todo dado ao fim do contrato?</summary><p>A LGPD disciplina término do tratamento e hipóteses de conservação, mas sua aplicação depende da finalidade e da base jurídica. Obrigações legais, regulatórias, exercício de direitos e outras hipóteses precisam ser avaliadas. Não use uma frase genérica sobre LGPD como regra de exclusão.</p></details>
+      <details><summary>Alfresco Community é automaticamente um SIGAD?</summary><p>Não. O produto oferece capacidades úteis, mas aderência depende dos requisitos aplicáveis, da configuração e dos processos implementados. Faça uma matriz de requisitos e guarde evidências de teste.</p></details>
+
+      <h2 id="fontes">Fontes oficiais e referências técnicas</h2>
+      <ul>
+        <li><a href="https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV203MAI2022.pdf" rel="noopener">CONARQ — e-ARQ Brasil, versão 2</a>, publicação aprovada pela Resolução nº 50, de 6 de maio de 2022. Consulta em 21/10/2026.</li>
+        <li><a href="https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-50-de-06-de-maio-de-2022" rel="noopener">CONARQ — Resolução nº 50/2022</a>. Consulta em 21/10/2026.</li>
+        <li><a href="https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-40-de-9-de-dezembro-de-2014-alterada" rel="noopener">CONARQ — Resolução nº 40/2014, alterada</a>. Página atualizada em 18/08/2021; consulta em 21/10/2026.</li>
+        <li><a href="https://www.planalto.gov.br/ccivil_03/leis/l8159.htm" rel="noopener">Lei nº 8.159, de 8 de janeiro de 1991</a>, política nacional de arquivos públicos e privados. Consulta em 21/10/2026.</li>
+        <li><a href="https://docs.alfresco.com/governance-services/latest/" rel="noopener">Alfresco Documentation — Governance Services</a>. Documentação técnica consultada em 21/10/2026; recursos variam por versão e edição.</li>
+      </ul>
+      <p class="note"><strong>Limite deste conteúdo:</strong> o artigo apresenta método técnico e não substitui avaliação jurídica, arquivística ou regulatória do acervo. Requisitos do setor público não devem ser transplantados para empresas privadas sem análise, e políticas internas não podem contrariar obrigações aplicáveis.</p>
+
+      <h2 id="relacionados">Leituras e soluções relacionadas</h2>
+      <ul>
+        <li><a href="https://www.arquindex.com.br/blog/classificacao-e-temporalidade/">Plano de classificação e tabela de temporalidade: por onde começar</a>.</li>
+        <li><a href="https://www.arquindex.com.br/alfresco-ecm/">Implantação e organização documental com Alfresco ECM</a>.</li>
+        <li><a href="https://www.arquindex.com.br/gestao-documental.html">Gestão documental e organização de acervos</a>.</li>
+        <li><a href="https://www.arquindex.com.br/blog/indice-mestre-databook-completude-aprovacao/">Índice mestre de databook: completude e aprovação</a>.</li>
+      </ul>
+      <div class="cta"><h2 style="color:#fff;margin-top:0">Planeje a temporalidade antes de automatizar</h2><p>A Arquindex apoia levantamento documental, metadados, classificação, temporalidade, fluxos e implantação de Alfresco conforme o escopo do cliente.</p><a class="button" href="https://wa.me/5531973632725?text=Ol%C3%A1%2C%20quero%20avaliar%20temporalidade%20e%20Alfresco">WhatsApp (31) 97363-2725</a><a class="button" href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></div>
+    </article>
+    <aside class="toc" aria-label="Sumário"><strong>Neste artigo</strong><a href="#problema">Prazo não é política</a><a href="#camadas">Seis camadas</a><a href="#modelo">Modelo de metadados</a><a href="#processo">Nove etapas</a><a href="#alfresco">Componentes Alfresco</a><a href="#seguranca">Segurança e auditoria</a><a href="#erros">Erros comuns</a><a href="#checklist">Checklist</a><a href="#faq">FAQ</a><a href="#fontes">Fontes</a></aside>
+  </div>
+</main>
+<footer><div><strong>Arquindex — Gestão Documental e Digitalização</strong><p>Belo Horizonte/MG · Atendimento nacional · <a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · <a href="https://wa.me/5531973632725">WhatsApp</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></div></footer>
+</body>
+</html>
