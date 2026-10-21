@@ -1,0 +1,200 @@
+name: Arquindex - Descoberta dos artigos 2026-10-21
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - .github/workflows/submeter-descoberta-artigos-20261021.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+
+jobs:
+  submeter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
+      GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
+      GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+      BING_INDEXNOW_KEY: ${{ secrets.BING_INDEXNOW_KEY }}
+    steps:
+      - name: Verificar producao e registrar descoberta
+        shell: bash
+        run: |
+          python - <<'PY'
+          import datetime
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import re
+          import time
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          pages = [
+              {
+                  "url": "https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/",
+                  "marker": "ARQ-ARTICLE-20261021-ALFRESCO-TEMPORALIDADE",
+                  "sha256": "cbc547057279cf405706486e49b960e8bff2db44caf47f70bb06d0256e797ee9",
+              },
+              {
+                  "url": "https://www.arquindex.com.br/blog/indice-mestre-databook-completude-aprovacao/",
+                  "marker": "ARQ-ARTICLE-20261021-DATABOOK-INDICE-MESTRE",
+                  "sha256": "8088caaf9b0c8cbb4fa62e50db9544864cf00388c826e69510b802703f700f56",
+              },
+          ]
+          sitemap = "https://www.arquindex.com.br/sitemap-artigos.xml"
+          report = {
+              "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "urls": [],
+              "sitemap": {"url": sitemap},
+              "google_search_console": {"submitted": False, "indexed": "not_claimed"},
+              "indexnow": {"submitted": False, "indexed": "not_claimed"},
+          }
+
+          def fetch(url, attempts=6):
+              last = None
+              for attempt in range(1, attempts + 1):
+                  try:
+                      req = urllib.request.Request(
+                          url,
+                          headers={"User-Agent": "Arquindex-Discovery-Verification/20261021", "Cache-Control": "no-cache"},
+                      )
+                      with urllib.request.urlopen(req, timeout=35) as response:
+                          return response.status, response.read()
+                  except Exception as exc:
+                      last = exc
+                      if attempt < attempts:
+                          time.sleep(min(attempt * 3, 12))
+              raise last
+
+          for page in pages:
+              status, body = fetch(page["url"])
+              text = body.decode("utf-8", "strict")
+              canonical = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)', text, re.I)
+              robots = re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\']([^"\']+)', text, re.I)
+              digest = hashlib.sha256(body).hexdigest()
+              assert status == 200
+              assert digest == page["sha256"]
+              assert page["marker"] in text
+              assert canonical and canonical.group(1) == page["url"]
+              assert robots and "index" in robots.group(1).lower() and "follow" in robots.group(1).lower()
+              report["urls"].append({
+                  "url": page["url"], "http_status": status, "sha256": digest,
+                  "canonical": canonical.group(1), "robots": robots.group(1), "verified": True,
+              })
+              print("PUBLIC_URL_VERIFIED", page["url"], status, digest, flush=True)
+
+          status, body = fetch(sitemap)
+          sitemap_text = body.decode("utf-8", "strict")
+          assert status == 200
+          assert all(page["url"] in sitemap_text for page in pages)
+          report["sitemap"].update({"http_status": status, "contains_all_urls": True})
+          print("PUBLIC_SITEMAP_VERIFIED", sitemap, status, flush=True)
+
+          required = ("GSC_CLIENT_ID", "GSC_CLIENT_SECRET", "GSC_REFRESH_TOKEN")
+          if all(os.environ.get(name, "").strip() for name in required):
+              token_data = urllib.parse.urlencode({
+                  "client_id": os.environ["GSC_CLIENT_ID"],
+                  "client_secret": os.environ["GSC_CLIENT_SECRET"],
+                  "refresh_token": os.environ["GSC_REFRESH_TOKEN"],
+                  "grant_type": "refresh_token",
+              }).encode()
+              with urllib.request.urlopen(
+                  urllib.request.Request("https://oauth2.googleapis.com/token", data=token_data), timeout=35
+              ) as response:
+                  token = json.load(response)["access_token"]
+              property_url = "sc-domain:arquindex.com.br"
+              endpoint = (
+                  "https://www.googleapis.com/webmasters/v3/sites/"
+                  + urllib.parse.quote(property_url, safe="")
+                  + "/sitemaps/"
+                  + urllib.parse.quote(sitemap, safe="")
+              )
+              request = urllib.request.Request(endpoint, method="PUT", headers={"Authorization": "Bearer " + token})
+              with urllib.request.urlopen(request, timeout=35) as response:
+                  response.read()
+                  gsc_status = response.status
+              assert gsc_status in (200, 204)
+              report["google_search_console"].update({
+                  "submitted": True,
+                  "property": property_url,
+                  "sitemap_url": sitemap,
+                  "http_status": gsc_status,
+                  "meaning": "submission accepted; download and indexing are not confirmed",
+              })
+              print("GOOGLE_SITEMAP_SUBMITTED", sitemap, gsc_status, "INDEXING_NOT_CLAIMED", flush=True)
+          else:
+              report["google_search_console"]["blocked"] = "GitHub Actions GSC OAuth secrets unavailable"
+              print("GOOGLE_SITEMAP_SKIPPED_MISSING_OAUTH", flush=True)
+
+          key = os.environ.get("BING_INDEXNOW_KEY", "").strip()
+          if key:
+              key_url = "https://www.arquindex.com.br/" + key + ".txt"
+              try:
+                  key_status, key_body = fetch(key_url, attempts=3)
+                  key_verified = key_status == 200 and key_body.decode("utf-8", "strict").strip() == key
+              except Exception as exc:
+                  key_verified = False
+                  report["indexnow"]["key_error"] = type(exc).__name__ + ": " + str(exc)[:160]
+              if key_verified:
+                  payload = json.dumps({
+                      "host": "www.arquindex.com.br",
+                      "key": key,
+                      "keyLocation": key_url,
+                      "urlList": [page["url"] for page in pages],
+                  }).encode()
+                  request = urllib.request.Request(
+                      "https://api.indexnow.org/indexnow",
+                      data=payload,
+                      headers={"Content-Type": "application/json; charset=utf-8"},
+                      method="POST",
+                  )
+                  try:
+                      with urllib.request.urlopen(request, timeout=35) as response:
+                          response.read()
+                          indexnow_status = response.status
+                  except urllib.error.HTTPError as exc:
+                      indexnow_status = exc.code
+                      if indexnow_status not in (200, 202):
+                          raise
+                  assert indexnow_status in (200, 202)
+                  report["indexnow"].update({
+                      "submitted": True,
+                      "http_status": indexnow_status,
+                      "key_file_verified": True,
+                      "url_count": len(pages),
+                      "meaning": "accepted by endpoint; crawl and indexing are not confirmed",
+                  })
+                  print("INDEXNOW_SUBMITTED", len(pages), indexnow_status, "INDEXING_NOT_CLAIMED", flush=True)
+              else:
+                  report["indexnow"].update({
+                      "blocked": "configured key file was not verified at the public host root",
+                      "key_file_verified": False,
+                  })
+                  print("INDEXNOW_SKIPPED_KEY_FILE_NOT_VERIFIED", flush=True)
+          else:
+              report["indexnow"]["blocked"] = "BING_INDEXNOW_KEY secret unavailable"
+              print("INDEXNOW_SKIPPED_MISSING_KEY", flush=True)
+
+          pathlib.Path("search-discovery-20261021.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+          )
+          PY
+
+      - name: Preservar comprovante
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: search-discovery-20261021
+          path: search-discovery-20261021.json
+          if-no-files-found: warn
+          retention-days: 90
