@@ -1,0 +1,20 @@
+name: Arquindex Alfresco GEO AEO preflight
+on:
+  pull_request:
+    paths:
+      - "seo/alfresco-cloud-ocr-ia-*/**"
+      - "blog/alfresco-cloud-e-ocr-tco/**"
+      - "blog/ocr-inteligente-vs-busca-ecm/**"
+      - "blog/nuvem-dedicada-governanca-alfresco/**"
+      - "scripts/qa/alfresco-geo-aeo-check.py"
+      - ".github/workflows/alfresco-geo-aeo-preflight.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate HTML, canonical and JSON-LD
+        run: python3 scripts/qa/alfresco-geo-aeo-check.py
