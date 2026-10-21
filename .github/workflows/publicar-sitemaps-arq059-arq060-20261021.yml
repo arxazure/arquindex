@@ -18,3 +18,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Atualizar XML com backup e rollback
         run: python scripts/atualizar-sitemaps-arq059-arq060-20261021.py
+
+# tentativa 2: locs relativos normalizados no preflight
