@@ -1,0 +1,40 @@
+name: Verificar sitemap ARQ-046 ARQ-048 ARQ-049 2026-10-21
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/verificar-sitemap-arq046-arq049-20261021.yml']
+permissions:
+  contents: read
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Validar XMLs e localizar URLs
+        run: |
+          python - <<'PY'
+          import requests,xml.etree.ElementTree as ET
+          targets=[
+          'https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/nova-lima/',
+          'https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/betim/',
+          'https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/contagem/']
+          robots=requests.get('https://www.arquindex.com.br/robots.txt',timeout=30,headers={'User-Agent':'ArquindexSEO/1.0'});robots.raise_for_status()
+          seeds=[x.split(':',1)[1].strip() for x in robots.text.splitlines() if x.lower().startswith('sitemap:')]
+          assert seeds,'NO_SITEMAPS_IN_ROBOTS'
+          seen=set();where={u:[] for u in targets};queue=list(seeds)
+          while queue:
+            url=queue.pop(0)
+            if url in seen:continue
+            seen.add(url);r=requests.get(url,timeout=30,headers={'User-Agent':'ArquindexSEO/1.0'});r.raise_for_status()
+            root=ET.fromstring(r.content)
+            locs=[e.text.strip() for e in root.iter() if e.tag.endswith('loc') and e.text]
+            if root.tag.endswith('sitemapindex'):queue.extend(locs)
+            else:
+              for t in targets:
+                if t in locs:where[t].append(url)
+            print('XML_VALID',url,len(locs))
+          for t,files in where.items():
+            print('SITEMAP_MEMBERSHIP',t,files)
+            assert files,'URL_NOT_IN_SITEMAP '+t
+          print('SITEMAP_VERIFIED',len(seen),'xml')
+          PY
