@@ -20,6 +20,21 @@
     "http": 200,
     "canonical_e_robots": "verificados"
   },
+  "descoberta_em_busca": {
+    "workflow": "https://github.com/arxazure/arquindex/actions/runs/39606613408",
+    "conclusao": "success",
+    "verificacao_pre_submissao": "duas URLs e sitemap HTTP 200; hashes, canonical, robots e presença no sitemap confirmados",
+    "google_search_console": {
+      "submetido": false,
+      "motivo": "OAuth do Search Console ausente nos secrets autorizados do repositório; conector GSC Wizard indisponível por assinatura inativa",
+      "indexacao_alegada": false
+    },
+    "indexnow": {
+      "submetido": false,
+      "motivo": "chave IndexNow ausente nos secrets autorizados do repositório",
+      "indexacao_alegada": false
+    }
+  },
   "destino_canonico": "https://www.arquindex.com.br/",
   "blog_prioritario": {
     "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
