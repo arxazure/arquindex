@@ -1,0 +1,38 @@
+name: Melhorar ARQ-046 ARQ-048 ARQ-049 2026-10-21 manha
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/rodada-seo-20261021-manha.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - name: Identidade ARQ-046
+        env:
+          DESIGN_TARGET: https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/nova-lima/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-048
+        env:
+          DESIGN_TARGET: https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/betim/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-049
+        env:
+          DESIGN_TARGET: https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/contagem/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Publicar AEO, links e atendimento
+        run: python scripts/rodada-seo-20261021-manha.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidencias-rodada-seo-20261021-manha
+          path: design-report/
