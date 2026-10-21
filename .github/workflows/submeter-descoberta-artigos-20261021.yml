@@ -22,7 +22,11 @@ jobs:
       GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
       GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
       GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
       BING_INDEXNOW_KEY: ${{ secrets.BING_INDEXNOW_KEY }}
+      INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
     steps:
       - name: Verificar producao e registrar descoberta
         shell: bash
@@ -100,12 +104,14 @@ jobs:
           report["sitemap"].update({"http_status": status, "contains_all_urls": True})
           print("PUBLIC_SITEMAP_VERIFIED", sitemap, status, flush=True)
 
-          required = ("GSC_CLIENT_ID", "GSC_CLIENT_SECRET", "GSC_REFRESH_TOKEN")
-          if all(os.environ.get(name, "").strip() for name in required):
+          gsc_credentials = {
+              "client_id": (os.environ.get("GSC_CLIENT_ID") or os.environ.get("GOOGLE_CLIENT_ID") or "").strip(),
+              "client_secret": (os.environ.get("GSC_CLIENT_SECRET") or os.environ.get("GOOGLE_CLIENT_SECRET") or "").strip(),
+              "refresh_token": (os.environ.get("GSC_REFRESH_TOKEN") or os.environ.get("GOOGLE_REFRESH_TOKEN") or "").strip(),
+          }
+          if all(gsc_credentials.values()):
               token_data = urllib.parse.urlencode({
-                  "client_id": os.environ["GSC_CLIENT_ID"],
-                  "client_secret": os.environ["GSC_CLIENT_SECRET"],
-                  "refresh_token": os.environ["GSC_REFRESH_TOKEN"],
+                  **gsc_credentials,
                   "grant_type": "refresh_token",
               }).encode()
               with urllib.request.urlopen(
@@ -136,7 +142,7 @@ jobs:
               report["google_search_console"]["blocked"] = "GitHub Actions GSC OAuth secrets unavailable"
               print("GOOGLE_SITEMAP_SKIPPED_MISSING_OAUTH", flush=True)
 
-          key = os.environ.get("BING_INDEXNOW_KEY", "").strip()
+          key = (os.environ.get("BING_INDEXNOW_KEY") or os.environ.get("INDEXNOW_KEY") or "").strip()
           if key:
               key_url = "https://www.arquindex.com.br/" + key + ".txt"
               try:
