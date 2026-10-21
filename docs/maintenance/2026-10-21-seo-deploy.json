@@ -1,0 +1,167 @@
+{
+  "date_br": "2026-10-21",
+  "scope": "Auditoria tecnica segura — campanha regional 24 cidades x 3 servicos, GitHub, HomeHost publico e Railway arquindex-web",
+  "result": "partial_no_deploy",
+  "checked_at_utc": "2026-10-21T17:16:20Z",
+  "github": {
+    "repository": "arxazure/arquindex",
+    "default_branch": {
+      "name": "master",
+      "sha": "919a54b2b247aa1aa3167dcf93c16365eeb7c644"
+    },
+    "railway_branch": {
+      "name": "railway-production-2026",
+      "sha": "7d1413c4c6c7996438b6ff613125bca666432e15"
+    },
+    "compare_to_live": {
+      "live_sha": "37f79c013e83710467e9877ea97767ef0e0d10a0",
+      "ahead_by": 3,
+      "files": [
+        "arquindex-platform/sector-digitalization.js",
+        "arquindex-platform/server.js",
+        "arquindex-platform/top10-opportunities.js"
+      ]
+    }
+  },
+  "railway": {
+    "project": "Arquindex Plataforma",
+    "project_id": "f652d9de-5f85-404f-baec-a48d552d9163",
+    "environment": "production",
+    "environment_id": "5ba32ff7-5386-4867-8250-2a87def0d9d4",
+    "service": "arquindex-web",
+    "service_id": "57fb4cbc-213b-462c-9c66-920b4d620137",
+    "root_directory": "/arquindex-platform",
+    "domain": "https://arquindex-web-production.up.railway.app",
+    "latest_confirmed_deployment": {
+      "id": "3c68ff8a-2f24-43a0-b9e3-16a90797541e",
+      "status": "SUCCESS",
+      "commit": "37f79c013e83710467e9877ea97767ef0e0d10a0",
+      "created_at": "2026-10-19T13:32:01.803Z",
+      "rollback_available": true
+    },
+    "staged_patch": {
+      "id": "23045367-bcf9-4511-be50-3d9859353f9e",
+      "status": "STAGED",
+      "change_count": 4,
+      "destructive": false,
+      "changes": [
+        "source.branch: vazio -> railway-production-2026",
+        "source.commitSha: remover valor vazio",
+        "source.image: remover valor vazio",
+        "source.repo: arxazure/arquindex -> arxazure/arquindex"
+      ]
+    },
+    "deploy_attempt": {
+      "outcome": "no_confirmation",
+      "detail": "accept_deploy nao retornou; leitura independente posterior confirmou o mesmo patch STAGED e nenhum novo deployment. A mutacao nao foi repetida cegamente."
+    },
+    "health_http": 200
+  },
+  "campaign_audit": {
+    "definition": {
+      "city_count": 24,
+      "service_count": 3,
+      "intent_count": 72,
+      "route_pattern": "/seo/{servico}/{cidade}/empresa",
+      "services": [
+        "digitalizacao-documentos",
+        "guarda-documental",
+        "gestao-documental"
+      ]
+    },
+    "http_200": 72,
+    "http_errors": 0,
+    "canonical_issues": 0,
+    "h1_issues": 0,
+    "noindex_urls": 0,
+    "missing_viewport": 0,
+    "missing_tracking": 0,
+    "index_of_pages": 0,
+    "broken_internal_links": 0,
+    "unique_internal_links_checked": 16,
+    "external_assets_referenced": 0,
+    "title_unique_count": 72,
+    "visible_word_range": {
+      "min": 402,
+      "max": 438
+    },
+    "response_time_ms_observed": {
+      "min": 67,
+      "max": 4401,
+      "average": 712,
+      "note": "tempo total de requisicao; nao equivale a Core Web Vitals"
+    },
+    "normalized_content_hashes_by_service": {
+      "digitalizacao-documentos": 1,
+      "guarda-documental": 1,
+      "gestao-documental": 1
+    },
+    "quality_gate": {
+      "status": "blocked_from_sitemap_and_submission",
+      "reason": "Dentro de cada servico, o texto visivel normalizado e identico nas 24 cidades. Publicar ou submeter a familia agora criaria risco de paginas doorway/variacoes mecanicas.",
+      "urls_in_railway_sitemap": 0,
+      "urls_in_official_sitemap": 0,
+      "action_taken": "Nenhuma URL foi adicionada ao sitemap, GSC ou IndexNow; nenhuma diretiva de indexacao foi alterada sem evidencia de Search Console."
+    }
+  },
+  "sitemap_audit": {
+    "robots_checked": 2,
+    "sitemap_documents_checked": 29,
+    "valid_http_200_xml": 29,
+    "failures": 0,
+    "official_roots": 7,
+    "railway_roots": 3
+  },
+  "homehost_public": {
+    "priority_pages": [
+      {
+        "url": "https://www.arquindex.com.br/",
+        "status": 200
+      },
+      {
+        "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+        "status": 200,
+        "canonical_self": true,
+        "h1_count": 1
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao.html",
+        "status": 200,
+        "canonical_self": true,
+        "h1_count": 1
+      },
+      {
+        "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+        "status": 200,
+        "canonical_self": true,
+        "h1_count": 1
+      }
+    ],
+    "publication_by_other_workflow_same_day": {
+      "published_run": "https://github.com/arxazure/arquindex/actions/runs/39593554829",
+      "independent_validation_run": "https://github.com/arxazure/arquindex/actions/runs/39593782902",
+      "sitemap_validation_run": "https://github.com/arxazure/arquindex/actions/runs/39593973261",
+      "note": "Esta rotina nao repetiu publicacao nem alterou arquivos do HomeHost."
+    }
+  },
+  "limitations": [
+    "Acessibilidade movel foi verificada por markup responsivo (viewport) e auditorias publicadas hoje; esta execucao nao fez nova medicao visual de overflow.",
+    "O conector de Search Console exigido pelo fluxo selecionado nao estava disponivel; por isso nenhuma decisao de noindex, exclusao ou consolidacao foi aplicada.",
+    "Merchant Center permaneceu separado e sem alteracoes."
+  ],
+  "changes_made": [
+    "Criado somente este recibo tecnico no GitHub."
+  ],
+  "destructive_actions": [],
+  "submissions": {
+    "google_search_console": "not_sent",
+    "indexnow": "not_sent",
+    "reason": "Nenhuma URL nova ou alteracao publicada e familia 72 bloqueada pelo quality gate."
+  },
+  "next_steps": [
+    "Diferenciar cada pagina regional com aplicacao, requisitos, logistica e exemplo realmente especificos ou manter a familia fora do sitemap ate a revisao editorial.",
+    "Restabelecer a operacao accept_deploy do Railway e aplicar o patch STAGED uma unica vez; depois confirmar deployment SUCCESS no commit 7d1413c4 ou posterior.",
+    "Apos deploy, repetir 72 HTTP/canonical/H1/link checks e validar mobile em navegador.",
+    "Consultar Search Console para a familia /seo/ antes de alterar indexabilidade ou consolidar URLs."
+  ]
+}
