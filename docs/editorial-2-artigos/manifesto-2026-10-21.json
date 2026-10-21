@@ -1,0 +1,37 @@
+{
+  "data": "2026-10-21",
+  "meta_diaria": 2,
+  "meta_acumulada_desde_2026_10_20": 4,
+  "novos_artigos_qualificados_produzidos_no_dia": 2,
+  "novos_artigos_publicados_e_verificados_no_dia": 0,
+  "deficit_autoria_acumulado": 2,
+  "deficit_publicacao_acumulado": 4,
+  "estado": "aguardando_commit_deploy_e_verificacao",
+  "destino_canonico": "https://www.arquindex.com.br/",
+  "blog_prioritario": {
+    "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
+    "cms": "WordPress",
+    "api_publica": "https://blog-digitalizacao-de-documentos.arquindex.com.br/wp-json/",
+    "sitemap": "https://blog-digitalizacao-de-documentos.arquindex.com.br/sitemaps.xml",
+    "permissao_de_escrita": "bloqueada_sem_autenticacao; POST /wp-json/wp/v2/posts retornou HTTP 401 rest_cannot_create",
+    "resultado": "nenhuma escrita realizada no WordPress"
+  },
+  "artigos": [
+    {
+      "titulo": "Temporalidade no Alfresco: eventos, retenção e bloqueio sem exclusão automática",
+      "palavras_texto_principal": 1993,
+      "url": "https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/",
+      "arquivo": "artigos-tecnicos/2026-10-21/temporalidade-no-alfresco-eventos-retencao-bloqueio/index.html",
+      "estado": "pronto_para_publicacao",
+      "fontes_principais": ["CONARQ e-ARQ Brasil v2", "Resolução CONARQ 50/2022", "Resolução CONARQ 40/2014 alterada", "Lei 8.159/1991", "Alfresco Governance Services Docs"]
+    },
+    {
+      "titulo": "Índice mestre de databook: como medir completude sem confundir presença com aprovação",
+      "palavras_texto_principal": 2107,
+      "url": "https://www.arquindex.com.br/blog/indice-mestre-databook-completude-aprovacao/",
+      "arquivo": "artigos-tecnicos/2026-10-21/indice-mestre-databook-completude-aprovacao/index.html",
+      "estado": "pronto_para_publicacao",
+      "fontes_principais": ["ANP SGSO", "ANP Gerenciamento da Integridade Estrutural", "ANP Manuais e cargas da fase de produção", "Petrobras Catálogo de Padronização"]
+    }
+  ]
+}
