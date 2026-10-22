@@ -1,0 +1,35 @@
+name: Verificar sitemaps ARQ-064 ARQ-066 ARQ-067 2026-10-22
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/verificar-sitemaps-arq064-arq066-arq067-20261022.yml']
+permissions:
+  contents: read
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Validar robots e sitemaps
+        run: |
+          python - <<'PY'
+          import requests,xml.etree.ElementTree as ET
+          from urllib.parse import urljoin,urlparse
+          targets=['https://digitalizar-arquivos-sp.arquindex.com.br/','https://seguranca.arquindex.com.br/','https://contratar-servicos-digitalizacao-documentos-com-armazenamento.arquindex.com.br/']
+          for target in targets:
+            base=f"{urlparse(target).scheme}://{urlparse(target).netloc}/"
+            rr=requests.get(urljoin(base,'robots.txt'),timeout=30,headers={'User-Agent':'ArquindexSEO/1.0'});rr.raise_for_status()
+            seeds=[x.split(':',1)[1].strip() for x in rr.text.splitlines() if x.lower().startswith('sitemap:')]
+            if not seeds:seeds=[urljoin(base,'sitemap.xml')]
+            seen=set();queue=list(seeds);found=[]
+            while queue:
+              url=queue.pop(0)
+              if url in seen:continue
+              seen.add(url);r=requests.get(url,timeout=30,headers={'User-Agent':'ArquindexSEO/1.0'});r.raise_for_status()
+              root=ET.fromstring(r.content);locs=[e.text.strip() for e in root.iter() if e.tag.endswith('loc') and e.text]
+              if root.tag.endswith('sitemapindex'):queue.extend(urljoin(url,x) for x in locs)
+              elif target in [urljoin(url,x) for x in locs]:found.append(url)
+              print('XML_VALID',target,url,len(locs))
+            print('SITEMAP_MEMBERSHIP',target,found)
+          print('SITEMAPS_CHECKED')
+          PY
