@@ -92,6 +92,21 @@ A legenda do Instagram informa o caminho pelo navegador sem alegar link clicáve
 - ARQ-079: possível sobreposição com 25 URLs e guia CONARQ.
 - ARQ-080: title/canonical inadequados, mas atendimento regional e papel editorial precisam ser confirmados antes da correção.
 
+## Search Console
+
+Comparação de períodos completos: 06–19/10/2026 versus 22/09–05/10/2026.
+
+| ID | Atual: impressões / cliques / posição | Anterior |
+|---|---:|---:|
+| ARQ-077 | 6 / 0 / 6,83 | 1 / 0 / 9,00 |
+| ARQ-078 | 3 / 0 / 5,00 | sem linha |
+| ARQ-079 | 3 / 0 / 8,00 | sem linha |
+| ARQ-080 | 2 / 0 / 2,00 | sem linha |
+| ARQ-081 | 1 / 0 / 4,00 | sem linha |
+| ARQ-082 | 1 / 0 / 7,00 | sem linha |
+
+As amostras são pequenas e anteriores à publicação. Zero cliques em todas as seis URLs; não há evidência de ganho de ranking ou conversão.
+
 ## Continuidade
 
 Fila atualizada para ARQ-083. Não há alegação de indexação, ranking, leads ou conversão.
