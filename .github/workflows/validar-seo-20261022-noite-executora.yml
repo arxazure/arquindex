@@ -1,0 +1,34 @@
+name: Validar ARQ-078 ARQ-081 ARQ-082 2026-10-22 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/validar-seo-20261022-noite-executora.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-validate" playwright --no-audit --no-fund
+      - name: Validar publicação em mobile e desktop
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-validate/node_modules/playwright');let browser;
+          const urls=[
+            ['ARQ-078','https://organizacao-de-arquivos-empresariais.arquindex.com.br/','Organização de Arquivos: Controle e Consulta | Arquindex','Como organizar e movimentar arquivos empresariais'],
+            ['ARQ-081','https://acervos-medico-baixada-fluminense.arquindex.com.br/o-que-e.html','Acervos Médicos: Organização, Guarda e Acesso | Arquindex','Como organizar e controlar grandes acervos médicos'],
+            ['ARQ-082','https://adequacao-exin-sp.arquindex.com.br/o-que-e.html','Consultoria LGPD: Credenciais, Escopo e Evidências | Arquindex','Como avaliar credenciais e escopo de uma consultoria LGPD']
+          ];
+          (async()=>{browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+          for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+            const c=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+            for(const [id,url,title,h1] of urls){const p=await c.newPage();const r=await p.goto(url+'?validate=20261022noite',{waitUntil:'domcontentloaded',timeout:45000});await p.waitForTimeout(1500);
+              const d=await p.evaluate(()=>({title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),robots:document.querySelector('meta[name=robots]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('#aq-nav'),widget:document.querySelectorAll('#arq-floating').length,oldWidgets:document.querySelectorAll('.aq-brand-wa,#wa-widget-send-button').length,proposal:[...document.querySelectorAll('a')].some(a=>a.href.includes('solicitar-proposta-contratacao')&&a.href.includes('utm_campaign=')),aeo:document.querySelectorAll('[data-aq-aeo]').length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth,words:(document.body.innerText||'').trim().split(/\s+/).length}));
+              const ok=r?.status()===200&&d.title===title&&d.h1.length===1&&d.h1[0]===h1&&d.canonical.length===1&&d.canonical[0]===url&&!/noindex/i.test(d.robots)&&d.logo&&d.menu&&d.widget===1&&d.oldWidgets===0&&d.proposal&&d.aeo===1&&d.sw<=d.cw+2;
+              console.log('VALIDATE',JSON.stringify({id,vp:vp.name,status:r?.status(),ok,...d}));if(!ok)throw new Error('VALIDATION_FAILED '+id+' '+vp.name);await p.close();}
+            await c.close();}
+          await browser.close();console.log('VALIDATION_COMPLETE');})().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1});
+          JS
