@@ -1,0 +1,142 @@
+{
+  "schema": "arquindex.seo_daily_10.v1",
+  "date_local": "2026-10-22",
+  "generated_at_local": "2026-10-22T08:36:00-03:00",
+  "status": "quality_gate_no_new_pages",
+  "production_sources": {
+    "homehost": {
+      "repository": "arxazure/arquindex",
+      "branch": "master",
+      "observed_head_before_manifest": "e03ed543ba4454f417307f900de15e71f6dd0fc9",
+      "evidence": "successful GitHub Actions FTPS workflows with backup and public verification"
+    },
+    "railway": {
+      "repository": "arxazure/arquindex",
+      "branch": "railway-production-2026",
+      "root_directory": "/arquindex-platform",
+      "branch_head": "95806674beaf556a31f30e7218d5f321976df9b7",
+      "latest_live_commit": "37f79c013e83710467e9877ea97767ef0e0d10a0",
+      "latest_deployment_id": "3c68ff8a-2f24-43a0-b9e3-16a90797541e",
+      "latest_status": "SUCCESS",
+      "staged_changes": 0,
+      "new_source_build_observed": false
+    }
+  },
+  "counts_this_run": {
+    "pages_created": 0,
+    "pages_updated": 0,
+    "pages_published": 0,
+    "pages_pending": 1,
+    "sitemaps_submitted": 0,
+    "indexnow_urls_submitted": 0
+  },
+  "decision": {
+    "new_pages_withheld": true,
+    "reasons": [
+      "The immediately preceding publication batch already added 14 Alfresco/OCR/IA URLs, including three technical articles; creating another batch now would weaken coordination and quality control.",
+      "The current queue prioritizes an existing URL (ARQ-066) and explicitly requires overlap/source verification before editing.",
+      "GSC performance reads are unavailable in this run, so traffic-bearing URLs were preserved."
+    ]
+  },
+  "recent_publication_inventory": {
+    "alfresco_batch": {
+      "commit": "1797d3c28d470a1a7733a6a08fe91facc0306957",
+      "workflow_run": "https://github.com/arxazure/arquindex/actions/runs/39706934252",
+      "conclusion": "success",
+      "local_execution_window": "2026-10-21 22:39–22:41 -03:00",
+      "urls": [
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-rio-de-janeiro/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-betim/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-belo-horizonte/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-nova-lima/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-sao-paulo/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-contagem/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-recife/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-curitiba/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-brasilia/",
+        "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-santa-luzia/",
+        "https://www.arquindex.com.br/blog/alfresco-cloud-e-ocr-tco/",
+        "https://www.arquindex.com.br/blog/ocr-inteligente-vs-busca-ecm/",
+        "https://www.arquindex.com.br/blog/nuvem-dedicada-governanca-alfresco/",
+        "https://www.arquindex.com.br/alfresco-cloud-ocr-ia/"
+      ],
+      "fresh_public_check": {
+        "http_200": 14,
+        "self_canonical": 14,
+        "one_h1": 14,
+        "indexable": 14,
+        "viewport": 14,
+        "word_ranges": {
+          "regional": "759–790",
+          "articles": "567–575",
+          "hub": 210
+        }
+      }
+    },
+    "cases_page": {
+      "url": "https://www.arquindex.com.br/clientes-cases/",
+      "commit": "c02ba6bfd614080a0fdf90f5551156ede37140a4",
+      "workflow_run": "https://github.com/arxazure/arquindex/actions/runs/39710338078",
+      "conclusion": "success",
+      "local_execution_window": "2026-10-21 23:15 -03:00",
+      "fresh_public_check": {
+        "http_status": 200,
+        "self_canonical": true,
+        "one_h1": true,
+        "indexable": true,
+        "viewport": true,
+        "visible_words": 820,
+        "cards": 7,
+        "case_thumbnail_assets": 6,
+        "all_thumbnail_requests_http_200": true,
+        "marker_present": true
+      },
+      "note": "Existing page update; not counted as a new page."
+    }
+  },
+  "sitemap_inventory": {
+    "root": "https://www.arquindex.com.br/sitemap.xml",
+    "documents_in_root_chain": 15,
+    "documents_http_200": 15,
+    "page_urls": 529,
+    "cases_page_included": true,
+    "alfresco_batch_urls_included": 14
+  },
+  "search_console": {
+    "harmless_read": "list_sites",
+    "result": "blocked",
+    "code": "payment_required",
+    "reason": "subscription_required",
+    "classification": "account subscription gate; not 401, 403, 429, or 5xx",
+    "exact_step": "Activate GSC Wizard at https://tool.gscwizard.com/settings/subscription, then rerun property listing and 7/28-day page/query reads.",
+    "retry_performed": false
+  },
+  "pending": [
+    {
+      "id": "ARQ-066",
+      "existing_url": "https://seguranca.arquindex.com.br/",
+      "candidate_overlap": "https://www.arquindex.com.br/seguranca-da-informacao/",
+      "action": "choose one existing URL for the access-review intent, then update it with a permissions matrix, restrained claims, metadata, CTA and internal links",
+      "blockers": [
+        "No deployable source for seguranca.arquindex.com.br was found on the default GitHub branch.",
+        "Overlap with the main security page has not been resolved.",
+        "Fresh GSC page/query evidence is unavailable due to the subscription gate."
+      ],
+      "state": "prepared_not_published"
+    }
+  ],
+  "connection_diagnostics": {
+    "github_read": "success",
+    "github_write": "success_for_manifest",
+    "homehost": "read via public HTTP and deployment evidence via GitHub Actions; no write needed",
+    "railway_read": "success; service live; no staged changes",
+    "public_http": "success",
+    "gsc": "payment_required"
+  },
+  "destructive_actions": [],
+  "next_actions": [
+    "Resolve ARQ-066 overlap and publication source before editing either security URL.",
+    "Improve depth and consent-compatible measurement on the recent Alfresco cohort before expanding it.",
+    "Restore GSC access and use settled 7/28-day page and query evidence to choose the next existing-first update."
+  ]
+}
