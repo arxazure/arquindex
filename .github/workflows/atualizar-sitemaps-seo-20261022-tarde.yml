@@ -1,0 +1,20 @@
+name: Atualizar sitemaps ARQ-070 ARQ-073 ARQ-075 2026-10-22
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/atualizar-sitemaps-seo-20261022-tarde.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar sitemaps com backup e rollback
+        run: python scripts/atualizar-sitemaps-arq070-arq073-arq075-20261022.py
