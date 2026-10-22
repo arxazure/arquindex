@@ -7,7 +7,7 @@ from html.parser import HTMLParser
 
 ROOT="https://www.arquindex.com.br/"; DATE="2026-10-22"; SITEMAP="/public_html/sitemap-artigos.xml"
 ARTICLES=[
- {"source":pathlib.Path("artigos-tecnicos/2026-10-22/pdfa-nao-basta-decreto-10278-validacao/index.html"),"target":"/public_html/blog/pdfa-nao-basta-decreto-10278-validacao/index.html","url":ROOT+"blog/pdfa-nao-basta-decreto-10278-validacao/","marker":"ARQ-ARTICLE-20261022-PDFA-VALIDACAO-10278"},
+ {"source":pathlib.Path("artigos-tecnicos/2026-10-22/pdfa-nao-basta-decreto-10278-validacao/index.html"),"target":"/public_html/blog/pdfa-nao-basta-decreto-10278-validacao/index.html","url":ROOT+"blog/pdfa-nao-basta-decreto-10278-validacao/","marker":"ARQ-ARTICLE-20261022-PDFA-VALIDACAO-10278","previous_sha256":"56291f15827a54c28727e32161bc2f86f70e411ae0d0fc08cdb597f8c7f5e353"},
  {"source":pathlib.Path("artigos-tecnicos/2026-10-22/prontuario-ocupacional-digital-rh-lgpd-nr7/index.html"),"target":"/public_html/blog/prontuario-ocupacional-digital-rh-lgpd-nr7/index.html","url":ROOT+"blog/prontuario-ocupacional-digital-rh-lgpd-nr7/","marker":"ARQ-ARTICLE-20261022-PRONTUARIO-OCUPACIONAL-NR7-LGPD"},
 ]
 
@@ -76,7 +76,9 @@ try:
    except ftplib.error_perm as exc:
     if not str(exc).startswith("550"): raise
     previous[a["target"]]=None
-   assert previous[a["target"]] in (None,planned[a["target"]]),("DESTINATION_CONFLICT",a["target"])
+   allowed=previous[a["target"]] in (None,planned[a["target"]])
+   allowed=allowed or (a.get("previous_sha256") and sha(previous[a["target"]])==a["previous_sha256"])
+   assert allowed,("DESTINATION_CONFLICT",a["target"])
   sitemap_before=get(ftp,SITEMAP); previous[SITEMAP]=sitemap_before
   ns="http://www.sitemaps.org/schemas/sitemap/0.9"; ET.register_namespace("",ns); root=ET.fromstring(sitemap_before); assert root.tag=="{"+ns+"}urlset"
   existing={n.text for n in root.iter("{"+ns+"}loc")}
