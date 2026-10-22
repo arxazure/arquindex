@@ -1,0 +1,38 @@
+name: Melhorar ARQ-064 ARQ-066 ARQ-067 2026-10-22 manha
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/rodada-seo-20261022-manha.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - name: Identidade ARQ-064
+        env:
+          DESIGN_TARGET: https://digitalizar-arquivos-sp.arquindex.com.br/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-066
+        env:
+          DESIGN_TARGET: https://seguranca.arquindex.com.br/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-067
+        env:
+          DESIGN_TARGET: https://contratar-servicos-digitalizacao-documentos-com-armazenamento.arquindex.com.br/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Publicar SEO AEO links e atendimento
+        run: python scripts/rodada-seo-20261022-manha.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidencias-rodada-seo-20261022-manha
+          path: design-report/
