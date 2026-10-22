@@ -175,12 +175,22 @@
   "submissions_by_this_audit": {
     "indexnow": 0,
     "gsc_sitemaps": 0,
-    "google_indexing_api": 0
+    "google_indexing_api": 0,
+    "gsc_blocker": "GSC Wizard subscription required; HomeHost workflow separately reports missing GSC OAuth."
   },
   "next_actions": [
     "Deploy latest Railway source from commit 95806674 or verified descendant and validate build, health, and public routes.",
     "Integrate the existing consent manager/analytics pattern into the 14 PR20 pages and /clientes-cases/ with backup, rollback, and public readback.",
     "Differentiate and expand the 72 regional pages before any sitemap or submission.",
     "Restore authorized GSC OAuth and submit the relevant sitemap; record submission separately from indexation."
-  ]
+  ],
+  "search_console_connector": {
+    "harmless_read_operation": "list connected properties",
+    "result": "blocked",
+    "code": "payment_required",
+    "reason": "subscription_required",
+    "http_classification": "account plan/subscription gate, not 401, 403, 429, or 5xx",
+    "work_completed_before_block": "Technical crawl, sitemap audit, source/deploy verification, local QA, and publication evidence review.",
+    "exact_human_step": "Activate a GSC Wizard subscription at https://tool.gscwizard.com/settings/subscription, then rerun property listing and performance reads. Do not retry before activation."
+  }
 }
