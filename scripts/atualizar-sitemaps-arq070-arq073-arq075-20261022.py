@@ -31,7 +31,7 @@ def transform(old,target):
  root=ET.fromstring(old);ns=''
  if root.tag.startswith('{'):ns=root.tag.split('}',1)[0][1:];ET.register_namespace('',ns)
  q=lambda x:'{'+ns+'}'+x if ns else x
- locs=[e.text.strip() for e in root.iter(q('loc')) if e.text];assert target not in [urljoin(target,x) for x in locs]
+ locs=[e.text.strip() for e in root.iter(q('loc')) if e.text]
  url=ET.SubElement(root,q('url'));ET.SubElement(url,q('loc')).text=target;ET.SubElement(url,q('lastmod')).text='2026-10-22'
  out=ET.tostring(root,encoding='utf-8',xml_declaration=True);ET.fromstring(out);return out
 def check(url):
@@ -51,7 +51,10 @@ with ftplib.FTP_TLS(timeout=60) as f:
   except ftplib.all_errors:pass
  assert base;rec=[]
  for host,target in TARGETS:
-  path,old=locate(f,base,host);new=transform(old,target);root=ET.fromstring(new);locs=[e.text.strip() for e in root.iter() if e.tag.endswith('loc') and e.text];assert len(locs)==len(set(locs))
+  path,old=locate(f,base,host);oldroot=ET.fromstring(old);oldlocs=[e.text.strip() for e in oldroot.iter() if e.tag.endswith('loc') and e.text]
+  if target in [urljoin(target,x) for x in oldlocs]:
+   print('SITEMAP_ALREADY_PRESENT',host,target,len(oldlocs),flush=True);continue
+  new=transform(old,target);root=ET.fromstring(new);locs=[e.text.strip() for e in root.iter() if e.tag.endswith('loc') and e.text];assert len(locs)==len(set(locs))
   for u in locs:
    absolute=urljoin('https://'+host+'/',u);st,_=check(absolute);assert st==200,(absolute,st)
   rec.append((host,target,path,old,new));print('PREFLIGHT_VALID',host,len(locs),flush=True)
