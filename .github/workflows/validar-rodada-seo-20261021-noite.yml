@@ -1,0 +1,37 @@
+name: Validar ARQ-059 ARQ-060 ARQ-063 2026-10-21 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/validar-rodada-seo-20261021-noite.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-validate" playwright --no-audit --no-fund
+      - name: Validar publicacao em mobile e desktop
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-validate/node_modules/playwright');let browser;
+          const pages=[
+            ['ARQ-059','https://digitalizar-digitalizacao-especializada.arquindex.com.br/','Digitalização Profissional: Escopo e Qualidade | Arquindex'],
+            ['ARQ-060','https://digitalizacao-ocr-empresas.arquindex.com.br/empresas.html','OCR para Empresas: Pesquisa e Validação | Arquindex'],
+            ['ARQ-063','https://digitalizacao-rh-sao-bernardo-do-campo.arquindex.com.br/o-que-e.html','Digitalização de Dossiês de RH em São Bernardo | Arquindex']
+          ];
+          (async()=>{browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+          for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+            const c=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+            for(const [id,url,title] of pages){const p=await c.newPage();const r=await p.goto(url+'?validated=20261021noite',{waitUntil:'domcontentloaded',timeout:45000});await p.waitForTimeout(1500);
+              const d=await p.evaluate(()=>({title:document.title,canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),h1:document.querySelectorAll('h1').length,logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('#aq-nav'),widget:document.querySelectorAll('#arq-floating').length,oldWidgets:document.querySelectorAll('.aq-brand-wa,#wa-widget-send-button').length,aeo:document.querySelectorAll('[data-aq-aeo]').length,proposal:[...document.querySelectorAll('a')].some(a=>a.href.includes('solicitar-proposta-contratacao')&&a.href.includes('utm_')),robots:document.querySelector('meta[name=robots]')?.content||'',cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth,words:(document.body.innerText||'').trim().split(/\s+/).length}));
+              const ok=r?.status()===200&&d.title===title&&d.canonical.length===1&&d.canonical[0]===url&&d.h1===1&&d.logo&&d.menu&&d.widget===1&&d.oldWidgets===0&&d.aeo===1&&d.proposal&&!/noindex/i.test(d.robots)&&d.sw<=d.cw+2;
+              console.log('VALIDATE',JSON.stringify({id,vp:vp.name,status:r?.status(),ok,...d}));if(!ok)throw new Error('VALIDATION_FAILED '+id+' '+vp.name);await p.close();}
+            await c.close();}
+          await browser.close();console.log('PUBLICATION_VERIFIED');})().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1});
+          JS
+
+# segunda tentativa apos conclusao do deploy 39695535120

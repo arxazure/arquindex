@@ -1,0 +1,31 @@
+name: Publicar oportunidades e artes 2026-10-21
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'campanhas/oportunidades-20261021/**'
+      - 'scripts/publish-oportunidades-20261021.py'
+      - '.github/workflows/publicar-oportunidades-artes-20261021.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar paginas e arquivos
+        run: python scripts/publish-oportunidades-20261021.py --check
+      - name: Publicar por FTPS com backup e conferir URLs
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python scripts/publish-oportunidades-20261021.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: oportunidades-20261021-publicacao
+          path: publish-report/

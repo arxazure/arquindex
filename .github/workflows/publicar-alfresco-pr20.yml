@@ -1,0 +1,44 @@
+name: Publicar campanha Alfresco PR20
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo/alfresco-cloud-ocr-ia-*/**'
+      - 'blog/alfresco-cloud-e-ocr-tco/**'
+      - 'blog/ocr-inteligente-vs-busca-ecm/**'
+      - 'blog/nuvem-dedicada-governanca-alfresco/**'
+      - 'alfresco-cloud-ocr-ia/**'
+      - 'scripts/publish-alfresco-pr20.py'
+      - '.github/workflows/publicar-alfresco-pr20.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preflight
+        run: python scripts/publish-alfresco-pr20.py --check
+      - name: Responsive rendering
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          export CHROME_PATH
+          npm install --prefix "$RUNNER_TEMP/pr20-browser" playwright@1.61.1 --ignore-scripts --no-audit --no-fund
+          NODE_PATH="$RUNNER_TEMP/pr20-browser/node_modules" node scripts/qa/alfresco-campaign-browser.cjs
+      - name: FTPS backup, release, public HTTP and official discovery
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
+          GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
+          GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+        run: python scripts/publish-alfresco-pr20.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: alfresco-pr20-publication
+          path: publish-report/

@@ -18,3 +18,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate HTML, canonical and JSON-LD
         run: python3 scripts/qa/alfresco-geo-aeo-check.py
+      - name: Validate release manifest and sitemap
+        run: python scripts/publish-alfresco-pr20.py --check
+      - name: Responsive rendering
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          export CHROME_PATH
+          npm install --prefix "$RUNNER_TEMP/pr20-browser" playwright@1.61.1 --ignore-scripts --no-audit --no-fund
+          NODE_PATH="$RUNNER_TEMP/pr20-browser/node_modules" node scripts/qa/alfresco-campaign-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: alfresco-pr20-preflight
+          path: publish-report/

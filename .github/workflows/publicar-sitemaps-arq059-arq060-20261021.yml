@@ -1,0 +1,22 @@
+name: Publicar sitemaps ARQ-059 ARQ-060 2026-10-21
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/publicar-sitemaps-arq059-arq060-20261021.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar XML com backup e rollback
+        run: python scripts/atualizar-sitemaps-arq059-arq060-20261021.py
+
+# tentativa 2: locs relativos normalizados no preflight
