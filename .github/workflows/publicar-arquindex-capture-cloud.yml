@@ -30,29 +30,36 @@ jobs:
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
-          FTP_LEGACY_MODE: ${{ vars.FTP_LEGACY_MODE }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST }}
         run: |
           python - <<'PY'
-          import os,ftplib,ssl,io,hashlib
+          import os,ftplib,ssl,io,hashlib,socket
+          from datetime import datetime, timezone
           from pathlib import Path
           data=Path('arquindex-capture-cloud.html').read_bytes()
           dst='arquindex-capture-cloud.html'
           pw=os.getenv('FTP_PASSWORD')
           if not pw:raise RuntimeError('Secret FTP_PASSWORD ausente ou vazio no GitHub Actions')
           remote=os.getenv('FTP_REMOTE_DIR') or 'public_html'
-          host='ftp.arquindex.com.br'
-          # Encrypted FTPS is always the default. Use explicitly enabled legacy FTP
-          # only for hosts that cannot support the secured transport.
-          legacy=(os.getenv('FTP_LEGACY_MODE') or '').strip().lower()=='true'
-          if legacy:
-              print('AVISO: FTP legado sem criptografia habilitado explicitamente via FTP_LEGACY_MODE')
-              conn=ftplib.FTP(timeout=40)
-          else:
-              conn=ftplib.FTP_TLS(timeout=40,context=ssl.create_default_context())
+          # Provider hostname already used by this repository's FTPS publishers.
+          # Never infer a trusted destination from an unverified certificate.
+          host=(os.getenv('FTP_TLS_HOST') or 'h59.servidorhh.com').strip()
+          expected=set(socket.gethostbyname_ex('ftp.arquindex.com.br')[2])
+          provider=set(socket.gethostbyname_ex(host)[2])
+          if not expected.intersection(provider):
+              raise RuntimeError('FTPS hostname does not resolve to the existing hosting server')
+          context=ssl.create_default_context()
+          context.minimum_version=ssl.TLSVersion.TLSv1_2
+          conn=ftplib.FTP_TLS(timeout=40,context=context)
           with conn as ftp:
               ftp.connect(host,21)
+              if ftp.sock.getpeername()[0] not in expected:
+                  raise RuntimeError('Unexpected FTPS server IP')
+              ftp.auth()  # Verify chain and hostname before sending credentials.
+              cert=ftp.sock.getpeercert()
+              print('FTPS_TLS_VALIDADO',host,ftp.sock.version(),cert.get('subjectAltName'),cert.get('notAfter'))
               ftp.login('arquind2',pw)
-              if not legacy:ftp.prot_p()
+              ftp.prot_p()
               ftp.set_pasv(True)
               ftp.cwd(remote)
               print('DESTINO',ftp.pwd())
@@ -63,26 +70,40 @@ jobs:
                   if previous.getvalue()==data:
                       print('ALREADY_CURRENT')
                   else:
-                      ftp.storbinary('STOR '+dst+'.backup',io.BytesIO(previous.getvalue()))
+                      # Unique backups preserve previous versions across repeated publications.
+                      stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+                      backup=dst+'.backup.'+stamp
+                      ftp.storbinary('STOR '+backup,io.BytesIO(previous.getvalue()))
+                      saved=io.BytesIO()
+                      ftp.retrbinary('RETR '+backup,saved.write)
+                      assert saved.getvalue()==previous.getvalue(),'Backup hash mismatch'
+                      current=io.BytesIO()
+                      ftp.retrbinary('RETR '+dst,current.write)
+                      assert current.getvalue()==previous.getvalue(),'Remote file changed concurrently'
+                      print('BACKUP_VERIFICADO',backup,hashlib.sha256(saved.getvalue()).hexdigest())
                       ftp.storbinary('STOR '+dst,io.BytesIO(data))
               else:
                   ftp.storbinary('STOR '+dst,io.BytesIO(data))
               result=io.BytesIO()
               ftp.retrbinary('RETR '+dst,result.write)
               assert hashlib.sha256(result.getvalue()).digest()==hashlib.sha256(data).digest(),'FTP hash mismatch'
-              print('UPLOAD_VERIFICADO',dst,len(data))
+              print('UPLOAD_VERIFICADO',dst,len(data),hashlib.sha256(data).hexdigest())
           PY
       - name: Validar pagina no dominio publico
         run: |
           python - <<'PY'
-          import urllib.request,time
+          import urllib.request,time,hashlib
+          from pathlib import Path
+          expected=Path('arquindex-capture-cloud.html').read_bytes()
           url='https://www.arquindex.com.br/arquindex-capture-cloud.html'
           for attempt in range(5):
               try:
                   with urllib.request.urlopen(urllib.request.Request(url+'?capturedeploy='+str(int(time.time())),headers={'User-Agent':'ArquindexDeploy/1.0','Cache-Control':'no-cache'}),timeout=20) as response:
-                      body=response.read().decode('utf-8','replace')
+                      public=response.read()
+                      body=public.decode('utf-8','replace')
                       assert response.status==200 and 'R$ 499' in body and 'R$ 599' in body
-                      print('SITE_PUBLICADO_E_VALIDADO',url)
+                      assert hashlib.sha256(public).digest()==hashlib.sha256(expected).digest(),'Public SHA256 mismatch'
+                      print('SITE_PUBLICADO_E_VALIDADO',url,'SHA256',hashlib.sha256(public).hexdigest())
                       break
               except Exception as exc:
                   print('VALIDACAO_PUBLICA_FALHOU',type(exc).__name__,str(exc)[:180])
