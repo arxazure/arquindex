@@ -2,9 +2,22 @@
   "data": "2026-10-22",
   "meta_diaria": 2,
   "novos_artigos_qualificados_produzidos_no_dia": 2,
-  "novos_artigos_publicados_e_verificados_no_dia": 0,
-  "saldo_pendente_do_dia": 2,
-  "estado": "preparado_aguardando_deploy",
+  "novos_artigos_publicados_e_verificados_no_dia": 2,
+  "saldo_pendente_do_dia": 0,
+  "estado": "publicado_e_verificado",
+  "github": {
+    "pull_request": "https://github.com/arxazure/arquindex/pull/22",
+    "commit_integrado": "d5393ff817ee1e892f85b64e20b58834bd85e5cf",
+    "workflow": "https://github.com/arxazure/arquindex/actions/runs/39784670765",
+    "conclusao": "success"
+  },
+  "deploy": {
+    "destino": "HomeHost",
+    "backup_recuperavel": "/seo-backups/artigos-20261022-20261022T131133Z",
+    "sitemap": "https://www.arquindex.com.br/sitemap-artigos.xml",
+    "http": 200,
+    "canonical_e_robots": "verificados"
+  },
   "origem_autorizada": {
     "repositorio": "arxazure/arquindex",
     "branch_publicadora": "master",
@@ -31,7 +44,8 @@
       "destino": "site principal",
       "url": "https://www.arquindex.com.br/blog/pdfa-nao-basta-decreto-10278-validacao/",
       "arquivo": "artigos-tecnicos/2026-10-22/pdfa-nao-basta-decreto-10278-validacao/index.html",
-      "estado": "preparado_aguardando_deploy"
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "56291f15827a54c28727e32161bc2f86f70e411ae0d0fc08cdb597f8c7f5e353"
     },
     {
       "titulo": "Prontuário ocupacional digital: como separar saúde e RH conforme NR-7 e LGPD",
@@ -40,7 +54,8 @@
       "destino": "site principal",
       "url": "https://www.arquindex.com.br/blog/prontuario-ocupacional-digital-rh-lgpd-nr7/",
       "arquivo": "artigos-tecnicos/2026-10-22/prontuario-ocupacional-digital-rh-lgpd-nr7/index.html",
-      "estado": "preparado_aguardando_deploy"
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "d05c4001cba049224cea6c9605bd0d51b5abe50242fab632fc57e292d6f7c9eb"
     }
   ]
 }
