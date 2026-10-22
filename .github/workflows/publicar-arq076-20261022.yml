@@ -1,0 +1,17 @@
+name: Publicar ARQ076
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/publicar-arq076-20261022.yml']
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4 Pillow
+      - run: python scripts/publicar-arq076-20261022.py
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
