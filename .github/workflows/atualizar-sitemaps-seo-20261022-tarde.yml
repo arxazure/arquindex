@@ -2,7 +2,7 @@ name: Atualizar sitemaps ARQ-070 ARQ-073 ARQ-075 2026-10-22
 on:
   push:
     branches: [master]
-    paths: ['.github/workflows/atualizar-sitemaps-seo-20261022-tarde.yml']
+    paths: ['.github/workflows/atualizar-sitemaps-seo-20261022-tarde.yml', 'scripts/atualizar-sitemaps-arq070-arq073-arq075-20261022.py']
 permissions:
   contents: read
 concurrency:
