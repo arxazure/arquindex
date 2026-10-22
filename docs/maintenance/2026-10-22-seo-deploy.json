@@ -1,0 +1,186 @@
+{
+  "schema": "arquindex.technical-audit.v1",
+  "date": "2026-10-22",
+  "generated_at_utc": "2026-10-22T10:03:00Z",
+  "status": "partial_blocked_railway_source_build",
+  "scope": {
+    "official_origin": "https://www.arquindex.com.br/",
+    "railway_origin": "https://arquindex-web-production.up.railway.app/",
+    "regional_campaign": {
+      "cities": 24,
+      "services": 3,
+      "intentions": 72
+    },
+    "merchant_center": "separate_not_accessed_or_modified"
+  },
+  "production_sources": {
+    "github_repository": "arxazure/arquindex",
+    "homehost_branch": {
+      "name": "master",
+      "observed_head_before_receipt": "c02ba6bfd614080a0fdf90f5551156ede37140a4"
+    },
+    "railway": {
+      "project": "Arquindex Plataforma",
+      "service": "arquindex-web",
+      "repository": "arxazure/arquindex",
+      "branch": "railway-production-2026",
+      "root_directory": "/arquindex-platform",
+      "observed_branch_head_before_trigger": "661fb3044334373f3be03d7a1969c6fb280be60f",
+      "trigger_marker_commit": "95806674beaf556a31f30e7218d5f321976df9b7",
+      "staged_changes": 0,
+      "source_change_pending": false
+    }
+  },
+  "railway_deployment": {
+    "result": "not_deployed",
+    "latest_confirmed_deployment_id": "3c68ff8a-2f24-43a0-b9e3-16a90797541e",
+    "latest_confirmed_status": "SUCCESS",
+    "latest_confirmed_commit": "37f79c013e83710467e9877ea97767ef0e0d10a0",
+    "latest_confirmed_created_at": "2026-10-19T13:32:00Z",
+    "branch_ahead_of_live_by_commits_before_marker": 7,
+    "trigger_test": {
+      "operation": "GitHub push inside configured root directory",
+      "commit": "95806674beaf556a31f30e7218d5f321976df9b7",
+      "runtime_change": false,
+      "new_deployment_observed": false,
+      "retry_performed": false,
+      "classification": "source_auto_deploy_trigger_failure_or_builds_suspended"
+    },
+    "exact_human_step": "Railway > Arquindex Plataforma > production > arquindex-web > Deployments: deploy latest source commit 95806674beaf556a31f30e7218d5f321976df9b7 (or a verified descendant) and confirm SUCCESS plus /health and priority routes. Do not use redeploy of the existing deployment because it would reuse old commit 37f79c0."
+  },
+  "connector_diagnostics": {
+    "railway_harmless_reads": "authenticated_and_successful_after_retry",
+    "initial_error": {
+      "code": -32603,
+      "message": "Internal error"
+    },
+    "http_auth_or_quota_error_observed": false,
+    "classification": "transient_connector_error_recovered; deployment trigger remains separate",
+    "reconnect_required": false
+  },
+  "qa_of_railway_branch_head_661fb304": {
+    "javascript_syntax_files_checked": 21,
+    "javascript_syntax_failures": 0,
+    "regression_tests_passed": 4,
+    "regression_tests_failed": 0,
+    "smoke_routes_checked": 79,
+    "smoke_failures": 0,
+    "cases_route": {
+      "noindex": true,
+      "no_store": true
+    },
+    "legacy_redirect_query_preserved": true
+  },
+  "public_regional_campaign": {
+    "urls_checked": 72,
+    "http_200": 72,
+    "http_errors": 0,
+    "canonical_issues": 0,
+    "h1_issues": 0,
+    "noindex_pages": 0,
+    "missing_viewport": 0,
+    "missing_tracking": 0,
+    "directory_listing_markers": 0,
+    "internal_links_checked": 16,
+    "broken_internal_links": 0,
+    "visible_word_count_range": {
+      "min": 402,
+      "max": 438
+    },
+    "normalized_exact_variants_per_service_across_24_cities": 1,
+    "quality_risk": "high_mechanical_or_doorway_pattern",
+    "in_railway_sitemap": 0,
+    "in_official_sitemaps": 0,
+    "submission_action": "withheld",
+    "submission_reason": "Differentiate and deepen regional utility before sitemap, GSC, or IndexNow submission."
+  },
+  "official_priority_pages": {
+    "pages_checked": 4,
+    "http_200": 4,
+    "note": "No traffic-bearing URL was modified without GSC evidence. Home and gestao_de_colaboradores showed title duplication and no parsed meta description; left unchanged pending evidence and source confirmation."
+  },
+  "sitemap_audit": {
+    "sitemap_documents_discovered": 31,
+    "valid_http_200_xml": 31,
+    "failures": 0,
+    "newly_observed": [
+      {
+        "url": "https://www.arquindex.com.br/sitemap-oportunidades-20261021.xml",
+        "locs": 5
+      },
+      {
+        "url": "https://www.arquindex.com.br/sitemap-alfresco-cloud-20261021.xml",
+        "locs": 14
+      }
+    ],
+    "note": "Several official-host sitemap responses took about 4.1–6.9 seconds and robots about 10.2 seconds in this sample; these are total fetch timings, not Core Web Vitals."
+  },
+  "newly_published_sitemap_urls": {
+    "urls_checked": 19,
+    "http_200": 19,
+    "self_canonical": 19,
+    "exactly_one_h1": 19,
+    "viewport_present": 19,
+    "indexable": 19,
+    "primary_failures": 0,
+    "missing_consent_compatible_tracking": 14,
+    "missing_tracking_groups": {
+      "regional_alfresco_pages": 10,
+      "technical_articles": 3,
+      "alfresco_hub": 1
+    }
+  },
+  "homehost_evidence": {
+    "writes_by_this_audit": false,
+    "strict_ftps_tls_and_backup_workflows_observed": true,
+    "alfresco_pr20_workflow_run": "https://github.com/arxazure/arquindex/actions/runs/39706934252",
+    "alfresco_pr20_commit": "1797d3c28d470a1a7733a6a08fe91facc0306957",
+    "alfresco_pr20_backup": "/seo-backups/pr20-20261022T013953Z",
+    "public_hash_and_http_verification": true,
+    "indexnow": {
+      "submitted_urls": 14,
+      "response_http": 200,
+      "key_verified": true,
+      "indexing_confirmed": false
+    },
+    "google_search_console": {
+      "sitemap_submitted": false,
+      "reason": "GSC OAuth configuration missing"
+    },
+    "cases_workflow_run": "https://github.com/arxazure/arquindex/actions/runs/39710338078",
+    "cases_page": {
+      "url": "https://www.arquindex.com.br/clientes-cases/",
+      "http_200": true,
+      "cards": 7,
+      "self_canonical": true,
+      "missing_consent_compatible_tracking": true
+    }
+  },
+  "changes_by_this_audit": [
+    {
+      "repository": "arxazure/arquindex",
+      "branch": "railway-production-2026",
+      "commit": "95806674beaf556a31f30e7218d5f321976df9b7",
+      "path": "arquindex-platform/deploy-notes/technical-audit-2026-10-22.md",
+      "type": "non_runtime_deploy_trigger_marker"
+    },
+    {
+      "repository": "arxazure/arquindex",
+      "branch": "master",
+      "path": "docs/maintenance/2026-10-22-seo-deploy.json",
+      "type": "audit_receipt"
+    }
+  ],
+  "destructive_actions": [],
+  "submissions_by_this_audit": {
+    "indexnow": 0,
+    "gsc_sitemaps": 0,
+    "google_indexing_api": 0
+  },
+  "next_actions": [
+    "Deploy latest Railway source from commit 95806674 or verified descendant and validate build, health, and public routes.",
+    "Integrate the existing consent manager/analytics pattern into the 14 PR20 pages and /clientes-cases/ with backup, rollback, and public readback.",
+    "Differentiate and expand the 72 regional pages before any sitemap or submission.",
+    "Restore authorized GSC OAuth and submit the relevant sitemap; record submission separately from indexation."
+  ]
+}
