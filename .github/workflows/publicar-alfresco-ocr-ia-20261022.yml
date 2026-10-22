@@ -1,0 +1,26 @@
+name: Atualizar Alfresco OCR IA - existing first
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-rotinas/publicar-alfresco-ocr-ia-20261022.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-alfresco-ocr-ia-20261022
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar parser HTML
+        run: python -m pip install beautifulsoup4
+      - name: Atualizar paginas existentes com backup e FTPS validado
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST }}
+          FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
+        run: python seo-rotinas/publicar-alfresco-ocr-ia-20261022.py
