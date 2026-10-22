@@ -12,7 +12,7 @@ jobs:
       - name: Verificar robots e sitemaps públicos
         run: |
           python - <<'PY'
-          import urllib.request,urllib.parse,xml.etree.ElementTree as ET
+          import urllib.request,urllib.parse,xml.etree.ElementTree as ET,time
           targets=[
           ('ARQ-070','https://ocr-maua.arquindex.com.br/'),
           ('ARQ-073','https://mapeamento-educacao.arquindex.com.br/'),
@@ -25,7 +25,7 @@ jobs:
               found=[]
               for sm in sms:
                   try:
-                      data=urllib.request.urlopen(sm,timeout=30).read()
+                      req=urllib.request.Request(sm,headers={'User-Agent':'ArquindexSEO/1.0','Cache-Control':'no-cache'});data=urllib.request.urlopen(req,timeout=30).read()
                       tree=ET.fromstring(data)
                       locs=[e.text.strip() for e in tree.iter() if e.tag.endswith('loc') and e.text]
                       hit=u in locs
