@@ -1,0 +1,46 @@
+{
+  "data": "2026-10-22",
+  "meta_diaria": 2,
+  "novos_artigos_qualificados_produzidos_no_dia": 2,
+  "novos_artigos_publicados_e_verificados_no_dia": 0,
+  "saldo_pendente_do_dia": 2,
+  "estado": "preparado_aguardando_deploy",
+  "origem_autorizada": {
+    "repositorio": "arxazure/arquindex",
+    "branch_publicadora": "master",
+    "destino": "HomeHost /public_html",
+    "credencial": "FTP_PASSWORD do GitHub Actions; valor não registrado"
+  },
+  "blog_prioritario": {
+    "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
+    "cms": "WordPress independente; não Blogger",
+    "leitura_inofensiva": "GET /wp-json/wp/v2/posts HTTP 200 em 22/10/2026; 2 posts públicos",
+    "permissao_de_escrita": "não disponível; POST sem autenticação retornou HTTP 401 rest_cannot_create em 21/10/2026",
+    "resultado": "nenhuma escrita repetida no WordPress; artigos destinados à origem GitHub/HomeHost autorizada"
+  },
+  "controle_de_duplicidade": {
+    "urls_candidatas_antes_do_deploy": "HTTP 404",
+    "repositorio_e_blog_wordpress": "títulos, intenções e slugs não encontrados",
+    "coordenacao": "conteúdo adicional às páginas SEO; não substitui atualização de página existente"
+  },
+  "artigos": [
+    {
+      "titulo": "PDF/A não basta: como validar digitalização conforme o Decreto 10.278/2020",
+      "palavras_texto_principal": 1900,
+      "fontes_principais": ["Decreto 10.278/2020", "CONARQ", "ISO 19005-1", "ISO 19005-2", "ISO 19005-3", "ISO 19005-4"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/pdfa-nao-basta-decreto-10278-validacao/",
+      "arquivo": "artigos-tecnicos/2026-10-22/pdfa-nao-basta-decreto-10278-validacao/index.html",
+      "estado": "preparado_aguardando_deploy"
+    },
+    {
+      "titulo": "Prontuário ocupacional digital: como separar saúde e RH conforme NR-7 e LGPD",
+      "palavras_texto_principal": 1952,
+      "fontes_principais": ["NR-7/MTE", "Lei 13.709/2018", "ANPD", "CFM Resolução 2.218/2018", "Decreto 10.278/2020"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/prontuario-ocupacional-digital-rh-lgpd-nr7/",
+      "arquivo": "artigos-tecnicos/2026-10-22/prontuario-ocupacional-digital-rh-lgpd-nr7/index.html",
+      "estado": "preparado_aguardando_deploy"
+    }
+  ]
+}
