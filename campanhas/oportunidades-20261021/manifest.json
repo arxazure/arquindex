@@ -1,0 +1,20 @@
+[
+  {
+    "source": "campanhas/oportunidades-20261021/blog/alfresco-cloud-ocr-inteligencia-documental/index.html",
+    "target": "/public_html/blog/alfresco-cloud-ocr-inteligencia-documental/index.html",
+    "url": "https://www.arquindex.com.br/blog/alfresco-cloud-ocr-inteligencia-documental/",
+    "marker": "ARQ-OPORTUNIDADES-20261021"
+  },
+  {
+    "source": "campanhas/oportunidades-20261021/blog/tco-alfresco-cloud-versus-saas/index.html",
+    "target": "/public_html/blog/tco-alfresco-cloud-versus-saas/index.html",
+    "url": "https://www.arquindex.com.br/blog/tco-alfresco-cloud-versus-saas/",
+    "marker": "ARQ-OPORTUNIDADES-20261021"
+  },
+  {
+    "source": "campanhas/oportunidades-20261021/campanha-oportunidades-20261021/index.html",
+    "target": "/public_html/campanha-oportunidades-20261021/index.html",
+    "url": "https://www.arquindex.com.br/campanha-oportunidades-20261021/",
+    "marker": "ARQ-OPORTUNIDADES-20261021"
+  }
+]
