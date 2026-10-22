@@ -1,0 +1,26 @@
+name: Publicar vitrine de cases Arquindex (HomeHost)
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-rotinas/publicar-cases-20261021.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-cases-homehost
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar verificador HTML
+        run: python -m pip install beautifulsoup4
+      - name: Atualizar cases com FTPS verificado, backup e rollback
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST }}
+          FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
+        run: python seo-rotinas/publicar-cases-20261021.py
