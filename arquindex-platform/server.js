@@ -441,6 +441,9 @@ const server=http.createServer(async(req,res)=>{
   if(!["GET","HEAD"].includes(req.method)){res.writeHead(405,{allow:"GET, HEAD"});return res.end();}
   const name=p==="/noticias/"?"index.html":p.slice("/noticias/".length);
   const base=canonicalOrigin(req);
+  if(name==="a948be82c7824bc989f2c5dd0f071bea.txt"){
+   res.writeHead(200,{"content-type":"text/plain; charset=utf-8"});return res.end(req.method==="HEAD"?undefined:"a948be82c7824bc989f2c5dd0f071bea");
+  }
   if(name==="sitemap.xml"){
    const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+newsPaths.map(path=>'<url><loc>'+base+path+'</loc></url>').join('')+'</urlset>';
    res.writeHead(200,{"content-type":"application/xml; charset=utf-8"});return res.end(req.method==="HEAD"?undefined:xml);
