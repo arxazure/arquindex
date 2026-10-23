@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-23",
+  "generated_at_utc": "2026-10-23T11:36:00Z",
+  "routine": "Arquindex 10 páginas SEO/GEO/AEO",
+  "goal": {
+    "maximum_pages_per_day": 10,
+    "existing_first": true
+  },
+  "counts": {
+    "created": 0,
+    "updated": 1,
+    "published": 1,
+    "pending": 3,
+    "unused_capacity": 9
+  },
+  "production_origin": {
+    "repository": "arxazure/arquindex",
+    "editorial_branch": "master",
+    "railway_branch": "railway-production-2026",
+    "railway_root": "/arquindex-platform",
+    "railway_head": "843e6d91c588a3ecb6ec09be262dcdeca32c4205",
+    "railway_latest_deployment": {
+      "id": "bf2c8127-3b33-4c59-a9d1-7bf08390ee7d",
+      "status": "SUCCESS"
+    },
+    "note": "A atualização editorial foi publicada no HomeHost por FTPS protegido; nenhuma alteração foi enviada ao Railway."
+  },
+  "commits": [
+    {
+      "sha": "c91f3dccc36f3ca268b3497f90e2adf965c02001",
+      "purpose": "publicador idempotente e conteúdo técnico"
+    },
+    {
+      "sha": "f9fbf6aed68d06f2036247ae36b81aa62150fd69",
+      "purpose": "workflow protegido"
+    },
+    {
+      "sha": "def9dec735946f937a06261b68718a13ef074c59",
+      "purpose": "correção do verificador bytes"
+    },
+    {
+      "sha": "b0bca8198baaa3a84fab0e3c5643c2b13f1e802e",
+      "purpose": "gatilho do workflow para alterações no publicador"
+    }
+  ],
+  "workflow": {
+    "success_run": {
+      "id": 39946992835,
+      "url": "https://github.com/arxazure/arquindex/actions/runs/39946992835",
+      "conclusion": "success"
+    },
+    "prior_failed_run": {
+      "id": 39946819045,
+      "classification": "erro de código no verificador pós-publicação",
+      "error": "TypeError: a bytes-like object is required, not 'str'",
+      "recovery": "ROLLBACK_COMPLETED",
+      "publication_counted": false
+    }
+  },
+  "pages": [
+    {
+      "id": "ARQ-081",
+      "title": "Acervos Médicos: Organização, Guarda e Acesso | Arquindex",
+      "intent": "processamento seguro e conferência de PDFs extensos em acervos médicos",
+      "url": "https://acervos-medico-baixada-fluminense.arquindex.com.br/o-que-e.html",
+      "operation": "existing_page_update",
+      "state": "published_verified",
+      "visible_words_before": 3619,
+      "visible_words_after": 5123,
+      "visible_words_added": 1504,
+      "backup": "/seo-backups/arq081-pdf-extenso-20261023T113421Z",
+      "page_sha256": "ca1246a2f51f0101360096afafd6de2dc40e6e59d679f719365ba757d8150300",
+      "public_sha256": "ca1246a2f51f0101360096afafd6de2dc40e6e59d679f719365ba757d8150300",
+      "checks": {
+        "http_status": 200,
+        "canonical": "https://acervos-medico-baixada-fluminense.arquindex.com.br/o-que-e.html",
+        "self_canonical": true,
+        "noindex": false,
+        "h1_count": 1,
+        "viewport": true,
+        "schema_types": [
+          "Organization",
+          "WebPage",
+          "FAQPage"
+        ],
+        "robots_status": 200,
+        "subdomain_sitemap_status": 200,
+        "subdomain_sitemap_contains_url": true,
+        "lastmod": "2026-10-23"
+      },
+      "content_blocks": [
+        "resposta direta",
+        "mudança técnica datada",
+        "tabela de requisitos e entregáveis",
+        "fluxo de seis etapas",
+        "tratamento de falhas",
+        "segurança e dados médicos",
+        "exemplo hipotético",
+        "FAQ prático",
+        "fontes, autoria e atualização",
+        "CTA e links internos"
+      ],
+      "sources": [
+        {
+          "name": "Microsoft Learn — limites do Azure Content Understanding",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/service-limits"
+        },
+        {
+          "name": "Microsoft Learn — visão geral do Azure Content Understanding",
+          "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/overview"
+        },
+        {
+          "name": "Autoridade Nacional de Proteção de Dados",
+          "url": "https://www.gov.br/anpd/pt-br"
+        }
+      ],
+      "caveat": "A referência ao Azure é contexto de mercado; a página não afirma integração, hospedagem ou capacidade contratada da Arquindex nessa plataforma."
+    }
+  ],
+  "inventory_validation": {
+    "recently_published_urls_checked": 14,
+    "http_200": 14,
+    "self_canonical": 14,
+    "indexable": 14,
+    "issues": [],
+    "root_sitemap_documents": 15,
+    "root_sitemap_urls": 531,
+    "recent_urls_in_root_sitemap": 14,
+    "arq081_uses_subdomain_sitemap": true
+  },
+  "queue": [
+    {
+      "id": "ARQ-083",
+      "state": "pending_editorial_review",
+      "reason": "intenção sobreposta à ARQ-054; evitar canibalização"
+    },
+    {
+      "id": "ARQ-084",
+      "state": "pending_editorial_review",
+      "reason": "intenção sobreposta à ARQ-075; aprofundar existente antes de criar"
+    },
+    {
+      "id": "ARQ-085",
+      "state": "pending_evidence",
+      "reason": "falta evidência documental de atendimento estadual para sustentar contexto regional"
+    }
+  ],
+  "submissions": {
+    "google_search_console": {
+      "attempted_read": true,
+      "result_code": "payment_required",
+      "message": "subscription_required",
+      "sitemap_submitted": false,
+      "url_submitted": false,
+      "indexing_confirmed": false
+    },
+    "indexnow": {
+      "submitted": false
+    },
+    "note": "Publicação e presença no sitemap foram verificadas; nenhuma submissão ou indexação foi alegada."
+  },
+  "coordination": {
+    "new_article_created": false,
+    "social_post_created": false,
+    "duplicate_canonical_created": false,
+    "note": "A execução atualizou uma página existente e não duplicou as rotinas de dois artigos e redes sociais."
+  },
+  "follow_up": [
+    "Consolidar blocos legados com títulos genéricos repetidos na ARQ-081 sem remover conteúdo útil.",
+    "Restabelecer leitura do Search Console para priorização por consultas e verificar desempenho antes de nova expansão.",
+    "Revisar sobreposições ARQ-083 e ARQ-084 e comprovação regional da ARQ-085."
+  ]
+}
