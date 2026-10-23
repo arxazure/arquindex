@@ -1,0 +1,34 @@
+name: Atualizar fila ARQ-089 a ARQ-094 2026-10-23 tarde
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/atualizar-fila-20261023-tarde.yml']
+permissions:
+  contents: write
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar cursor e registros
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          p=Path('seo/fila-seo-geo-aeo.csv')
+          lines=p.read_text('utf-8').splitlines()
+          lines=[x for x in lines if not x.startswith(tuple(f'ARQ-{n:03d};' for n in range(89,95))) and not x.startswith('CURSOR;')]
+          block='''ARQ-089;https://escolher-consultoria-especializada-protecao-dados.arquindex.com.br/checklist.html;checklist de governança da informação;governança e proteção de dados;;Medir consulta+URL em janela completa; divulgar em rotação futura com arte já verificada;2026-10-23;2026-10-23;;GitHub+FTP;sha256:d287a8120b0b2577c60430033dd3f8a10a89a63378bfc8c056b02db4358f47db;https://github.com/arxazure/arquindex/actions/runs/39996693130 | https://github.com/arxazure/arquindex/actions/runs/39997078162;"publicada e verificada mobile/desktop: canonical corrigido, title/H1, identidade, matriz AEO, CTA UTM, sitemap e arte"
+          ARQ-090;https://mapeamento-prontuarios-ibirite.arquindex.com.br/vantagens.html;mapeamento de prontuários em Ibirité;gestão documental e saúde;Ibirité;Medir consulta+URL; validar capacidade comercial antes de qualquer alegação local; divulgar em rotação futura;2026-10-23;2026-10-23;;GitHub+FTP;sha256:aab52a88372e52ab81c4bcf5fd19b9853a33b4e0494321b0e9d58cf1238babb2;https://github.com/arxazure/arquindex/actions/runs/39996693130 | https://github.com/arxazure/arquindex/actions/runs/39997078162;"publicada e verificada mobile/desktop: canonical corrigido, title/H1, identidade, fluxo/AEO, CTA UTM, sitemap e arte; sem alegar unidade local"
+          ARQ-091;https://melhores-solucoes-digitalizacao-documentos-empresariais.arquindex.com.br/;serviços de digitalização;digitalização;;Definir papel único frente a seis URLs antes de alterar; corrigir overflow junto de revisão editorial;2026-10-23;;;;auditoria GitHub;;;"HTTP 200 e canonical próprio; GSC recente 4 impressões, 0 cliques, posição 91,75; identidade/AEO/CTA ausentes e overflow móvel; preservada por sobreposição e amostra insuficiente"
+          ARQ-092;https://solucoes-exin-solucao.arquindex.com.br/;soluções para documentos;gestão da informação;;Definir intenção específica frente a doze URLs antes de alterar;2026-10-23;;;;auditoria GitHub;;;"HTTP 200 e canonical próprio; title/H1 genéricos, identidade/AEO/CTA ausentes e overflow móvel; preservada por sobreposição"
+          ARQ-093;https://solucoes-mapeamento-empresas.arquindex.com.br/;mapeamento documental e de processos;governança documental;;Definir papel único frente a seis URLs antes de alterar;2026-10-23;;;;auditoria GitHub;;;"HTTP 200 e canonical próprio; title/H1 genéricos, identidade/AEO/CTA ausentes e overflow móvel; preservada por sobreposição"
+          ARQ-094;https://vantagens-contratar-dpo-terceirizado-empresa.arquindex.com.br/;DPO terceirizado contrato rotina e indicadores;LGPD e DPO;;Medir consulta+URL em janela completa; divulgar em rotação futura com arte já verificada;2026-10-23;2026-10-23;;GitHub+FTP;sha256:b57d2913be3f12da248c03c773c4625d5b9b105efdc9fdcd627fa00badd437e9;https://github.com/arxazure/arquindex/actions/runs/39996693130 | https://github.com/arxazure/arquindex/actions/runs/39997078162;"publicada e verificada mobile/desktop: canonical próprio, title/H1, identidade, contrato/rotina/indicadores AEO, CTA UTM, sitemap e arte"'''.splitlines()
+          lines.extend(x.strip() for x in block)
+          lines.append('CURSOR;ARQ-095;;;;Auditar ARQ-095 a ARQ-100, preservando ARQ-099 já verificada e divulgada;2026-10-23;;;fila;;;;pendente')
+          p.write_text('\n'.join(lines)+'\n','utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add seo/fila-seo-geo-aeo.csv
+          git commit -m "atualizar fila para ARQ-095"
+          git push
