@@ -1,0 +1,20 @@
+name: Corrigir mobile ARQ-098 2026-10-23
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/corrigir-mobile-arq098-20261023.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4
+      - run: python scripts/corrigir-mobile-arq098-20261023.py
