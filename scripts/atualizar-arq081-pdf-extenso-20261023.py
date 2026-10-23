@@ -291,7 +291,7 @@ with ftplib.FTP_TLS(timeout=60) as ftp:
         canonical = page.find("link", rel=lambda value: value and "canonical" in value)
         assert canonical and canonical.get("href") == URL
         assert page.select_one("#" + MARKER)
-        assert "noindex" not in body.lower()
+        assert b"noindex" not in body.lower()
         visible_words = len(page.get_text(" ", strip=True).split())
         assert visible_words >= 4300, visible_words
 
