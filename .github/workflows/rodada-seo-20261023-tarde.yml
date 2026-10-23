@@ -1,0 +1,38 @@
+name: Melhorar ARQ-089 ARQ-090 ARQ-094 2026-10-23 tarde
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/rodada-seo-20261023-tarde.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install beautifulsoup4 pillow
+      - name: Identidade ARQ-089
+        env:
+          DESIGN_TARGET: https://escolher-consultoria-especializada-protecao-dados.arquindex.com.br/checklist.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-090
+        env:
+          DESIGN_TARGET: https://mapeamento-prontuarios-ibirite.arquindex.com.br/vantagens.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Identidade ARQ-094
+        env:
+          DESIGN_TARGET: https://vantagens-contratar-dpo-terceirizado-empresa.arquindex.com.br/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Publicar conteúdo, sitemaps e artes
+        run: python scripts/rodada-seo-20261023-tarde.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidencias-seo-20261023-tarde
+          path: design-report/
