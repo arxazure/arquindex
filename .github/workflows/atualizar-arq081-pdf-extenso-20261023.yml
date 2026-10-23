@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - ".github/workflows/atualizar-arq081-pdf-extenso-20261023.yml"
+      - "scripts/atualizar-arq081-pdf-extenso-20261023.py"
   workflow_dispatch:
 
 permissions:
