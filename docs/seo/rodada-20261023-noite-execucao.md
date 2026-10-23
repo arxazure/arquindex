@@ -47,7 +47,7 @@ Foram auditadas seis URLs (ARQ-095 a ARQ-100). Três melhorias substanciais fora
 - Canonical corrigido do caminho indevido no domínio principal para a própria URL.
 - Melhoria: inventário, preparação, captura, indexação, conferência e entrega; fontes e CTA com UTM.
 - Backup principal: `/seo-backups/rodada-20261023-noite-20261023T234024Z/arq-098.html`
-- A primeira validação encontrou largura móvel de 414 px causada por link técnico longo, tabela e deslocamento do atendimento. A correção isolada foi aplicada com novo backup em `/seo-backups/correcao-arq098-20261023T234024Z.html`.
+- A primeira validação encontrou largura móvel de 414 px causada por link técnico longo, tabela e deslocamento do atendimento. A correção isolada foi aplicada com novo backup em `/seo-backups/correcao-arq098-20261023T234424Z.html`.
 - Sitemap: https://digitalizardocumentos.arquindex.com.br/sitemap.xml
 
 ## Validação final
