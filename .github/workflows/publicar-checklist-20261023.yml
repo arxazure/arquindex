@@ -1,0 +1,47 @@
+name: Publicar guia e respostas SEO AEO GEO 2026-10-23
+on:
+  push:
+    branches: [master]
+    paths: [.github/workflows/publicar-checklist-20261023.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  guia:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install beautifulsoup4 pillow
+      - run: python scripts/publicar-checklist-20261023.py
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comprovante-checklist-20261023
+          path: publish-report/
+  respostas:
+    runs-on: ubuntu-latest
+    needs: guia
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install beautifulsoup4
+      - run: python scripts/publicar-blocos-aeo-20261022.py
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: comprovante-respostas-20261023
+          path: publish-report/
