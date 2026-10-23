@@ -6,7 +6,35 @@ const BASE_PATH = '/gestao-documental';
 const CANONICAL_BASE = 'https://www.arquindex.com.br/gestao-documental';
 const INDEXNOW_KEY = 'a948be82c7824bc989f2c5dd0f071bea';
 
-$path = parse_url($_SERVER['REQUEST_URI'] ?? BASE_PATH . '/', PHP_URL_PATH) ?: BASE_PATH . '/';
+$requestUri = $_SERVER['REQUEST_URI'] ?? BASE_PATH . '/';
+// Only accept origin-form request targets; do not let parse_url repair bad input.
+if ($requestUri === '' || $requestUri[0] !== '/' || strpos($requestUri, '//') === 0
+    || preg_match('/[\x00-\x20\x7f]/', $requestUri)) {
+    http_response_code(400);
+    exit;
+}
+$path = parse_url($requestUri, PHP_URL_PATH);
+if (!is_string($path) || $path === '') {
+    http_response_code(400);
+    exit;
+}
+if ($path !== BASE_PATH && strpos($path, BASE_PATH . '/') !== 0) {
+    http_response_code(strpos($path, BASE_PATH) === 0 ? 400 : 404);
+    exit;
+}
+$upstreamPath = substr($path, strlen(BASE_PATH));
+if ($upstreamPath === '') $upstreamPath = '/';
+// Inspect decoded bytes too, but forward the original encoding unchanged.
+// This keeps encoded filenames working without accepting authority-like paths.
+$decodedPath = rawurldecode($upstreamPath);
+if (preg_match('/%(?![0-9a-f]{2})/i', $upstreamPath)
+    || strpbrk($decodedPath, "@\\") !== false
+    || strpos($decodedPath, '//') === 0
+    || preg_match('/[\x00-\x20\x7f]/', $upstreamPath)
+    || preg_match('/[\x00-\x1f\x7f]/', $decodedPath)) {
+    http_response_code(400);
+    exit;
+}
 if ($path === BASE_PATH . '/_health') {
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode(['ok' => true, 'service' => 'arquindex-homehost-replica'], JSON_UNESCAPED_SLASHES);
@@ -17,11 +45,6 @@ if ($path === BASE_PATH . '/' . INDEXNOW_KEY . '.txt') {
     echo INDEXNOW_KEY;
     exit;
 }
-if (strpos($path, BASE_PATH) !== 0) {
-    http_response_code(404);
-    exit;
-}
-$upstreamPath = substr($path, strlen(BASE_PATH)) ?: '/';
 $query = $_SERVER['QUERY_STRING'] ?? '';
 $url = SOURCE_ORIGIN . $upstreamPath . ($query !== '' ? '?' . $query : '');
 
