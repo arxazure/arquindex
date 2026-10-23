@@ -1,0 +1,1 @@
+Arquindex Capture Pro Inventário. Branch isolada de implantação no Railway. O backend exige DATABASE_URL, SESSION_SECRET e BOOTSTRAP_ADMIN_PASSWORD gerenciados no ambiente Railway. Estrutura PostgreSQL multiempresas. O módulo nunca executa expurgo automaticamente.
