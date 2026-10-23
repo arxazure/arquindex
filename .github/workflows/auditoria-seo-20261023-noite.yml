@@ -1,0 +1,40 @@
+name: Auditar ARQ-095 a ARQ-100 2026-10-23 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/auditoria-seo-20261023-noite.yml']
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-audit" playwright --no-audit --no-fund
+      - name: Auditar seis URLs
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-audit/node_modules/playwright');let b;
+          const urls=[
+          ['ARQ-095','https://digitalizar-ocr-empresas.arquindex.com.br/'],
+          ['ARQ-096','https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/como-escolher.html'],
+          ['ARQ-097','https://digitalizacao-ocr-empresas.arquindex.com.br/'],
+          ['ARQ-098','https://digitalizardocumentos.arquindex.com.br/o-que-e.html'],
+          ['ARQ-099','https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/custo-beneficio.html'],
+          ['ARQ-100','https://lista-empresas-digitalizacao-documentos-regiao.arquindex.com.br/checklist.html']];
+          (async()=>{b=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+          for(const vp of [{n:'mobile',w:390,h:844},{n:'desktop',w:1440,h:900}]){
+           const c=await b.newContext({viewport:{width:vp.w,height:vp.h},isMobile:vp.n==='mobile'});
+           for(const [id,url] of urls){const p=await c.newPage();let r,err='';
+            try{r=await p.goto(url+'?audit=20261023noite',{waitUntil:'domcontentloaded',timeout:45000});await p.waitForTimeout(1000)}catch(e){err=String(e.message||e)}
+            const d=await p.evaluate(()=>({title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),description:document.querySelector('meta[name="description"]')?.content||'',canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),robots:document.querySelector('meta[name=robots]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('#aq-nav'),widget:document.querySelectorAll('#arq-floating').length,old:document.querySelectorAll('.aq-brand-wa,#wa-widget-send-button').length,proposal:[...document.querySelectorAll('a')].some(a=>a.href.includes('solicitar-proposta-contratacao')),aeo:document.querySelectorAll('[data-aq-aeo]').length,forms:document.querySelectorAll('form').length,links:[...document.querySelectorAll('a[href]')].filter(a=>a.href.includes('arquindex.com.br')).length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth,words:(document.body.innerText||'').trim().split(/\s+/).filter(Boolean).length}));
+            console.log('AUDIT',JSON.stringify({id,vp:vp.n,status:r?.status()||0,err,...d}));await p.close()}
+           await c.close()}
+          await b.close()})().catch(async e=>{console.error(e);if(b)await b.close().catch(()=>{});process.exit(1)});
+          JS
