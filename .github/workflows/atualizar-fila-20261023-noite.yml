@@ -1,0 +1,35 @@
+name: Atualizar fila ARQ-095 a ARQ-100 2026-10-23 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/atualizar-fila-20261023-noite.yml']
+permissions:
+  contents: write
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar cursor e registros
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          p=Path('seo/fila-seo-geo-aeo.csv')
+          lines=p.read_text('utf-8').splitlines()
+          lines=[x for x in lines if not x.startswith(tuple(f'ARQ-{n:03d};' for n in range(95,101))) and not x.startswith('CURSOR;')]
+          block='''ARQ-095;https://digitalizar-ocr-empresas.arquindex.com.br/;OCR corporativo teste e aceite;digitalização e OCR;;Medir consulta+URL em janela completa; divulgar em rotação futura com arte verificada;2026-10-23;2026-10-23;;GitHub+FTP;sha256:9ce77622a89a55bdd0f04d60450277fa8256154d0fc3354fc78421319b82e0a4;https://github.com/arxazure/arquindex/actions/runs/40040867983 | https://github.com/arxazure/arquindex/actions/runs/40041175519;"publicada e verificada mobile/desktop: title/H1, identidade, limites e critérios de aceite OCR, CTA UTM, sitemap e arte"
+          ARQ-096;https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/como-escolher.html;como comparar empresas de digitalização;digitalização;;Medir consulta+URL; não criar outra página equivalente; divulgar em rotação futura;2026-10-23;2026-10-23;;GitHub+FTP;sha256:5b2a8300bf700bf87e9c4e6b62edb818699f6fbbca782dfcd401f6fd6400f9f8;https://github.com/arxazure/arquindex/actions/runs/40040867983 | https://github.com/arxazure/arquindex/actions/runs/40041175519;"publicada e verificada: canonical corrigido, title/H1, identidade, tabela comparativa, CTA UTM, sitemap e arte"
+          ARQ-097;https://digitalizacao-ocr-empresas.arquindex.com.br/;digitalização com OCR;digitalização e OCR;;Definir papel distinto da ARQ-095 antes de alterar ou propor consolidação;2026-10-23;;;;auditoria GitHub;;;"HTTP 200 e canonical próprio; conteúdo superficial e sem identidade; preservada por sobreposição direta com ARQ-095"
+          ARQ-098;https://digitalizardocumentos.arquindex.com.br/o-que-e.html;como preparar documentos para digitalização;digitalização;;Medir consulta+URL; divulgar em rotação futura com arte verificada;2026-10-23;2026-10-23;;GitHub+FTP;sha256:f973022666ea1cafb9618911bf87b9e3f0614b77d96241c06c089f2be689c9c2;https://github.com/arxazure/arquindex/actions/runs/40040867983 | https://github.com/arxazure/arquindex/actions/runs/40041321931 | https://github.com/arxazure/arquindex/actions/runs/40041175519;"publicada e verificada após correção móvel isolada: canonical, title/H1, identidade, preparação e aceite, CTA UTM, sitemap e arte"
+          ARQ-099;https://empresas-digitalizacao-documentos-regiao.arquindex.com.br/custo-beneficio.html;quanto custa digitalização de documentos;digitalização;;Preservar publicação e divulgação existentes; medir consulta+URL sem republicar;2026-10-23;;;;registro existente docs/seo;;;"HTTP 200 e canonical próprio; referência já verificada e divulgada preservada; nenhuma republicação nesta rodada"
+          ARQ-100;https://lista-empresas-digitalizacao-documentos-regiao.arquindex.com.br/checklist.html;checklist para contratar digitalização;digitalização;;Diferenciar da ARQ-096 ou propor consolidação antes de corrigir canonical/title;2026-10-23;;;;auditoria GitHub;;;"HTTP 200; title repetido e canonical incorreto, porém preservada por sobreposição com ARQ-096"
+          '''.splitlines()
+          lines.extend(x.strip() for x in block if x.strip())
+          lines.append('CURSOR;ARQ-101;;;;Auditar ARQ-101 a ARQ-106 e preservar páginas já divulgadas;2026-10-23;;;fila;;;;pendente')
+          p.write_text('\n'.join(lines)+'\n','utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add seo/fila-seo-geo-aeo.csv
+          git commit -m "atualizar fila para ARQ-101"
+          git push
