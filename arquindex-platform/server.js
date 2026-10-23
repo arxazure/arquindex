@@ -460,7 +460,7 @@ const server=http.createServer(async(req,res)=>{
  if(await serveReplica(req,res)) return;
  if(legacyRedirects.has(p)){
   const target=legacyRedirects.get(p);
-  res.writeHead(301,{"location":target,"cache-control":"public, max-age=3600"});
+  res.writeHead(301,{"location":target+u.search,"cache-control":"public, max-age=3600"});
   return res.end();
  }
  // The public documentation hub can be indexed; /seo/ remains noindex below.
