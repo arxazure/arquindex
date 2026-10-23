@@ -2,7 +2,7 @@ import { renderAuthorityGuide } from "./authority-guide-longform.js";
 import { renderDigitalize, digitalizePaths } from "./digitalize-pages.js";
 import { renderRegional, regionalPaths, regionalBase } from "./regional-ged-replica.js";
 import http from "node:http";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { sectorPages } from "./sector-digitalization.js";
 import { opportunityGuideHtml, opportunityBlocks } from "./top10-opportunities.js";
 import { alfrescoLandingHtml } from "./alfresco-campaign.js";
@@ -22,6 +22,9 @@ const OFFICIAL="https://arquindex.com.br";
 const PORT = Number(process.env.PORT || 3000);
 const BASE = (process.env.SITE_BASE_URL || "").replace(/\/$/,"");
 const WHATSAPP = "5531973632725";
+const newsDirectory = new URL("./homehost-news/", import.meta.url);
+const newsFiles = new Set(readdirSync(newsDirectory).filter(name => /^[a-z0-9-]+\.html$/.test(name)));
+const newsPaths = ["/noticias/", ...[...newsFiles].filter(name => name !== "index.html").map(name => "/noticias/" + name)];
 
 const services = [
 ["digitalizacao-documentos","Digitalização de Documentos","Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.","A partir de R$ 0,10 por página"],
@@ -377,7 +380,7 @@ function sectorPage(slug,req){
 }
 function contentListing(req){
  const cards=articles.map(a=>'<article class="card"><div class="eyebrow" style="color:#0b3d91">'+esc(a.category)+'</div><h3><a href="/conteudo/'+a.slug+'">'+esc(a.title)+'</a></h3><p>'+esc(a.lead)+'</p><p><a href="/conteudo/'+a.slug+'">Ler artigo →</a></p></article>').join("");
- return layout("Artigos sobre digitalização, Alfresco e LGPD | Arquindex","Guias técnicos de digitalização, Alfresco ECM, proteção de dados e LGPD.",'<section><h1>Conteúdos e artigos</h1><p>Guias técnicos para apoiar decisões documentais e de privacidade.</p><div class="grid">'+cards+'</div></section>',req);
+ return layout("Artigos sobre digitalização, Alfresco e LGPD | Arquindex","Guias técnicos de digitalização, Alfresco ECM, proteção de dados e LGPD.",'<section><h1>Conteúdos e artigos</h1><p>Guias técnicos para apoiar decisões documentais e de privacidade. <a href="/noticias/">Leia também o Radar de notícias da Arquindex</a>.</p><div class="grid">'+cards+'</div></section>',req);
 }
 function articlePage(slug,req){
  const a=articles.find(a=>a.slug===slug);if(!a)return null;
@@ -433,6 +436,24 @@ const server=http.createServer(async(req,res)=>{
  const enhancedEnd=res.end.bind(res);
  res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return enhancedEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(p==="/noticias"){res.writeHead(301,{location:"/noticias/"+u.search});return res.end();}
+ if(p==="/noticias/"||p.startsWith("/noticias/")){
+  if(!["GET","HEAD"].includes(req.method)){res.writeHead(405,{allow:"GET, HEAD"});return res.end();}
+  const name=p==="/noticias/"?"index.html":p.slice("/noticias/".length);
+  const base=canonicalOrigin(req);
+  if(name==="sitemap.xml"){
+   const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+newsPaths.map(path=>'<url><loc>'+base+path+'</loc></url>').join('')+'</urlset>';
+   res.writeHead(200,{"content-type":"application/xml; charset=utf-8"});return res.end(req.method==="HEAD"?undefined:xml);
+  }
+  if(newsFiles.has(name)){
+   const html=readFileSync(new URL(name,newsDirectory),"utf8").replaceAll("https://www.arquindex.com.br/noticias/",base+"/noticias/")
+    .replaceAll('href="/contato.html"','href="/contato"').replaceAll('href="/lgpd-consultoria.html"','href="/solucoes/consultoria-lgpd"');
+   res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow, max-snippet:-1, max-image-preview:large","cache-control":"public, max-age=300"});return res.end(req.method==="HEAD"?undefined:html);
+  }
+  const images=new Set(["assets/gestao-documentos-ged-ecm-alfresco.jpg","assets/avaliacao-avancada-arquivos-r1400.jpg"]);
+  if(images.has(name)){const bytes=readFileSync(new URL(name,newsDirectory));res.writeHead(200,{"content-type":"image/jpeg","cache-control":"public, max-age=86400"});return res.end(req.method==="HEAD"?undefined:bytes);}
+  res.writeHead(404,{"content-type":"text/plain; charset=utf-8"});return res.end("Página não encontrada");
+ }
  if(p==="/cases"||p==="/cases/"){
   // Pre-publication preview: keep unindexed until case disclosures are approved.
   const html=readFileSync(new URL("./cases-clientes-rascunho.html",import.meta.url),"utf8");
@@ -485,6 +506,7 @@ const server=http.createServer(async(req,res)=>{
    "Sitemap: "+base+"/sitemap.xml",
    "Sitemap: "+base+"/sitemap-index.xml",
    "Sitemap: "+base+"/gestao-documental/sitemap.xml",
+   "Sitemap: "+base+"/noticias/sitemap.xml",
    ""
   ].join("\n"));
  }
@@ -526,14 +548,14 @@ const server=http.createServer(async(req,res)=>{
  if(p==="/plano-autoridade-rmbh"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Digitalização, Gestão Documental, GED e LGPD na RMBH | Arquindex","Soluções documentais para empresas de Belo Horizonte, Contagem, Betim e Nova Lima.",'<section><h1>Soluções documentais para empresas da RMBH</h1><p>Digitalização com OCR e indexação, gestão documental, GED/ECM e consultoria LGPD para projetos corporativos.</p><div class="grid">'+[['Digitalização em Belo Horizonte','/solucoes/digitalizacao-documentos'],['Gestão documental em Contagem e Betim','/solucoes/gestao-documental'],['GED e ECM em Nova Lima','/solucoes/alfresco-incloud'],['Consultoria LGPD na RMBH','/solucoes/consultoria-lgpd']].map(([a,b])=>'<article class="card"><h2>'+a+'</h2><p>Diagnóstico de escopo, volume, segurança e logística de implantação.</p><a href="'+b+'">Conheça a solução</a></article>').join('')+'</div><h2>Atendimento regional</h2><p>Belo Horizonte, Contagem, Betim, Nova Lima e demais cidades da região metropolitana, conforme avaliação operacional.</p><p><a href="/contato">Solicitar avaliação comercial</a></p></section>',req));}
  if(p==="/sitemap.xml"){
   const base=canonicalOrigin(req);
-  const paths=["/","/plano-autoridade-rmbh","/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path),...regionalPaths,...digitalizePaths];
+  const paths=["/","/plano-autoridade-rmbh","/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd","/solucoes","/conteudo","/autoridade","/setores","/biblioteca-normativa","/metodologia","/contato","/llms.txt",...services.map(s=>"/solucoes/"+s[0]),...articles.map(a=>"/conteudo/"+a.slug),...authorityPages.map(a=>"/autoridade/"+a.slug),...landingPages.map(a=>"/setores/"+a.slug),"/guias",...top10Guides.map(a=>"/guias/"+a.slug),"/digitalizacao","/gestao-documental/",...regionalGuides.map(a=>a.path),...regionalPaths,...digitalizePaths,...newsPaths];
   const xml='<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+[...new Set(paths)].map(path=>"<url><loc>"+base+path+"</loc></url>").join("")+"</urlset>";
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
  }
  if(p==="/sitemap-index.xml"){
   const base=canonicalOrigin(req);
-  const xml='<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>'+base+'/sitemap.xml</loc></sitemap><sitemap><loc>'+base+'/gestao-documental/sitemap.xml</loc></sitemap></sitemapindex>';
+  const xml='<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>'+base+'/sitemap.xml</loc></sitemap><sitemap><loc>'+base+'/gestao-documental/sitemap.xml</loc></sitemap><sitemap><loc>'+base+'/noticias/sitemap.xml</loc></sitemap></sitemapindex>';
   res.writeHead(200,{"content-type":"application/xml; charset=utf-8","cache-control":"public, max-age=3600"});
   return res.end(xml);
  }
