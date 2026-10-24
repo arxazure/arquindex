@@ -44,7 +44,7 @@ Artes individuais verificadas:
 - Auditoria: https://github.com/arxazure/arquindex/actions/runs/40143940885
 - Publicação, backups, sitemaps e artes: https://github.com/arxazure/arquindex/actions/runs/40144123678
 - Validação independente: https://github.com/arxazure/arquindex/actions/runs/40144337579
-- Commit da fila: https://github.com/arxazure/arquindex/commit/60ae6f997b08455465e3d58c8cb748d7e80ab3db
+- Commit da fila: https://github.com/arxazure/arquindex/commit/30cdaf7b4118241bac60a15c816dc6aec65a349f
 
 ## Search Console — linha de base
 
