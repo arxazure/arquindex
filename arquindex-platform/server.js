@@ -438,7 +438,8 @@ const server=http.createServer(async(req,res)=>{
  const enhancedEnd=res.end.bind(res);
  res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return enhancedEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
- if(p==="/biblioteca-tecnica"||p==="/biblioteca-tecnica/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(readFileSync(new URL("./biblioteca-tecnica.html",import.meta.url),"utf8"));}
+ if(p==="/biblioteca-tecnica"){res.writeHead(301,{location:"/biblioteca-tecnica/"+u.search,"cache-control":"public, max-age=3600"});return res.end();}
+ if(p==="/biblioteca-tecnica/"){const html=readFileSync(new URL("./biblioteca-tecnica.html",import.meta.url),"utf8").replace("</head>",analyticsSnippet()+"</head>");res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(html);}
  if(p==="/lgpd-checklist"){res.writeHead(301,{location:"/lgpd-checklist/"});return res.end();}
  if(p==="/lgpd-checklist/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(readFileSync(new URL("./lgpd-checklist-landing.html",import.meta.url),"utf8"));}
 
