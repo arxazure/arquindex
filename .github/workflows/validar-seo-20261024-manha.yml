@@ -1,0 +1,35 @@
+name: Validar ARQ-102 ARQ-104 ARQ-106 2026-10-24 manha
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/validar-seo-20261024-manha.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-validate" playwright --no-audit --no-fund
+      - name: Validar páginas e sitemaps
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-validate/node_modules/playwright');
+          const targets=[
+          ['ARQ-102','https://gestao-eletronica-de-documentos-ged.arquindex.com.br/','GED e ECM: Permissões, Versões e Recuperação | Arquindex'],
+          ['ARQ-104','https://arquivamento.arquindex.com.br/o-que-e.html','Arquivamento de Documentos: Consulta e Devolução | Arquindex'],
+          ['ARQ-106','https://empresas-digitalizacao-documental-brasil-grandes-empresas.arquindex.com.br/','Digitalização em Grande Escala: Planejamento e Aceite | Arquindex']];
+          (async()=>{const b=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+          for(const vp of [{n:'mobile',w:390,h:844},{n:'desktop',w:1440,h:900}]){
+            const c=await b.newContext({viewport:{width:vp.w,height:vp.h},isMobile:vp.n==='mobile'});
+            for(const [id,url,title] of targets){const p=await c.newPage();const r=await p.goto(url+'?postcheck=20261024manha',{waitUntil:'domcontentloaded',timeout:45000});await p.waitForTimeout(800);
+              const d=await p.evaluate(()=>({title:document.title,h1:document.querySelectorAll('h1').length,canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('#aq-nav'),widget:document.querySelectorAll('#arq-floating').length,aeo:document.querySelectorAll('[data-aq-aeo]').length,proposal:[...document.querySelectorAll('a')].some(a=>a.href.includes('solicitar-proposta-contratacao')&&a.href.includes('utm_')),cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));
+              if(r.status()!==200||d.title!==title||d.h1!==1||d.canonical!==url||/noindex/i.test(d.robots)||!d.logo||!d.menu||d.widget!==1||d.aeo!==1||!d.proposal||d.sw>d.cw+2) throw Error(id+' '+vp.n+' '+JSON.stringify(d));
+              console.log('POSTCHECK_OK',id,vp.n,JSON.stringify(d));await p.close();}
+            await c.close();}
+          for(const [id,url] of targets){const sm=new URL('/sitemap.xml',url).href;const r=await fetch(sm+'?v=20261024manha');const x=await r.text();if(!r.ok||!x.includes(url))throw Error(id+' sitemap');console.log('SITEMAP_OK',id,sm)}
+          await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
