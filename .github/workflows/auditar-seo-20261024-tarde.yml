@@ -15,7 +15,7 @@ jobs:
       - run: npm install playwright
       - name: Auditoria pública mobile e desktop
         run: |
-          cat > /tmp/audit.js <<'JS'
+          cat > audit.js <<'JS'
           const { chromium } = require('playwright');
           const items = [
             ['ARQ-107','https://consultoria-ocr-vantagens.arquindex.com.br/empresas.html'],
@@ -26,7 +26,7 @@ jobs:
             ['ARQ-112','https://gestao-digitalizacao-preco.arquindex.com.br/']
           ];
           (async()=>{
-            const browser=await chromium.launch({headless:true});
+            const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
             for(const [id,url] of items){
               for(const [device,width,height] of [['mobile',390,844],['desktop',1440,900]]){
                 const page=await browser.newPage({viewport:{width,height}});
@@ -56,4 +56,4 @@ jobs:
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
-          node /tmp/audit.js
+          node audit.js
