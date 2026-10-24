@@ -1,0 +1,20 @@
+name: PR Digital - validar paginas
+on:
+  pull_request:
+    paths:
+      - 'pr-digital/**'
+      - 'scripts/validate-pr-digital.mjs'
+      - '.github/workflows/validate-pr-digital.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate static PR Digital pages and sitemap
+        run: node scripts/validate-pr-digital.mjs
