@@ -10,7 +10,7 @@ No primeiro início, a administração recebe um link de ativação de uso únic
 
 ## Fluxos disponíveis
 
-- Empresas, unidades, departamentos, agentes, sistemas, ROPA, riscos, incidentes, treinamentos, auditorias e conferência manual de websites.
+- Empresas, unidades, departamentos, agentes, sistemas, ROPA, riscos, incidentes, treinamentos, auditorias e varredura passiva e conferência manual de websites.
 - CRUD com vínculo de empresa validado no servidor, perfis administrador, gestor por empresa e leitura por empresa; sessões seguras e CSRF.
 - Políticas em rascunho a partir do cadastro e ROPA; publicação explícita pela administração. Edições retornam ao rascunho.
 - Portal por empresa com versões publicadas, canal do titular e denúncias. Denúncias ficam restritas à administração. Protocolo e chave de acompanhamento; somente respostas marcadas públicas aparecem ao solicitante.
@@ -18,6 +18,6 @@ No primeiro início, a administração recebe um link de ativação de uso únic
 
 ## Limites explícitos
 
-O módulo de website registra conferência manual; não executa scanner de vulnerabilidades. Não há integração automática com ANPD, e-mail, cookies de sites externos ou faturamento. Planos comerciais são contratados mediante proposta. Rascunhos de políticas exigem revisão jurídica e aprovação. O sistema não substitui backup integral do PostgreSQL ou homologação operacional.
+O módulo de websites permite varredura passiva autorizada de uma página HTTPS pública: cabeçalhos, atributos de Set-Cookie e sinais de privacidade no HTML. Salva histórico por empresa e inclui os relatórios na exportação. Bloqueia endereços internos e revalida redirecionamentos. Não executa JavaScript, navegação autenticada ou exploração de vulnerabilidades; consentimento e cookies no navegador exigem validação manual. Não há integração automática com ANPD, e-mail, cookies de sites externos ou faturamento. Planos comerciais são contratados mediante proposta. Rascunhos de políticas exigem revisão jurídica e aprovação. O sistema não substitui backup integral do PostgreSQL ou homologação operacional.
 
 Validação: `npm test`; teste de segregação no PostgreSQL durante o início; testes HTTP sem autenticação após a implantação.
