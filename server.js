@@ -3,13 +3,27 @@ import express from 'express';import pg from 'pg';import bcrypt from 'bcryptjs';
 const app=express();app.use(helmet());app.use(express.json({limit:'30kb'}));const db=new pg.Pool({connectionString:process.env.DATABASE_URL});const secret=process.env.SESSION_SECRET||'';if(secret.length<32)throw Error('SESSION_SECRET ausente');const seal=x=>createHmac('sha256',secret).update(x).digest('hex');const uuid=x=>/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(x||'');const Q=(s,a=[])=>db.query(s,a);const wrap=f=>(req,res)=>Promise.resolve(f(req,res)).catch(e=>{console.error(e);res.status(500).json({error:'Erro interno'})});
 const schema=`CREATE TABLE IF NOT EXISTS tenants(id uuid primary key,name text not null);CREATE TABLE IF NOT EXISTS users(id uuid primary key,tenant_id uuid not null references tenants(id),email text not null unique,password_hash text not null,role text not null);CREATE TABLE IF NOT EXISTS sites(id uuid primary key,tenant_id uuid not null references tenants(id),name text not null,address text not null,unique(id,tenant_id));CREATE TABLE IF NOT EXISTS boxes(id uuid primary key,tenant_id uuid not null references tenants(id),code text not null,department text not null,doc_type text not null,site_id uuid not null,created_at timestamptz default now(),unique(tenant_id,code),unique(id,tenant_id),foreign key(site_id,tenant_id) references sites(id,tenant_id));CREATE TABLE IF NOT EXISTS requests(id uuid primary key,tenant_id uuid not null references tenants(id),box_id uuid not null,type text not null,status text not null default 'pending',target_site_id uuid,requested_at timestamptz default now(),foreign key(box_id,tenant_id) references boxes(id,tenant_id),foreign key(target_site_id,tenant_id) references sites(id,tenant_id));CREATE TABLE IF NOT EXISTS retention(id uuid primary key,tenant_id uuid not null references tenants(id),doc_type text not null,years integer not null check(years>=0),final_action text not null default 'review',unique(tenant_id,doc_type));`;
 await Q(schema);
-if(process.env.BOOTSTRAP_ADMIN_EMAIL&&process.env.BOOTSTRAP_ADMIN_PASSWORD){
- const email=process.env.BOOTSTRAP_ADMIN_EMAIL.toLowerCase().trim();
- if(process.env.BOOTSTRAP_ADMIN_PASSWORD.length<18)throw Error('Bootstrap password too short');
- const existing=await Q('select id from users where lower(email)=lower($1)',[email]);
- if(existing.rowCount&&(process.env.BOOTSTRAP_ADMIN_RESET==='true'||Object.prototype.hasOwnProperty.call(process.env,'BOOTSTRAP_ADMIN_RESET=true'))){await Q('update users set password_hash=$1 where id=$2',[await bcrypt.hash(process.env.BOOTSTRAP_ADMIN_PASSWORD,12),existing.rows[0].id]);console.log('senha do admin redefinida')}
- if(!existing.rowCount){const tenant=randomUUID(),user=randomUUID();const hash=await bcrypt.hash(process.env.BOOTSTRAP_ADMIN_PASSWORD,12);const conn=await db.connect();try{await conn.query('BEGIN');await conn.query('insert into tenants(id,name) values($1,$2)',[tenant,'Arquindex Gestao Documental']);await conn.query('insert into users(id,tenant_id,email,password_hash,role) values($1,$2,$3,$4,$5)',[user,tenant,email,hash,'admin']);await conn.query('insert into sites(id,tenant_id,name,address) values($1,$2,$3,$4)',[randomUUID(),tenant,'Arquindex - Guarda Externa','Rua Barao Homem de Melo, 1376, Belo Horizonte - MG']);await conn.query('COMMIT')}catch(e){await conn.query('ROLLBACK');throw e}finally{conn.release()}}
-}
+const bootstrapEmail=process.env.BOOTSTRAP_ADMIN_EMAIL?.trim().toLowerCase();
+const bootstrapPassword=process.env.BOOTSTRAP_ADMIN_PASSWORD;
+const resetValue=process.env.BOOTSTRAP_ADMIN_RESET ?? process.env['BOOTSTRAP_ADMIN_RESET=true'];
+const doReset=/^(?:true|"true"|'true')$/i.test((resetValue||'').trim());
+if(bootstrapEmail&&bootstrapPassword){
+ const existing=await Q('select id,password_hash,role from users where lower(email)=lower($1)',[bootstrapEmail]);
+ console.log('bootstrap admin: exists='+!!existing.rowCount+' reset='+doReset);
+ if(!existing.rowCount||doReset){
+  if(Buffer.byteLength(bootstrapPassword,'utf8')>72||bootstrapPassword.length<18)throw Error('Bootstrap password must contain at least 18 characters and at most 72 UTF-8 bytes');
+  if(existing.rowCount){
+   if(existing.rows[0].role!=='admin')throw Error('Bootstrap email belongs to a non-admin account');
+   if(!(await bcrypt.compare(bootstrapPassword,existing.rows[0].password_hash))){
+    await Q('update users set password_hash=$1 where id=$2',[await bcrypt.hash(bootstrapPassword,12),existing.rows[0].id]);
+    console.log('senha do admin redefinida');
+   }else console.log('bootstrap admin: password already matches');
+  }else{
+   const tenant=randomUUID(),user=randomUUID();const hash=await bcrypt.hash(bootstrapPassword,12);const conn=await db.connect();
+   try{await conn.query('BEGIN');await conn.query('insert into tenants(id,name) values($1,$2)',[tenant,'Arquindex Gestao Documental']);await conn.query('insert into users(id,tenant_id,email,password_hash,role) values($1,$2,$3,$4,$5)',[user,tenant,bootstrapEmail,hash,'admin']);await conn.query('insert into sites(id,tenant_id,name,address) values($1,$2,$3,$4)',[randomUUID(),tenant,'Arquindex - Guarda Externa','Rua Barao Homem de Melo, 1376, Belo Horizonte - MG']);await conn.query('COMMIT')}catch(e){await conn.query('ROLLBACK');throw e}finally{conn.release()}
+  }
+ }
+}else console.log('bootstrap admin: configuration incomplete; existing accounts unchanged');
 
 app.get('/health',wrap(async(req,res)=>{await Q('select 1');res.json({ok:true,service:'arquindex-inventario'})}));
 app.post('/api/login',wrap(async(req,res)=>{const {email,password}=req.body||{};if(typeof email!=='string'||typeof password!=='string')return res.sendStatus(400);const r=await Q('select * from users where lower(email)=lower($1)',[email.trim()]);if(!r.rows.length||!(await bcrypt.compare(password,r.rows[0].password_hash)))return res.sendStatus(401);const payload=Buffer.from(JSON.stringify({u:r.rows[0].id,e:Date.now()+28800000})).toString('base64url');res.setHeader('Set-Cookie',`arx=${payload}.${seal(payload)}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800`);res.json({ok:true})}));
