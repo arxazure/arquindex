@@ -1,0 +1,44 @@
+name: Validar ARQ-113 ARQ-114 ARQ-118 2026-10-24 noite
+on:
+  push:
+    paths:
+      - '.github/workflows/validar-seo-20261024-noite.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install playwright
+      - name: Validar publicação independente
+        run: |
+          cat > validate.js <<'JS'
+          const {chromium}=require('playwright');
+          const items=[
+            ['ARQ-113','https://mapeamento-ocr-rj.arquindex.com.br/','OCR e Indexação: Teste, Revisão e Aceite | Arquindex'],
+            ['ARQ-114','https://compliance-arquivos-corporativo.arquindex.com.br/','Governança da Informação: Mapeamento e Responsáveis | Arquindex'],
+            ['ARQ-118','https://arquivamento.arquindex.com.br/custo.html','Custo da Guarda Documental: Fatores do Orçamento | Arquindex']
+          ];
+          (async()=>{
+            const b=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+            for(const [id,url,title] of items){
+              for(const [device,w,h] of [['mobile',390,844],['desktop',1440,900]]){
+                const p=await b.newPage({viewport:{width:w,height:h}});
+                const r=await p.goto(url+'?postcheck=20261024noite',{waitUntil:'networkidle',timeout:60000});
+                const d=await p.evaluate(()=>({title:document.title,h1:document.querySelectorAll('h1').length,canonical:document.querySelector('link[rel="canonical"]')?.href||'',robots:document.querySelector('meta[name="robots"]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('#aq-nav'),widget:document.querySelectorAll('#arq-floating').length,old:document.querySelectorAll('.aq-brand-wa,#wa-widget-send-button').length,aeo:document.querySelectorAll('[data-aq-aeo]').length,cta:[...document.querySelectorAll('a[href]')].filter(a=>/wa.me|solicitar-proposta/i.test(a.href)).length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));
+                if(r.status()!=200||d.title!==title||d.h1!==1||d.canonical!==url||/noindex/i.test(d.robots)||!d.logo||!d.menu||d.widget!==1||d.old!==0||d.aeo!==1||d.cta<1||d.sw>d.cw+2) throw new Error(JSON.stringify({id,device,status:r.status(),...d}));
+                console.log('PAGE_VERIFIED',JSON.stringify({id,device,status:r.status(),...d}));
+                await p.close();
+              }
+              const sm='https://'+new URL(url).hostname+'/sitemap.xml';
+              const res=await fetch(sm+'?postcheck=20261024noite',{headers:{'cache-control':'no-cache'}});
+              const xml=await res.text();
+              if(!res.ok||!xml.includes(url)||!xml.includes('<urlset'))throw new Error('SITEMAP '+id);
+              console.log('SITEMAP_VERIFIED',id,sm);
+            }
+            await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node validate.js
