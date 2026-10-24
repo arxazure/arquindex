@@ -1,0 +1,31 @@
+name: HomeHost weekly safe inventory 2026-10-23
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/homehost-weekly-audit-20261023.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-homehost-weekly-maintenance
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validar sintaxe antes do FTPS
+        run: python -m py_compile seo-rotinas/homehost-weekly-audit-20261023.py
+      - name: Gerar backup integral e inventário sem exclusões
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python seo-rotinas/homehost-weekly-audit-20261023.py
