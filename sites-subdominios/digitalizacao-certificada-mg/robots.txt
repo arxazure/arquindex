@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://digitalizacao-certificada-mg.arquindex.com.br/sitemap.xml
