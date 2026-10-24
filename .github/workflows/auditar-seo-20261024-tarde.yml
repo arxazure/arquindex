@@ -1,0 +1,59 @@
+name: Auditar ARQ-107 a ARQ-112 2026-10-24 tarde
+on:
+  push:
+    paths:
+      - '.github/workflows/auditar-seo-20261024-tarde.yml'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install playwright
+      - name: Auditoria pública mobile e desktop
+        run: |
+          cat > /tmp/audit.js <<'JS'
+          const { chromium } = require('playwright');
+          const items = [
+            ['ARQ-107','https://consultoria-ocr-vantagens.arquindex.com.br/empresas.html'],
+            ['ARQ-108','https://digitalizar-arquivos-corporativo.arquindex.com.br/'],
+            ['ARQ-109','https://digitalizar-arquivos-custo.arquindex.com.br/'],
+            ['ARQ-110','https://empresas-adequacao-lgpd-paulo.arquindex.com.br/diagnostico.html'],
+            ['ARQ-111','https://gestao-de-arquivos-fisicos.arquindex.com.br/'],
+            ['ARQ-112','https://gestao-digitalizacao-preco.arquindex.com.br/']
+          ];
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            for(const [id,url] of items){
+              for(const [device,width,height] of [['mobile',390,844],['desktop',1440,900]]){
+                const page=await browser.newPage({viewport:{width,height}});
+                const res=await page.goto(url,{waitUntil:'networkidle',timeout:60000});
+                const data=await page.evaluate(()=>({
+                  title:document.title,
+                  h1:[...document.querySelectorAll('h1')].map(x=>x.innerText.trim()),
+                  description:document.querySelector('meta[name="description"]')?.content||'',
+                  canonical:document.querySelector('link[rel="canonical"]')?.href||'',
+                  robots:document.querySelector('meta[name="robots"]')?.content||'',
+                  logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),
+                  menu:!!document.querySelector('#aq-nav'),
+                  widget:document.querySelectorAll('#arq-floating').length,
+                  oldWidget:document.querySelectorAll('.aq-brand-wa,#wa-widget-send-button').length,
+                  cta:[...document.querySelectorAll('a[href]')].filter(a=>/wa.me|solicitar-proposta/i.test(a.href)).length,
+                  forms:document.querySelectorAll('form').length,
+                  aeo:document.querySelectorAll('[data-aq-aeo]').length,
+                  links:document.querySelectorAll('a[href]').length,
+                  words:(document.body.innerText.match(/\S+/g)||[]).length,
+                  clientWidth:document.documentElement.clientWidth,
+                  scrollWidth:document.documentElement.scrollWidth
+                }));
+                console.log(JSON.stringify({id,url,device,status:res?.status(),...data}));
+                await page.close();
+              }
+            }
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/audit.js
