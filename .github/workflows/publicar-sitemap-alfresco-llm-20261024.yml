@@ -1,0 +1,24 @@
+name: Alfresco LLM - atualizar sitemap e notificar IndexNow
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-rotinas/publicar-sitemap-alfresco-llm-20261024.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-sitemap-alfresco-llm-20261024
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar sitemap existente e notificar IndexNow
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST }}
+          FTP_REMOTE_DIR: ${{ vars.FTP_REMOTE_DIR }}
+        run: python seo-rotinas/publicar-sitemap-alfresco-llm-20261024.py
