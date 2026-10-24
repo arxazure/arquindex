@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://arquivo-fisico-digital.arquindex.com.br/sitemap.xml
