@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-24",
+  "state": "draft_pending_dns_tls_hosting",
+  "domain": "arquindex.com.br",
+  "count": 6,
+  "subdomains": [
+    {
+      "hostname": "guarda-digital.arquindex.com.br",
+      "theme": "Guarda Digital e Governança"
+    },
+    {
+      "hostname": "arquivo-fisico-digital.arquindex.com.br",
+      "theme": "Recuperação de Arquivos Físicos"
+    },
+    {
+      "hostname": "digitalizacao-certificada-mg.arquindex.com.br",
+      "theme": "Digitalização Certificada em Minas Gerais"
+    },
+    {
+      "hostname": "gestao-documental-sp.arquindex.com.br",
+      "theme": "Gestão de Documentos em São Paulo"
+    },
+    {
+      "hostname": "decreto-10278-documentos.arquindex.com.br",
+      "theme": "Decreto 10.278 e Gestão Documental"
+    },
+    {
+      "hostname": "alfresco-gestao-arquivos.arquindex.com.br",
+      "theme": "Alfresco ECM e Arquivos Digitais"
+    }
+  ],
+  "dns_authority": "not confirmed; Cloudflare authenticated account lists no arquindex.com.br zone",
+  "rules": [
+    "Do not create DNS blindly",
+    "Do not deploy if existing host/content",
+    "Verify HTTPS and 200 and canonical readback",
+    "Do not submit sitemap before published",
+    "Review cross-domain cannibalization and existing-first"
+  ]
+}
