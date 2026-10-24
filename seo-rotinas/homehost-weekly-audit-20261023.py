@@ -6,6 +6,7 @@ Não remove nem move arquivos. O relatório fica fora de public_html.
 
 import collections
 import ftplib
+import gzip
 import hashlib
 import io
 import json
@@ -132,7 +133,7 @@ def main() -> None:
         fd, local_tar = tempfile.mkstemp(prefix="arquindex-weekly-", suffix=".tar.gz")
         os.close(fd)
         try:
-            with tarfile.open(local_tar, "w:gz") as archive:
+            with open(local_tar, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=1) as compressed, tarfile.open(fileobj=compressed, mode="w|") as archive:
                 stack = list(reversed(sorted(roots)))
                 while stack:
                     directory = stack.pop()
@@ -153,6 +154,8 @@ def main() -> None:
                         size = int(facts.get("size") or 0)
                         report["files"] += 1
                         report["bytes"] += size
+                        if report["files"] % 100 == 0:
+                            print("BACKUP_PROGRESS", json.dumps({"files": report["files"], "bytes": report["bytes"], "path": path}, ensure_ascii=False), flush=True)
                         if report["files"] > MAX_FILES:
                             raise RuntimeError("FILE_LIMIT_EXCEEDED")
                         if report["bytes"] > MAX_BYTES:
