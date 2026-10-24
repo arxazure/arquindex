@@ -1,0 +1,35 @@
+name: Melhorar ARQ-113 ARQ-114 ARQ-118 2026-10-24 noite
+on:
+  push:
+    paths:
+      - '.github/workflows/rodada-seo-20261024-noite.yml'
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install beautifulsoup4 pillow
+      - name: Padronizar identidade ARQ-113
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          DESIGN_TARGET: https://mapeamento-ocr-rj.arquindex.com.br/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Padronizar identidade ARQ-114
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          DESIGN_TARGET: https://compliance-arquivos-corporativo.arquindex.com.br/
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Padronizar identidade ARQ-118
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          DESIGN_TARGET: https://arquivamento.arquindex.com.br/custo.html
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Publicar conteúdo, sitemaps e artes
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python scripts/rodada-seo-20261024-noite.py
