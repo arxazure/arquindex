@@ -459,8 +459,8 @@ const server=http.createServer(async(req,res)=>{
     .replaceAll('href="/contato.html"','href="/contato"').replaceAll('href="/lgpd-consultoria.html"','href="/solucoes/consultoria-lgpd"');
    res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow, max-snippet:-1, max-image-preview:large","cache-control":"public, max-age=300"});return res.end(req.method==="HEAD"?undefined:html);
   }
-  const images=new Set(["assets/gestao-documentos-ged-ecm-alfresco.jpg","assets/avaliacao-avancada-arquivos-r1400.jpg"]);
-  if(images.has(name)){const bytes=readFileSync(new URL(name,newsDirectory));res.writeHead(200,{"content-type":"image/jpeg","cache-control":"public, max-age=86400"});return res.end(req.method==="HEAD"?undefined:bytes);}
+  const images=new Set(["assets/gestao-documentos-ged-ecm-alfresco.jpg","assets/gestao-documentos-ged-ecm-alfresco.png","assets/avaliacao-avancada-arquivos-r1400.jpg","assets/avaliacao-avancada-arquivos-r1400.png"]);
+  if(images.has(name)){const bytes=readFileSync(new URL(name,newsDirectory));const type=name.endsWith(".png")?"image/png":"image/jpeg";res.writeHead(200,{"content-type":type,"cache-control":"public, max-age=86400"});return res.end(req.method==="HEAD"?undefined:bytes);}
   res.writeHead(404,{"content-type":"text/plain; charset=utf-8"});return res.end("Página não encontrada");
  }
  if(p==="/cases"||p==="/cases/"){
