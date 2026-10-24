@@ -437,6 +437,9 @@ const server=http.createServer(async(req,res)=>{
  const enhancedEnd=res.end.bind(res);
  res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return enhancedEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
+ if(p==="/lgpd-checklist"){res.writeHead(301,{location:"/lgpd-checklist/"});return res.end();}
+ if(p==="/lgpd-checklist/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(readFileSync(new URL("./lgpd-checklist-landing.html",import.meta.url),"utf8"));}
+
  if(p==="/noticias"){res.writeHead(301,{location:"/noticias/"+u.search});return res.end();}
  if(p==="/noticias/"||p.startsWith("/noticias/")){
   if(!["GET","HEAD"].includes(req.method)){res.writeHead(405,{allow:"GET, HEAD"});return res.end();}
@@ -581,7 +584,7 @@ const server=http.createServer(async(req,res)=>{
  if(p==="/conteudo"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(contentListing(req));}
  if(p==="/contato"){const isContact=p==="/contato";res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout(isContact?"Contato | Arquindex":"Conteúdos | Arquindex",isContact?"Solicite um orçamento para soluções documentais.":"Artigos e guias de gestão documental, LGPD e ECM.",isContact?'<section><h1>Fale com a Arquindex</h1><p>Peça um orçamento pelo WhatsApp: <a href="https://wa.me/'+WHATSAPP+'">31 97363-2725</a></p><p>Email: comercial@arquindex.com.br</p></section>':'<section><h1>Conteúdo técnico Arquindex</h1><p>Publicações em preparação editorial. Veja nossas <a href="/solucoes">soluções</a>.</p></section>',req));}
  if(p==="/"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(home(req));}
- if(p==="/solucoes"){const cards=services.map(([s,n,d,pr])=>`<article class="card"><h3>${n}</h3><p>${d}</p><div class="price">${pr}</div><a href="/solucoes/${s}">Detalhes →</a></article>`).join("");res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Soluções | Arquindex","Soluções de gestão documental, digitalização, LGPD, Alfresco ECM, Databook e arquivos.",`<section><h1>Soluções Arquindex</h1><div class="grid">${cards}</div></section>`,req));}
+ if(p==="/solucoes"){const cards=services.map(([s,n,d,pr])=>`<article class="card"><h3>${n}</h3><p>${d}</p><div class="price">${pr}</div><a href="/solucoes/${s}">Detalhes →</a></article>`).join("");res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Soluções | Arquindex","Soluções de gestão documental, digitalização, LGPD, Alfresco ECM, Databook e arquivos.",`<section><h1>Soluções Arquindex</h1><div class="grid"><article class="card"><h3>LGPD Checklist Multiempresas</h3><p>Mapa de dados, riscos, políticas e canais por cliente. Planos a partir de R$ 299/mês, conforme escopo.</p><a href="/lgpd-checklist/">Conhecer o sistema →</a></article>${cards}</div></section>`,req));}
  const sol=p.match(/^\/solucoes\/([^/]+)$/); if(sol){const h=solutionPage(sol[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
  const m=p.match(/^\/seo\/([^/]+)\/([^/]+)\/([^/]+)$/); if(m){const h=seoPage(m[1],m[2],m[3],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow, max-snippet:-1, max-image-preview:large"});return res.end(h);}}
  if(p==="/api/indexnow"&&req.method==="POST"){res.writeHead(403,{"content-type":"application/json"});return res.end(JSON.stringify({ok:false,error:"Envio desabilitado ate aprovacao editorial e autenticacao"}));
@@ -611,6 +614,7 @@ async function notifyIndexNowForPublishedPages(){
 if(process.env.NODE_ENV==="production"&&process.env.INDEXNOW_AUTO_SUBMIT==="true"&&BASE===OFFICIAL){
  setTimeout(()=>{notifyIndexNowForPublishedPages().catch(err=>console.warn("IndexNow error",String(err)));},12000);
 }
+
 
 
 
