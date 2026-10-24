@@ -5,10 +5,10 @@ const schema=`CREATE TABLE IF NOT EXISTS tenants(id uuid primary key,name text n
 await Q(schema);
 if(process.env.BOOTSTRAP_ADMIN_EMAIL&&process.env.BOOTSTRAP_ADMIN_PASSWORD){
  const email=process.env.BOOTSTRAP_ADMIN_EMAIL.toLowerCase().trim();
- if(process.env.BOOTSTRAP_ADMIN_PASSWORD.length<18)throw Error('Bootstrap password too short');
- const existing=await Q('select id from users where lower(email)=lower($1)',[email]);
- if(existing.rowCount&&process.env.BOOTSTRAP_ADMIN_RESET==='true'){await Q('update users set password_hash=$1 where id=$2',[await bcrypt.hash(process.env.BOOTSTRAP_ADMIN_PASSWORD,12),existing.rows[0].id]);console.log('senha do admin redefinida')}
- if(!existing.rowCount){const tenant=randomUUID(),user=randomUUID();const hash=await bcrypt.hash(process.env.BOOTSTRAP_ADMIN_PASSWORD,12);const conn=await db.connect();try{await conn.query('BEGIN');await conn.query('insert into tenants(id,name) values($1,$2)',[tenant,'Arquindex Gestao Documental']);await conn.query('insert into users(id,tenant_id,email,password_hash,role) values($1,$2,$3,$4,$5)',[user,tenant,email,hash,'admin']);await conn.query('insert into sites(id,tenant_id,name,address) values($1,$2,$3,$4)',[randomUUID(),tenant,'Arquindex - Guarda Externa','Rua Barao Homem de Melo, 1376, Belo Horizonte - MG']);await conn.query('COMMIT')}catch(e){await conn.query('ROLLBACK');throw e}finally{conn.release()}}
+ if(process.env.BOOTSTRAP_ADMIN_PASSWORD.trim().length<18)throw Error('Bootstrap password too short');
+ const adminPw=process.env.BOOTSTRAP_ADMIN_PASSWORD.trim();const doReset=/^\W*true\W*$/i.test(process.env.BOOTSTRAP_ADMIN_RESET||'');const existing=await Q('select id from users where lower(email)=lower($1)',[email]);
+ if(existing.rowCount&&doReset){await Q('update users set password_hash=$1 where id=$2',[await bcrypt.hash(adminPw,12),existing.rows[0].id]);console.log('senha do admin redefinida')}else console.log('bootstrap admin: existe='+!!existing.rowCount+' reset='+doReset);
+ if(!existing.rowCount){const tenant=randomUUID(),user=randomUUID();const hash=await bcrypt.hash(adminPw,12);const conn=await db.connect();try{await conn.query('BEGIN');await conn.query('insert into tenants(id,name) values($1,$2)',[tenant,'Arquindex Gestao Documental']);await conn.query('insert into users(id,tenant_id,email,password_hash,role) values($1,$2,$3,$4,$5)',[user,tenant,email,hash,'admin']);await conn.query('insert into sites(id,tenant_id,name,address) values($1,$2,$3,$4)',[randomUUID(),tenant,'Arquindex - Guarda Externa','Rua Barao Homem de Melo, 1376, Belo Horizonte - MG']);await conn.query('COMMIT')}catch(e){await conn.query('ROLLBACK');throw e}finally{conn.release()}}
 }
 
 app.get('/health',wrap(async(req,res)=>{await Q('select 1');res.json({ok:true,service:'arquindex-inventario'})}));
