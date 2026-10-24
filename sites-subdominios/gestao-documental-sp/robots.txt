@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gestao-documental-sp.arquindex.com.br/sitemap.xml

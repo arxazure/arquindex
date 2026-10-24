@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://alfresco-gestao-arquivos.arquindex.com.br/sitemap.xml

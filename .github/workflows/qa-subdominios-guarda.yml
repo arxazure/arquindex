@@ -1,0 +1,55 @@
+name: QA subdominios HomeHost guarda documental
+on:
+  pull_request:
+    paths:
+      - 'sites-subdominios/**'
+      - '.github/workflows/qa-subdominios-guarda.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar seis hosts, canonicas, sitemaps e robots
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,xml.etree.ElementTree as ET
+          hosts=['guarda-digital','arquivo-fisico-digital','digitalizacao-certificada-mg','gestao-documental-sp','decreto-10278-documentos','alfresco-gestao-arquivos']
+          root=Path('sites-subdominios')
+          for host in hosts:
+              dir=root/host
+              domain=host+'.arquindex.com.br'
+              html=(dir/'index.html').read_text(encoding='utf-8')
+              robots=(dir/'robots.txt').read_text(encoding='utf-8')
+              sitemap=(dir/'sitemap.xml').read_text(encoding='utf-8')
+              canonical='https://'+domain+'/'
+              assert 'rel="canonical" href="'+canonical+'"' in html,domain
+              assert len(re.findall(r'<h1[ >]',html))==1,domain
+              assert 'application/ld+json' in html,domain
+              assert 'Sitemap: '+canonical+'sitemap.xml' in robots,domain
+              loc=ET.fromstring(sitemap).find('{http://www.sitemaps.org/schemas/sitemap/0.9}url/{http://www.sitemaps.org/schemas/sitemap/0.9}loc')
+              assert loc is not None and loc.text==canonical,domain
+              print('SOURCE_OK',domain)
+          PY
+      - name: Criar pacote isolado para HomeHost sem publicar
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          root=Path('sites-subdominios')
+          with ZipFile('arquindex-seis-subdominios-homehost.zip','w',ZIP_DEFLATED) as out:
+              for folder in sorted(root.iterdir()):
+                  if not folder.is_dir(): continue
+                  for fn in ('index.html','robots.txt','sitemap.xml'):
+                      path=folder/fn
+                      if path.is_file():out.write(path,arcname=folder.name+'/'+fn)
+          print('ZIP_SOURCE_READY')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-seis-subdominios-homehost
+          path: arquindex-seis-subdominios-homehost.zip
+          if-no-files-found: error

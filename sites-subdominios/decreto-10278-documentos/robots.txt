@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://decreto-10278-documentos.arquindex.com.br/sitemap.xml
