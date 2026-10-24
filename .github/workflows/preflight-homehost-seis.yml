@@ -1,0 +1,43 @@
+name: Preflight HomeHost seis subdominios
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/preflight-homehost-seis.yml'
+permissions:
+  contents: read
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: DNS TLS HTTP and canonical read-only
+        run: |
+          python3 - <<'PY'
+          import socket, ssl, urllib.request, json, re, pathlib
+          names=['guarda-digital','arquivo-fisico-digital','digitalizacao-certificada-mg','gestao-documental-sp','decreto-10278-documentos','alfresco-gestao-arquivos']
+          result=[]
+          for name in names:
+            host=name+'.arquindex.com.br'
+            row={'host':host,'dns':False,'tls':False,'http':None,'canonical':None,'safe_to_deploy':False}
+            try:
+              row['ips']=sorted({x[4][0] for x in socket.getaddrinfo(host,443,type=socket.SOCK_STREAM)})
+              row['dns']=True
+              with socket.create_connection((host,443),timeout=8) as s:
+                with ssl.create_default_context().wrap_socket(s,server_hostname=host) as tls:
+                  row['tls']=True
+              with urllib.request.urlopen('https://'+host+'/',timeout=12) as resp:
+                row['http']=resp.status
+                text=resp.read(200000).decode('utf-8','replace')
+                match=re.search(r'<link[^>]*rel=["\']canonical["\'][^>]*>',text,re.I)
+                row['canonical']=match.group(0)[:300] if match else None
+            except Exception as e: row['error']=type(e).__name__
+            result.append(row)
+            print('PREFLIGHT',json.dumps(row,ensure_ascii=False))
+          pathlib.Path('homehost-preflight.json').write_text(json.dumps(result,indent=2),encoding='utf8')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: homehost-preflight-readonly
+          path: homehost-preflight.json
+          if-no-files-found: error
