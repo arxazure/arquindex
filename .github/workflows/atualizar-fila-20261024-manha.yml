@@ -1,0 +1,34 @@
+name: Atualizar fila ARQ-101 a ARQ-106 2026-10-24 manha
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/atualizar-fila-20261024-manha.yml']
+permissions:
+  contents: write
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Atualizar cursor e registros
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          p=Path('seo/fila-seo-geo-aeo.csv')
+          lines=p.read_text('utf-8').splitlines()
+          lines=[x for x in lines if not x.startswith(tuple(f'ARQ-{n:03d};' for n in range(101,107))) and not x.startswith('CURSOR;')]
+          block='''ARQ-101;https://digitalizar.arquindex.com.br/;digitalização de documentos;digitalização;;Definir papel frente à ARQ-098 e página pilar antes de alterar; corrigir overflow somente com revisão editorial;2026-10-24;;;;auditoria GitHub;;;"HTTP 200 e canonical próprio; conteúdo genérico de BH, identidade/AEO/CTA ausentes e overflow móvel; preservada por sobreposição"
+          ARQ-102;https://gestao-eletronica-de-documentos-ged.arquindex.com.br/;GED e ECM permissões versões e recuperação;GED e ECM;;Medir consulta+URL em janela completa; não repetir divulgação sem material novo;2026-10-24;2026-10-24;2026-10-24;GitHub+FTP+Instagram+LinkedIn+GoogleBusiness;sha256:1b66385ed04e210c1ca22a4ff28740d2f32e10a4104c841e50e60f3e5c89603d;https://github.com/arxazure/arquindex/actions/runs/40090932526 | https://github.com/arxazure/arquindex/actions/runs/40091170428 | Instagram 17912603334506729 | LinkedIn urn:li:share:7519726214916313088 | GBP 8683592038654414914 PROCESSING;"publicada, verificada e divulgada: canonical corrigido, identidade, matriz GED/ECM, CTA UTM, sitemap e arte"
+          ARQ-103;https://gestao-digitalizacao-preco.arquindex.com.br/empresas.html;quanto custa digitalização de documentos;digitalização;;Diferenciar da ARQ-099 antes de corrigir canonical/title ou propor consolidação;2026-10-24;;;;auditoria GitHub;;;"HTTP 200; canonical incorreto e title repetido; preservada por sobreposição com ARQ-099 já trabalhada"
+          ARQ-104;https://arquivamento.arquindex.com.br/o-que-e.html;arquivamento consulta retirada e devolução;guarda e organização;;Medir consulta+URL; divulgar em rotação futura com arte verificada;2026-10-24;2026-10-24;;GitHub+FTP;sha256:620b0fe37cbcf793ed5377aedd056fa5d56726b5d208b67ff5470c327d0e6453;https://github.com/arxazure/arquindex/actions/runs/40090932526 | https://github.com/arxazure/arquindex/actions/runs/40091170428;"publicada e verificada: canonical, title/H1, identidade, protocolo de movimentação, CTA UTM, sitemap e arte"
+          ARQ-105;https://digitalizar-digitalizacao-solucao.arquindex.com.br/o-que-e.html;digitalização de documentos;digitalização;;Diferenciar da ARQ-098 antes de corrigir canonical/title ou propor consolidação;2026-10-24;;;;auditoria GitHub;;;"HTTP 200; canonical incorreto e title repetido; preservada por sobreposição direta com ARQ-098"
+          ARQ-106;https://empresas-digitalizacao-documental-brasil-grandes-empresas.arquindex.com.br/;digitalização em grande escala;digitalização;;Medir consulta+URL; validar região e logística em cada oportunidade; divulgar em rotação futura;2026-10-24;2026-10-24;;GitHub+FTP;sha256:5016db6bfca43e10777f2faed376a3f0e114e119f0db4facf798ede2678f9363;https://github.com/arxazure/arquindex/actions/runs/40090932526 | https://github.com/arxazure/arquindex/actions/runs/40091170428;"publicada e verificada: title/H1, identidade, planejamento de grandes lotes, ressalva regional, CTA UTM, sitemap e arte"'''.splitlines()
+          lines.extend(x.strip() for x in block if x.strip())
+          lines.append('CURSOR;ARQ-107;;;;Auditar ARQ-107 a ARQ-112 e preservar páginas já divulgadas;2026-10-24;;;fila;;;;pendente')
+          p.write_text('\n'.join(lines)+'\n','utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add seo/fila-seo-geo-aeo.csv
+          git commit -m "atualizar fila para ARQ-107"
+          git push
