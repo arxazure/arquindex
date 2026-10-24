@@ -1,0 +1,208 @@
+{
+  "audited_at": "2026-10-24T10:15:00Z",
+  "evidence_level": "observed",
+  "production_origins": {
+    "railway": {
+      "project": "Arquindex Plataforma",
+      "service": "arquindex-web",
+      "environment": "production",
+      "repository": "arxazure/arquindex",
+      "branch": "railway-production-2026",
+      "root_directory": "/arquindex-platform",
+      "staged_changes": null
+    },
+    "homehost": {
+      "repository_branch": "master",
+      "write_mode": "GitHub Actions over FTPS TLS; no direct destructive operation"
+    }
+  },
+  "railway": {
+    "latest_deployment": {
+      "id": "96c662d5-d6a2-45d7-a4cd-b013d051fe35",
+      "status": "SUCCESS",
+      "commit": "b3354bdd4cd84ba160528e26bfca20940708dc13"
+    },
+    "changes": [
+      {
+        "commit": "ea3a8f175d777e734d0e37c4f77e9922898ca308",
+        "change": "serve existing news PNG assets with correct image/png content type",
+        "validation": [
+          "/health 200",
+          "/noticias/assets/avaliacao-avancada-arquivos-r1400.png 200 image/png 786446 bytes",
+          "/noticias/assets/gestao-documentos-ged-ecm-alfresco.png 200 image/png 786444 bytes"
+        ],
+        "rollback": "Railway deployment 7a318f60-e090-4c44-9c8e-6bf393daf43b can rollback"
+      },
+      {
+        "commit": "b3354bdd4cd84ba160528e26bfca20940708dc13",
+        "change": "301 /biblioteca-tecnica to trailing-slash canonical and prepare analytics injection",
+        "validation": [
+          "/biblioteca-tecnica 301 -> /biblioteca-tecnica/",
+          "/biblioteca-tecnica/ 200",
+          "self-canonical",
+          "one H1",
+          "viewport present"
+        ],
+        "tracking": "not active: GA4_MEASUREMENT_ID variable is absent"
+      }
+    ],
+    "regional_campaign": {
+      "intentions": 72,
+      "http_200": 72,
+      "self_canonical": 72,
+      "one_h1": 72,
+      "viewport": 72,
+      "noindex_observed": 0,
+      "sitemap_inclusions": 0,
+      "content_words_observed": {
+        "min": 402,
+        "max": 438
+      },
+      "publication_action": "none",
+      "risk": "thin/mechanical regional templates; held out of sitemap and not submitted"
+    },
+    "discovery": {
+      "robots_status": 200,
+      "sitemap_status": 200,
+      "sitemap_index_status": 200,
+      "index_of_observed": false
+    }
+  },
+  "official_site": {
+    "priority_pages": [
+      {
+        "url": "https://www.arquindex.com.br/",
+        "status": 200,
+        "canonical": "self",
+        "h1": 1,
+        "viewport": true,
+        "tracking_observed": true
+      },
+      {
+        "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+        "status": 200,
+        "canonical": "self",
+        "h1": 1,
+        "viewport": true,
+        "tracking_observed": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+        "status": 200,
+        "canonical": "self",
+        "h1": 1,
+        "viewport": true,
+        "tracking_observed": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao.html",
+        "status": 200,
+        "canonical": "self",
+        "h1": 1,
+        "viewport": true,
+        "tracking_observed": true
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+        "status": 200,
+        "canonical": "self",
+        "h1": 1,
+        "viewport": true,
+        "tracking_observed": true
+      }
+    ],
+    "internal_link_check": {
+      "links_checked": 120,
+      "status_200": 107,
+      "status_301": 8,
+      "http_404": 4,
+      "transport_errors": 1
+    },
+    "broken_references": [
+      {
+        "url": "https://www.arquindex.com.br/arquindex-favicon.png",
+        "status": 404,
+        "referenced_by": [
+          "/",
+          "/digitalizacao.html",
+          "/digitalizacao-com-ocr.html"
+        ]
+      },
+      {
+        "url": "https://www.arquindex.com.br/img/about.webp",
+        "status": 404,
+        "referenced_by": [
+          "/"
+        ]
+      },
+      {
+        "url": "https://www.arquindex.com.br/css/IE-fix.css",
+        "status": 404,
+        "referenced_by": [
+          "/guarda_de_documentos.html",
+          "/gestao_de_colaboradores_documentos.html"
+        ]
+      },
+      {
+        "url": "https://www.arquindex.com.br/assets/img/about.webp",
+        "status": 404,
+        "referenced_by": [
+          "/digitalizacao.html",
+          "/digitalizacao-com-ocr.html"
+        ]
+      },
+      {
+        "url": "http://www.arquindex.com.br/loja/",
+        "status": "fetch_failed",
+        "referenced_by": [
+          "/guarda_de_documentos.html",
+          "/gestao_de_colaboradores_documentos.html"
+        ]
+      }
+    ],
+    "changes_applied": 0,
+    "reason_held": "weekly off-public-root backup has not yet reached verified terminal success"
+  },
+  "homehost_weekly": {
+    "previous_run": {
+      "id": 40053631810,
+      "status": "cancelled",
+      "reason": "60-minute workflow timeout",
+      "backup_verified": false
+    },
+    "retry_run": {
+      "id": 40084543361,
+      "url": "https://github.com/arxazure/arquindex/actions/runs/40084543361",
+      "status": "in_progress",
+      "step": "Gerar backup integral e inventário sem exclusões"
+    },
+    "hardening_commits": [
+      "665621a69deec16fe53af27faf3eaeaa1acebfdf",
+      "f0e87c810e1c5d0e58447a298080d96022850420"
+    ],
+    "changes": "gzip level 1, progress every 100 files, timeout 300 minutes",
+    "deletion_count": 0,
+    "moved_to_quarantine": 0,
+    "bytes_freed": 0
+  },
+  "search_console": {
+    "connector_result": "INVALID_ARGUMENT",
+    "classification": "connector argument/runtime error; not 401/403/429/5xx",
+    "url_inspection": false,
+    "sitemap_submitted": false,
+    "indexing_confirmed": false
+  },
+  "indexnow": {
+    "submitted": false
+  },
+  "merchant_center": {
+    "audited": false,
+    "reason": "kept separate; no authorized Merchant session used"
+  },
+  "pending": [
+    "Wait for HomeHost backup run 40084543361 terminal result and full readback SHA-256 before changing HomeHost assets or cleanup.",
+    "After verified backup, restore or remove only proven broken references; preserve URLs with GSC signals.",
+    "Obtain approved GA4_MEASUREMENT_ID for Railway; variable is absent, so analytics snippet remains empty.",
+    "Resolve GSC connector INVALID_ARGUMENT before making indexing claims or deletion decisions."
+  ]
+}
