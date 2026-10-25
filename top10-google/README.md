@@ -15,6 +15,12 @@ Reutiliza os serviços `capture-hub` e `top10-google-dashboard` do projeto Railw
 
 Contrato do snapshot: `schemaVersion: 1`, `collectedAt` ISO UTC, `metrics` com `current`/`previous` numéricos ou null e `lowerIsBetter` quando apropriado; `sources` com conta, disponibilidade, período e hora da consulta; `pages`, `channels`, `receipts`, `queue` e `evidence`. Toda evidência vem das respostas dos conectores. Consulta vazia não confirma valor zero. Campos do provedor são escapados antes da renderização.
 
+As datas do resumo vêm de `periods.current` e `periods.previous`, cada um com `start` e `end` no formato `YYYY-MM-DD`. Exemplo: `{"current":{"start":"2026-10-01","end":"2026-10-21"},"previous":{"start":"2026-09-10","end":"2026-09-30"}}`. Não há datas fixas no HTML. Snapshots anteriores sem `periods` continuam aceitos, com aviso explícito de períodos não informados e orientação para conferir cada fonte. Ao renovar a coleta, preencher os dois períodos após conferir as respostas; não inferi-los da data de coleta. O painel não presume que períodos fornecidos tenham duração igual.
+
+O backend valida o objeto principal, as listas e seus campos usados na renderização, valores numéricos, datas dos períodos e contagens da fila. Estrutura inválida retorna 503 com cache privado desativado nas duas rotas, sem expor o conteúdo da coleta. Campos numéricos ausentes ou null permanecem sem dados. Unidades também são escapadas como texto.
+
+QA: oito testes Node aprovados localmente, incluindo troca de períodos, compatibilidade com snapshot sem datas, estruturas inválidas nas duas rotas e renderização com campos ausentes. `.github/workflows/top10-google-tests.yml` executa apenas testes com Node 24 em PRs que alteram este módulo; não contém credenciais, publicação ou deploy. Os testes do Hub simulam OAuth/sessão e upstream; login Google real, configurações privadas e correspondência entre o snapshot e as fontes ainda exigem validação no ambiente autorizado. Não registrar cookies, tokens ou o snapshot privado nos logs da revisão.
+
 ## Fontes verificadas nesta execução
 
 Windsor: Search Console `sc-domain:arquindex.com.br`, Bing Webmaster `https://arquindex.com.br/`, GA4 `311737260`, Instagram `17841429848911605`. Metricool: marca `7366010`, organização LinkedIn `94842130`, leitura de posts e agenda. GSC Wizard recusou chamadas com `subscription_required`; não é dependência da coleta via Windsor.
