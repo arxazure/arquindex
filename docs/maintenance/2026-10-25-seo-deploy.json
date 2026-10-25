@@ -1,0 +1,227 @@
+{
+  "audited_at": "2026-10-25T07:10:00-03:00",
+  "evidence_level": "observed",
+  "production_origins": {
+    "railway": {
+      "project": "Arquindex Plataforma",
+      "service": "arquindex-web",
+      "environment": "production",
+      "repository": "arxazure/arquindex",
+      "branch": "railway-production-2026",
+      "root_directory": "/arquindex-platform",
+      "staged_changes": null
+    },
+    "homehost": {
+      "repository_branch": "master",
+      "transport": "GitHub Actions over FTPS TLS",
+      "destructive_operations_allowed": false
+    }
+  },
+  "railway": {
+    "deployment": {
+      "id": "9f880b56-6b3e-4ced-ac40-5915403244a3",
+      "status": "SUCCESS",
+      "commit": "655e7fae0a4641b346a16e728759d5e2845e11db",
+      "healthcheck": "/health HTTP 200"
+    },
+    "change": {
+      "description": "exact 301 redirect for crawler-requested root bundle",
+      "from": "/assets/index-BBjM0UaD.js",
+      "to": "/gestao-documental/assets/index-BBjM0UaD.js",
+      "target_status": 200,
+      "target_content_type": "text/javascript",
+      "github_actions_run": 40183138912,
+      "github_actions_conclusion": "success"
+    },
+    "http_log_sample": {
+      "rows": 501,
+      "statuses": {
+        "200": 488,
+        "204": 2,
+        "404": 11
+      },
+      "http_5xx": 0,
+      "errors": {
+        "cloudflare_challenge_paths": 7,
+        "legacy_root_bundle": 4
+      },
+      "legacy_root_bundle_user_agent": "Applebot"
+    },
+    "regional_campaign": {
+      "intentions": 72,
+      "http_200": 72,
+      "self_canonical": 72,
+      "one_h1": 72,
+      "viewport": 72,
+      "noindex_observed": 0,
+      "sitemap_inclusions": 0,
+      "content_words_observed": {
+        "min": 402,
+        "max": 438
+      },
+      "action": "kept out of sitemap and not submitted",
+      "risk": "thin mechanical regional variants; doorway and cannibalization review required"
+    },
+    "technical_library": {
+      "index": {
+        "status": 200,
+        "words": 449,
+        "tracking": false,
+        "json_ld": 0
+      },
+      "resources": [
+        {
+          "path": "/biblioteca-tecnica/manual-digitalizacao-ocr.html",
+          "status": 200,
+          "words": 239
+        },
+        {
+          "path": "/biblioteca-tecnica/manual-lgpd-dpo.html",
+          "status": 200,
+          "words": 206
+        },
+        {
+          "path": "/biblioteca-tecnica/manual-guarda-ecm-databook.html",
+          "status": 200,
+          "words": 201
+        },
+        {
+          "path": "/biblioteca-tecnica/apresentacao-digitalizacao-lgpd.html",
+          "status": 200,
+          "words": 176
+        },
+        {
+          "path": "/biblioteca-tecnica/apresentacao-guarda-alfresco-databook.html",
+          "status": 200,
+          "words": 150
+        }
+      ],
+      "common_validation": {
+        "self_canonical": true,
+        "one_h1": true,
+        "viewport": true,
+        "internal_links_checked": 6,
+        "broken_internal_links": 0,
+        "sitemap_inclusions": 0,
+        "tracking": false,
+        "json_ld": 0
+      },
+      "tracking_blocker": "GA4_MEASUREMENT_ID is absent from Railway variable names",
+      "issue": "https://github.com/arxazure/arquindex/issues/42"
+    }
+  },
+  "official_site": {
+    "priority_pages_http_200": 5,
+    "priority_pages_self_canonical": 5,
+    "priority_pages_one_h1": 5,
+    "priority_pages_viewport": 5,
+    "accessibility_static": {
+      "html_lang": 5,
+      "images_without_alt": 0,
+      "missing_main_landmark": [
+        "/guarda_de_documentos.html",
+        "/gestao_de_colaboradores_documentos.html"
+      ]
+    },
+    "internal_resources": {
+      "checked": 135,
+      "status_200": 122,
+      "status_301": 8,
+      "status_404": 4,
+      "transport_errors": 1
+    },
+    "broken_references": [
+      {
+        "url": "https://www.arquindex.com.br/arquindex-favicon.png",
+        "status": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/img/about.webp",
+        "status": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/css/IE-fix.css",
+        "status": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/assets/img/about.webp",
+        "status": 404
+      },
+      {
+        "url": "http://www.arquindex.com.br/loja/",
+        "status": "transport_error"
+      }
+    ],
+    "changes_applied": 0,
+    "issue": "https://github.com/arxazure/arquindex/issues/28"
+  },
+  "homehost_weekly": {
+    "previous_run": {
+      "id": 40084543361,
+      "status": "cancelled",
+      "timeout_minutes": 300,
+      "ftps_tls_verified": true,
+      "last_progress": {
+        "files": 14000,
+        "bytes": 252202080,
+        "path": "cast/vendor/openid/php-openid/Auth/OpenID/SQLStore.php"
+      },
+      "remote_backup_verified": false,
+      "reason": "timeout before archive upload and SHA-256 readback"
+    },
+    "optimization": {
+      "commits": [
+        "863f5f4e519fc9fababcc00afe58002f5656e58a",
+        "29fbf5cc22e15de09efbf7404efd3f35ec99909c"
+      ],
+      "workers": 4,
+      "changes": [
+        "inventory before transfer",
+        "bounded parallel FTPS downloads",
+        "size verification",
+        "one reconnect retry per file",
+        "gzip level 1",
+        "360 minute workflow limit"
+      ]
+    },
+    "current_run": {
+      "id": 40182813507,
+      "url": "https://github.com/arxazure/arquindex/actions/runs/40182813507",
+      "status": "in_progress",
+      "syntax_validation": "success",
+      "backup_verified": false
+    },
+    "cleanup": {
+      "deleted": 0,
+      "moved_to_quarantine": 0,
+      "bytes_freed": 0,
+      "state": "held_until_backup_and_gsc_evidence"
+    }
+  },
+  "search_console": {
+    "get_account_info": "INVALID_ARGUMENT",
+    "list_sites": "payment_required/subscription_required",
+    "http_classification": "not 401/403/429/5xx",
+    "sitemap_submitted": false,
+    "url_inspection": false,
+    "indexing_confirmed": false,
+    "next_step": "activate GSC Wizard subscription or configure a separately authorized GSC integration"
+  },
+  "indexnow": {
+    "submitted": false
+  },
+  "merchant_center": {
+    "audited": false,
+    "reason": "kept separate; no dedicated authorized Merchant session used"
+  },
+  "issues": {
+    "homehost_assets": 28,
+    "technical_library": 42
+  },
+  "pending": [
+    "Wait for HomeHost run 40182813507 terminal success and verified_by_full_readback=true before any cleanup or HomeHost write.",
+    "Do not submit the 72 regional pages or five thin technical resources before editorial differentiation and cannibalization review.",
+    "Configure an approved GA4_MEASUREMENT_ID on Railway to activate consent-aware tracking.",
+    "Restore GSC read access before deletion decisions or indexing claims."
+  ]
+}
