@@ -1,0 +1,30 @@
+name: HomeHost private resumable backup
+on:
+  workflow_dispatch:
+    inputs:
+      resume_checkpoint:
+        description: 'Caminho privado BACKUP_CHECKPOINT da última execução; vazio inicia cópia nova'
+        required: false
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-homehost-weekly-maintenance
+  cancel-in-progress: false
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Testar sem conexão de rede
+        run: python -m unittest discover -s tests -p 'test_homehost_resumable_backup.py' -v
+      - name: Backup privado com leitura completa e SHA-256 por parte
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+          RESUME_CHECKPOINT: ${{ inputs.resume_checkpoint }}
+        run: python seo-rotinas/homehost-resumable-backup.py --resume "$RESUME_CHECKPOINT"
