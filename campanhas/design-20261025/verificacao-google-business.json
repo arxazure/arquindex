@@ -1,0 +1,72 @@
+{
+  "verified_at": "2026-10-25",
+  "posts": [
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/6213125128459303361",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEM2CyeTE4dGa7wE",
+      "service_url": "https://www.arquindex.com.br/capture-cloud-ecm-guia/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/3695632491499863858",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEN2Wz6_g1aW5HA",
+      "service_url": "https://www.arquindex.com.br/armazenamento-de-arquivos/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/5373797074732271256",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEN_7mcyTjaqpGg",
+      "service_url": "https://www.arquindex.com.br/gestao-documental-rh/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/4872264513154878416",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEL_jmtTayqf4oAE",
+      "service_url": "https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/6800528189115269202",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEOilv_GE39zWYQ",
+      "service_url": "https://www.arquindex.com.br/gestao-documental-belo-horizonte/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/8077325406956007634",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEKLanNP7pfiI0QE",
+      "service_url": "https://www.arquindex.com.br/digitalizacao-mineracao-industria/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/7831903035544555778",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKENHO6Oi4_rCqAw",
+      "service_url": "https://www.arquindex.com.br/guarda-de-arquivos-belo-horizonte/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/3554523096725038652",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEPDt4-CshYb6tQE",
+      "service_url": "https://www.arquindex.com.br/lgpd-no-rh/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/7523417312652550059",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEOGM8f-ytPXZag",
+      "service_url": "https://www.arquindex.com.br/digitalizacao-dossies-funcionarios/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/5931807557516184047",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEMe5r7T0ycXz1QE",
+      "service_url": "https://www.arquindex.com.br/alfresco-belo-horizonte/"
+    },
+    {
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/8066192553184651891",
+      "state": "LIVE",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEIiAgOr2toD5pAE",
+      "service_url": "https://www.arquindex.com.br/custodia-fisica-de-arquivos/"
+    }
+  ],
+  "total": 11
+}
