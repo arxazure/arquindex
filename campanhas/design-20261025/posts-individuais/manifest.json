@@ -1,0 +1,79 @@
+[
+  {
+    "slug": "digitalizacao-dossies-funcionarios",
+    "file": "digitalizacao-dossies-funcionarios.jpg",
+    "bytes": 379367,
+    "sha256": "2745343d49e1ff9d18387dc949dba623e06ba7c3f721f51735423f703f3ddcd1",
+    "illustrative": true
+  },
+  {
+    "slug": "lgpd-no-rh",
+    "file": "lgpd-no-rh.jpg",
+    "bytes": 355747,
+    "sha256": "bf51d47f6ae887d7728e046d7ced8dc4d5f83365ff329d87a3ae976888783ea5",
+    "illustrative": true
+  },
+  {
+    "slug": "alfresco-belo-horizonte",
+    "file": "alfresco-belo-horizonte.jpg",
+    "bytes": 376741,
+    "sha256": "53358258f68fe3812a9aac020267e4ee4c6718bcabcbe661cbf4255e3bd530a5",
+    "illustrative": true
+  },
+  {
+    "slug": "guarda-de-arquivos-belo-horizonte",
+    "file": "guarda-de-arquivos-belo-horizonte.jpg",
+    "bytes": 400752,
+    "sha256": "98f0e32f32979faebf7e620e957f64320dfe7c6440b74d5e5bc533583a5cf650",
+    "illustrative": true
+  },
+  {
+    "slug": "digitalizacao-mineracao-industria",
+    "file": "digitalizacao-mineracao-industria.jpg",
+    "bytes": 378067,
+    "sha256": "6082c05194b003eab1b8493df7e045a960933f28edad5b51c02fc5fb95dfcc7c",
+    "illustrative": true
+  },
+  {
+    "slug": "gestao-documental-rh",
+    "file": "gestao-documental-rh.jpg",
+    "bytes": 385028,
+    "sha256": "4b006393c89dcb0944e77c1601077ffdc8328a801f1ace5073ac0766c1d7039f",
+    "illustrative": true
+  },
+  {
+    "slug": "gestao-documental-belo-horizonte",
+    "file": "gestao-documental-belo-horizonte.jpg",
+    "bytes": 385226,
+    "sha256": "b756554912823754c62359ebab833d5bd7e0e856c17bf0a21d818c3184f614b6",
+    "illustrative": true
+  },
+  {
+    "slug": "armazenamento-de-arquivos",
+    "file": "armazenamento-de-arquivos.jpg",
+    "bytes": 382419,
+    "sha256": "e623e665a872011bef923cf71463dc57f825a5b789d7df4231c9ab09da3f3869",
+    "illustrative": true
+  },
+  {
+    "slug": "consultoria-lgpd-belo-horizonte",
+    "file": "consultoria-lgpd-belo-horizonte.jpg",
+    "bytes": 346376,
+    "sha256": "a0942739049f933ddf87bccb967a89ced96f5c2af48ba33a17c5aac6609bedbe",
+    "illustrative": true
+  },
+  {
+    "slug": "capture-cloud-ecm-guia",
+    "file": "capture-cloud-ecm-guia.jpg",
+    "bytes": 372079,
+    "sha256": "910e5c32a9a2c9139de50387ad1f574e403599c199630b6a9da67b120c44d962",
+    "illustrative": true
+  },
+  {
+    "slug": "custodia-fisica-de-arquivos",
+    "file": "custodia-fisica-de-arquivos.jpg",
+    "bytes": 365086,
+    "sha256": "f04a21d0dfeb6ea5abe22c88031b24fda2e3397ac4afb1e8af3534c434116453",
+    "illustrative": true
+  }
+]
