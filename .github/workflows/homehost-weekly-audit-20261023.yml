@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - ".github/workflows/homehost-weekly-audit-20261023.yml"
+      - "seo-rotinas/homehost-weekly-audit-20261023.py"
   workflow_dispatch:
 
 permissions:
@@ -17,7 +18,7 @@ concurrency:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

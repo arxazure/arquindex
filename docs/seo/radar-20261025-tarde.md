@@ -1,0 +1,9 @@
+# Radar — 25/10/2026 — tarde
+Pesquisa sem publicação. Lido último radar da manhã. Janela sobreposta: 22–25/10. Fontes pesquisadas: menções Arquindex, ANPD/CONARQ, Hyland/Microsoft. Sem novidade primária datada suficiente para outra pauta; resultados antigos não apresentados como notícias atuais.
+Candidato localizado: https://portalsoftware.com.br/software/arquindex — listagem de fornecedor/produto, site oficial .com.br e sede Belo Horizonte identificados no texto. Data de publicação não informada; categorização inclui videoconferência e alternativas não pertinentes. Excluído de alerta de menção conforme regra de ignorar diretórios. Independência editorial não comprovada; não classificar como cobertura, release ou patrocínio. Nenhum efeito de reputação/ranking/venda inferido.
+https://pt.linkedin.com/posts/arquindexbh_consultoria-lgpd-arquindex-activity-7517653808479363072-5sQD — candidato de conteúdo próprio corporativo, não cobertura independente. Sem data absoluta verificada, sem novo alerta. Demais retornos sociais próprios já conhecidos ou sem URL específica foram deduplicados.
+Sem nova menção substantiva elegível confirmada; busca não exaustiva, não prova ausência global.
+ARQ-119/120 permanecem com hipóteses registradas e sem liberação por falta de leitura renderizada/comparação. Não criar outro artigo genérico, imagem ou versões sociais para preencher frequência.
+Registro: 25/10 | menções/triagem | interno | pesquisa | sem novo alerta. Zero publicação, zero submissão, zero pauta nova liberada. Não presumir comunicação automática.
+Pendências: datas/autoria dos candidatos e comparação de destinos existentes.
+Próximas ações: 1) manter pesquisa sobreposta e confirmar fontes substantivas; 2) comparar 119/120 com páginas existentes antes de briefing; 3) preservar materiais e posts anteriores sem repetição.

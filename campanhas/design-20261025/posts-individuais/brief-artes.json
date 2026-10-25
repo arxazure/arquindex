@@ -1,0 +1,79 @@
+{
+  "mode": "built-in imagegen",
+  "reference": "115791.png",
+  "purpose": "Arte individual por serviço para posts Google Business com site e WhatsApp",
+  "design": "Fotografia conceitual à direita, texto à esquerda, azul-marinho, branco e azul, tipografia da referência, rodapé Arquindex e CTA WhatsApp (31) 97363-2725.",
+  "artworks": [
+    {
+      "slug": "digitalizacao-dossies-funcionarios",
+      "title": "Digitalização de dossiês de funcionários",
+      "headline": "Dossiês organizados, informação acessível",
+      "benefits": "OCR e PDF pesquisável • Índices por funcionário • Conferência de qualidade",
+      "scene": "woman scanning staff folders in document processing office"
+    },
+    {
+      "slug": "lgpd-no-rh",
+      "title": "LGPD no RH",
+      "headline": "Dados de funcionários com governança",
+      "benefits": "Mapeamento de dados • Políticas e treinamento • Acesso por perfil",
+      "scene": "male HR professional checking files in modern office"
+    },
+    {
+      "slug": "alfresco-belo-horizonte",
+      "title": "Alfresco ECM em Belo Horizonte",
+      "headline": "Centralize e organize seus documentos",
+      "benefits": "Metadados e permissões • Migração e implantação • Suporte especializado",
+      "scene": "computer and server racks with conceptual document management interface, no fake product version"
+    },
+    {
+      "slug": "guarda-de-arquivos-belo-horizonte",
+      "title": "Guarda de arquivos em Belo Horizonte",
+      "headline": "Organização e consulta sob demanda",
+      "benefits": "Inventário de caixas • Controle de movimentações • Temporalidade documental",
+      "scene": "organized archive warehouse with plain labeled boxes on steel shelves"
+    },
+    {
+      "slug": "digitalizacao-mineracao-industria",
+      "title": "Digitalização para mineração e indústria",
+      "headline": "Documentos técnicos com rastreabilidade",
+      "benefits": "OCR e indexação • Projetos e revisões • Integração ao ECM",
+      "scene": "engineer with safety helmet holding tablet at industrial site"
+    },
+    {
+      "slug": "gestao-documental-rh",
+      "title": "Gestão documental de RH",
+      "headline": "Organização em cada etapa do RH",
+      "benefits": "Classificação e índices • Dossiês de funcionários • Consulta autorizada",
+      "scene": "woman HR professional holding tablet near archive shelves"
+    },
+    {
+      "slug": "gestao-documental-belo-horizonte",
+      "title": "Gestão documental em Belo Horizonte",
+      "headline": "Organize, preserve e encontre",
+      "benefits": "Classificação documental • Temporalidade • Acervos físicos e digitais",
+      "scene": "office document specialist organizing folders in a filing cabinet"
+    },
+    {
+      "slug": "consultoria-lgpd-belo-horizonte",
+      "title": "Consultoria LGPD em Belo Horizonte",
+      "headline": "Privacidade com processos e evidências",
+      "benefits": "Diagnóstico e plano de ação • Políticas • Treinamento",
+      "scene": "professional woman consultant with documents and subtle cybersecurity visual, fictional person no named identity"
+    },
+    {
+      "slug": "armazenamento-de-arquivos",
+      "title": "Armazenamento de arquivos",
+      "headline": "Espaço organizado para seu acervo",
+      "benefits": "Identificação e inventário • Consulta sob demanda • Retenção planejada",
+      "scene": "archive storage shelves with neatly arranged plain labeled boxes and employee in navy uniform"
+    },
+    {
+      "slug": "capture-cloud-ecm-guia",
+      "title": "Arquindex Capture Cloud ECM",
+      "headline": "Da captura à gestão documental",
+      "benefits": "Digitalização e OCR • Validação humana • Entrega ao ECM",
+      "scene": "scanner, computer and cloud document icons as illustrative marketing scene, no precise diagram"
+    }
+  ],
+  "reused": "custodia-fisica-de-arquivos"
+}

@@ -1,0 +1,60 @@
+{
+  "data": "2026-10-25",
+  "meta_diaria": 2,
+  "novos_artigos_qualificados_produzidos_no_dia": 2,
+  "novos_artigos_publicados_e_verificados_no_dia": 2,
+  "saldo_pendente_do_dia": 0,
+  "saldo_pendente_rotina_atual_antes_do_dia": 4,
+  "deficit_historico_rotina_anterior": 2,
+  "saldo_pendente_total_registrado": 6,
+  "estado": "publicado_e_verificado",
+  "github": {
+    "repositorio": "arxazure/arquindex",
+    "branch_publicadora": "master",
+    "pull_request": "https://github.com/arxazure/arquindex/pull/43",
+    "commit_integrado": "a246d2d151c9fe064fed9574e03003df3cee9a0b",
+    "workflow": "https://github.com/arxazure/arquindex/actions/runs/40196491679",
+    "conclusao": "success"
+  },
+  "deploy": {
+    "destino": "HomeHost /public_html",
+    "backup_recuperavel": "/seo-backups/artigos-20261025-20261025T131146Z",
+    "sitemap": "https://www.arquindex.com.br/sitemap-artigos.xml",
+    "http": 200,
+    "canonical_e_robots": "verificados publicamente"
+  },
+  "blog_prioritario": {
+    "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
+    "cms": "WordPress independente; não Blogger",
+    "leitura_inofensiva": "GET /wp-json/wp/v2/posts HTTP 200 em 25/10/2026; 2 posts públicos",
+    "permissao_de_escrita": "não disponível; POST sem autenticação já retornou HTTP 401 rest_cannot_create em 21/10/2026",
+    "resultado": "nenhuma escrita incerta repetida no WordPress; origem GitHub/HomeHost autorizada selecionada"
+  },
+  "controle_de_duplicidade": {
+    "urls_candidatas_antes_do_deploy": "HTTP 404",
+    "repositorio_e_blog_wordpress": "títulos, intenções e slugs não encontrados",
+    "coordenacao": "conteúdo adicional às páginas SEO; não substitui atualização de página existente"
+  },
+  "artigos": [
+    {
+      "titulo": "Cadeia de custódia na guarda documental: da coleta à devolução",
+      "palavras_texto_principal": 1675,
+      "fontes_principais": ["e-ARQ Brasil versão 2", "Resolução CONARQ 50/2022", "Lei 8.159/1991", "Lei 13.709/2018"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/cadeia-de-custodia-guarda-documental-caixas/",
+      "arquivo": "artigos-tecnicos/2026-10-25/cadeia-de-custodia-guarda-documental-caixas/index.html",
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "f6fedfb49af6caba26b13cf27a83f2ad803d3496e72cab699081ec955fbf2d11"
+    },
+    {
+      "titulo": "RIPD para digitalização e OCR: como transformar riscos em controles",
+      "palavras_texto_principal": 1742,
+      "fontes_principais": ["ANPD — Relatório de Impacto à Proteção de Dados Pessoais", "Lei 13.709/2018", "ANPD — Guia de Segurança da Informação", "Decreto 10.278/2020"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/ripd-digitalizacao-ocr-riscos-lgpd/",
+      "arquivo": "artigos-tecnicos/2026-10-25/ripd-digitalizacao-ocr-riscos-lgpd/index.html",
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "d8cd025a3e1c442762d50eddc5b3d92e51eaad530dafd5d3623785a50d2d8a58"
+    }
+  ]
+}

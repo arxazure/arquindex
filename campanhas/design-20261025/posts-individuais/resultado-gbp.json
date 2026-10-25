@@ -1,0 +1,351 @@
+{
+  "date": "2026-10-25",
+  "profile": "Arquindex em BH Digitalização de Documentos",
+  "location": "locations/2344229015359741158",
+  "updates": 11,
+  "new_posts": 1,
+  "journal": [
+    {
+      "slug": "custodia-fisica-de-arquivos",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/8066192553184651891 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/8066192553184651891, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/8066192553184651891 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/8066192553184651891, state: PROCESSING."
+        },
+        "isError": false
+      },
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/8066192553184651891",
+        "summary": "Custódia física de arquivos\n\nEstruture a transferência, identificação e consulta do seu acervo físico com protocolos e responsabilidades documentados.\n\n✓ Protocolo de transferência\n✓ Inventário por caixa e lote\n✓ Registro de movimentações\n✓ Consulta autorizada\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/custodia-fisica-de-arquivos/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/custodia-arquivos.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Cust%C3%B3dia%20f%C3%ADsica%20de%20arquivos."
+      }
+    },
+    {
+      "slug": "solucoes-documentais",
+      "params": {
+        "summary": "Soluções documentais da Arquindex em Belo Horizonte e região metropolitana\n\nConheça nossas páginas sobre digitalização com OCR, dossiês de funcionários, gestão documental de RH, Alfresco ECM, consultoria LGPD, mineração e indústria, guarda, custódia física e armazenamento de arquivos.\n\nCada serviço reúne vídeo explicativo, manual técnico e apresentação:\nhttps://www.arquindex.com.br/solucoes-documentais/\n\nAtendimento na RM BH. Projetos em outras capitais mediante avaliação técnica e logística.\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "language_code": "pt-BR",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/servicos-referencia.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20sobre%20as%20solu%C3%A7%C3%B5es%20documentais%20da%20Arquindex."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published local post on location locations/2344229015359741158 (summary: 'Soluções documentais da Arquindex em Belo Horizonte e região metropolitana\\n\\nConheça nossas páginas sobre digitalização com OCR, dossiês de funcionários, gestão documental de RH, Alfresco ECM, consultoria LGPD, mineração e indústria, guarda, custódia física e armazenamento de arquivos.\\n\\nCada serviço reúne vídeo explicativo, manual técnico e apresentação:\\nhttps://www.arquindex.com.br/solucoes-documentais/\\n\\nAtendimento na RM BH. Projetos em outras capitais mediante avaliação técnica e logística.\\n\\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.', photo: https://www.arquindex.com.br/assets/campanha-20261025/servicos-referencia.jpg, call to action: LEARN_MORE). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/2154650066946843429, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published local post on location locations/2344229015359741158 (summary: 'Soluções documentais da Arquindex em Belo Horizonte e região metropolitana\\n\\nConheça nossas páginas sobre digitalização com OCR, dossiês de funcionários, gestão documental de RH, Alfresco ECM, consultoria LGPD, mineração e indústria, guarda, custódia física e armazenamento de arquivos.\\n\\nCada serviço reúne vídeo explicativo, manual técnico e apresentação:\\nhttps://www.arquindex.com.br/solucoes-documentais/\\n\\nAtendimento na RM BH. Projetos em outras capitais mediante avaliação técnica e logística.\\n\\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.', photo: https://www.arquindex.com.br/assets/campanha-20261025/servicos-referencia.jpg, call to action: LEARN_MORE). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/2154650066946843429, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "digitalizacao-dossies-funcionarios",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/7523417312652550059",
+        "summary": "Digitalização de dossiês de funcionários\n\nTransforme documentos do RH em informação pesquisável, com OCR, indexação por funcionário e rastreabilidade.\n\n✓ PDF pesquisável com OCR\n✓ Indexação por funcionário e período\n✓ Conferência de qualidade\n✓ Entrega organizada para RH e DP\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/digitalizacao-dossies-funcionarios/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/digitalizacao-dossies-funcionarios.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Digitaliza%C3%A7%C3%A3o%20de%20dossi%C3%AAs%20de%20funcion%C3%A1rios."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/7523417312652550059 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/7523417312652550059, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/7523417312652550059 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/7523417312652550059, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "lgpd-no-rh",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/3554523096725038652",
+        "summary": "LGPD no RH\n\nMapeamento de dados e revisão dos processos documentais do RH para apoiar o programa de proteção de dados da empresa.\n\n✓ Inventário de dados e processos\n✓ Políticas e procedimentos\n✓ Apoio ao DPO e às áreas de RH e TI\n✓ Treinamento e controle de acesso\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/lgpd-no-rh/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/lgpd-no-rh.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20LGPD%20no%20RH."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/3554523096725038652 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/3554523096725038652, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/3554523096725038652 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/3554523096725038652, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "gestao-documental-rh",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/5373797074732271256",
+        "summary": "Gestão documental de RH\n\nCentralize os documentos de funcionários com classificação, padronização de índices e controles de acesso.\n\n✓ Documentos de funcionários\n✓ Padronização e indexação\n✓ Consulta para auditorias\n✓ Apoio à governança da informação\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/gestao-documental-rh/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/gestao-documental-rh.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Gest%C3%A3o%20documental%20de%20RH."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/5373797074732271256 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/5373797074732271256, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/5373797074732271256 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/5373797074732271256, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "alfresco-belo-horizonte",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/5931807557516184047",
+        "summary": "Alfresco ECM em Belo Horizonte\n\nImplantação, migração e suporte em Alfresco Community com metadados, permissões e processos definidos para a sua operação.\n\n✓ Gestão centralizada de documentos\n✓ Fluxos e aprovações conforme projeto\n✓ Integração com sistemas\n✓ Arquitetura dimensionada por uso\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/alfresco-belo-horizonte/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/alfresco-belo-horizonte.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Alfresco%20ECM%20em%20Belo%20Horizonte."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/5931807557516184047 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/5931807557516184047, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/5931807557516184047 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/5931807557516184047, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "gestao-documental-belo-horizonte",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/6800528189115269202",
+        "summary": "Gestão documental em Belo Horizonte\n\nDa organização física à gestão digital, com classificação, temporalidade e processos de consulta documentados.\n\n✓ Classificação e indexação\n✓ Temporalidade documental\n✓ Digitalização e conferência\n✓ Consultoria e treinamento\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/gestao-documental-belo-horizonte/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/gestao-documental-belo-horizonte.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Gest%C3%A3o%20documental%20em%20Belo%20Horizonte."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/6800528189115269202 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/6800528189115269202, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/6800528189115269202 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/6800528189115269202, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "guarda-de-arquivos-belo-horizonte",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/7831903035544555778",
+        "summary": "Guarda de arquivos em Belo Horizonte\n\nOrganização do acervo físico, identificação de caixas e atendimento de consultas com condições de coleta e guarda definidas em contrato.\n\n✓ Inventário e localização do acervo\n✓ Controle de temporalidade\n✓ Consulta e retirada sob demanda\n✓ Atendimento empresarial\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/guarda-de-arquivos-belo-horizonte/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/guarda-de-arquivos-belo-horizonte.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Guarda%20de%20arquivos%20em%20Belo%20Horizonte."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/7831903035544555778 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/7831903035544555778, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/7831903035544555778 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/7831903035544555778, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "consultoria-lgpd-belo-horizonte",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/4872264513154878416",
+        "summary": "Consultoria LGPD em Belo Horizonte\n\nDiagnóstico, inventário de dados, políticas e treinamento para apoiar a implementação do programa de privacidade.\n\n✓ Diagnóstico e plano de ação\n✓ Mapeamento de dados\n✓ Políticas e treinamento\n✓ Apoio ao encarregado\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/consultoria-lgpd-belo-horizonte/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/consultoria-lgpd-belo-horizonte.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Consultoria%20LGPD%20em%20Belo%20Horizonte."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/4872264513154878416 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/4872264513154878416, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/4872264513154878416 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/4872264513154878416, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "digitalizacao-mineracao-industria",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/8077325406956007634",
+        "summary": "Digitalização para mineração e indústria\n\nOrganize documentos de engenharia, projetos e registros industriais com digitalização, OCR e indexação por metadados.\n\n✓ Documentos técnicos e projetos\n✓ OCR e índices por metadados\n✓ Rastreabilidade de revisões\n✓ Integração ao ECM conforme escopo\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/digitalizacao-mineracao-industria/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/digitalizacao-mineracao-industria.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Digitaliza%C3%A7%C3%A3o%20para%20minera%C3%A7%C3%A3o%20e%20ind%C3%BAstria."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/8077325406956007634 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/8077325406956007634, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/8077325406956007634 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/8077325406956007634, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "armazenamento-de-arquivos",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/3695632491499863858",
+        "summary": "Armazenamento de arquivos\n\nArmazenamento de arquivos físicos com identificação e controle. Para arquivos digitais, avalie infraestrutura, backup e gestão documental.\n\n✓ Acondicionamento e identificação\n✓ Localização por inventário\n✓ Retenção e destinação planejadas\n✓ Integração ao arquivo digital\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/armazenamento-de-arquivos/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/armazenamento-de-arquivos.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Armazenamento%20de%20arquivos."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/3695632491499863858 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/3695632491499863858, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/3695632491499863858 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/3695632491499863858, state: PROCESSING."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "capture-cloud-ecm-guia",
+      "params": {
+        "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/6213125128459303361",
+        "summary": "Arquindex Capture Cloud ECM\n\nConheça o fluxo proposto de digitalização, OCR, indexação, conferência e entrega ao ECM. A arquitetura final depende de validação técnica.\n\n✓ Captura e processamento\n✓ Validação pelo operador\n✓ Entrega ao repositório\n✓ Temporalidade com autorização\n\nPágina do serviço, vídeo e materiais técnicos: https://www.arquindex.com.br/capture-cloud-ecm-guia/\n\nBH, Contagem, Betim, Nova Lima e RM BH. Projetos nas capitais sob avaliação técnica e logística.\n\n#Arquindex #GestãoDocumental #BeloHorizonte #RMBH\n\nFale com a Arquindex pelo botão abaixo para atendimento no WhatsApp.",
+        "photo_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/capture-cloud-ecm-guia.jpg",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://wa.me/5531973632725?text=Ol%C3%A1!%20Gostaria%20de%20uma%20avalia%C3%A7%C3%A3o%20para%20Arquindex%20Capture%20Cloud%20ECM."
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/6213125128459303361 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/6213125128459303361, state: PROCESSING."
+          }
+        ],
+        "structuredContent": {
+          "result": "Updated local post accounts/111390525053034972643/locations/2344229015359741158/localPosts/6213125128459303361 on location locations/2344229015359741158 (fields: summary,media,callToAction). Post name: accounts/111390525053034972643/locations/2344229015359741158/localPosts/6213125128459303361, state: PROCESSING."
+        },
+        "isError": false
+      }
+    }
+  ],
+  "image_deployment": {
+    "published": true,
+    "images": [
+      {
+        "file": "alfresco-belo-horizonte.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/alfresco-belo-horizonte.jpg",
+        "http": 200,
+        "sha256": "53358258f68fe3812a9aac020267e4ee4c6718bcabcbe661cbf4255e3bd530a5"
+      },
+      {
+        "file": "armazenamento-de-arquivos.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/armazenamento-de-arquivos.jpg",
+        "http": 200,
+        "sha256": "e623e665a872011bef923cf71463dc57f825a5b789d7df4231c9ab09da3f3869"
+      },
+      {
+        "file": "capture-cloud-ecm-guia.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/capture-cloud-ecm-guia.jpg",
+        "http": 200,
+        "sha256": "910e5c32a9a2c9139de50387ad1f574e403599c199630b6a9da67b120c44d962"
+      },
+      {
+        "file": "consultoria-lgpd-belo-horizonte.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/consultoria-lgpd-belo-horizonte.jpg",
+        "http": 200,
+        "sha256": "a0942739049f933ddf87bccb967a89ced96f5c2af48ba33a17c5aac6609bedbe"
+      },
+      {
+        "file": "custodia-fisica-de-arquivos.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/custodia-fisica-de-arquivos.jpg",
+        "http": 200,
+        "sha256": "f04a21d0dfeb6ea5abe22c88031b24fda2e3397ac4afb1e8af3534c434116453"
+      },
+      {
+        "file": "digitalizacao-dossies-funcionarios.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/digitalizacao-dossies-funcionarios.jpg",
+        "http": 200,
+        "sha256": "2745343d49e1ff9d18387dc949dba623e06ba7c3f721f51735423f703f3ddcd1"
+      },
+      {
+        "file": "digitalizacao-mineracao-industria.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/digitalizacao-mineracao-industria.jpg",
+        "http": 200,
+        "sha256": "6082c05194b003eab1b8493df7e045a960933f28edad5b51c02fc5fb95dfcc7c"
+      },
+      {
+        "file": "gestao-documental-belo-horizonte.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/gestao-documental-belo-horizonte.jpg",
+        "http": 200,
+        "sha256": "b756554912823754c62359ebab833d5bd7e0e856c17bf0a21d818c3184f614b6"
+      },
+      {
+        "file": "gestao-documental-rh.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/gestao-documental-rh.jpg",
+        "http": 200,
+        "sha256": "4b006393c89dcb0944e77c1601077ffdc8328a801f1ace5073ac0766c1d7039f"
+      },
+      {
+        "file": "guarda-de-arquivos-belo-horizonte.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/guarda-de-arquivos-belo-horizonte.jpg",
+        "http": 200,
+        "sha256": "98f0e32f32979faebf7e620e957f64320dfe7c6440b74d5e5bc533583a5cf650"
+      },
+      {
+        "file": "lgpd-no-rh.jpg",
+        "url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/lgpd-no-rh.jpg",
+        "http": 200,
+        "sha256": "bf51d47f6ae887d7728e046d7ced8dc4d5f83365ff329d87a3ae976888783ea5"
+      }
+    ],
+    "backup": "/seo-backups/artes-posts-20261025T073153Z"
+  },
+  "verification": {
+    "method": "Google public UI via browser",
+    "observed": "Updated Capture Cloud post contains service URL and WhatsApp CTA. New hub post and nine other recent service cards show WhatsApp CTAs. Individual art is present.",
+    "example_url": "https://www.google.com.br/search?q=Arquindex+em+BH+Digitaliza%C3%A7%C3%A3o+de+Documentos&ludocid=13787100657679265672&source=sh/x/localposts&lsig=AB86z5WfWxWkBzIaSs_BM_OC6NaF#lpstate=pid:6213125128459303361",
+    "limitation": "Connector analytics readback was cached; not used as confirmation of new content or current state of all 12 posts."
+  }
+}
