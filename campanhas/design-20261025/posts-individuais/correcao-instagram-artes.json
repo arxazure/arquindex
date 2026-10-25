@@ -1,0 +1,191 @@
+{
+  "date": "2026-10-25",
+  "account": "17841429848911605",
+  "reason": "Initial eleven service publications reused composite art instead of individual service art.",
+  "action": "Eleven replacement image posts published, each using its own service-specific JPEG.",
+  "count": 11,
+  "unique_images": 11,
+  "journal": [
+    {
+      "slug": "digitalizacao-dossies-funcionarios",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/digitalizacao-dossies-funcionarios.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18015544211971676."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18015544211971676."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "lgpd-no-rh",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/lgpd-no-rh.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 17887666368687972."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 17887666368687972."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "alfresco-belo-horizonte",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/alfresco-belo-horizonte.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18084342971355102."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18084342971355102."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "guarda-de-arquivos-belo-horizonte",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/guarda-de-arquivos-belo-horizonte.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18125427235909739."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18125427235909739."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "digitalizacao-mineracao-industria",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/digitalizacao-mineracao-industria.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18133571233741235."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18133571233741235."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "gestao-documental-rh",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/gestao-documental-rh.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 17964835788231388."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 17964835788231388."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "gestao-documental-belo-horizonte",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/gestao-documental-belo-horizonte.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18103195181563874."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18103195181563874."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "consultoria-lgpd-belo-horizonte",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/consultoria-lgpd-belo-horizonte.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18050738711812150."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18050738711812150."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "custodia-fisica-de-arquivos",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/custodia-fisica-de-arquivos.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18171853936407838."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18171853936407838."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "armazenamento-de-arquivos",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/armazenamento-de-arquivos.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 18091552118215399."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 18091552118215399."
+        },
+        "isError": false
+      }
+    },
+    {
+      "slug": "capture-cloud-ecm-guia",
+      "image_url": "https://www.arquindex.com.br/assets/campanha-20261025/posts/capture-cloud-ecm-guia.jpg",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Published image post to Instagram account 17841429848911605. Media id: 17866747218676131."
+          }
+        ],
+        "structuredContent": {
+          "result": "Published image post to Instagram account 17841429848911605. Media id: 17866747218676131."
+        },
+        "isError": false
+      }
+    }
+  ],
+  "verification": {
+    "api": "All 11 publication actions succeeded and returned media IDs.",
+    "public_profile": "New posts visible on https://www.instagram.com/arquindex/ . Four distinct artworks visually confirmed; profile refreshed and displays nine of the new posts in latest public grid.",
+    "archive_status": "Original posts not archived. Connector has no archive/edit-media action and browser is unauthenticated."
+  }
+}
