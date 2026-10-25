@@ -1,33 +1,13 @@
-name: Validar fila SEO preservando historico
+# Workflow histórico aposentado: rodada de 24/10/2026 já registrada.
+# Mantido apenas como marcador seguro; nunca altera fila ou cursor.
+name: Arquindex SEO rodada histórica desativada
 on:
-  push:
-    paths:
-      - '.github/workflows/atualizar-fila-20261024-tarde.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  validate:
+  archived:
+    if: ${{ false }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - name: Validar registro persistente sem reexecutar rodada antiga
-        run: |
-          python3 - <<'PY'
-          import csv
-          from pathlib import Path
-          path = Path('seo/fila-seo-geo-aeo.csv')
-          with path.open(encoding='utf-8', newline='') as stream:
-              rows = list(csv.DictReader(stream, delimiter=';'))
-          assert rows, 'Fila vazia'
-          ids = [row['id'] for row in rows]
-          assert len(ids) == len(set(ids)), 'IDs duplicados'
-          cursors = [row for row in rows if row['id'] == 'CURSOR']
-          assert len(cursors) == 1, 'Cursor ausente ou duplicado'
-          assert cursors[0]['url'].startswith('ARQ-'), 'Cursor invalido'
-          required = {'ARQ-107', 'ARQ-108', 'ARQ-109', 'ARQ-110', 'ARQ-111', 'ARQ-112'}
-          assert required.issubset(set(ids)), 'Registros da rodada ausentes'
-          print('FILA_VALIDADA', len(rows), 'CURSOR_PRESERVADO', cursors[0]['url'])
-          print('Rodada historica nao reexecutada; nenhuma escrita ou publicacao.')
-          PY
+      - run: echo "Workflow histórico desativado. Não modifica fila SEO."
