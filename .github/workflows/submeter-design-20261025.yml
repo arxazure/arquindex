@@ -1,0 +1,49 @@
+name: Submeter campanha visual Arquindex ao IndexNow
+on:
+  workflow_run:
+    workflows: ["Publicar design e materiais Arquindex 20261025"]
+    types: [completed]
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  indexnow:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Validar URLs publicadas e enviar IndexNow
+        run: |
+          python3 - <<'PY'
+          import urllib.request,urllib.parse,json,re,xml.etree.ElementTree as ET,pathlib
+          base='https://www.arquindex.com.br/'
+          def get(path):
+            with urllib.request.urlopen(urllib.request.Request(base+path,headers={'User-Agent':'ArquindexIndexNow/20261025','Cache-Control':'no-cache'}),timeout=35) as r:
+              assert r.status==200
+              return r.read()
+          sitemap=get('sitemap-campanha-20261025.xml')
+          urls=[e.text for e in ET.fromstring(sitemap).iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
+          assert len(urls)==12 and len(set(urls))==12
+          for url in urls:
+            assert url.startswith(base)
+            html=get(url.removeprefix(base)).decode()
+            assert 'ARQ-DESIGN-20261025' in html and url in html
+            assert len(re.findall(r'<h1[ >]',html,re.I))==1
+          key=get('indexnow-key.txt').decode('ascii').strip()
+          assert re.fullmatch(r'[A-Za-z0-9-]{8,128}',key)
+          assert get(key+'.txt').decode('ascii').strip()==key
+          payload={'host':'www.arquindex.com.br','key':key,'keyLocation':base+key+'.txt','urlList':urls}
+          req=urllib.request.Request('https://api.indexnow.org/indexnow',data=json.dumps(payload).encode(),headers={'Content-Type':'application/json'},method='POST')
+          with urllib.request.urlopen(req,timeout=35) as r:
+            status=r.status
+            assert status in (200,202)
+          report={'submitted':True,'http':status,'urls':urls,'note':'Aceite da submissão não comprova indexação.'}
+          pathlib.Path('indexnow-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          print(json.dumps(report,ensure_ascii=False))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indexnow-campanha-design-20261025
+          path: indexnow-report.json
