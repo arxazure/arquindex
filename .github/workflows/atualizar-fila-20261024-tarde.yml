@@ -1,13 +1,13 @@
 name: Registrar rodada SEO 2026-10-24 tarde
+# Arquivo histórico: desativado para evitar regressão do cursor SEO.
+# Não adicionar gatilhos de execução. A rodada já foi registrada.
 on:
-  push:
-    paths:
-      - '.github/workflows/atualizar-fila-20261024-tarde.yml'
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
   register:
+    if: ${{ false }} # histórico: nunca executar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
