@@ -36,3 +36,7 @@ Fonte: https://www.arquindex.com.br/pr-digital/databooks-digitais-engenharia/
 - [ ] Deploy na HomeHost e auditoria pública de URLs
 - [ ] Sitemap servido no domínio e submetido pelas ferramentas autorizadas
 - [ ] Contatos editoriais verificados e pitches enviados
+
+## Revisão de QA — 25/10/2026
+
+Validador por parsing, testes de regressão e correções da calculadora incluídos no PR. A publicação usa verificação prévia de backup integral recente, leitura completa e SHA-256; sem comprovação, o workflow interrompe antes de qualquer escrita em produção. O upload fica restrito aos HTMLs e sitemap de `/pr-digital/`, com preservação das versões substituídas e reversão em falha de validação pública. Nenhuma alteração de DNS, subdomínios ou envio à indexação faz parte deste workflow. Artes sociais e `og:image` continuam pendentes; os seis posts são rascunhos de texto.

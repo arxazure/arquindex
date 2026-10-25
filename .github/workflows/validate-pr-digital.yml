@@ -3,7 +3,8 @@ on:
   pull_request:
     paths:
       - 'pr-digital/**'
-      - 'scripts/validate-pr-digital.mjs'
+      - 'scripts/validate-pr-digital*'
+      - 'tests/*pr-digital*'
       - '.github/workflows/validate-pr-digital.yml'
   workflow_dispatch:
 jobs:
@@ -16,5 +17,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Regression tests
+        run: |
+          python tests/test-pr-digital-validator.py
+          python tests/test-pr-digital-publish.py
+          node tests/pr-digital-calculator.mjs
       - name: Validate static PR Digital pages and sitemap
         run: node scripts/validate-pr-digital.mjs

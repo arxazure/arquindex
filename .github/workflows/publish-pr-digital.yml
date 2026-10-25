@@ -1,0 +1,38 @@
+name: PR Digital - publicar com backup validado
+on:
+  push:
+    branches: [feat/pr-digital-tres-campanhas-20261024]
+    paths:
+      - 'pr-digital/**'
+      - 'scripts/*pr-digital*'
+      - 'tests/*pr-digital*'
+      - '.github/workflows/publish-pr-digital.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-homehost-weekly-maintenance
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar pacote e regressões
+        run: |
+          python scripts/validate-pr-digital.py
+          python tests/test-pr-digital-validator.py
+          python tests/test-pr-digital-publish.py
+          node tests/pr-digital-calculator.mjs
+          python -m py_compile scripts/publish-pr-digital.py
+      - name: Verificar backup integral e publicar somente pr-digital
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python scripts/publish-pr-digital.py

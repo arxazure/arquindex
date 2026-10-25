@@ -1,5 +1,7 @@
 # Kit de imprensa — PR Digital Arquindex (24/10/2026)
 
+**Status: modelos preparados; divulgar somente após deploy validado. Atualização editorial: 25/10/2026.**
+
 ## Orientações editoriais
 
 Publicar apenas as afirmações metodologicamente sustentadas. Não usar “estudo revela economia de até 40%” como constatação até existir coleta real, amostra documentada, revisão e metodologia auditável. Não afirmar que mineradoras/clientes específicos utilizam a arquitetura sem autorização e evidência. Não afirmar conformidade jurídica automática de todo documento digitalizado. Recomendação: oferecer um veículo prioridade com embargo acordado antes de envio amplo.
@@ -38,15 +40,15 @@ Publicar apenas as afirmações metodologicamente sustentadas. Não usar “estu
 
 **LinkedIn 1:** O custo de um ECM vai além da assinatura mensal. Licenças, infraestrutura, migração, suporte e segurança compõem o TCO. Publicamos um roteiro técnico para comparar SaaS e código aberto com premissas explícitas. Leia: https://www.arquindex.com.br/pr-digital/custo-oculto-transformacao-digital/ #TransformacaoDigital #GestaoDocumental #TCO
 
-**Instagram 1:** Sua equipe cresce. O custo da gestão de documentos também? Compare licenças, infraestrutura e operação antes de decidir. Análise técnica no link: https://www.arquindex.com.br/pr-digital/custo-oculto-transformacao-digital/ #ECM #GestaoDocumental
+**Instagram 1:** Sua equipe cresce. O custo da gestão de documentos também? Compare licenças, infraestrutura e operação antes de decidir. Análise técnica no link da bio ou nos Stories: https://www.arquindex.com.br/pr-digital/custo-oculto-transformacao-digital/ #ECM #GestaoDocumental
 
 **LinkedIn 2:** IA documental não precisa depender integralmente de APIs públicas. Entenda a arquitetura de OCR, classificação, Alfresco e governança com processamento local — incluindo limites e controles necessários. https://www.arquindex.com.br/pr-digital/ia-local-governanca-documental/ #Alfresco #LGPD #InteligenciaArtificial
 
-**Instagram 2:** OCR + IA local + governança documental: mais controle sobre onde o dado é processado, sem promessas de segurança absoluta. Guia técnico: https://www.arquindex.com.br/pr-digital/ia-local-governanca-documental/ #IA #LGPD
+**Instagram 2:** OCR + IA local + governança documental: mais controle sobre onde o dado é processado, sem promessas de segurança absoluta. Guia técnico no link da bio ou nos Stories: https://www.arquindex.com.br/pr-digital/ia-local-governanca-documental/ #IA #LGPD
 
 **LinkedIn 3:** O valor de um Databook digital está na rastreabilidade, integridade, completude e facilidade de auditoria — não apenas no PDF. Guia de engenharia: https://www.arquindex.com.br/pr-digital/databooks-digitais-engenharia/ #Engenharia #Databook #GestaoDocumental
 
-**Instagram 3:** Databook não é só pasta digital! Índice mestre, controle de versões e conferência de anexos ajudam a entregar documentação técnica de forma organizada. https://www.arquindex.com.br/pr-digital/databooks-digitais-engenharia/ #Databook #EngenhariaIndustrial
+**Instagram 3:** Databook não é só pasta digital! Índice mestre, controle de versões e conferência de anexos ajudam a entregar documentação técnica de forma organizada. Acesse pelo link da bio ou nos Stories: https://www.arquindex.com.br/pr-digital/databooks-digitais-engenharia/ #Databook #EngenhariaIndustrial
 
 ## Estratégia de links e monitoramento
 
