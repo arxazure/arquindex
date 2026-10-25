@@ -1,0 +1,37 @@
+name: Publicar design e materiais Arquindex 20261025
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'campanhas/design-20261025/release.zip'
+      - 'scripts/deploy-design-20261025.py'
+      - '.github/workflows/publicar-design-20261025.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-homehost-design-20261025
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preparar codificação de imagens para redes sociais
+        run: python3 -m pip install Pillow==12.0.0
+      - name: Abrir pacote validado
+        run: python3 -m zipfile -e campanhas/design-20261025/release.zip campanhas/design-20261025/public
+      - name: Validar páginas e materiais
+        env:
+          VALIDATE_ONLY: '1'
+        run: python3 scripts/deploy-design-20261025.py
+      - name: Publicar com backup privado e rollback
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python3 scripts/deploy-design-20261025.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: relatorio-design-20261025
+          path: publish-report/design-20261025.json
