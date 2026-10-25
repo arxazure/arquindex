@@ -2,25 +2,26 @@
   "data": "2026-10-25",
   "meta_diaria": 2,
   "novos_artigos_qualificados_produzidos_no_dia": 2,
-  "novos_artigos_publicados_e_verificados_no_dia": 0,
-  "saldo_pendente_do_dia": 2,
+  "novos_artigos_publicados_e_verificados_no_dia": 2,
+  "saldo_pendente_do_dia": 0,
   "saldo_pendente_rotina_atual_antes_do_dia": 4,
   "deficit_historico_rotina_anterior": 2,
-  "saldo_pendente_total_registrado": 8,
-  "estado": "pronto_para_publicacao",
+  "saldo_pendente_total_registrado": 6,
+  "estado": "publicado_e_verificado",
   "github": {
     "repositorio": "arxazure/arquindex",
     "branch_publicadora": "master",
-    "commit_integrado": null,
-    "workflow": null,
-    "conclusao": "pendente"
+    "pull_request": "https://github.com/arxazure/arquindex/pull/43",
+    "commit_integrado": "a246d2d151c9fe064fed9574e03003df3cee9a0b",
+    "workflow": "https://github.com/arxazure/arquindex/actions/runs/40196491679",
+    "conclusao": "success"
   },
   "deploy": {
     "destino": "HomeHost /public_html",
-    "backup_recuperavel": null,
+    "backup_recuperavel": "/seo-backups/artigos-20261025-20261025T131146Z",
     "sitemap": "https://www.arquindex.com.br/sitemap-artigos.xml",
-    "http": null,
-    "canonical_e_robots": "pendentes de verificacao publica"
+    "http": 200,
+    "canonical_e_robots": "verificados publicamente"
   },
   "blog_prioritario": {
     "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
@@ -42,8 +43,8 @@
       "destino": "site principal",
       "url": "https://www.arquindex.com.br/blog/cadeia-de-custodia-guarda-documental-caixas/",
       "arquivo": "artigos-tecnicos/2026-10-25/cadeia-de-custodia-guarda-documental-caixas/index.html",
-      "estado": "pronto_para_publicacao",
-      "sha256_local": "f6fedfb49af6caba26b13cf27a83f2ad803d3496e72cab699081ec955fbf2d11"
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "f6fedfb49af6caba26b13cf27a83f2ad803d3496e72cab699081ec955fbf2d11"
     },
     {
       "titulo": "RIPD para digitalização e OCR: como transformar riscos em controles",
@@ -52,8 +53,8 @@
       "destino": "site principal",
       "url": "https://www.arquindex.com.br/blog/ripd-digitalizacao-ocr-riscos-lgpd/",
       "arquivo": "artigos-tecnicos/2026-10-25/ripd-digitalizacao-ocr-riscos-lgpd/index.html",
-      "estado": "pronto_para_publicacao",
-      "sha256_local": "d8cd025a3e1c442762d50eddc5b3d92e51eaad530dafd5d3623785a50d2d8a58"
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "d8cd025a3e1c442762d50eddc5b3d92e51eaad530dafd5d3623785a50d2d8a58"
     }
   ]
 }
