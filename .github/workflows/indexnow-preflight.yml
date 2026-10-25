@@ -1,0 +1,49 @@
+name: IndexNow diagnostico sem envios
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/indexnow-preflight.yml'
+      - 'scripts/indexnow_preflight.py'
+      - 'tests/test_indexnow_preflight.py'
+  pull_request:
+    paths:
+      - '.github/workflows/indexnow-preflight.yml'
+      - 'scripts/indexnow_preflight.py'
+      - 'scripts/indexnow_daily.py'
+      - 'tests/test_indexnow*.py'
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p 'test_indexnow*.py' -v
+  diagnose:
+    if: github.event_name != 'pull_request'
+    needs: tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Ler DNS, chave e sitemap sem enviar URLs
+        run: python scripts/indexnow_preflight.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indexnow-preflight-${{ github.run_id }}
+          path: indexnow-preflight/
+          if-no-files-found: error
+          retention-days: 30

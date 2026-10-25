@@ -36,3 +36,30 @@ Relatórios ficam nos artifacts por 30 dias e o resumo no job. Confira a primeir
 execução: agendamento ativo não significa que todos os subdomínios passaram.
 
 Referências: https://www.indexnow.org/documentation e https://www.indexnow.org/faq
+
+## Diagnóstico sem envios
+
+O workflow `indexnow-preflight.yml` executa os testes e um inventário somente
+de leitura por host: DNS, chave e sitemap. Não acessa credenciais, não publica
+DNS/FTP, não envia URLs ao IndexNow e não altera o cache de recebimentos.
+Chave e sitemap são conferidos independentemente para não esconder a segunda
+falha quando a primeira ocorre. O inventário conserva todos os candidatos,
+inclusive os indisponíveis.
+
+O sucesso desse workflow significa que a coleta diagnóstica terminou; não
+significa que os hosts estão prontos. Consulte `status`, `blocked_hosts` e
+as etapas/códigos em `indexnow-preflight/report.json`, além do resumo Markdown.
+O remetente diário permanece inalterado e continua falhando quando qualquer
+host apresenta erro. `ready_for_page_checks` exige validar as páginas antes
+de enviar; não comprova recebimento ou indexação.
+
+Diagnóstico da execução 40198973376 (25/10/2026): dos 68 hosts candidatos,
+64 falharam na resolução DNS; `adequacaolgpd.arquindex.com.br` e
+`arquindex.com.br` rejeitaram URLs de sitemap fora do próprio host;
+`digitalizacaodedocumentosbh.arquindex.com.br` retornou HTTP 404 antes
+da checagem das páginas. `www.arquindex.com.br` verificou 545 URLs,
+preservou 531 inalteradas e recebeu HTTP 200 para 14 alteradas.
+Essas são evidências daquela execução, não uma afirmação do estado atual.
+Os bloqueios de DNS/hospedagem dos sites preparados já são tratados nas issues
+#10 e #35; não criar apontamentos a partir de IPs históricos nem subir páginas
+para eliminar artificialmente os erros do relatório.
