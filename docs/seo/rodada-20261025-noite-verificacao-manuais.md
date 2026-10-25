@@ -14,7 +14,20 @@ Verificação pública independente repetida em 25/10/2026 à noite:
 | https://www.arquindex.com.br/digitalizacao-ocr-manual-tecnico-bh/ | acessível | própria | index,follow | presente | Do papel à pesquisa: digitalização com critérios de aceite |
 | https://www.arquindex.com.br/guarda-fisica-custodia-manual-planos-bh/ | acessível | própria | index,follow | presente | Guarda física com localização e rastreabilidade |
 
-A falha final do workflow foi `RemoteDisconnected` durante a validação HTTP e não desfaz o envio FTPS já verificado. Isso não comprova indexação.
+A falha final do primeiro workflow foi `RemoteDisconnected` durante a validação HTTP e não desfaz o envio FTPS já verificado. Isso não comprova indexação.
+
+## Sitemap e descoberta
+
+O workflow [40245986595](https://github.com/arxazure/arquindex/actions/runs/40245986595) concluiu com sucesso:
+
+- verificou publicamente as duas páginas;
+- adicionou somente as duas URLs a `/public_html/sitemap-bh.xml`;
+- validou e releu o XML por FTPS;
+- confirmou 5 URLs únicas no sitemap;
+- registrou SHA-256 `24a624109c2e54acac6febf2d967aa3bfd0a71c4443b78888e73df18ad2343e6`;
+- guardou as versões anterior e posterior no artifact [12619056168](https://github.com/arxazure/arquindex/actions/runs/40245986595/artifacts/12619056168), com retenção de 30 dias.
+
+A leitura pública sem cache confirmou as cinco URLs em `https://www.arquindex.com.br/sitemap-bh.xml`. Não houve submissão autenticada ao Search Console, Bing Webmaster ou IndexNow; sitemap publicado não significa URL indexada.
 
 ## Qualidade e pendências
 
@@ -24,9 +37,7 @@ As duas páginas têm conteúdo distinto, resposta direta, manual, condições c
 2. não há imagem própria da peça/página;
 3. não há CTA WhatsApp funcional nem atendimento flutuante para +55 31 97363-2725;
 4. o texto visível informa que a revisão técnica e comercial está pendente;
-5. as URLs ainda não foram cadastradas em sitemap confirmado;
-6. não houve submissão autenticada ao Search Console, Bing Webmaster ou IndexNow;
-7. não houve publicação social nesta rodada.
+5. não houve publicação social nesta rodada.
 
 Qualquer substituição dos arquivos agora existentes deve preservar cópia recuperável por URL e rollback. O bloqueio da issue [#28](https://github.com/arxazure/arquindex/issues/28) continua aplicável às alterações pendentes em arquivos existentes até existir backup integral validado.
 
@@ -47,5 +58,5 @@ Não alterar nem promover as seis rotas apenas com base nesses achados; primeiro
 ## Próximas prioridades
 
 1. concluir backup retomável e validar restauração isolada;
-2. corrigir identidade, CTA e revisão das duas páginas novas com backup individual/rollback e depois atualizar sitemap;
-3. somente após publicação final validada, executar submissões autenticadas sem confundir recebimento com indexação.
+2. corrigir identidade, CTA e revisão das duas páginas novas com backup individual e rollback;
+3. somente após versão final e conexão autenticada, submeter o sitemap sem confundir recebimento com indexação.
