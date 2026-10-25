@@ -1,12 +1,5 @@
 name: PR Digital - publicar com backup validado
 on:
-  push:
-    branches: [feat/pr-digital-tres-campanhas-20261024]
-    paths:
-      - 'pr-digital/**'
-      - 'scripts/*pr-digital*'
-      - 'tests/*pr-digital*'
-      - '.github/workflows/publish-pr-digital.yml'
   workflow_dispatch:
 permissions:
   contents: read

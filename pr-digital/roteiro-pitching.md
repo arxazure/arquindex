@@ -40,3 +40,7 @@ Fonte: https://www.arquindex.com.br/pr-digital/databooks-digitais-engenharia/
 ## Revisão de QA — 25/10/2026
 
 Validador por parsing, testes de regressão e correções da calculadora incluídos no PR. A publicação usa verificação prévia de backup integral recente, leitura completa e SHA-256; sem comprovação, o workflow interrompe antes de qualquer escrita em produção. O upload fica restrito aos HTMLs e sitemap de `/pr-digital/`, com preservação das versões substituídas e reversão em falha de validação pública. Nenhuma alteração de DNS, subdomínios ou envio à indexação faz parte deste workflow. Artes sociais e `og:image` continuam pendentes; os seis posts são rascunhos de texto.
+
+### Retomada do backup integral
+
+O workflow `backup-and-publish-pr-digital.yml` inventaria as mesmas raízes públicas do processo anterior, mantém cópias em partes TAR.GZ fora de `public_html`, lê cada parte completamente após o envio e registra SHA-256 e inventário. Usa três conexões de transferência e uma de controle. Partes concluídas são reaproveitadas após nova verificação; arquivos de origem não são removidos ou alterados. Falhas de tamanho, data de modificação ou integridade interrompem o processo. O publicador reconhece o relatório integral em partes e confere todas elas antes de publicar. Um checkpoint parcial nunca libera o deploy. A rotina pode permanecer em execução por horas; não se deve declarar publicação até o passo de auditoria pública terminar com sucesso.

@@ -53,14 +53,37 @@ def main():
             if report.get('state')!='backup_verified_inventory_complete_cleanup_held': continue
             if 'public_html' not in report.get('roots',[]): continue
             if candidate.get('outside_public_html') is not True or candidate.get('verified_by_full_readback') is not True: continue
-            path=candidate.get('path','')
-            if not path.startswith('/seo-backups/weekly-full-') or '..' in path or not path.endswith('.tar.gz'): continue
-            if ftp.size(path)!=candidate.get('bytes'): continue
-            digest=hashlib.sha256();ftp.retrbinary('RETR '+path,digest.update)
-            if digest.hexdigest()!=candidate.get('sha256'): raise RuntimeError('BACKUP_HASH_MISMATCH')
+            if candidate.get('format')=='tar.gz.parts.v1':
+                parts=candidate.get('parts',[])
+                encoded=json.dumps(parts,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()
+                if not parts or hashlib.sha256(encoded).hexdigest()!=candidate.get('sha256'):raise RuntimeError('PART_MANIFEST_HASH_MISMATCH')
+                if sum(p.get('files',0) for p in parts)!=report.get('files'):raise RuntimeError('PART_FILE_COUNT_MISMATCH')
+                if sum(p.get('source_bytes',0) for p in parts)!=report.get('bytes'):raise RuntimeError('PART_SOURCE_BYTES_MISMATCH')
+                if sum(p.get('bytes',0) for p in parts)!=candidate.get('bytes'):raise RuntimeError('PART_BYTES_MISMATCH')
+                inventory_path=candidate.get('inventory_path','')
+                if not inventory_path.startswith('/seo-backups/parallel-full-') or '..' in inventory_path or not inventory_path.endswith('/inventory.json'):raise RuntimeError('INVALID_INVENTORY_PATH')
+                inventory=io.BytesIO();ftp.retrbinary('RETR '+inventory_path,inventory.write)
+                if hashlib.sha256(inventory.getvalue()).hexdigest()!=candidate.get('inventory_sha256'):raise RuntimeError('INVENTORY_HASH_MISMATCH')
+                manifest=json.loads(inventory.getvalue())
+                if len(manifest.get('files',[]))!=report.get('files') or manifest.get('roots')!=report.get('roots'):raise RuntimeError('INVENTORY_COUNT_ROOTS_MISMATCH')
+                seen=set()
+                for part in parts:
+                    path=part.get('path','')
+                    if path in seen or not path.startswith(posixpath.dirname(inventory_path)+'/part-') or '..' in path or not path.endswith('.tar.gz'):raise RuntimeError('INVALID_BACKUP_PART_PATH')
+                    seen.add(path)
+                    if part.get('inventory_sha256')!=candidate.get('inventory_sha256'):raise RuntimeError('PART_INVENTORY_MISMATCH')
+                    if ftp.size(path)!=part.get('bytes'):raise RuntimeError('BACKUP_PART_SIZE_MISMATCH')
+                    digest=hashlib.sha256();ftp.retrbinary('RETR '+path,digest.update)
+                    if digest.hexdigest()!=part.get('sha256'):raise RuntimeError('BACKUP_PART_HASH_MISMATCH')
+            else:
+                path=candidate.get('path','')
+                if not path.startswith('/seo-backups/weekly-full-') or '..' in path or not path.endswith('.tar.gz'):continue
+                if ftp.size(path)!=candidate.get('bytes'):continue
+                digest=hashlib.sha256();ftp.retrbinary('RETR '+path,digest.update)
+                if digest.hexdigest()!=candidate.get('sha256'):raise RuntimeError('BACKUP_HASH_MISMATCH')
             backup=candidate;break
         if not backup: raise RuntimeError('BLOCKED: no verified full backup within 48 hours; zero production writes')
-        print('BACKUP_VERIFIED',json.dumps(backup),flush=True)
+        print('BACKUP_VERIFIED',json.dumps({k:v for k,v in backup.items() if k!='parts'}),flush=True)
         # Required public dependencies must be healthy before any write.
         get_public('/');get_public('/guias-digitalizacao/')
         ftp.cwd('/public_html')
