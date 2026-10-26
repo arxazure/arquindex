@@ -1,0 +1,2 @@
+Rebuild do aplicativo LGPD Checklist após correção do JavaScript do painel IA.
+Sem migração de banco nem alteração de cadastros.
