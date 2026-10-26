@@ -39,13 +39,13 @@ document.addEventListener('click',async e=>{
    const container=$('#aiProposals');
    container.innerHTML='<h3>Preenchimento proposto por secao</h3><p class="muted">Revise o texto antes de gravar. Apenas Sistemas, Politicas e Auditorias podem ser gravados nesta etapa; ROPA e Riscos exigem vinculo a departamento/processo existente.</p>'+pendingAi.map((x,i)=>'<div class="card"><strong>'+E((defs[x.section]?.label||x.section)+' — '+x.name)+'</strong><label class="field">Conteudo sugerido<textarea data-ai-index="'+i+'" style="min-height:115px">'+E(x.text||x.finding||x.purpose||x.mitigation||x.name)+'</textarea></label><label><input type="checkbox" data-ai-check="'+i+'" '+(['system','policy','audit'].includes(x.section)?'checked':'disabled')+'> Gravar esta proposta</label></div>').join('');
    $('#aiApply').hidden=!pendingAi.some(x=>['system','policy','audit'].includes(x.section));
-   $('#aiFeedback').textContent='Propostas prontas: revise e confirme o que deseja salvar.';
+   $('#aiFeedback').textContent='Propostas prontas: revise, marque os itens e clique em Gravar rascunhos revisados.';
   }catch(err){$('#aiFeedback').textContent=err.message;}finally{b.disabled=false;}
  }
  if(e.target?.id==='aiApply'){
-  if(!companyId||!pendingAi.length)return;
+  if(!companyId||!pendingAi.length){notice('Selecione uma empresa e gere propostas antes de gravar.');return;}
   if(!confirm('Gravar os registros selecionados como rascunhos?'))return;
-  const chosen=[...document.querySelectorAll('[data-ai-check]:checked')];
+  const chosen=[...document.querySelectorAll('[data-ai-check]:checked')];if(!chosen.length){notice('Marque ao menos uma proposta para gravar.');return;}
   const b=e.target;b.disabled=true;let saved=0;
   try{
    for(const check of chosen){
@@ -54,9 +54,8 @@ document.addEventListener('click',async e=>{
     await api('/records','POST',{section:x.section,company_id:companyId,payload});saved++;
     check.checked=false;
    }
-   $('#aiFeedback').textContent=saved+' registro(s) criado(s). Confirme os dados em cada secao.';
-   await refresh();
-  }catch(err){$('#aiFeedback').textContent=saved+' salvo(s); interrompido: '+err.message;}finally{b.disabled=false;}
+   await refresh();active=chosen.length===1?pendingAi[Number(chosen[0].dataset.aiCheck)].section:'policy';await render();notice(saved+' registro(s) salvo(s) no banco. Abra a secao correspondente.');
+  }catch(err){notice(saved+' salvo(s); erro: '+err.message);}finally{b.disabled=false;}
  }
 });
 
