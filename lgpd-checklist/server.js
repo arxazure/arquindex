@@ -86,6 +86,27 @@ app.post('/api/assistant/draft',auth,writer,assistantRateLimit,wrap(async(req,re
  }catch(e){return res.status(502).json({error:e.name==='AbortError'?'Tempo limite excedido.':'Falha na comunicacao com IA.'});}finally{clearTimeout(timer);}
 }));
 
+
+app.post('/api/assistant/structure',auth,writer,assistantRateLimit,wrap(async(req,res)=>{
+ const {company_id,instruction,consent}=req.body||{};
+ if(consent!==true)return res.status(400).json({error:'Confirme o envio ao provedor.'});
+ if(typeof instruction!=='string'||instruction.trim().length<15||instruction.length>6000)return res.status(400).json({error:'Pedido invalido.'});
+ const c=await company(pool,company_id,req.user);if(!c)return res.sendStatus(404);
+ if(!process.env.OPENAI_API_KEY)return res.status(503).json({error:'Configure OPENAI_API_KEY.'});
+ const records=(await pool.query("SELECT id,section,payload FROM lgpd_records WHERE company_id=$1 AND section IN ('company','system','department','process','policy') ORDER BY created_at DESC LIMIT 40",[c.id])).rows;
+ const context=records.map(x=>({id:x.id,section:x.section,name:String(x.payload.name||x.payload.company_name||'').slice(0,150)}));
+ const schema={type:'object',additionalProperties:false,properties:{items:{type:'array',items:{type:'object',additionalProperties:false,properties:{section:{type:'string',enum:['system','policy','audit','process','risk']},name:{type:'string'},text:{type:'string'},purpose:{type:'string'},data_categories:{type:'string'},data_subjects:{type:'string'},legal_basis:{type:'string'},finding:{type:'string'},action:{type:'string'},mitigation:{type:'string'},parent_id:{type:'string'}},required:['section','name','text','purpose','data_categories','data_subjects','legal_basis','finding','action','mitigation','parent_id']}},notes:{type:'string'}},required:['items','notes']};
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
+ try{
+  const upstream=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',signal:controller.signal,headers:{Authorization:'Bearer '+process.env.OPENAI_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:process.env.OPENAI_MODEL||'gpt-4.1-mini',response_format:{type:'json_schema',json_schema:{name:'lgpd_record_proposals',strict:true,schema}},messages:[{role:'system',content:'Proponha registros LGPD em portugues. Use somente fatos confirmados, marque pendencias explicitamente. Nunca invente nomes, bases legais definitivas ou controles existentes. Produza ate 8 itens; policy tem texto integral em text; audit tem finding/action; system apenas name; process exige parent_id de departamento existente e risk parent_id de processo existente, se nenhum existir, NAO proponha process/risk; nao invente UUIDs. Cada item e RASCUNHO para revisao, nunca afirmacao de conformidade.'},{role:'user',content:JSON.stringify({instruction,company:c.payload.company_name,existing:context})}],max_completion_tokens:3000})});
+  if(!upstream.ok)return res.status(502).json({error:'Falha na geracao estruturada ('+upstream.status+').'});
+  const result=JSON.parse((await upstream.json()).choices[0].message.content);
+  result.items=(result.items||[]).filter(x=>['system','policy','audit','process','risk'].includes(x.section)).slice(0,8);
+  await audit(pool,req.user,c.id,'assistant_structure_preview',null);
+  res.json({items:result.items,notes:result.notes||'',saved:false});
+ }catch(err){res.status(502).json({error:err.name==='AbortError'?'Tempo limite da IA.':'Nao foi possivel estruturar a resposta.'});}finally{clearTimeout(timer);}
+}));
+
 app.post('/api/records',auth,writer,wrap((req,res)=>saveRecord(req,res,null)));
 app.put('/api/records/:id',auth,writer,wrap((req,res)=>saveRecord(req,res,req.params.id)));
 app.delete('/api/records/:id',auth,writer,wrap(async(req,res)=>{const db=await pool.connect();try{await db.query('BEGIN');const old=await record(db,req.params.id,req.user);if(!old){await db.query('ROLLBACK');return res.sendStatus(404);}if(old.section==='company'&&req.user.role!=='admin'){await db.query('ROLLBACK');return res.sendStatus(403);}const child=await db.query('SELECT 1 FROM lgpd_records WHERE parent_id=$1 OR (company_id=$1 AND id<>$1) LIMIT 1',[old.id]);const users=await db.query('SELECT 1 FROM lgpd_users WHERE company_id=$1 LIMIT 1',[old.id]);const cases=await db.query('SELECT 1 FROM lgpd_cases WHERE company_id=$1 LIMIT 1',[old.id]);if(child.rowCount||users.rowCount||cases.rowCount){await db.query('ROLLBACK');return res.status(409).json({error:'Existem registros vinculados; preserve o histórico'});}await audit(db,req.user,old.company_id,'delete',old.id);await db.query('DELETE FROM lgpd_records WHERE id=$1',[old.id]);await db.query('COMMIT');res.json({ok:true});}catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}}));
