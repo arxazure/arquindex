@@ -37,8 +37,8 @@ document.addEventListener('click',async e=>{
    const result=await api('/assistant/structure','POST',{company_id:companyId,instruction,consent:true});
    pendingAi=result.items||[];
    const container=$('#aiProposals');
-   container.innerHTML='<h3>Preenchimento proposto por secao</h3><p class="muted">Revise o texto antes de gravar. Apenas Sistemas, Politicas e Auditorias podem ser gravados nesta etapa; ROPA e Riscos exigem vinculo a departamento/processo existente.</p>'+pendingAi.map((x,i)=>'<div class="card"><strong>'+E((defs[x.section]?.label||x.section)+' — '+x.name)+'</strong><label class="field">Conteudo sugerido<textarea data-ai-index="'+i+'" style="min-height:115px">'+E(x.text||x.finding||x.purpose||x.mitigation||x.name)+'</textarea></label><label><input type="checkbox" data-ai-check="'+i+'" '+(['system','policy','audit'].includes(x.section)?'checked':'disabled')+'> Gravar esta proposta</label></div>').join('');
-   $('#aiApply').hidden=!pendingAi.some(x=>['system','policy','audit'].includes(x.section));
+   container.innerHTML='<h3>Preenchimento proposto por secao</h3><p class="muted">Revise o texto antes de gravar. Sistemas, Politicas, Auditorias, ROPA e Riscos: para ROPA escolha um departamento existente; para RIPD escolha um processo ROPA existente.</p>'+pendingAi.map((x,i)=>'<div class="card"><strong>'+E((defs[x.section]?.label||x.section)+' — '+x.name)+'</strong><label class="field">Conteudo sugerido<textarea data-ai-index="'+i+'" style="min-height:115px">'+E(x.text||x.finding||x.purpose||x.mitigation||x.name)+'</textarea></label><label><input type="checkbox" data-ai-check="'+i+'" '+'checked'+'> Gravar esta proposta</label></div>').join('');
+   $('#aiApply').hidden=!pendingAi.some(x=>['system','policy','audit','process','risk'].includes(x.section));
    $('#aiFeedback').textContent='Propostas prontas: revise, marque os itens e clique em Gravar rascunhos revisados.';
   }catch(err){$('#aiFeedback').textContent=err.message;}finally{b.disabled=false;}
  }
@@ -50,8 +50,10 @@ document.addEventListener('click',async e=>{
   try{
    for(const check of chosen){
     const i=Number(check.dataset.aiCheck),x=pendingAi[i],value=document.querySelector('[data-ai-index="'+i+'"]').value;
-    const payload=x.section==='policy'?{name:x.name,text:value,audience:'A definir',status:'Rascunho',version:'1.0'}:x.section==='audit'?{name:x.name,scope:'Revisao LGPD',finding:value,action:x.action||'Validar plano de acao',status:'Pendente de revisao'}:{name:x.name,provider:'A confirmar',access:'A verificar'};
-    await api('/records','POST',{section:x.section,company_id:companyId,payload});saved++;
+    const payload=x.section==='policy'?{name:x.name,text:value,audience:'A definir',status:'Rascunho',version:'1.0'}:x.section==='audit'?{name:x.name,scope:'Revisao LGPD',finding:value,action:x.action||'Validar plano de acao',status:'Pendente de revisao'}:x.section==='process'?{name:x.name,purpose:value,legal_basis:x.legal_basis||'Pendente de avaliacao',data_categories:x.data_categories||'Pendente',data_subjects:x.data_subjects||'Pendente',responsible:'A definir'}:x.section==='risk'?{name:x.name,assessment:value,impact:'A avaliar',probability:'A avaliar',mitigation:x.mitigation||'Pendente de avaliacao',status:'Rascunho'}:{name:x.name,provider:'A confirmar',access:'A verificar'};
+    let parentId=null;
+    if(x.section==='process'||x.section==='risk'){const parentSection=x.section==='process'?'department':'process';const options=records.filter(r=>r.section===parentSection&&r.company_id===companyId);if(!options.length)throw Error('Cadastre primeiro um '+(parentSection==='department'?'departamento vinculado a unidade':'processo ROPA')+' para gravar '+x.name);const selected=prompt('Vincular '+x.name+' a '+parentSection+':\n'+options.map((r,j)=>(j+1)+' - '+recordName(r)).join('\n')+'\nInforme o numero:', '1');if(selected===null)throw Error('Vinculo cancelado');const n=Number(selected);if(!Number.isInteger(n)||n<1||n>options.length)throw Error('Numero de vinculo invalido');parentId=options[n-1].id;}
+    await api('/records','POST',{section:x.section,company_id:companyId,parent_id:parentId,payload});saved++;
     check.checked=false;
    }
    await refresh();active=chosen.length===1?pendingAi[Number(chosen[0].dataset.aiCheck)].section:'policy';await render();notice(saved+' registro(s) salvo(s) no banco. Abra a secao correspondente.');
