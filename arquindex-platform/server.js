@@ -438,7 +438,21 @@ const server=http.createServer(async(req,res)=>{
  const enhancedEnd=res.end.bind(res);
  res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return enhancedEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
- if(p==="/assets/index-BBjM0UaD.js"){res.writeHead(301,{location:"/gestao-documental/assets/index-BBjM0UaD.js"+u.search,"cache-control":"public, max-age=86400"});return res.end();}
+ const gestaoLegacyAssets=new Set([
+  "/assets/index-BBjM0UaD.js",
+  "/assets/FloatingWhatsApp-hEQiOKBe.js",
+  "/assets/framework-DjPHiq1u.js",
+  "/assets/index-BtOKElGy.css",
+  "/assets/layout-segment-context-CzWiu16x.js",
+  "/assets/SiteHeader-CvK2nEvS.js",
+  "/assets/rolldown-runtime-S-ySWqyJ.js"
+ ]);
+ if(gestaoLegacyAssets.has(p)){res.writeHead(301,{location:"/gestao-documental"+p+u.search,"cache-control":"public, max-age=86400"});return res.end();}
+ const gestaoMalformedRoutes=new Map([
+  ["/gestao-documental/brasil/centro-oeste/df/gestao-documental/brasilia","/gestao-documental/brasil/centro-oeste/df/brasilia"],
+  ["/gestao-documental/blog/gestao-documental/orcamento-digitalizacao-ocr-bh-criterios-entrega","/gestao-documental/blog/orcamento-digitalizacao-ocr-bh-criterios-entrega"]
+ ]);
+ if(gestaoMalformedRoutes.has(p)){res.writeHead(301,{location:gestaoMalformedRoutes.get(p)+u.search,"cache-control":"public, max-age=86400"});return res.end();}
  if(/^\/biblioteca-tecnica\/(manual-digitalizacao-ocr|manual-lgpd-dpo|manual-guarda-ecm-databook|apresentacao-digitalizacao-lgpd|apresentacao-guarda-alfresco-databook)\.html$/.test(p)){if(!["GET","HEAD"].includes(req.method)){res.writeHead(405,{allow:"GET, HEAD"});return res.end();}const file=p.split("/").pop();res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(req.method==="HEAD"?undefined:readFileSync(new URL("./biblioteca-tecnica/"+file,import.meta.url),"utf8"));}
  if(p==="/biblioteca-tecnica"){res.writeHead(301,{location:"/biblioteca-tecnica/"+u.search,"cache-control":"public, max-age=3600"});return res.end();}
  if(p==="/biblioteca-tecnica/"){const html=readFileSync(new URL("./biblioteca-tecnica.html",import.meta.url),"utf8").replace("</head>",analyticsSnippet()+"</head>");res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});return res.end(html);}
