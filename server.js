@@ -6,7 +6,7 @@ await Q(schema);
 const bootstrapEmail=process.env.BOOTSTRAP_ADMIN_EMAIL?.trim().toLowerCase();
 const bootstrapPassword=process.env.BOOTSTRAP_ADMIN_PASSWORD;
 const resetValue=process.env.BOOTSTRAP_ADMIN_RESET ?? process.env['BOOTSTRAP_ADMIN_RESET=true'];
-const doReset=/^(?:true|"true"|'true')$/i.test((resetValue||'').trim());
+const doReset=/^(?:true|\"true\"|'true')$/i.test((resetValue||'').trim()) || (process.env.BOOTSTRAP_ADMIN_RESET===undefined && Object.prototype.hasOwnProperty.call(process.env,'BOOTSTRAP_ADMIN_RESET=true'));
 if(bootstrapEmail&&bootstrapPassword){
  const existing=await Q('select id,password_hash,role from users where lower(email)=lower($1)',[bootstrapEmail]);
  console.log('bootstrap admin: exists='+!!existing.rowCount+' reset='+doReset);
