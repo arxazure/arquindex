@@ -1,0 +1,63 @@
+{
+  "data": "2026-10-26",
+  "meta_diaria": 2,
+  "novos_artigos_qualificados_produzidos_no_dia": 2,
+  "novos_artigos_publicados_e_verificados_no_dia": 0,
+  "saldo_pendente_do_dia": 2,
+  "saldo_pendente_rotina_atual_antes_do_dia": 4,
+  "deficit_historico_rotina_anterior": 2,
+  "saldo_pendente_total_registrado": 8,
+  "estado": "pronto_para_publicacao",
+  "github": {
+    "repositorio": "arxazure/arquindex",
+    "branch_publicadora": "master",
+    "commit_integrado": null,
+    "workflow": null,
+    "conclusao": "pendente"
+  },
+  "deploy": {
+    "destino": "HomeHost /public_html",
+    "escopo": "duas URLs novas e atualização transacional do sitemap; nenhuma página existente substituída",
+    "backup_recuperavel": null,
+    "sitemap": "https://www.arquindex.com.br/sitemap-artigos.xml",
+    "http": null,
+    "canonical_e_robots": "pendentes de verificacao publica"
+  },
+  "blog_prioritario": {
+    "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
+    "cms": "WordPress independente; não Blogger",
+    "leitura_publica": "GET /wp-json/wp/v2/posts HTTP 200 em 26/10/2026; 2 posts públicos",
+    "conector_wordpress": "leitura autenticada funcionou e listou 7 sites, mas o subdomínio prioritário não está entre os sites acessíveis",
+    "permissao_de_escrita": "não confirmada para o subdomínio prioritário; nenhuma escrita incerta foi tentada",
+    "resultado": "origem GitHub/HomeHost autorizada selecionada"
+  },
+  "controle_de_duplicidade": {
+    "urls_candidatas_antes_do_deploy": "HTTP 404",
+    "repositorio": "títulos, intenções e slugs não encontrados entre os artigos recorrentes",
+    "busca_publica": "existem guias amplos sobre Decreto 10.278 e Alfresco, mas não manuais equivalentes sobre o índice de metadados do Anexo II nem sobre a decisão entre tipos, aspectos e pastas",
+    "wordpress_prioritario": "2 posts públicos sem equivalência temática",
+    "coordenacao_seo": "não replica ARQ-119 a ARQ-124 nem substitui páginas SEO existentes"
+  },
+  "artigos": [
+    {
+      "titulo": "Metadados do Decreto 10.278/2020: como montar um índice auditável",
+      "palavras_texto_principal": 1817,
+      "fontes_principais": ["Decreto 10.278/2020", "Resolução CONARQ 48/2021", "e-ARQ Brasil versão 2"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/metadados-decreto-10278-indice-digitalizacao/",
+      "arquivo": "artigos-tecnicos/2026-10-26/metadados-decreto-10278-indice-digitalizacao/index.html",
+      "estado": "pronto_para_publicacao",
+      "sha256_local": "5d3807b61d6050f1fc191cddc4d6880b9df72f670e3b4ce8423c2aae877ba515"
+    },
+    {
+      "titulo": "Tipos, aspectos e pastas no Alfresco: como modelar documentos",
+      "palavras_texto_principal": 2007,
+      "fontes_principais": ["Alfresco Content Services 7.2 — Content models", "Alfresco Document Library tutorials", "Alfresco Search Enterprise", "e-ARQ Brasil versão 2"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/tipos-aspectos-pastas-alfresco-modelagem-documental/",
+      "arquivo": "artigos-tecnicos/2026-10-26/tipos-aspectos-pastas-alfresco-modelagem-documental/index.html",
+      "estado": "pronto_para_publicacao",
+      "sha256_local": "758e5e1cb9d9cf0a268923831acc1836f55337bae1d540758577a62ef69e721e"
+    }
+  ]
+}

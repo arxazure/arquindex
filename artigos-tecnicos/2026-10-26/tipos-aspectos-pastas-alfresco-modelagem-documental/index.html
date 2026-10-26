@@ -1,0 +1,127 @@
+<!doctype html><html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tipos, aspectos e pastas no Alfresco | Arquindex</title>
+<meta name="description" content="Como modelar documentos no Alfresco com tipos, aspectos, propriedades, pastas, categorias e tags sem transformar a árvore em uma taxonomia rígida.">
+<meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://www.arquindex.com.br/blog/tipos-aspectos-pastas-alfresco-modelagem-documental/">
+<meta property="og:type" content="article"><meta property="og:site_name" content="Arquindex"><meta property="og:locale" content="pt_BR"><meta property="og:title" content="Tipos, aspectos e pastas no Alfresco: como modelar documentos"><meta property="og:description" content="Guia técnico para escolher estruturas, metadados e controles que continuem úteis quando o repositório crescer."><meta property="og:url" content="https://www.arquindex.com.br/blog/tipos-aspectos-pastas-alfresco-modelagem-documental/"><meta name="twitter:card" content="summary">
+<style>:root{--navy:#071a33;--blue:#0b4f86;--teal:#087f88;--ink:#17283b;--muted:#536579;--line:#d9e2ea;--paper:#fff;--bg:#f3f6f9;--soft:#eaf3f5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.72 Arial,Helvetica,sans-serif}a{color:#075b91}header{background:var(--navy);color:#fff}.top{max-width:1120px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.brand{color:#fff;text-decoration:none;font-weight:900;letter-spacing:2px;font-size:24px}.top nav{display:flex;gap:18px;flex-wrap:wrap}.top nav a{color:#dceaf7}.hero{background:linear-gradient(120deg,#071a33,#0b4f86 64%,#087f88);color:#fff;padding:64px 24px}.hero>div,.layout{max-width:1120px;margin:auto}.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.hero h1{max-width:930px;font-size:clamp(34px,5vw,58px);line-height:1.08;margin:12px 0 18px}.hero .lead{max-width:850px;font-size:21px;line-height:1.55}.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:32px;padding:32px 20px 60px}article,.toc{background:var(--paper);border:1px solid var(--line);border-radius:15px}article{padding:clamp(24px,5vw,58px)}.toc{position:sticky;top:18px;height:max-content;padding:22px}.toc strong{display:block;margin-bottom:10px}.toc a{display:block;padding:6px 0;font-size:14px}.answer,.note{background:var(--soft);border-left:5px solid var(--teal);padding:20px 22px;border-radius:8px}.meta{color:var(--muted);font-size:14px}.marker{font-size:12px;color:var(--muted)}h2{font-size:29px;line-height:1.25;color:var(--navy);margin-top:46px;scroll-margin-top:20px}h3{font-size:21px;line-height:1.35;color:#164c70;margin-top:28px}table{border-collapse:collapse;width:100%;min-width:680px}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:#e8f0f6}.scroll{overflow:auto}ol li,ul li{margin-bottom:8px}.checklist li{list-style:"✓  ";padding-left:4px}details{border-bottom:1px solid var(--line);padding:15px 0}summary{font-weight:700;cursor:pointer}.cta{background:var(--navy);color:#fff;padding:25px;border-radius:12px;margin-top:38px}.cta a{color:#fff}.button{display:inline-block;background:var(--teal);color:#fff!important;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:700;margin:7px 8px 0 0}footer{background:#061326;color:#d8e3ef;padding:30px 24px}footer>div{max-width:1120px;margin:auto}footer a{color:#bfe8ee}@media(max-width:860px){.layout{display:block}.toc{position:static;margin-bottom:20px}.hero{padding-top:44px}.top nav{font-size:14px}}</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.arquindex.com.br/#organization","name":"Arquindex","url":"https://www.arquindex.com.br/","email":"comercial@arquindex.com.br","telephone":"+55 31 97363-2725"},{"@type":"Article","headline":"Tipos, aspectos e pastas no Alfresco: como modelar documentos","description":"Como escolher tipos, aspectos, propriedades e estruturas de navegação para um repositório sustentável.","datePublished":"2026-10-26","dateModified":"2026-10-26","inLanguage":"pt-BR","author":{"@id":"https://www.arquindex.com.br/#organization"},"publisher":{"@id":"https://www.arquindex.com.br/#organization"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.arquindex.com.br/blog/tipos-aspectos-pastas-alfresco-modelagem-documental/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://www.arquindex.com.br/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.arquindex.com.br/blog/"},{"@type":"ListItem","position":3,"name":"Tipos, aspectos e pastas no Alfresco","item":"https://www.arquindex.com.br/blog/tipos-aspectos-pastas-alfresco-modelagem-documental/"}]}]}</script>
+</head><body><header><div class="top"><a class="brand" href="https://www.arquindex.com.br/">ARQUINDEX</a><nav aria-label="Principal"><a href="https://www.arquindex.com.br/servicos/">Soluções</a><a href="https://www.arquindex.com.br/blog/">Artigos</a><a href="https://www.arquindex.com.br/alfresco-ecm/">Alfresco ECM</a><a href="https://www.arquindex.com.br/contato-orcamento/">Contato</a></nav></div></header>
+<main><section class="hero"><div><p class="eyebrow">Alfresco · ECM · modelo de conteúdo</p><h1>Tipos, aspectos e pastas no Alfresco: como modelar documentos</h1><p class="lead">Uma árvore de diretórios pode orientar navegação, mas não deve carregar sozinha toda a classificação, o ciclo de vida e as regras do negócio.</p></div></section><div class="layout"><article id="artigo">
+<p class="meta">Autoria institucional: Arquindex · Publicado em 26/10/2026 · Atualizado em 26/10/2026 · Conteúdo técnico e informativo</p><p class="marker">ARQ-ARTICLE-20261026-ALFRESCO-TIPOS-ASPECTOS-PASTAS</p>
+<p class="answer"><strong>Resposta direta:</strong> no Alfresco, use um <strong>tipo</strong> para representar a identidade principal e estável do objeto, como contrato ou prontuário; use <strong>aspectos</strong> para acrescentar conjuntos reutilizáveis de propriedades ou comportamentos, como confidencialidade, temporalidade ou dados de digitalização; use <strong>pastas</strong> para navegação, contexto operacional e permissões quando isso fizer sentido. Categorias e tags ajudam em agrupamentos transversais, mas não substituem metadados governados. O desenho sustentável começa pelo processo e pelos documentos, não pela reprodução integral do organograma.</p>
+
+<h2 id="problema">O problema da árvore que tenta explicar tudo</h2>
+<p>Muitos projetos começam copiando a estrutura de rede: Empresa &gt; Unidade &gt; Departamento &gt; Ano &gt; Cliente &gt; Tipo &gt; Status. A árvore parece intuitiva enquanto há poucos arquivos, mas se torna profunda, duplicada e sensível a reorganizações. Um contrato que pertence ao Jurídico, atende Compras, envolve determinado fornecedor e está em renovação pode caber em várias pastas. Copiá-lo cria versões divergentes; escolher uma única pasta esconde outras dimensões.</p>
+<p>O repositório do Alfresco persiste conteúdo, metadados, associações e índices de texto. O modelo de conteúdo permite definir propriedades qualificadas por namespace, tipos, aspectos, restrições e relacionamentos. Isso possibilita pesquisar e aplicar regras sem depender exclusivamente do caminho. A pasta continua útil, mas deixa de ser a única fonte de significado.</p>
+<p>Modelagem não é apenas tarefa técnica. Ela traduz tipos documentais, processos, responsabilidades, permissões, temporalidade e necessidades de busca. Um XML perfeito ou um modelo criado pela interface pode falhar se os campos não correspondem à rotina real, se ninguém sabe preenchê-los ou se as regras mudam sem governança.</p>
+
+<h2 id="componentes">O papel de cada componente</h2>
+<div class="scroll"><table><thead><tr><th>Componente</th><th>Use para</th><th>Evite usar como</th></tr></thead><tbody>
+<tr><td>Tipo</td><td>Identidade primária do nó e propriedades essenciais daquele documento.</td><td>Lista enorme de estados ou combinações departamentais.</td></tr>
+<tr><td>Aspecto</td><td>Conjunto reutilizável de propriedades e comportamentos aplicável a vários tipos.</td><td>Atalho sem regra de aplicação, remoção e validação.</td></tr>
+<tr><td>Propriedade</td><td>Dado estruturado pesquisável, validável e utilizável por regras.</td><td>Campo livre para tudo o que não foi analisado.</td></tr>
+<tr><td>Pasta</td><td>Navegação, agrupamento operacional, contexto e, com cautela, herança de acesso.</td><td>Banco de dados hierárquico ou réplica imutável do organograma.</td></tr>
+<tr><td>Categoria</td><td>Classificação transversal em uma taxonomia administrada.</td><td>Substituto automático de plano de classificação arquivística.</td></tr>
+<tr><td>Tag</td><td>Marcação leve para descoberta colaborativa ou uso controlado.</td><td>Campo normativo de temporalidade, sigilo ou tipo documental.</td></tr>
+<tr><td>Associação</td><td>Relacionar objetos, como contrato e aditivo, sem duplicar arquivos.</td><td>Ligação sem cardinalidade, sentido ou manutenção definidos.</td></tr>
+</tbody></table></div>
+
+<h2 id="tipos">Quando criar um tipo documental</h2>
+<p>Crie um tipo quando o documento possui identidade de negócio relativamente estável e um núcleo de propriedades obrigatórias que o distingue. Um contrato pode exigir número, partes, objeto, vigência e situação. Um relatório de inspeção pode exigir ativo, local, data, responsável e resultado. Esses conjuntos são diferentes o suficiente para justificar tipos ou uma hierarquia de tipos.</p>
+<p>Evite criar um tipo para cada departamento, cliente ou ano. Esses elementos costumam ser propriedades, referências ou contexto de pasta. Também não transforme cada estado em tipo: “contrato em análise”, “contrato aprovado” e “contrato vencido” representam ciclo, não identidades documentais diferentes. Estado deve ser controlado por propriedade e, quando necessário, workflow.</p>
+<p>A herança de tipos ajuda a concentrar campos comuns em um tipo-base corporativo, mas excesso de níveis aumenta dependência e dificulta evolução. Defina uma raiz simples, documente o que cada nível acrescenta e teste migrações. Um documento possui um tipo primário; por isso, características que atravessam diversas famílias tendem a funcionar melhor como aspectos.</p>
+
+<h2 id="aspectos">Quando um aspecto é a escolha correta</h2>
+<p>Aspectos são adequados para capacidades modulares. “Possui dados pessoais”, “está sujeito à temporalidade”, “foi digitalizado”, “exige revisão” ou “pertence a processo controlado” podem aparecer em contratos, dossiês, prontuários e documentos técnicos. Em vez de duplicar os mesmos campos em cada tipo, o aspecto reúne propriedades e comportamentos reutilizáveis.</p>
+<h3>Exemplo: aspecto de digitalização</h3>
+<p>Um aspecto pode conter identificador de lote, data da captura, unidade, operador, hash, algoritmo, resultado de qualidade e relação com o original. Ele se aplica somente aos representantes digitais produzidos por aquele processo. Um documento nato-digital não deve receber valores fictícios para satisfazer o formulário.</p>
+<h3>Exemplo: aspecto de temporalidade</h3>
+<p>O aspecto pode registrar classe, evento inicial, data do evento, prazo aplicável, destinação prevista, bloqueio e fundamento da suspensão. A aplicação do prazo não deve executar exclusão automática sem avaliação e autorização, conforme explicado no guia sobre temporalidade no Alfresco.</p>
+<h3>Governança de aplicação e remoção</h3>
+<p>Defina quem pode aplicar o aspecto, quais campos tornam-se obrigatórios, se a remoção é permitida e que evento fica em auditoria. Aspecto adicionado por regra de pasta precisa ser testado quando o documento é movido. Remover o aspecto não pode apagar silenciosamente evidência que deveria permanecer.</p>
+
+<h2 id="pastas">Pastas: úteis, mas com responsabilidade limitada</h2>
+<p>Pastas continuam importantes para navegação humana, áreas de trabalho, entrada de documentos, separação de projetos e gestão de permissões. Uma estrutura curta e previsível ajuda adoção. O problema surge quando cada informação é codificada no caminho e precisa ser duplicada para atender diferentes visões.</p>
+<p>Evite profundidade desnecessária e nomes que mudam toda semana. Prefira espaços estáveis, como área, processo ou projeto, e deixe ano, status, fornecedor e tipo em propriedades quando esses valores precisam ser pesquisados ou alterados. Visualizações, consultas salvas e facetas podem apresentar coleções sem mover o arquivo.</p>
+<p>Permissões por pasta simplificam administração, mas heranças quebradas em centenas de subpastas criam risco. Modele grupos e papéis, separe áreas de colaboração de registros controlados e teste acesso com usuários reais. Metadado de confidencialidade sem política de autorização não protege conteúdo; pasta restrita sem governança também pode acumular exceções invisíveis.</p>
+
+<h2 id="propriedades">Como desenhar propriedades que sobrevivem ao crescimento</h2>
+<p>Cada propriedade precisa de nome técnico estável, rótulo, definição, tipo de dado, cardinalidade, obrigatoriedade, valor padrão, restrição, origem e responsável. Use namespaces próprios para evitar colisões. A documentação oficial do Alfresco explica que propriedades do modelo usam nomes qualificados, compostos por namespace e nome local; isso diferencia, por exemplo, campos homônimos de modelos distintos.</p>
+<p>Escolha o tipo correto. Datas devem ser datas, valores monetários precisam de convenção, referências não devem depender de texto livre e listas controladas precisam de gestão de mudança. Um campo obrigatório na definição pode impedir importações antigas; um campo opcional usado como se fosse obrigatório quebra relatórios. Decida a regra com base em cenários reais.</p>
+<p>Não concentre todas as informações em uma descrição extensa. Campos estruturados permitem filtro, validação, automação e integração. Ao mesmo tempo, não transforme cada palavra em propriedade. O texto completo e o OCR atendem busca textual; metadados atendem fatos relevantes e controlados.</p>
+
+<h2 id="exemplos">Três exemplos de modelagem</h2>
+<h3>Contratos e aditivos</h3>
+<p>Tipo <em>Contrato</em> com número, partes, objeto, vigência e responsável; tipo <em>Aditivo</em> ou uma associação qualificada, conforme o processo. Aspectos de confidencialidade, dados pessoais, temporalidade e assinatura podem atravessar os dois. Pastas organizam carteira ou área, sem duplicar o contrato para cada interessado.</p>
+<h3>Dossiê de colaborador</h3>
+<p>A pasta ou objeto dossiê agrupa documentos por vínculo. Tipos distinguem ficha de registro, contrato, exame, comprovante e desligamento. Dados sensíveis de saúde exigem segregação e permissão específica; não basta colocar todos os arquivos sob “RH”. Aspectos de temporalidade e digitalização acrescentam controles sem criar dezenas de tipos combinados.</p>
+<h3>Databook de engenharia</h3>
+<p>Um projeto pode conter certificados, desenhos, relatórios, folhas de dados e termos de aprovação. Propriedades registram tag do equipamento, disciplina, pacote, revisão, emissor, status e requisito do índice mestre. Associações ligam revisão substituta e documento de origem. A pasta representa pacote ou entrega; o status de aprovação não deve ser inferido apenas pela localização.</p>
+
+<h2 id="implantacao">Implantação em doze passos</h2><ol>
+<li><strong>Inventarie documentos e processos.</strong> Comece por amostras reais, exceções e consultas frequentes.</li>
+<li><strong>Separe identidade de característica.</strong> Identidade tende a tipo; capacidade reutilizável tende a aspecto.</li>
+<li><strong>Defina o vocabulário.</strong> Nomeie tipos, propriedades, estados e papéis de modo consistente.</li>
+<li><strong>Modele o mínimo útil.</strong> Evite reproduzir todos os campos de sistemas legados sem finalidade.</li>
+<li><strong>Escolha namespaces.</strong> Use prefixos próprios, estáveis e documentados.</li>
+<li><strong>Defina restrições.</strong> Listas, formatos, cardinalidade, valores nulos e responsáveis.</li>
+<li><strong>Desenhe pastas rasas.</strong> Use-as para contexto e navegação, não para armazenar toda a semântica.</li>
+<li><strong>Planeje permissões.</strong> Teste herança, grupos, exceções e segregação de dados sensíveis.</li>
+<li><strong>Prototipe formulários.</strong> Usuários precisam entender rótulos, ajuda e ordem de preenchimento.</li>
+<li><strong>Teste busca e relatórios.</strong> O modelo só é útil se recuperar as perguntas do negócio.</li>
+<li><strong>Migre com mapeamento.</strong> Preserve origem, identificadores, versões, datas e exceções.</li>
+<li><strong>Versione o modelo.</strong> Registre alterações, compatibilidade, plano de retorno e impacto em integrações.</li>
+</ol>
+
+<h2 id="integracao">Importação, API e evolução</h2>
+<p>Antes de importar em massa, teste criação, atualização, busca, download, versionamento e permissões pela mesma interface ou API usada em produção. Valide nomes qualificados, tipos de dados, encoding e comportamento de valores ausentes. Um lote pode parecer concluído mesmo quando propriedades foram ignoradas pelo mapeamento.</p>
+<p>Separe identificador de negócio do identificador interno do repositório. Integrações devem possuir chave estável e estratégia de idempotência para não criar duplicatas ao repetir um envio. Registre origem, horário, resultado e erro por item. Em migrações, preserve a relação entre versão, conteúdo e metadados; copiar apenas a última versão precisa ser uma decisão explícita.</p>
+<p>Mudanças em modelos ativos exigem cautela. Renomear prefixos, propriedades ou tipos pode afetar consultas, formulários, regras e código. Adições compatíveis tendem a ser menos arriscadas que remoções. Faça backup, teste restauração, execute em ambiente de homologação e tenha plano de rollback antes de alterar produção.</p>
+
+<h2 id="riscos">Erros comuns</h2><ul>
+<li>Criar um tipo para cada combinação de departamento, ano e status.</li>
+<li>Reproduzir toda a rede de arquivos sem revisar duplicidades e permissões.</li>
+<li>Usar tag livre para decisão de retenção ou sigilo.</li>
+<li>Adicionar aspecto sem definir aplicação, remoção e campos obrigatórios.</li>
+<li>Quebrar herança de permissão em centenas de pastas.</li>
+<li>Usar texto para datas, números e referências estruturadas.</li>
+<li>Importar documentos antes de validar busca e formulário.</li>
+<li>Alterar modelo em produção sem backup e teste de restauração.</li>
+<li>Confundir versão do arquivo com estado de aprovação.</li>
+<li>Automatizar exclusão porque um campo de prazo venceu.</li>
+</ul>
+
+<h2 id="checklist">Checklist de arquitetura</h2><ul class="checklist">
+<li>Cada tipo representa identidade documental compreensível.</li>
+<li>Características reutilizáveis foram avaliadas como aspectos.</li>
+<li>Propriedades têm definição, tipo, regra e responsável.</li>
+<li>Namespaces e prefixos são próprios e estáveis.</li>
+<li>Pastas permanecem curtas e não duplicam documentos.</li>
+<li>Permissões foram testadas com perfis reais.</li>
+<li>Busca funciona por metadados e texto completo.</li>
+<li>Estados de workflow não foram transformados em tipos.</li>
+<li>Integrações possuem chave idempotente e log por item.</li>
+<li>Migração preserva origem, versões e exceções conforme o escopo.</li>
+<li>Mudanças do modelo passam por homologação, backup e rollback.</li>
+<li>Temporalidade termina em avaliação e autorização, não em exclusão cega.</li>
+</ul>
+
+<h2 id="faq">Perguntas frequentes</h2>
+<details><summary>Posso modelar tudo apenas com pastas?</summary><p>É possível começar assim, mas pesquisa, automação e mudança organizacional ficam limitadas. Use pastas para contexto e metadados para fatos que precisam ser pesquisados, validados ou reutilizados.</p></details>
+<details><summary>Qual é a diferença principal entre tipo e aspecto?</summary><p>O tipo expressa a identidade primária do objeto. O aspecto acrescenta características reutilizáveis e pode ser aplicado a objetos de tipos diferentes.</p></details>
+<details><summary>Categoria e tag substituem plano de classificação?</summary><p>Não automaticamente. Elas podem apoiar descoberta, mas um plano arquivístico envolve instrumentos, regras, responsabilidades, temporalidade e governança próprias.</p></details>
+<details><summary>É melhor tornar todos os campos obrigatórios?</summary><p>Não. Obrigatoriedade sem fonte confiável cria valores fictícios e bloqueia importações. Torne obrigatório o que é necessário e disponível no ponto do processo.</p></details>
+<details><summary>É possível mudar o modelo depois?</summary><p>Sim, mas alterações podem afetar conteúdo existente, formulários, busca, regras e integrações. Versione, teste compatibilidade e planeje migração e retorno.</p></details>
+
+<h2 id="fontes">Fontes técnicas e oficiais</h2><ul>
+<li><a href="https://docs.alfresco.com/content-services/7.2/config/models/" rel="noopener">Alfresco Content Services 7.2 — Content models</a>, documentação oficial sobre configuração de modelos. Consulta em 26/10/2026.</li>
+<li><a href="https://docs.alfresco.com/content-services/6.0/tutorial/share/doclib/" rel="noopener">Alfresco Content Services — Document Library tutorials</a>, exemplos oficiais de tipos, propriedades, aspectos e templates de metadados. Consulta em 26/10/2026.</li>
+<li><a href="https://docs.alfresco.com/search-enterprise/3.1/using/languages/" rel="noopener">Alfresco Search Enterprise — Query languages</a>, propriedades qualificadas por namespace em consultas. Consulta em 26/10/2026.</li>
+<li><a href="https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV205MAI2022.pdf" rel="noopener">CONARQ — e-ARQ Brasil, versão 2</a>, requisitos de classificação, metadados, captura, pesquisa, acesso e auditoria. Consulta em 26/10/2026.</li>
+</ul><p class="note"><strong>Limite:</strong> a documentação citada descreve recursos técnicos. A aderência arquivística, jurídica e operacional depende do desenho e da implantação de cada organização.</p>
+
+<h2 id="relacionados">Leituras relacionadas</h2><ul><li><a href="https://www.arquindex.com.br/blog/temporalidade-no-alfresco-eventos-retencao-bloqueio/">Temporalidade no Alfresco: eventos, retenção e bloqueio</a>.</li><li><a href="https://www.arquindex.com.br/blog/indice-mestre-databook-completude-aprovacao/">Índice mestre de databook e aprovação</a>.</li><li><a href="https://www.arquindex.com.br/alfresco-ecm/">Implantação e consultoria Alfresco ECM</a>.</li><li><a href="https://www.arquindex.com.br/blog/metadados-decreto-10278-indice-digitalizacao/">Metadados do Decreto 10.278/2020</a>.</li></ul>
+<div class="cta"><h2 style="color:#fff;margin-top:0">Modele o repositório antes de migrar o acervo</h2><p>A Arquindex apoia diagnóstico, modelo de conteúdo, metadados, permissões, workflows, migração e operação de Alfresco ECM.</p><a class="button" href="https://wa.me/5531973632725?text=Ol%C3%A1%2C%20quero%20avaliar%20a%20modelagem%20documental%20no%20Alfresco">WhatsApp (31) 97363-2725</a><a class="button" href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></div>
+</article><aside class="toc" aria-label="Sumário"><strong>Neste artigo</strong><a href="#problema">Problema</a><a href="#componentes">Componentes</a><a href="#tipos">Tipos</a><a href="#aspectos">Aspectos</a><a href="#pastas">Pastas</a><a href="#propriedades">Propriedades</a><a href="#exemplos">Exemplos</a><a href="#implantacao">Implantação</a><a href="#checklist">Checklist</a><a href="#faq">FAQ</a><a href="#fontes">Fontes</a></aside></div></main>
+<footer><div><strong>Arquindex — Gestão Documental, Alfresco e Digitalização</strong><p>Belo Horizonte/MG · Atendimento nacional · <a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · <a href="https://wa.me/5531973632725">WhatsApp</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></div></footer></body></html>
