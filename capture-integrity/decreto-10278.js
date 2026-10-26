@@ -45,10 +45,10 @@ export function registerInput({ bytes, metadata, origem, actorId, tenantId, publ
   const inputHash = checksum(bytes);
   const id = metadata?.identificadorDigital || randomUUID();
   const fields = { ...metadata, identificadorDigital: id };
-  const check = validateMetadata(fields, { publicBody: publicBody && origem !== 'nato_digital' });
+  const check = origem === 'nato_digital' ? { valid: true, missing: [], note: 'Fora do escopo do Decreto 10.278/2020; metadados a validar conforme politica do cliente' } : validateMetadata(fields, { publicBody });
   const timestamp = new Date().toISOString();
   return {
-    documentoId: id, tenantId, origem, capturedAt: timestamp, actorId,
+    documentoId: id, tenantId, origem, publicBody, capturedAt: timestamp, actorId,
     metadata: fields, metadataValidation: check,
     versions: [{ stage: 'recebido', createdAt: timestamp, actorId, ...inputHash }],
     status: check.valid ? 'aguardando_conferencia' : 'metadados_pendentes',
