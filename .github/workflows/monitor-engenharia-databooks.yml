@@ -1,0 +1,60 @@
+name: Monitor engenharia e Databooks - somente leitura
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 10 * * *' # 07h35 America/Sao_Paulo; após integração na master
+  pull_request:
+    paths:
+      - 'scripts/monitor_engenharia_databooks.py'
+      - 'tests/test_monitor_engenharia_databooks.py'
+      - 'docs/seo/interlinking/**'
+      - '.github/workflows/monitor-engenharia-databooks.yml'
+permissions:
+  contents: read
+concurrency:
+  group: monitor-databooks-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Testar auditor sem acesso à rede
+        run: python -m unittest discover -s tests -p test_monitor_engenharia_databooks.py -v
+      - name: Recuperar estado anterior
+        if: github.event_name != 'pull_request'
+        uses: actions/cache/restore@v4
+        with:
+          path: .databooks-state
+          key: databooks-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: databooks-v1-
+      - name: Consultar URLs atuais da fila sem publicar
+        run: |
+          python scripts/monitor_engenharia_databooks.py --fila seo/fila-seo-geo-aeo.csv --previous .databooks-state/previous.json --output databooks-report/resultado.json
+      - name: Preservar relatorio como estado
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          if test -f databooks-report/resultado.json; then
+            mkdir -p .databooks-state
+            cp databooks-report/resultado.json .databooks-state/previous.json
+          fi
+      - name: Salvar estado entre execucoes
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/cache/save@v4
+        with:
+          path: .databooks-state
+          key: databooks-v1-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Guardar evidencia mesmo em caso de alerta
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: databooks-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: databooks-report/
+          if-no-files-found: warn
+          retention-days: 30
