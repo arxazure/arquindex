@@ -78,6 +78,25 @@ async function init(){
  await pool.query(`CREATE TABLE IF NOT EXISTS lgpd_web_audits(id UUID PRIMARY KEY,website_id UUID NOT NULL REFERENCES lgpd_records(id) ON DELETE RESTRICT,company_id UUID NOT NULL REFERENCES lgpd_records(id) ON DELETE RESTRICT,user_id UUID NOT NULL REFERENCES lgpd_users(id),result JSONB NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT now());CREATE INDEX IF NOT EXISTS lgpd_web_audits_site_idx ON lgpd_web_audits(website_id,created_at DESC);`);
  if(process.env.RUN_SELF_TESTS==='true'){await dbSelfTest();try{const r=await scanPage(publicOrigin);console.log('WEB_AUDIT_SELF_TEST',JSON.stringify({status:r.httpStatus,method:r.method,checks:r.checks.length}));}catch(e){console.log('WEB_AUDIT_SELF_TEST_UNAVAILABLE',e.code||'network');}}
  const db=await pool.connect();let activation=null;try{await db.query('BEGIN');await db.query('SELECT pg_advisory_xact_lock(987643201)');const r=await db.query("SELECT id FROM lgpd_users WHERE role='admin' LIMIT 1");if(!r.rowCount){const email=(process.env.ADMIN_EMAIL||'arquindex@gmail.com').toLowerCase();const u=await db.query("INSERT INTO lgpd_users(email,role) VALUES($1,'admin') RETURNING id",[email]);const t=secret();await db.query("INSERT INTO lgpd_activation(user_id,token_hash,expires_at) VALUES($1,$2,now()+interval '24 hours')",[u.rows[0].id,digest(t)]);activation=publicOrigin+'/activate#token='+t;}await db.query('COMMIT');}catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}if(activation)console.log('OWNER_ACTIVATION_URL '+activation);
+ // Explicit, one-time recovery: uses the Railway secret without printing it.
+ if(process.env.BOOTSTRAP_ADMIN_RESET==='true'){
+   const adminEmail=String(process.env.ADMIN_EMAIL||'').trim().toLowerCase();
+   const adminPassword=process.env.ADMIN_PASSWORD;
+   if(!adminEmail||!adminPassword||adminPassword.length<14||adminPassword.length>256)throw Error('ADMIN_RESET_CONFIG_INVALID');
+   const cx=await pool.connect();
+   try{
+     await cx.query('BEGIN');
+     await cx.query('SELECT pg_advisory_xact_lock(987643202)');
+     const adminUser=await cx.query("SELECT id FROM lgpd_users WHERE email=$1 AND role='admin' FOR UPDATE",[adminEmail]);
+     if(adminUser.rowCount!==1)throw Error('ADMIN_RESET_USER_NOT_FOUND');
+     await cx.query('UPDATE lgpd_users SET password_hash=$1,enabled=true WHERE id=$2',[passwordHash(adminPassword),adminUser.rows[0].id]);
+     await cx.query('DELETE FROM lgpd_sessions WHERE user_id=$1',[adminUser.rows[0].id]);
+     await cx.query('DELETE FROM lgpd_activation WHERE user_id=$1',[adminUser.rows[0].id]);
+     await audit(cx,{id:adminUser.rows[0].id},null,'admin_password_recovery',adminUser.rows[0].id);
+     await cx.query('COMMIT');
+     console.log('ADMIN_PASSWORD_RECOVERY_OK');
+   }catch(error){await cx.query('ROLLBACK');throw error;}finally{cx.release();}
+ }
 }
 async function dbSelfTest(){const db=await pool.connect();try{await db.query('BEGIN');const a=randomUUID(),b=randomUUID(),dep=randomUUID();for(const id of [a,b])await db.query("INSERT INTO lgpd_records(id,section,company_id,payload) VALUES($1,'company',$1,$2)",[id,JSON.stringify({company_name:'SYNTHETIC SELF TEST'})]);await db.query("INSERT INTO lgpd_records(id,section,company_id,parent_id,payload) VALUES($1,'branch',$2,$2,'{}')",[dep,b]);const user={role:'manager',company_id:a};if(await record(db,dep,user))throw Error('Tenant isolation failed');const foreign=await record(db,dep,{role:'admin'});let rejected=false;try{validateParent('department',foreign,a);}catch{rejected=true;}if(!rejected)throw Error('Cross tenant parent accepted');const q=await db.query("SELECT id FROM lgpd_records WHERE ($1::text='admin' OR company_id=$2) AND id=ANY($3::uuid[])",[user.role,a,[a,b,dep]]);if(q.rows.length!==1||q.rows[0].id!==a)throw Error('Tenant query failed');console.log('DB_SELF_TEST_PASS tenant_read,tenant_query,parent_boundary,rollback');}finally{await db.query('ROLLBACK');db.release();}}
 init().then(()=>app.listen(Number(process.env.PORT||3000),'0.0.0.0',()=>console.log('LGPD_READY 0.3.0'))).catch(e=>{console.error('LGPD_START_FAILED',e.code||e.message);process.exit(1);});
