@@ -1,0 +1,224 @@
+{
+  "audit_date": "2026-10-26",
+  "scope": "daily-safe-technical-audit",
+  "production_origin": {
+    "repository": "arxazure/arquindex",
+    "branch": "railway-production-2026",
+    "root_directory": "/arquindex-platform",
+    "railway_project": {
+      "name": "Arquindex Plataforma",
+      "id": "f652d9de-5f85-404f-baec-a48d552d9163"
+    },
+    "railway_service": {
+      "name": "arquindex-web",
+      "id": "57fb4cbc-213b-462c-9c66-920b4d620137"
+    },
+    "railway_environment": {
+      "name": "production",
+      "id": "5ba32ff7-5386-4867-8250-2a87def0d9d4"
+    },
+    "staged_changes": null
+  },
+  "deployment": {
+    "previous": {
+      "commit": "25bd28107804d0ff9824d9ec05f5d018bb9da897",
+      "deployment_id": "5651b502-afde-49b1-bf5d-c24f1488e3af",
+      "status": "SUCCESS"
+    },
+    "final": {
+      "commit": "9ff8b25b947cbb9a7d478dc16bd74930620856cc",
+      "message": "fix: redirect malformed gestão documental assets and routes",
+      "deployment_id": "ab043c69-4f1c-4352-8072-1dc528cd0f4a",
+      "status": "SUCCESS",
+      "deployed_at_utc": "2026-10-26T09:59:47Z"
+    },
+    "github_actions": {
+      "run_id": 40303826026,
+      "conclusion": "success",
+      "url": "https://github.com/arxazure/arquindex/actions/runs/40303826026"
+    }
+  },
+  "changes": {
+    "file": "arquindex-platform/server.js",
+    "type": "safe_exact_301_redirects",
+    "layout_changed": false,
+    "rules": [
+      "7 known root asset bundle paths -> /gestao-documental/assets/<file>, query preserved",
+      "/gestao-documental/brasil/centro-oeste/df/gestao-documental/brasilia -> /gestao-documental/brasil/centro-oeste/df/brasilia, query preserved",
+      "/gestao-documental/blog/gestao-documental/orcamento-digitalizacao-ocr-bh-criterios-entrega -> /gestao-documental/blog/orcamento-digitalizacao-ocr-bh-criterios-entrega, query preserved"
+    ],
+    "issue_closed": "https://github.com/arxazure/arquindex/issues/45"
+  },
+  "validation": {
+    "redirected_paths": {
+      "checked": 9,
+      "http_301": 9,
+      "wrong_location": 0
+    },
+    "redirect_targets": {
+      "checked": 9,
+      "http_200": 9
+    },
+    "railway_http_logs_after_deploy": {
+      "requests": 90,
+      "http_200": 81,
+      "http_301": 9,
+      "http_4xx": 0,
+      "http_5xx": 0
+    },
+    "regional_campaign": {
+      "intentions_checked": 72,
+      "http_200": 72,
+      "self_canonical": 72,
+      "exactly_one_h1": 72,
+      "mobile_viewport": 72,
+      "noindex": 0,
+      "technical_failures": 0,
+      "sitemap_inclusion": false,
+      "submission_performed": false,
+      "note": "Pages remain thin/mechanical (402–438 visible words observed previously); they were not submitted or added to sitemap."
+    },
+    "platform_endpoints": {
+      "health": 200,
+      "robots_txt": 200,
+      "sitemap_xml": 200,
+      "sitemap_index_xml": 200
+    }
+  },
+  "official_site": {
+    "priority_pages": [
+      {
+        "url": "https://www.arquindex.com.br/",
+        "status": 200,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": true,
+        "main_element": true
+      },
+      {
+        "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+        "status": 200,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": false,
+        "main_element": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+        "status": 200,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": false,
+        "main_element": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao.html",
+        "status": 200,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": true,
+        "main_element": true
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+        "status": 200,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": true,
+        "main_element": true
+      }
+    ],
+    "links_and_assets": {
+      "checked": 135,
+      "http_200": 122,
+      "http_301": 8,
+      "http_404": 4,
+      "transport_errors": 1
+    },
+    "unresolved": [
+      {
+        "url": "https://www.arquindex.com.br/arquindex-favicon.png",
+        "result": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/img/about.webp",
+        "result": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/css/IE-fix.css",
+        "result": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/assets/img/about.webp",
+        "result": 404
+      },
+      {
+        "url": "http://www.arquindex.com.br/loja/",
+        "result": "transport_error"
+      }
+    ],
+    "tracking_gap": [
+      "/guarda_de_documentos.html",
+      "/gestao_de_colaboradores_documentos.html"
+    ],
+    "semantic_main_gap": [
+      "/guarda_de_documentos.html",
+      "/gestao_de_colaboradores_documentos.html"
+    ],
+    "tracking_issue": "https://github.com/arxazure/arquindex/issues/28"
+  },
+  "homehost_weekly_module": {
+    "last_run": {
+      "run_id": 40182813507,
+      "conclusion": "cancelled",
+      "duration_hours": 6,
+      "inventory_progress": {
+        "files": 53500,
+        "bytes": 1563237078
+      },
+      "inventory_complete": false,
+      "archive_uploaded": false,
+      "sha256_readback": false,
+      "backup_valid": false
+    },
+    "today_action": "none; Monday daily scope only",
+    "files_deleted": 0,
+    "files_moved": 0,
+    "files_quarantined": 0,
+    "bytes_freed": 0,
+    "reason": "Destructive cleanup remains prohibited until a complete off-public-root backup is uploaded and checksum-validated."
+  },
+  "integrations": {
+    "gsc": {
+      "read_test": "blocked",
+      "error_type": "subscription_required",
+      "structured_code": "INVALID_ARGUMENT",
+      "not_http_auth_failure": true
+    },
+    "sitemap_submitted": false,
+    "gsc_url_sent": false,
+    "indexnow_sent": false,
+    "indexing_confirmed": false,
+    "merchant_center": {
+      "status": "separate_pending",
+      "seo_metrics_mixed": false
+    }
+  },
+  "next_steps": [
+    "On the next Sunday window, change the weekly HomeHost inventory/backup to a resumable or root-segmented process before rerunning.",
+    "Restore or correct the four broken official-site assets and the legacy HTTP /loja/ reference only after a valid HomeHost backup and write access.",
+    "Restore tracking and semantic <main> on the two legacy priority pages without changing their URLs.",
+    "Resolve GSC Wizard subscription access before performance/cannibalization analysis or any sitemap/URL submission.",
+    "Deepen the 72 regional pages before sitemap inclusion to avoid doorway-like publication."
+  ]
+}
