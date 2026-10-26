@@ -1,1 +1,22 @@
-{"name":"arquindex-lgpd-checklist","version":"0.3.0","private":true,"type":"module","scripts":{"start":"node server.js","test":"node --test test/*.test.js"},"engines":{"node":">=22"},"dependencies":{"express":"4.21.2","pg":"8.13.1","helmet":"8.0.0","express-rate-limit":"7.5.0"}}
+{
+  "name": "arquindex-lgpd-checklist",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "express": "4.21.2",
+    "pg": "8.13.1",
+    "helmet": "8.0.0",
+    "express-rate-limit": "7.5.0",
+    "docx": "9.5.1",
+    "exceljs": "4.4.0",
+    "pdfkit": "0.17.2"
+  }
+}
