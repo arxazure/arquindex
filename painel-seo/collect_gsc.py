@@ -26,8 +26,7 @@ def oauth_token():
 def main():
     missing=[x for x in ('GSC_CLIENT_ID','GSC_CLIENT_SECRET','GSC_REFRESH_TOKEN') if not os.environ.get(x)]
     if missing:
-        print('GSC not configured: missing GitHub Actions secrets '+', '.join(missing))
-        return
+        raise RuntimeError('GSC_NOT_CONFIGURED: missing GitHub Actions secrets '+', '.join(missing))
     token=oauth_token()
     sites=request_json('https://www.googleapis.com/webmasters/v3/sites',token=token).get('siteEntry',[])
     allowed=[s['siteUrl'] for s in sites if s.get('permissionLevel') not in ('siteUnverifiedUser',) and ('arquindex.com.br' in s.get('siteUrl',''))]
@@ -53,6 +52,8 @@ def main():
             count+=len(rows)
             if len(rows)<2500:break
         property_reports.append({'property':site,'rows':count})
+    if not allowed:
+        raise RuntimeError('GSC_NO_VERIFIED_ARQUINDEX_PROPERTIES: check OAuth authorization and Search Console access')
     output={'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'start_date':start.isoformat(),'end_date':end.isoformat(),'source':'Google Search Console API OAuth','properties':property_reports,'rows':allrows}
     p=Path(__file__).with_name('gsc-real.json')
     p.write_text(json.dumps(output,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
