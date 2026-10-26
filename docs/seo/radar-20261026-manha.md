@@ -1,0 +1,12 @@
+# Radar — 26/10/2026 — manhã
+Último registro lido: radar-20261025-hyland-validacao.md, blob 7e9f03e3e1ab650f97ec9f08f14873898d499dd2. Janela principal 23–26/10; ampliada para referência técnica de 14/10 explicitamente, sem chamar notícia das últimas 72h.
+Buscas: Arquindex, ANPD, CONARQ, Microsoft OCR/RAG/SharePoint. Resultados regulatórios antigos e diretórios deduplicados. Perfil https://br.linkedin.com/company/arquindex aberto: conteúdo próprio de BH, sem nova cobertura editorial elegível. Não prova ausência global de menções.
+
+## Candidato novo, ainda não liberado para publicação
+Fonte primária aberta: https://learn.microsoft.com/en-us/azure/foundry-classic/openai/concepts/use-your-data — declara aposentadoria do Azure OpenAI On Your Data em 14/10/2026; data de atualização editorial não confirmada. A aposentadoria não abrange todas as chamadas Azure OpenAI nem equivale à aposentadoria de modelos. Migração não automática; avaliar autorização por usuário, referências e testes com o acervo. Não afirmar que Arquindex usa essa funcionalidade ou foi afetada.
+Proposta de análise: “RAG documental: como identificar dependências de serviços descontinuados”. Intenção informacional/técnica; AEO: “Como saber se minha aplicação documental usa Azure OpenAI On Your Data?”. Estrutura proposta: identificar chamadas legadas; mapear fontes/permissões; comparar caminhos suportados; validar respostas/citações; plano de transição. Diferencial: checklist de aceitação com pergunta sem resposta e acesso negado, além de pergunta respondida. Serviço associado potencial: governança de informação/IA documental, capacidade específica a validar. ID/URL interna e seção existente pendentes: não inventar ficha nem criar artigo concorrente a guia atual. Sem versões sociais finais até confirmar destino e deduplicação em outras rotinas.
+
+ARQ119 revalidada no leitor: não acessível pela ferramenta, sem diagnóstico HTTP/DNS. ARQ119/120 continuam triadas, não cobertas. Nenhuma alteração em title/H1/description.
+Registro: 26/10 | fonte Microsoft acima | interno | pesquisa/triagem | preparado candidato, não publicado. Zero pautas liberadas, zero publicações e submissões.
+Pendências: comparar candidato com inventário atual; validar oferta e URL destino; obter leitura renderizada 119/120.
+Próximas ações: 1) procurar guia RAG existente e confirmar elegibilidade do candidato; 2) comparar 119/120 com pilares antes de briefing; 3) continuar busca de menções com sobreposição e abrir candidatos substantivos.
