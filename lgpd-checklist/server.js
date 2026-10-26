@@ -1,6 +1,5 @@
 import {excelExport,pdfExport,wordExport} from './export-files.js';
 import express from 'express';
-import {pdfExport,excelExport} from './export-files.js';
 import {scanPage} from './web-audit.js';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
