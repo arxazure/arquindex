@@ -223,9 +223,10 @@
   },
   "search_platforms": {
     "gsc_read_test": {
-      "operation": "list_sites",
-      "result": "INVALID_ARGUMENT",
-      "classification": "connector_argument_or_code_error; not 401, 403, 429 or 5xx"
+      "operation": "get_account_info",
+      "result": "payment_required / subscription_required",
+      "classification": "Active authentication reached the service; the GSC Wizard trial ended or no subscription is active. Not 401, 403, 429 or 5xx.",
+      "next_step": "Activate a GSC Wizard subscription at https://tool.gscwizard.com/settings/subscription and retry the property read."
     },
     "gsc_metrics_retrieved": false,
     "sitemap_submitted": false,
