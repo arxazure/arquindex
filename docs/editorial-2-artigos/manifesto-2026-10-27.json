@@ -24,6 +24,14 @@
     "http": 200,
     "canonical_e_robots": "verificados publicamente"
   },
+  "rastreamento": {
+    "sitemap_atualizado": "sim; duas URLs confirmadas pelo workflow público",
+    "google_search_console_e_indexnow": "não submetidos",
+    "servico": "GSC Wizard",
+    "leitura_diagnostica": "get_account_info recusado com payment_required / subscription_required; list_sites, list_sitemaps e get_indexnow_settings não ficaram disponíveis",
+    "acao_humana_exata": "ativar plano ou trial em https://tool.gscwizard.com/settings/subscription e então repetir leitura de propriedade, submissão de sitemap e IndexNow",
+    "indexacao_alegada": false
+  },
   "blog_prioritario": {
     "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
     "cms": "WordPress independente; não Blogger",
