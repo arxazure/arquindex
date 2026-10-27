@@ -1,0 +1,64 @@
+{
+  "data": "2026-10-27",
+  "meta_diaria": 2,
+  "novos_artigos_qualificados_produzidos_no_dia": 2,
+  "novos_artigos_publicados_e_verificados_no_dia": 0,
+  "saldo_pendente_do_dia": 2,
+  "saldo_pendente_rotina_atual_antes_do_dia": 4,
+  "deficit_historico_rotina_anterior": 2,
+  "saldo_pendente_total_registrado": 8,
+  "estado": "pronto_para_publicacao",
+  "github": {
+    "repositorio": "arxazure/arquindex",
+    "branch_publicadora": "master",
+    "pull_request": null,
+    "commit_integrado": null,
+    "workflow": null,
+    "conclusao": null
+  },
+  "deploy": {
+    "destino": "HomeHost /public_html",
+    "escopo": "duas URLs novas e atualização transacional do sitemap; nenhuma página existente substituída",
+    "backup_recuperavel": null,
+    "sitemap": "https://www.arquindex.com.br/sitemap-artigos.xml",
+    "http": null,
+    "canonical_e_robots": "aguardando deploy"
+  },
+  "blog_prioritario": {
+    "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
+    "cms": "WordPress independente; não Blogger",
+    "leitura_publica": "GET /wp-json/wp/v2/posts HTTP 200 em 27/10/2026; 2 posts públicos",
+    "conector_wordpress": "leitura autenticada funcionou e listou 7 sites, mas o subdomínio prioritário não está entre os sites acessíveis",
+    "permissao_de_escrita": "não confirmada para o subdomínio prioritário; nenhuma escrita incerta foi tentada",
+    "resultado": "origem GitHub/HomeHost autorizada selecionada"
+  },
+  "controle_de_duplicidade": {
+    "urls_candidatas_antes_do_deploy": "HTTP 404",
+    "repositorio": "títulos, intenções e slugs não encontrados entre os artigos recorrentes",
+    "busca_publica": "nenhum resultado equivalente para governança controlador/operador na digitalização ou transmittal e revisões em Databooks",
+    "wordpress_prioritario": "2 posts públicos sem equivalência temática",
+    "coordenacao_seo": "não replica ARQ-125 a ARQ-130 nem substitui páginas SEO existentes"
+  },
+  "artigos": [
+    {
+      "titulo": "Controlador e operador na digitalização: como documentar instruções, ROPA e evidências",
+      "palavras_texto_principal": 2043,
+      "fontes_principais": ["LGPD — Lei 13.709/2018", "ANPD — Guia de Agentes de Tratamento versão 2.0", "Resolução CD/ANPD 15/2024"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/controlador-operador-digitalizacao-ropa-evidencias/",
+      "arquivo": "artigos-tecnicos/2026-10-27/controlador-operador-digitalizacao-ropa-evidencias/index.html",
+      "estado": "pronto_para_publicacao",
+      "sha256_publico": null
+    },
+    {
+      "titulo": "Transmittal e controle de revisões no Databook: como impedir entrega obsoleta",
+      "palavras_texto_principal": 2023,
+      "fontes_principais": ["Petrobras I-ET-3010.2D-1200-91A-P4X-001 rev. 0", "Catálogo de Padronização Petrobras", "e-ARQ Brasil versão 2", "Resolução CONARQ 50/2022"],
+      "destino": "site principal",
+      "url": "https://www.arquindex.com.br/blog/transmittal-controle-revisoes-databook/",
+      "arquivo": "artigos-tecnicos/2026-10-27/transmittal-controle-revisoes-databook/index.html",
+      "estado": "pronto_para_publicacao",
+      "sha256_publico": null
+    }
+  ]
+}
