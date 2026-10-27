@@ -1,0 +1,24 @@
+name: Capture integrity tests
+on:
+  pull_request:
+    paths:
+      - 'capture-integrity/**'
+      - '.github/workflows/capture-integrity-test.yml'
+  push:
+    branches:
+      - feat/decreto-10278-hash-metadados-20261026
+    paths:
+      - 'capture-integrity/**'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Node unit tests
+        working-directory: capture-integrity
+        run: npm test
