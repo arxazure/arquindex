@@ -2,27 +2,27 @@
   "data": "2026-10-27",
   "meta_diaria": 2,
   "novos_artigos_qualificados_produzidos_no_dia": 2,
-  "novos_artigos_publicados_e_verificados_no_dia": 0,
-  "saldo_pendente_do_dia": 2,
+  "novos_artigos_publicados_e_verificados_no_dia": 2,
+  "saldo_pendente_do_dia": 0,
   "saldo_pendente_rotina_atual_antes_do_dia": 4,
   "deficit_historico_rotina_anterior": 2,
-  "saldo_pendente_total_registrado": 8,
-  "estado": "pronto_para_publicacao",
+  "saldo_pendente_total_registrado": 6,
+  "estado": "publicado_e_verificado",
   "github": {
     "repositorio": "arxazure/arquindex",
     "branch_publicadora": "master",
-    "pull_request": null,
-    "commit_integrado": null,
-    "workflow": null,
-    "conclusao": null
+    "pull_request": "https://github.com/arxazure/arquindex/pull/70",
+    "commit_integrado": "be48d4eae176d70da56bb7f5b5b7fda851c219d4",
+    "workflow": "https://github.com/arxazure/arquindex/actions/runs/40510338706",
+    "conclusao": "success"
   },
   "deploy": {
     "destino": "HomeHost /public_html",
     "escopo": "duas URLs novas e atualização transacional do sitemap; nenhuma página existente substituída",
-    "backup_recuperavel": null,
+    "backup_recuperavel": "/seo-backups/artigos-20261027-20261027T131452Z",
     "sitemap": "https://www.arquindex.com.br/sitemap-artigos.xml",
-    "http": null,
-    "canonical_e_robots": "aguardando deploy"
+    "http": 200,
+    "canonical_e_robots": "verificados publicamente"
   },
   "blog_prioritario": {
     "url": "https://blog-digitalizacao-de-documentos.arquindex.com.br/",
@@ -47,8 +47,8 @@
       "destino": "site principal",
       "url": "https://www.arquindex.com.br/blog/controlador-operador-digitalizacao-ropa-evidencias/",
       "arquivo": "artigos-tecnicos/2026-10-27/controlador-operador-digitalizacao-ropa-evidencias/index.html",
-      "estado": "pronto_para_publicacao",
-      "sha256_publico": null
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "dfe07c314f03ac14a7a68da6bf4ccac3315a98928d9327c85823149c6192de66"
     },
     {
       "titulo": "Transmittal e controle de revisões no Databook: como impedir entrega obsoleta",
@@ -57,8 +57,8 @@
       "destino": "site principal",
       "url": "https://www.arquindex.com.br/blog/transmittal-controle-revisoes-databook/",
       "arquivo": "artigos-tecnicos/2026-10-27/transmittal-controle-revisoes-databook/index.html",
-      "estado": "pronto_para_publicacao",
-      "sha256_publico": null
+      "estado": "publicado_http_200_verificado",
+      "sha256_publico": "b042fac9d2d846e6550785e23de93eac5705f490a3ec0881eacb6ec566c8ff9a"
     }
   ]
 }
