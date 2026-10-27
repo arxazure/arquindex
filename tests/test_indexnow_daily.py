@@ -26,6 +26,7 @@ class IndexNowTests(unittest.TestCase):
             return 200, b'changed content', {}
         with patch.object(daily, 'key_for', return_value=('12345678', 'https://' + host + '/indexnow-key.txt')), \
              patch.object(daily, 'discover', return_value=[url]), \
+             patch.object(daily, 'robots_for', return_value=type('Robots', (), {'can_fetch': lambda *args: True})()), \
              patch.object(daily, 'request', side_effect=fake_request):
             report, state = daily.process_host(host, old or {})
         return report, state, submissions
@@ -51,6 +52,7 @@ class IndexNowTests(unittest.TestCase):
 
     def test_missing_key_blocks_only_that_host(self):
         with patch.object(daily, 'key_for', side_effect=ValueError('missing key')), \
+             patch.object(daily, 'discover', return_value=['https://a.arquindex.com.br/']), \
              patch.object(daily, 'request') as request:
             report, state = daily.process_host('a.arquindex.com.br', {})
         self.assertTrue(report['errors'])
@@ -61,6 +63,28 @@ class IndexNowTests(unittest.TestCase):
                 b'<urlset><url><loc>https://evil.com/</loc></url></urlset>', {})):
             with self.assertRaises(ValueError):
                 daily.discover('a.arquindex.com.br')
+
+    def test_apex_www_alias_is_not_an_error_or_submission(self):
+        with patch.object(daily, 'request', return_value=(200,
+                b'<urlset><url><loc>https://www.arquindex.com.br/</loc></url></urlset>', {})):
+            report, state = daily.process_host('arquindex.com.br', {})
+        self.assertEqual(report['status'], 'delegated_to_www')
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['batches'], [])
+
+    def test_noindex_canonical_and_header_guards(self):
+        url = 'https://a.arquindex.com.br/'
+        good = b'<html><link rel="canonical" href="https://a.arquindex.com.br/"></html>'
+        self.assertIsNone(daily.exclusion_reason(url, good, {}))
+        self.assertEqual(daily.exclusion_reason(url, good, {'X-Robots-Tag': 'noindex'}), 'x_robots_noindex')
+        self.assertEqual(daily.exclusion_reason(url, good.replace(b'</html>', b'<meta name="robots" content="noindex"></html>'), {}), 'meta_noindex')
+        self.assertEqual(daily.exclusion_reason(url, good.replace(b'a.arquindex', b'b.arquindex'), {}), 'canonical_points_elsewhere')
+        self.assertEqual(daily.exclusion_reason(url, b'<html></html>', {}), 'canonical_missing_or_multiple')
+
+    def test_dns_error_is_classified(self):
+        import socket
+        import urllib.error
+        self.assertEqual(daily.error_code(urllib.error.URLError(socket.gaierror(-2, 'not found'))), 'dns')
 
 
 if __name__ == '__main__':

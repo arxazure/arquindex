@@ -5,13 +5,17 @@ import hashlib
 import json
 import os
 import re
+import socket
+import ssl
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import urllib.robotparser
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
+from html.parser import HTMLParser
 
 ENDPOINT = 'https://api.indexnow.org/indexnow'
 STATE = Path('.indexnow-state/accepted.json')
@@ -19,6 +23,73 @@ REPORT = Path('indexnow-report/report.json')
 MAX_BYTES = 8 * 1024 * 1024
 MAX_URLS = 25000
 KEY_RE = re.compile(r'[A-Za-z0-9-]{8,128}')
+
+
+class CanonicalAlias(ValueError):
+    """The apex sitemap delegates exclusively to the configured www inventory."""
+
+
+def error_code(exc):
+    seen = set()
+    while exc is not None and id(exc) not in seen:
+        seen.add(id(exc))
+        if isinstance(exc, socket.gaierror):
+            return 'dns'
+        if isinstance(exc, ssl.SSLError):
+            return 'tls'
+        if isinstance(exc, urllib.error.HTTPError):
+            return 'http_' + str(exc.code)
+        if isinstance(exc, urllib.error.URLError) and isinstance(exc.reason, BaseException):
+            exc = exc.reason
+        else:
+            exc = exc.__cause__ or exc.__context__
+    return 'validation_or_network'
+
+
+class SEOParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.canonicals = []
+        self.noindex = False
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'link' and 'canonical' in attrs.get('rel', '').lower().split():
+            self.canonicals.append(attrs.get('href', ''))
+        if tag == 'meta' and attrs.get('name', '').lower() in ('robots', 'bingbot', 'msnbot'):
+            tokens = re.split(r'[\s,;]+', attrs.get('content', '').lower())
+            self.noindex |= bool({'noindex', 'none'} & set(tokens))
+
+
+def exclusion_reason(url, body, headers):
+    headers = {k.lower(): v for k, v in headers.items()}
+    if re.search(r'\b(noindex|none)\b', headers.get('x-robots-tag', ''), re.I):
+        return 'x_robots_noindex'
+    if 'html' in headers.get('content-type', '').lower() or b'<html' in body[:4096].lower():
+        parser = SEOParser()
+        parser.feed(body.decode('utf-8', errors='replace'))
+        if parser.noindex:
+            return 'meta_noindex'
+        if len(parser.canonicals) != 1:
+            return 'canonical_missing_or_multiple'
+        if urllib.parse.urljoin(url, parser.canonicals[0]) != url:
+            return 'canonical_points_elsewhere'
+    return None
+
+
+def robots_for(host):
+    parser = urllib.robotparser.RobotFileParser()
+    try:
+        status, body, _ = request('https://' + host + '/robots.txt')
+        if status != 200:
+            raise ValueError('robots not HTTP 200')
+        parser.parse(body.decode('utf-8', errors='replace').splitlines())
+    except Exception as exc:
+        if error_code(exc) == 'http_404':
+            parser.parse([])
+        else:
+            raise
+    return parser
 
 
 def valid_url(url, host):
@@ -91,6 +162,11 @@ def discover(host):
         kind = tree.tag.rsplit('}', 1)[-1]
         if kind not in ('sitemapindex', 'urlset'):
             raise ValueError('invalid sitemap XML')
+        locs = [(node.text or '').strip() for node in tree.iter()
+                if node.tag.rsplit('}', 1)[-1] == 'loc']
+        if host == 'arquindex.com.br' and locs and all(
+                valid_url(loc, 'www.arquindex.com.br') for loc in locs):
+            raise CanonicalAlias('apex sitemap delegates to www.arquindex.com.br; processed separately')
         for node in tree.iter():
             if node.tag.rsplit('}', 1)[-1] != 'loc':
                 continue
@@ -120,17 +196,29 @@ def key_for(host):
 
 def process_host(host, old):
     result = {'host': host, 'checked': 0, 'unchanged': 0, 'changed': 0,
-              'received_200': 0, 'pending_202': 0, 'errors': [], 'batches': []}
+              'received_200': 0, 'pending_202': 0, 'errors': [], 'batches': [],
+              'excluded': [], 'stage': 'sitemap', 'status': 'checking'}
     accepted = dict(old)
     try:
-        key, location = key_for(host)
         pages = discover(host)
+        result['stage'] = 'key'
+        key, location = key_for(host)
+        result['stage'] = 'robots'
+        robots = robots_for(host)
+        result['stage'] = 'pages'
         changed = {}
         for url in pages:
             try:
-                status, body, _ = request(url)
+                if not robots.can_fetch('bingbot', url) or not robots.can_fetch('IndexNow', url):
+                    result['excluded'].append({'url': url, 'reason': 'robots_disallow'})
+                    continue
+                status, body, headers = request(url)
                 if status != 200:
                     raise ValueError('page not HTTP 200')
+                reason = exclusion_reason(url, body, headers)
+                if reason:
+                    result['excluded'].append({'url': url, 'reason': reason})
+                    continue
                 digest = hashlib.sha256(body).hexdigest()
                 result['checked'] += 1
                 if old.get(url) == digest:
@@ -138,9 +226,10 @@ def process_host(host, old):
                 else:
                     changed[url] = digest
             except Exception as exc:
-                result['errors'].append({'url': url, 'error': str(exc)})
+                result['errors'].append({'url': url, 'code': error_code(exc), 'error': str(exc)})
         result['changed'] = len(changed)
         urls = sorted(changed)
+        result['stage'] = 'submission'
         for offset in range(0, len(urls), 10000):
             batch = urls[offset:offset + 10000]
             status, _, _ = request(ENDPOINT, {'host': host, 'key': key,
@@ -154,8 +243,16 @@ def process_host(host, old):
                 # Ownership pending: do not suppress the next day's retry.
             else:
                 raise ValueError('unexpected submission HTTP ' + str(status))
+        result['status'] = 'completed_with_exclusions' if result['excluded'] else 'completed'
+    except CanonicalAlias as exc:
+        result['status'] = 'delegated_to_www'
+        result['delegated_to'] = 'www.arquindex.com.br'
+        result['reason'] = str(exc)
     except Exception as exc:
-        result['errors'].append({'error': str(exc)})
+        result['status'] = 'blocked'
+        result['errors'].append({'stage': result['stage'], 'code': error_code(exc), 'error': str(exc)})
+    if result['errors']:
+        result['status'] = 'blocked'
     return result, accepted
 
 

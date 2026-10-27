@@ -1,5 +1,13 @@
 # IndexNow diário
 
+Correção de 27/10/2026: o sitemap do apex que anuncia exclusivamente URLs do
+www é registrado como delegado ao www, sem enviar URLs sob o host errado.
+Os demais cruzamentos de host continuam bloqueados. O remetente verifica
+robots.txt (Bingbot e IndexNow), X-Robots-Tag, meta noindex e canonical única
+própria em HTML antes de enviar. Exclusões têm URL e motivo no relatório;
+erros agora têm etapa e classificação (DNS, TLS, HTTP ou validação).
+Essa correção não cria DNS ou subdomínios e não contorna falhas de hospedagem.
+
 Workflow: `.github/workflows/indexnow-daily.yml`. Execução diária às 06h17
 de Brasília (09h17 UTC); GitHub pode atrasar execuções agendadas. Também aceita
 execução manual e roda ao alterar seus próprios arquivos em master.
