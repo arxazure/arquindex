@@ -1,0 +1,252 @@
+{
+  "audit_date": "2026-10-27",
+  "scope": "daily_technical_audit",
+  "production_origin": {
+    "provider": "Railway",
+    "project": "Arquindex Plataforma",
+    "project_id": "f652d9de-5f85-404f-baec-a48d552d9163",
+    "environment": "production",
+    "service": "arquindex-web",
+    "repository": "arxazure/arquindex",
+    "branch": "railway-production-2026",
+    "root_directory": "/arquindex-platform",
+    "start_command": "npm start",
+    "healthcheck_path": "/health",
+    "public_origin": "https://arquindex-web-production.up.railway.app",
+    "staged_changes": null,
+    "destructive_staged_changes": false
+  },
+  "change": {
+    "type": "safe_reversible_semantic_markup",
+    "file": "arquindex-platform/server.js",
+    "summary": "Wrapped the regional SEO page body content in a semantic main landmark.",
+    "content_changed": false,
+    "layout_intentionally_changed": false,
+    "canonicals_changed": false,
+    "indexability_changed": false,
+    "sitemap_changed": false,
+    "submissions_made": false,
+    "commit": "d6b0c465dc332c798549a2c5f4005bf4183d3353",
+    "branch": "railway-production-2026",
+    "deployment_id": "aadf18e8-6527-488c-aaca-f4f81a3dc075",
+    "deployment_status": "SUCCESS",
+    "deployed_at_utc": "2026-10-27T10:13:05.733Z",
+    "rollback_available": true
+  },
+  "regional_campaign": {
+    "services": [
+      "digitalizacao-documentos",
+      "guarda-documental",
+      "consultoria-lgpd"
+    ],
+    "cities": [
+      "belo-horizonte-mg",
+      "contagem-mg",
+      "betim-mg",
+      "nova-lima-mg",
+      "uberlandia-mg",
+      "juiz-de-fora-mg",
+      "montes-claros-mg",
+      "divinopolis-mg",
+      "ipatinga-mg",
+      "sete-lagoas-mg",
+      "sao-paulo-sp",
+      "campinas-sp",
+      "guarulhos-sp",
+      "sao-bernardo-do-campo-sp",
+      "santo-andre-sp",
+      "osasco-sp",
+      "sorocaba-sp",
+      "ribeirao-preto-sp",
+      "santos-sp",
+      "sao-jose-dos-campos-sp",
+      "rio-de-janeiro-rj",
+      "niteroi-rj",
+      "duque-de-caxias-rj",
+      "nova-iguacu-rj"
+    ],
+    "url_pattern": "https://arquindex-web-production.up.railway.app/seo/{service}/{city}/empresa",
+    "tested_urls": 72,
+    "post_deploy_http_200": 72,
+    "self_canonical": 72,
+    "single_h1": 72,
+    "viewport": 72,
+    "main_landmark": 72,
+    "noindex": 0,
+    "tracking_detected": 0,
+    "visible_word_count": {
+      "min": 392,
+      "max": 428
+    },
+    "sitemap_inclusion": false,
+    "indexnow_submission": false,
+    "assessment": "Technically reachable, but content remains short and highly templated. Keep excluded from sitemap and IndexNow until editorial distinctiveness, local evidence and cannibalization review are complete."
+  },
+  "railway_http_window": {
+    "hours": 1,
+    "total": 335,
+    "status_2xx": 324,
+    "status_3xx": 7,
+    "status_4xx": 4,
+    "status_5xx": 0,
+    "four_xx_detail": [
+      {
+        "status": 404,
+        "count": 2,
+        "path_family": "/cdn-cgi/challenge-platform/...",
+        "note": "Cloudflare challenge callback, not a regional content route"
+      },
+      {
+        "status": 499,
+        "count": 2,
+        "paths": [
+          "/assets/index-BtOKElGy.css",
+          "/gestao-documental/assets/index-BtOKElGy.css"
+        ],
+        "note": "Client closed request before response"
+      }
+    ],
+    "post_deploy_validation": "Deployment log contains 72 regional page requests with HTTP 200 plus favicon 204 responses; no 4xx or 5xx in that post-deploy batch."
+  },
+  "official_site": {
+    "priority_pages": [
+      {
+        "url": "https://www.arquindex.com.br/",
+        "reachable": true,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": true,
+        "main": true
+      },
+      {
+        "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+        "reachable": true,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": false,
+        "main": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+        "reachable": true,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": false,
+        "main": false
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao.html",
+        "reachable": true,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": true,
+        "main": true
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+        "reachable": true,
+        "self_canonical": true,
+        "h1_count": 1,
+        "viewport": true,
+        "noindex": false,
+        "tracking": true,
+        "main": true
+      }
+    ],
+    "robots_txt": {
+      "url": "https://www.arquindex.com.br/robots.txt",
+      "reachable": true
+    },
+    "sitemap_xml": {
+      "url": "https://www.arquindex.com.br/sitemap.xml",
+      "reachable": true,
+      "type": "sitemap_index"
+    },
+    "sitemap_index_xml": {
+      "url": "https://www.arquindex.com.br/sitemap-index.xml",
+      "status": 404
+    },
+    "broken_assets": [
+      "https://www.arquindex.com.br/arquindex-favicon.png",
+      "https://www.arquindex.com.br/img/about.webp",
+      "https://www.arquindex.com.br/assets/img/about.webp",
+      "https://www.arquindex.com.br/css/IE-fix.css"
+    ],
+    "internal_reference_sample": {
+      "unique_references": 135,
+      "direct_ok": 95,
+      "redirected": 10,
+      "confirmed_404_in_crawl": 3,
+      "browser_transport_errors": 27
+    },
+    "explicit_502_pages": [
+      "https://www.arquindex.com.br/digitalizacao-processamento-dados.html",
+      "https://www.arquindex.com.br/avaliacao-de-arquivos-para-digitalizacao.html"
+    ],
+    "resolved_today": [
+      {
+        "from": "http://www.arquindex.com.br/loja/",
+        "to": "https://www.arquindex.com.br/servicos/",
+        "result": "redirected and destination rendered"
+      }
+    ],
+    "canonical_issue": {
+      "page": "https://arquindex-web-production.up.railway.app/gestao-documental/brasil/centro-oeste/df/brasilia",
+      "declared_canonical": "https://www.arquindex.com.br/gestao-documental/brasil/centro-oeste/df/gestao-documental/brasilia",
+      "result": "Canonical contains a duplicated segment and points to a redirect.",
+      "github_issue": "https://github.com/arxazure/arquindex/issues/69"
+    }
+  },
+  "homehost": {
+    "operation_today": "read_only_backup_status_check",
+    "workflow_run": "https://github.com/arxazure/arquindex/actions/runs/40445309906",
+    "workflow_conclusion": "success",
+    "backup_state": "in_progress",
+    "final_checkpoint": "checkpoint-000027-6e3d9be793ba.json",
+    "cumulative_files": 6500,
+    "cumulative_source_bytes": 192002636,
+    "log_marker": "BACKUP_PARTIAL_RESUME_REQUIRED",
+    "complete_backup_validated": false,
+    "cleanup_performed": false,
+    "items_deleted": 0,
+    "items_quarantined": 0,
+    "bytes_freed": 0,
+    "reason": "Weekly cleanup is not due today and a complete validated backup is not yet proven."
+  },
+  "search_platforms": {
+    "gsc_read_test": {
+      "operation": "list_sites",
+      "result": "INVALID_ARGUMENT",
+      "classification": "connector_argument_or_code_error; not 401, 403, 429 or 5xx"
+    },
+    "gsc_metrics_retrieved": false,
+    "sitemap_submitted": false,
+    "urls_submitted": false,
+    "indexing_confirmed": false,
+    "indexnow_submitted": false,
+    "merchant_center": {
+      "audited": false,
+      "reason": "Kept separate; no own authorized Merchant Center audit was performed."
+    }
+  },
+  "github_records": {
+    "homehost_and_official_site_issue": "https://github.com/arxazure/arquindex/issues/28",
+    "homehost_comment_id": 6439217996,
+    "canonical_issue": "https://github.com/arxazure/arquindex/issues/69"
+  },
+  "next_steps": [
+    "Complete and validate the resumable HomeHost backup outside the public directory before any cleanup.",
+    "Resolve confirmed official-site 404 assets and retest 502 pages from the true HomeHost publishing origin.",
+    "Fix the duplicated Brasília canonical in the correct source after auditing the full route family.",
+    "Obtain a successful GSC property read, then review clicks, impressions and cannibalization before changing or submitting regional URLs.",
+    "Keep the 72 regional pages out of sitemap and IndexNow until editorial differentiation and real local evidence are sufficient."
+  ]
+}
