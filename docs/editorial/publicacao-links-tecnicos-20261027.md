@@ -1,0 +1,6 @@
+# Publicação técnica — 27/10/2026
+Sites deploy succeeded appgdep_6ae0b85d90c08191af0bc34bde4277cc, versão15 appgprj_6a820d17726081918a7d8142dbefcd84~appgver_4c0040d416e48191a975e5c0f211c846, commit9d176426d7b4247c30efbcf5d1f07965b341fe24.
+Atualizado guia existente com nota operacional: https://arquindex-gestao-documental.arquindex.chatgpt.site/blog/comunicacao-incidente-seguranca-anpd-3-dias-uteis . Sem novo artigo concorrente.
+Manual PDF publicado no mesmo deploy: /manual-revisao-copia-documental.pdf ; imagem técnica PNG: /revisao-copia-documental.png . Roteiro de revisão de cópia, não parecer ou certificação.
+Windsor confirmou publicação de imagem e texto no LinkedIn oficial94842130: urn:li:share:7520857716739821568 . URL https://www.linkedin.com/feed/update/urn:li:share:7520857716739821568 . Post contém links para guia, manual e https://www.arquindex.com.br/ . Histórico de52 posts consultado para deduplicar antes da publicação. Nenhum efeito em ranking alegado.
+HomeHost/Hostinger/Railway e Instagram não publicados nesta rodada. Backup HomeHost anteriormente parcial; Railway exige reconexão. Solicitação atual prioriza LinkedIn e conteúdo técnico. Nenhum anúncio pago, contato externo ou submissão de indexação.
