@@ -27,3 +27,9 @@ Complementadas referências à Resolução CD/ANPD 18/2024 no PDF hospedado pela
 ## Verificação posterior
 
 Acompanhar status do commit no GitHub e validar as cinco páginas públicas, incluindo conteúdo novo e schema. O conector Railway retornou UNAUTHORIZED na preparação; o envio utiliza a branch já vinculada ao deploy automático. Não tratar commit enviado como comprovação de deploy ou indexação. A configuração de GA4 permanece pendente.
+
+## Continuação após deploy
+
+O commit `40f901c84839bd8443563027f59b4d382d46568c` recebeu status de sucesso no serviço Arquindex Plataforma. Foi observada no navegador a versão nova do manual OCR, com sumário, conteúdo ampliado e aparência desktop legível. A avaliação visual móvel e de impressão continua pendente.
+
+A checagem externa encontrou 404 em `https://docs.alfresco.com/content-services/`. Corrigida a referência nas duas páginas para `/content-services/latest/`, que respondeu HTTP 200 após redirecionar para a documentação oficial Hyland. Fontes ANPD e veraPDF responderam 200. Nenhuma capacidade específica Alfresco foi inferida dessa checagem de disponibilidade.
