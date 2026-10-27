@@ -21,13 +21,13 @@ O backend valida o objeto principal, as listas e seus campos usados na renderiza
 
 QA: oito testes Node aprovados localmente, incluindo troca de períodos, compatibilidade com snapshot sem datas, estruturas inválidas nas duas rotas e renderização com campos ausentes. `.github/workflows/top10-google-tests.yml` executa apenas testes com Node 24 em PRs que alteram este módulo; não contém credenciais, publicação ou deploy. Os testes do Hub simulam OAuth/sessão e upstream; login Google real, configurações privadas e correspondência entre o snapshot e as fontes ainda exigem validação no ambiente autorizado. Não registrar cookies, tokens ou o snapshot privado nos logs da revisão.
 
-## Fontes verificadas nesta execução
+## Histórico de fontes registrado antes desta revisão
 
 Windsor: Search Console `sc-domain:arquindex.com.br`, Bing Webmaster `https://arquindex.com.br/`, GA4 `311737260`, Instagram `17841429848911605`. Metricool: marca `7366010`, organização LinkedIn `94842130`, leitura de posts e agenda. GSC Wizard recusou chamadas com `subscription_required`; não é dependência da coleta via Windsor.
 
 Comparação de busca: 01–21/10/2026 contra 10–30/09/2026, 21 dias cada. Totais Google consultados sem dimensão página; consulta de páginas separada não é somada para formar totais. CTR = cliques / impressões, diferença em pontos percentuais. Posição menor significa melhoria. Ausentes, iguais ou sem base comparável ficam cinza; base zero não recebe percentual infinito. O provedor não retornou maturidade nem hora de preenchimento do cache: informar essa limitação. GA4 filtrado para os dois hostnames institucionais retornou nenhuma linha; não interpretar como ausência comprovada de visitas ou leads.
 
-A coleta é um instantâneo consultado nos conectores autorizados nesta sessão, armazenado em variável privada. Não é uma integração contínua entre o runtime e o MCP do ChatGPT. Recarregar o painel recalcula cores, mas não atualiza fontes. Renovar `TOP10_SNAPSHOT_JSON` somente após nova leitura autorizada e conferência das respostas. Para sincronização autônoma ainda faltam credenciais de API de servidor ou exportação autorizada para armazenamento privado; não copiar tokens do ChatGPT nem criar outro serviço para simular integração.
+A coleta é um instantâneo consultado nos conectores autorizados em sessão anterior, segundo o histórico do PR, armazenado em variável privada. Não é uma integração contínua entre o runtime e o MCP do ChatGPT. Recarregar o painel recalcula cores, mas não atualiza fontes. Renovar `TOP10_SNAPSHOT_JSON` somente após nova leitura autorizada e conferência das respostas. Para sincronização autônoma ainda faltam credenciais de API de servidor ou exportação autorizada para armazenamento privado; não copiar tokens do ChatGPT nem criar outro serviço para simular integração.
 
 ## Publicação e permissões
 
@@ -39,4 +39,44 @@ Facebook orgânico está ligado a outra identidade; não confundir a conta de an
 
 Ranking regional, inspeção atual de indexação, eventos de leitura/scroll, conversões qualificadas e citações em IA ainda não integrados. As metas 3 posts/dia/canal, 100 páginas e 15 artigos continuam planejamento. Não foram verificadas como execução.
 
-Manter PR #36 isolado: **não fazer merge em master nem implantar na HomeHost antes da validação do backup integral da issue #28**. Implantar diretamente apenas as duas fontes dos serviços Railway existentes. Manter automações, fila e demais aplicações. Rollback por revisão anterior do serviço; não restaurar o antigo backend público com dados privados. Nenhum snapshot privado ou segredo deve entrar no GitHub.
+Manter PR #36 isolado: **não fazer merge em master nem implantar na HomeHost antes da validação do backup integral da issue #28**. Qualquer implantação, inclusive nos serviços Railway existentes, exige aprovação explícita da usuária. Esta revisão altera somente o branch do PR. Manter automações, fila e demais aplicações. Rollback por revisão anterior do serviço; não restaurar o antigo backend público com dados privados. Nenhum snapshot privado ou segredo deve entrar no GitHub.
+
+
+
+## Revisão de 27/10/2026 — entrada de evidências
+
+O estado atual já contém backend privado e testes; não é apenas HTML estático. Esta revisão não consultou provedores de métricas nem verificou os segredos de produção. Contas e capacidades citadas acima são histórico, não confirmação de conexão atual.
+
+`observations.mjs` acrescenta um contrato opcional, retrocompatível, para exportações autorizadas nas cinco áreas: ranking, indexing, pages, articles e publications. Cada linha exige kind, key, source, account, observedAt (ISO com fuso), evidenceId, status (observed/unavailable/error), value e URL HTTPS para um resultado observado. note é opcional. Ranking exige número positivo; a chave deve identificar consulta, país, dispositivo e, apenas quando medido pelo provedor, cidade. Não converter posição média do GSC em posição regional.
+
+O importador valida formato e rastreabilidade declarada; não autentica a origem de um arquivo fornecido, não consulta sua URL nem confirma visibilidade pública. O operador deve conferir a resposta original, a autorização da conta e a semântica de value. Para indexing, registrar o veredito original da inspeção e sua data; para pages/articles, registrar exatamente a verificação feita (HTTP, publicação ou revisão editorial); para publications, preservar o estado original (inclusive processamento), sem chamar aceite de publicação visível. Recibos não medem a meta diária.
+
+O painel mostra a última observação por kind/source/account/key. Falha mais recente invalida sucesso anterior nessa mesma chave; em empate vence a última linha do arquivo. Contagens são registros observados da amostra, sem somar canais nem declará-los produção total. Uma amostra vazia permanece sem dados. Evidências de escopos diferentes exigem chaves diferentes.
+
+Preparação local, sem acesso à rede:
+
+```sh
+node top10-google/import-snapshot.mjs /caminho/privado/exportacao.json /caminho/privado/snapshot-validado.json
+node --test top10-google/*.test.mjs
+```
+
+O destino é criado com permissão 0600, sem sobrescrever arquivos e sem imprimir dados. Nunca versionar os arquivos privados. Configurar o resultado em TOP10_SNAPSHOT_JSON é uma etapa externa posterior que exige aprovação; não há rota de escrita, upload público, tarefa agendada ou publicação no importador.
+
+### Bloqueios para alimentação autônoma
+
+| Área | O que já existe | O que falta e como liberar |
+|---|---|---|
+| Ranking | Métricas agregadas e observações importáveis | API/exportação de servidor autorizada do GSC/Bing, propriedade e períodos conferidos; ranking municipal exige provedor com localidade e método documentados |
+| Indexação | Contrato por URL, sem inferência por cliques ou HTTP 200 | Credencial autorizada de inspeção por URL, propriedade validada, quota, data da inspeção e cobertura; IndexNow não prova indexação |
+| Páginas | Planejamento de 100 URLs e tabela de busca | Inventário do CMS/repositório com URL publicada, ID, revisão e evidência HTTP/canonical; não contar o plano como entregue |
+| Artigos | 15 pautas no arquivo de planejamento | Inventário editorial, revisão humana e URL comprovada; GA4 autorizado e eventos para leitura/scroll e conversões |
+| Publicações | Recibos e capacidade por canal, mais observações importáveis | Identidade orgânica confirmada, exportação/API de leitura de servidor, IDs, estados e URLs por canal e data; publicar exige aprovação separada |
+| Atualização | Importação offline e endpoint privado somente leitura | Escolher armazenamento privado, credenciais com menor privilégio, retenção, renovação/revogação e executor; MCP conectado no ChatGPT não é credencial do runtime |
+
+GSC Wizard constava como subscription_required no histórico; não foi retestado. Não é possível afirmar que credenciais estejam ausentes de toda a infraestrutura: elas não foram acessadas nesta revisão. Não copiar tokens de sessões ou conectores. Falta autorização separada para qualquer provisionamento, alteração de variáveis, merge, deploy ou postagem. O bloqueio de backup da issue #28 continua registrado, sem nova comprovação nesta revisão.
+
+Validação desta revisão: 11 testes locais aprovados com Node 24; incluindo rejeição de evidências sem origem/conta, rank inválido e URLs inseguras, ausência distinta de zero, última falha, escape HTML, importação e autenticação. A revisão não atesta funcionamento de APIs remotas ou implantação da nova versão.
+
+### Empacotamento para futura implantação aprovada
+
+O backend agora importa observations.mjs: distribuir ambos os arquivos no mesmo diretório. A Function atual usa código embutido em startCommand; não colar server.mjs isoladamente nesse comando. Uma implantação futura deverá empacotar os módulos (ou usar bundle revisado), preservar os segredos privados e validar em ambiente isolado. Não substituir capture-hub.tsx pela cópia deste PR sem reconciliar alterações posteriores do Hub: a configuração consultada em 27/10 já inclui outras rotas que não fazem parte desta revisão. Os dois serviços usam imagem Function Bun, sem source repo seguindo este branch; nenhuma configuração foi modificada.
