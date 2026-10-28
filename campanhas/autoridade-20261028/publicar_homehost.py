@@ -29,6 +29,9 @@ SLUGS = (
     "desinfestacao-higienizacao-acervos",
     "arquivos-contaminacao-industria",
     "manual-resposta-incidente-acervo",
+    "avaliacao-contaminacao-caixas-documentos",
+    "recuperacao-documentos-embalagens-contaminadas",
+    "processamento-seguro-acervo-contaminado",
 )
 PUBLIC_BASE = "https://www.arquindex.com.br/guias/"
 
