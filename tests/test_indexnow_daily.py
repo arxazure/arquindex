@@ -3,9 +3,12 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+
 spec = importlib.util.spec_from_file_location('daily', Path(__file__).resolve().parents[1] / 'scripts/indexnow_daily.py')
 daily = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(daily)
+
+
 
 
 class IndexNowTests(unittest.TestCase):
@@ -15,6 +18,7 @@ class IndexNowTests(unittest.TestCase):
                     'https://b.arquindex.com.br/', 'http://a.arquindex.com.br/',
                     'https://a.arquindex.com.br/#x']:
             self.assertFalse(daily.valid_url(url, 'a.arquindex.com.br'))
+
 
     def run_host(self, code, old=None):
         host, url = 'a.arquindex.com.br', 'https://a.arquindex.com.br/'
@@ -31,6 +35,7 @@ class IndexNowTests(unittest.TestCase):
             report, state = daily.process_host(host, old or {})
         return report, state, submissions
 
+
     def test_received_200_persists_hash_and_deduplicates(self):
         report, state, sent = self.run_host(200)
         self.assertEqual(report['received_200'], 1)
@@ -40,15 +45,18 @@ class IndexNowTests(unittest.TestCase):
         self.assertEqual(report['unchanged'], 1)
         self.assertEqual(sent, [])
 
+
     def test_202_keeps_url_pending_for_next_run(self):
         report, state, _ = self.run_host(202)
         self.assertEqual(report['pending_202'], 1)
         self.assertEqual(state, {})
 
+
     def test_failed_submission_does_not_mark_received(self):
         report, state, _ = self.run_host(403)
         self.assertTrue(report['errors'])
         self.assertEqual(state, {})
+
 
     def test_missing_key_blocks_only_that_host(self):
         with patch.object(daily, 'key_for', side_effect=ValueError('missing key')), \
@@ -58,11 +66,13 @@ class IndexNowTests(unittest.TestCase):
         self.assertTrue(report['errors'])
         request.assert_not_called()
 
+
     def test_cross_host_sitemap_is_rejected(self):
         with patch.object(daily, 'request', return_value=(200,
                 b'<urlset><url><loc>https://evil.com/</loc></url></urlset>', {})):
             with self.assertRaises(ValueError):
                 daily.discover('a.arquindex.com.br')
+
 
     def test_apex_www_alias_is_not_an_error_or_submission(self):
         with patch.object(daily, 'request', return_value=(200,
@@ -71,6 +81,7 @@ class IndexNowTests(unittest.TestCase):
         self.assertEqual(report['status'], 'delegated_to_www')
         self.assertEqual(report['errors'], [])
         self.assertEqual(report['batches'], [])
+
 
     def test_noindex_canonical_and_header_guards(self):
         url = 'https://a.arquindex.com.br/'
@@ -81,10 +92,45 @@ class IndexNowTests(unittest.TestCase):
         self.assertEqual(daily.exclusion_reason(url, good.replace(b'a.arquindex', b'b.arquindex'), {}), 'canonical_points_elsewhere')
         self.assertEqual(daily.exclusion_reason(url, b'<html></html>', {}), 'canonical_missing_or_multiple')
 
+
     def test_dns_error_is_classified(self):
         import socket
         import urllib.error
         self.assertEqual(daily.error_code(urllib.error.URLError(socket.gaierror(-2, 'not found'))), 'dns')
+
+
+
+
+    def test_candidate_sitemaps_do_not_authorize_submission(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'sitemap.xml').write_text('<loc>https://planned.arquindex.com.br/</loc>')
+            self.assertIn('planned.arquindex.com.br', daily.candidate_hosts(root))
+            self.assertNotIn('planned.arquindex.com.br', daily.hosts_from_repository(root))
+
+    def test_dns_nonexistence_and_temporary_failures_never_submit(self):
+        import socket
+        for code, status in [(socket.EAI_NONAME, 'dns_unresolved'),
+                             (socket.EAI_AGAIN, 'dns_temporary_or_resolver_failure')]:
+            with self.subTest(code=code), patch.object(daily.socket, 'getaddrinfo', side_effect=socket.gaierror(code, 'DNS')), patch.object(daily, 'request') as request:
+                result = daily.audit_candidate('planned.arquindex.com.br')
+                self.assertEqual(result['status'], status)
+                self.assertFalse(result['submitted'])
+                request.assert_not_called()
+
+    def test_resolved_candidate_requires_publication_and_key(self):
+        with patch.object(daily.socket, 'getaddrinfo', return_value=[]), patch.object(daily, 'discover', return_value=['https://a.arquindex.com.br/']), patch.object(daily, 'key_for', side_effect=ValueError('missing key')):
+            result = daily.audit_candidate('a.arquindex.com.br')
+            self.assertEqual(result['status'], 'publication_check_failed')
+            self.assertFalse(result['submitted'])
+
+    def test_ready_candidate_is_not_automatically_submitted(self):
+        with patch.object(daily.socket, 'getaddrinfo', return_value=[]), patch.object(daily, 'discover', return_value=['https://a.arquindex.com.br/']), patch.object(daily, 'key_for', return_value=('12345678', 'https://a.arquindex.com.br/indexnow-key.txt')), patch.object(daily, 'request') as request:
+            result = daily.audit_candidate('a.arquindex.com.br')
+            self.assertEqual(result['status'], 'sitemap_and_key_ready_for_review')
+            self.assertFalse(result['submitted'])
+            request.assert_not_called()
 
 
 if __name__ == '__main__':
