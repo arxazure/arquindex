@@ -9,9 +9,9 @@ const letters=n=>{let s='';for(n++;n;n=Math.floor((n-1)/26))s=String.fromCharCod
 
 function riskLevel(probability,impact){
  const p=Number(probability),i=Number(impact);
- if(!Number.isInteger(p)||!Number.isInteger(i)||p<1||p>5||i<1||i>5)return {score:'PENDENTE DE AVALIACAO',level:'Nao avaliado',style:5};
+ if(!Number.isInteger(p)||!Number.isInteger(i)||p<1||p>5||i<1||i>5)return {score:'PENDENTE DE AVALIACAO',level:'Nao avaliado',style:6};
  const score=p*i;
- return {score,level:score<=4?'Baixo':score<=9?'Moderado':score<=16?'Alto':'Critico',style:score<=4?1:score<=9?2:score<=16?3:4};
+ return {score,level:score<=4?'Baixo':score<=9?'Moderado':score<=16?'Alto':'Critico',style:score<=4?2:score<=9?3:score<=16?4:5};
 }
 export function excelExport(records){
  const grouped=new Map();
