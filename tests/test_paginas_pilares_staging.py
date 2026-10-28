@@ -40,7 +40,7 @@ class LandingPages(unittest.TestCase):
     self.assertIn('application/ld+json',html)
     self.assertIn('name="description"',html)
     self.assertIn('name="viewport"',html)
-    self.assertIn('class="faq"',html)
+    self.assertIn('class="section faq"',html)
     self.assertIn('arquindex-logo-oficial.webp',html)
     self.assertTrue(all(any(f"https://{other}.arquindex.com.br/"==url for url in p.links) for other in SLUGS if other!=slug))
     self.assertNotIn('aggregateRating',html)
