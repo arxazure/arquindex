@@ -19,6 +19,16 @@ SLUGS = (
     "digitalizacao-decreto-10278-metadados",
     "bpo-documental-departamento-pessoal",
     "guarda-documental-ou-digitalizacao",
+    "guarda-documental-empresas",
+    "preco-guarda-documentos-caixas",
+    "inventario-caixas-rastreabilidade",
+    "temporalidade-destinacao-segura",
+    "guarda-prontuarios-documentos-sensiveis",
+    "desratizacao-arquivos",
+    "fezes-urina-ratos-documentos",
+    "desinfestacao-higienizacao-acervos",
+    "arquivos-contaminacao-industria",
+    "manual-resposta-incidente-acervo",
 )
 PUBLIC_BASE = "https://www.arquindex.com.br/guias/"
 
