@@ -25,3 +25,12 @@ test('evidence output escapes text, preserves goals and discloses sample limits'
  assert.ok(html.includes('não é total de produção'));assert.ok(html.includes('Meta planejada'));
  assert.ok(html.includes('Sem dados fornecidos'));
 });
+
+test('AI citation observations distinguish cited, unlinked mentions and absent results',()=>{
+ const base={...row,kind:'ai_citations',key:'ChatGPT | digitalização certificada em BH | pt-BR | sessão controlada'};
+ for(const value of ['cited','mentioned_without_link','not_cited']) assert.ok(validObservations([{...base,value}]));
+ for(const value of [1,'yes','ranking','']) assert.equal(validObservations([{...base,value}]),false);
+ const html=render({...snapshot,observations:[{...base,value:'not_cited'}]});
+ assert.ok(html.includes('Citações em respostas de IA'));assert.ok(html.includes('not_cited'));
+ assert.equal(summarizeObservations([{...base,status:'unavailable',value:null}]).at(-1).observed,0);
+});
