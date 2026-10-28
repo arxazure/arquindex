@@ -1,0 +1,23 @@
+name: Testar blocos EEAT em staging
+on:
+  push:
+    branches:
+      - seo/eeat-pilares-20261028
+    paths:
+      - scripts/gerar-blocos-eeat-staging.py
+      - tests/test_gerar_blocos_eeat_staging.py
+      - .github/workflows/test-eeat-staging.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Testes de regressao sem deploy
+        run: python -m unittest discover -s tests -p 'test_gerar_blocos_eeat_staging.py' -v
