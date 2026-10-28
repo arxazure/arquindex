@@ -1,0 +1,146 @@
+[
+  {
+    "host": "quanto-custa-servico-dpo-externo-brasil.arquindex.com.br",
+    "url": "https://quanto-custa-servico-dpo-externo-brasil.arquindex.com.br/diagnostico.html",
+    "title": "Diagnóstico e escopo de DPO",
+    "steps": [
+      "Mapear operações com dados pessoais",
+      "Identificar responsáveis e contratos",
+      "Registrar riscos e plano de ação",
+      "Definir canal de titulares e indicadores"
+    ],
+    "i": 0
+  },
+  {
+    "host": "software-reconhecimento-texto-documentos-digitalizados.arquindex.com.br",
+    "url": "https://software-reconhecimento-texto-documentos-digitalizados.arquindex.com.br/",
+    "title": "OCR e PDF pesquisável",
+    "steps": [
+      "Preparar documentos e conferir legibilidade",
+      "Executar captura e reconhecimento de texto",
+      "Conferir nomes, datas e resultados de busca",
+      "Entregar arquivos com índice e regras de acesso"
+    ],
+    "i": 1
+  },
+  {
+    "host": "solucoes-digitalizacao-documentos-empresariais.arquindex.com.br",
+    "url": "https://solucoes-digitalizacao-documentos-empresariais.arquindex.com.br/",
+    "title": "Digitalização empresarial",
+    "steps": [
+      "Inventariar caixas e tipos documentais",
+      "Definir preparação, captura e nomenclatura",
+      "Conferir completude e qualidade por amostra",
+      "Formalizar entrega e tratamento dos originais"
+    ],
+    "i": 2
+  },
+  {
+    "host": "cedoc.arquindex.com.br",
+    "url": "https://cedoc.arquindex.com.br/",
+    "title": "Centro de documentação",
+    "steps": [
+      "Registrar localização e responsáveis pelo acervo",
+      "Aplicar classificação e índice de recuperação",
+      "Definir empréstimos, devoluções e acesso",
+      "Monitorar movimentações e pendências"
+    ],
+    "i": 3
+  },
+  {
+    "host": "consultoria-decreto10278-solucao.arquindex.com.br",
+    "url": "https://consultoria-decreto10278-solucao.arquindex.com.br/",
+    "title": "Digitalização e Decreto 10.278",
+    "steps": [
+      "Identificar requisitos aplicáveis ao documento",
+      "Definir parâmetros de captura e metadados",
+      "Planejar integridade, assinatura e rastreabilidade",
+      "Validar a entrega antes de decidir sobre originais"
+    ],
+    "i": 4
+  },
+  {
+    "host": "digitalizacao-documental-curitiba-empresas-recomendadas-contrat.arquindex.com.br",
+    "url": "https://digitalizacao-documental-curitiba-empresas-recomendadas-contrat.arquindex.com.br/",
+    "title": "Planejamento da digitalização",
+    "steps": [
+      "Informar cidade, volume e estado do acervo",
+      "Confirmar logística e disponibilidade na proposta",
+      "Definir amostra e critérios de qualidade",
+      "Planejar entrega, acesso e tratamento de pendências"
+    ],
+    "i": 5
+  },
+  {
+    "host": "digitalizacao-documental-paulo-empresas-melhor-custo-beneficio.arquindex.com.br",
+    "url": "https://digitalizacao-documental-paulo-empresas-melhor-custo-beneficio.arquindex.com.br/",
+    "title": "Custos da digitalização",
+    "steps": [
+      "Medir quantidade e esforço de preparação",
+      "Separar OCR, indexação e formatos de entrega",
+      "Dimensionar logística e conferência",
+      "Comparar propostas pelo mesmo escopo"
+    ],
+    "i": 6
+  },
+  {
+    "host": "digitalizar-arquivos-solucao.arquindex.com.br",
+    "url": "https://digitalizar-arquivos-solucao.arquindex.com.br/",
+    "title": "Digitalizar arquivos",
+    "steps": [
+      "Inventariar documentos e prioridades de consulta",
+      "Preparar lotes e padrão de nomes",
+      "Capturar, aplicar OCR e conferir",
+      "Organizar entrega e permissões de acesso"
+    ],
+    "i": 7
+  },
+  {
+    "host": "ecm.arquindex.com.br",
+    "url": "https://ecm.arquindex.com.br/custo.html",
+    "title": "Investimento em ECM",
+    "steps": [
+      "Definir usuários, volume e integrações",
+      "Separar implantação, migração e treinamento",
+      "Dimensionar armazenamento, suporte e backup",
+      "Comparar custo recorrente com o escopo contratado"
+    ],
+    "i": 8
+  },
+  {
+    "host": "servicos.arquindex.com.br",
+    "url": "https://servicos.arquindex.com.br/",
+    "title": "Gestão documental integrada",
+    "steps": [
+      "Registrar objetivo e diagnóstico inicial",
+      "Escolher organização, captura ou repositório",
+      "Definir responsáveis, entregáveis e qualidade",
+      "Acompanhar execução e validar o aceite"
+    ],
+    "i": 9
+  },
+  {
+    "host": "arquivardocumento.arquindex.com.br",
+    "url": "https://arquivardocumento.arquindex.com.br/",
+    "title": "Organização de arquivos",
+    "steps": [
+      "Classificar tipos documentais e responsáveis",
+      "Padronizar caixas, pastas e localização",
+      "Registrar consultas e movimentações",
+      "Validar retenção antes de eliminar documentos"
+    ],
+    "i": 10
+  },
+  {
+    "host": "arquivos-educacao.arquindex.com.br",
+    "url": "https://arquivos-educacao.arquindex.com.br/",
+    "title": "Arquivos da educação",
+    "steps": [
+      "Inventariar prontuários acadêmicos e matrículas",
+      "Definir acesso por perfil e necessidade",
+      "Conferir completude e vínculo com aluno",
+      "Documentar entrega e regras de conservação"
+    ],
+    "i": 11
+  }
+]
