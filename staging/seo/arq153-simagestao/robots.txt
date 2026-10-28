@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://simagestao.arquindex.com.br/sitemap.xml
