@@ -5,6 +5,7 @@ No synthetic rows, no credentials written to disk.
 import os,json,datetime,urllib.request,urllib.parse
 from pathlib import Path
 
+
 def request_json(url, payload=None, token=None):
     data=json.dumps(payload).encode() if payload is not None else None
     headers={'Accept':'application/json','User-Agent':'Arquindex-GSC-GitHub/1.0'}
@@ -12,6 +13,7 @@ def request_json(url, payload=None, token=None):
     if token: headers['Authorization']='Bearer '+token
     with urllib.request.urlopen(urllib.request.Request(url,data=data,headers=headers),timeout=35) as response:
         return json.load(response)
+
 
 def oauth_token():
     params=urllib.parse.urlencode({
@@ -23,13 +25,28 @@ def oauth_token():
     with urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token',data=params),timeout=35) as response:
         return json.load(response)['access_token']
 
+
+def authorized_property(site):
+    if site.get('permissionLevel') not in ('siteOwner', 'siteFullUser', 'siteRestrictedUser'):
+        return False
+    value = site.get('siteUrl', '')
+    if value.startswith('sc-domain:'):
+        host = value[len('sc-domain:'):].lower()
+    else:
+        parsed = urllib.parse.urlsplit(value)
+        if parsed.scheme not in ('http', 'https') or parsed.username or parsed.password:
+            return False
+        host = (parsed.hostname or '').lower()
+    return host == 'arquindex.com.br' or host.endswith('.arquindex.com.br')
+
+
 def main():
     missing=[x for x in ('GSC_CLIENT_ID','GSC_CLIENT_SECRET','GSC_REFRESH_TOKEN') if not os.environ.get(x)]
     if missing:
         raise RuntimeError('GSC_NOT_CONFIGURED: missing GitHub Actions secrets '+', '.join(missing))
     token=oauth_token()
     sites=request_json('https://www.googleapis.com/webmasters/v3/sites',token=token).get('siteEntry',[])
-    allowed=[s['siteUrl'] for s in sites if s.get('permissionLevel') not in ('siteUnverifiedUser',) and ('arquindex.com.br' in s.get('siteUrl',''))]
+    allowed=sorted({s['siteUrl'] for s in sites if authorized_property(s)})
     today=datetime.date.today()
     end=today-datetime.timedelta(days=3)
     start=end-datetime.timedelta(days=27)
@@ -42,8 +59,9 @@ def main():
             body={'startDate':start.isoformat(),'endDate':end.isoformat(),'dimensions':['query','page'],'rowLimit':2500,'startRow':offset,'type':'web'}
             try: response=request_json(endpoint,body,token)
             except Exception as e:
-                print('Could not read property '+site+': '+str(e)[:180])
-                break
+                # Do not replace prior verified data with a partial or empty success.
+                # Exception bodies can contain sensitive data; report only type and HTTP status.
+                raise RuntimeError('GSC_PROPERTY_READ_FAILED: '+site+'; '+type(e).__name__+'; HTTP '+str(getattr(e, 'code', 'n/a'))) from None
             rows=response.get('rows',[])
             for r in rows:
                 keys=r.get('keys',[])
@@ -56,6 +74,8 @@ def main():
         raise RuntimeError('GSC_NO_VERIFIED_ARQUINDEX_PROPERTIES: check OAuth authorization and Search Console access')
     output={'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'start_date':start.isoformat(),'end_date':end.isoformat(),'source':'Google Search Console API OAuth','properties':property_reports,'rows':allrows}
     p=Path(__file__).with_name('gsc-real.json')
-    p.write_text(json.dumps(output,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
+    temp=p.with_suffix('.json.tmp')
+    temp.write_text(json.dumps(output,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
+    temp.replace(p)
     print('GSC properties:',len(property_reports),'rows:',len(allrows))
 if __name__=='__main__':main()
