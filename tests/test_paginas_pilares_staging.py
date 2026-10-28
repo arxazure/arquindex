@@ -48,6 +48,12 @@ class LandingPages(unittest.TestCase):
     substantial=[p for p in normalized if len(p.split())>=35]
     self.assertEqual(len(substantial),len(set(substantial)),f"{slug}: paragrafos longos duplicados")
     self.assertIn('name="description"',html)
+    self.assertNotIn('href=""',html)
+    self.assertNotIn('src=""',html)
+    self.assertNotIn('href="#"',html)
+    self.assertEqual(p.tags.get("html"),1)
+    self.assertEqual(p.tags.get("body"),1)
+    self.assertTrue(html.lower().lstrip().startswith("<!doctype html>"))
     self.assertIn('name="viewport"',html)
     self.assertIn('class="section faq"',html)
     self.assertIn('arquindex-logo-oficial.webp',html)
