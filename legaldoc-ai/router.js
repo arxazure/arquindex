@@ -40,9 +40,9 @@ export function legalDocRouter({pool}){
   const companyId=allowedCompany(req,res);if(!companyId)return;
   const db=await pool.connect();
   try{await db.query('BEGIN');const q=await db.query('SELECT * FROM legaldoc_templates WHERE id=$1 AND company_id=$2 FOR UPDATE',[req.params.id,companyId]);
-   if(!q.rowCount)return res.status(404).json({error:'Modelo nao encontrado'});
-   const model=q.rows[0];if(model.status!=='DRAFT')return res.status(409).json({error:'Modelo nao e rascunho'});
-   if(String(model.created_by)===String(req.user.id))return res.status(403).json({error:'Aprovacao independente obrigatoria'});
+   if(!q.rowCount){await db.query('ROLLBACK');return res.status(404).json({error:'Modelo nao encontrado'});}
+   const model=q.rows[0];if(model.status!=='DRAFT'){await db.query('ROLLBACK');return res.status(409).json({error:'Modelo nao e rascunho'});}
+   if(String(model.created_by)===String(req.user.id)){await db.query('ROLLBACK');return res.status(403).json({error:'Aprovacao independente obrigatoria'});}
    await db.query("UPDATE legaldoc_templates SET status='APPROVED',approved_by=$1,approved_at=now(),updated_at=now() WHERE id=$2",[req.user.id,model.id]);
    await log(db,companyId,req.user.id,'template_approved',null,model.id,{sha256:model.body_sha256});await db.query('COMMIT');res.json({id:model.id,status:'APPROVED'});
   }catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}
