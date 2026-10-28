@@ -631,7 +631,7 @@ async function notifyIndexNowForPublishedPages(){
   console.log("IndexNow notification",response.status,"urls",payload.urlList.length);
  }catch(err){console.warn("IndexNow notification error",String(err));}
 }
-if(process.env.NODE_ENV==="production"&&process.env.INDEXNOW_AUTO_SUBMIT==="true"&&BASE===OFFICIAL){
+if(process.env.INDEXNOW_RELEASE_APPROVED==="true"&&process.env.NODE_ENV==="production"&&process.env.INDEXNOW_AUTO_SUBMIT==="true"&&BASE===OFFICIAL){
  setTimeout(()=>{notifyIndexNowForPublishedPages().catch(err=>console.warn("IndexNow error",String(err)));},12000);
 }
 

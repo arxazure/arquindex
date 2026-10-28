@@ -46,6 +46,12 @@ if ($path === BASE_PATH . '/' . INDEXNOW_KEY . '.txt') {
     exit;
 }
 $query = $_SERVER['QUERY_STRING'] ?? '';
+// Preserve the existing public URL; recover the legacy malformed canonical.
+$malformedBrasilia = BASE_PATH . '/brasil/centro-oeste/df/gestao-documental/brasilia';
+if ($path === $malformedBrasilia) {
+    header('Location: ' . BASE_PATH . '/brasil/centro-oeste/df/brasilia' . ($query !== '' ? '?' . $query : ''), true, 301);
+    exit;
+}
 $url = SOURCE_ORIGIN . $upstreamPath . ($query !== '' ? '?' . $query : '');
 
 $ch = curl_init($url);
@@ -86,9 +92,12 @@ if ($isText) {
         'orcamento','privacidade','robots.txt','setores','solucoes',
         'a948be82c7824bc989f2c5dd0f071bea.txt'
     ];
-    foreach ($prefixes as $prefix) $body = str_replace('/' . $prefix, BASE_PATH . '/' . $prefix, $body);
+    foreach ($prefixes as $prefix) {
+        $body = preg_replace("~/" . preg_quote($prefix, "~") . "(?=[/\"'?#<\\s]|$)~", BASE_PATH . "/" . $prefix, $body);
+    }
     $body = preg_replace('/((?:href|src|action)=["\'])\/(?!\/)/i', '$1' . BASE_PATH . '/', $body);
     $body = str_replace('codex-preview" content="development', 'codex-preview" content="production', $body);
+    $body = preg_replace("~(?:/gestao-documental){2,}(?=/|[\"'?#]|$)~", BASE_PATH, $body);
     $body = str_replace($marker, CANONICAL_BASE . '/', $body);
 }
 

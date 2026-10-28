@@ -28,9 +28,9 @@ foreach (['CURLOPT_RETURNTRANSFER', 'CURLOPT_FOLLOWLOCATION', 'CURLOPT_MAXREDIRS
 }
 function curl_init($url) { $GLOBALS['capturedUrl'] = $url; return true; }
 function curl_setopt_array($handle, $options) { return true; }
-function curl_exec($handle) { return '<a href="/orcamento">Orçamento</a>'; }
+function curl_exec($handle) { return $GLOBALS['input']['upstream_body'] ?? '<a href="/orcamento">Orçamento</a>'; }
 function curl_getinfo($handle, $option) {
-    return $option === CURLINFO_RESPONSE_CODE ? 200 : 'text/html; charset=utf-8';
+    return $option === CURLINFO_RESPONSE_CODE ? 200 : ($GLOBALS['input']['content_type'] ?? 'text/html; charset=utf-8');
 }
 function curl_error($handle) { return ''; }
 function curl_close($handle) {}
@@ -100,6 +100,30 @@ class HomehostReplicaTest(unittest.TestCase):
         result = self.request(BASE + "/blog?" + query, query=query)
         self.assertEqual(result["url"], ORIGIN + "/blog?" + query)
         self.assertEqual(urlsplit(result["url"]).netloc, urlsplit(ORIGIN).netloc)
+
+    def test_all_500_city_canonicals_and_links(self):
+        inventory = json.loads((ENTRYPOINT.parents[1] / "test/fixtures/regional-city-paths.json").read_text())
+        self.assertEqual(len(inventory["paths"]), 500)
+        for path in inventory["paths"]:
+            with self.subTest(path=path):
+                body = '<link rel="canonical" href="' + ORIGIN + path + '"><h1>Cidade</h1><a href="' + path + '">Cidade</a>'
+                result = self.request(BASE + path, upstream_body=body)
+                self.assertEqual(result["status"], 200)
+                self.assertEqual(result["body"], '<link rel="canonical" href="https://www.arquindex.com.br' + BASE + path + '"><h1>Cidade</h1><a href="' + BASE + path + '">Cidade</a>')
+
+    def test_city_sitemap_preserves_xml_and_all_locations(self):
+        paths = json.loads((ENTRYPOINT.parents[1] / "test/fixtures/regional-city-paths.json").read_text())["paths"]
+        xml = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>' + ORIGIN + p + '</loc></url>' for p in paths) + '</urlset>'
+        result = self.request(BASE + '/sitemap-cidades.xml', upstream_body=xml, content_type='application/xml')
+        self.assertEqual(result["body"], xml.replace(ORIGIN, 'https://www.arquindex.com.br' + BASE))
+
+    def test_malformed_brasilia_redirects_before_upstream(self):
+        path = BASE + '/brasil/centro-oeste/df/gestao-documental/brasilia'
+        for method in ('GET', 'HEAD'):
+            result = self.request(path, method=method, query='utm_source=test')
+            self.assertEqual(result["status"], 301)
+            self.assertIsNone(result["url"])
+            self.assertEqual(result["body"], '')
 
     def test_head_body_is_empty(self):
         result = self.request(BASE + "/blog", method="HEAD")

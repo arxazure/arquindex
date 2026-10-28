@@ -12,7 +12,11 @@ const ROUTE_PREFIXES = [
 function rewriteText(input) {
   const marker = "__ARQUINDEX_REPLICA_CANONICAL_BASE__";
   let output = input.replaceAll(SOURCE + "/", marker).replaceAll(SOURCE, CANONICAL_BASE);
-  for (const prefix of ROUTE_PREFIXES) output = output.replaceAll("/" + prefix, BASE_PATH + "/" + prefix);
+  // Match complete route segments: /brasil must not match /brasilia (issue #69).
+  for (const prefix of ROUTE_PREFIXES) {
+    const escaped = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    output = output.replace(new RegExp("/" + escaped + "(?=[/\"'?#<\\s]|$)", "g"), BASE_PATH + "/" + prefix);
+  }
   return output
     .replace(/((?:href|src|action)=["'])\/(?!\/)/gi, "$1" + BASE_PATH + "/")
     .replaceAll('codex-preview" content="development', 'codex-preview" content="production')
