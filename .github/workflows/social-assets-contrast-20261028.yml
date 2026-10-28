@@ -1,0 +1,33 @@
+name: Campaign RMBH technical assets
+on:
+  push:
+    branches: [master]
+    paths: [.github/workflows/social-assets-contrast-20261028.yml]
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Aguardar publicação anterior
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for attempt in $(seq 1 60); do
+            state=$(gh api repos/arxazure/arquindex/actions/runs/40618227776 --jq .status)
+            if [ "$state" = completed ]; then exit 0; fi
+            sleep 15
+          done
+          exit 1
+      - uses: actions/checkout@v4
+      - run: npm install playwright
+      - run: node scripts/build-social-20261028.cjs
+      - run: python scripts/publish-social-assets-20261028.py
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-rmbh-technical-assets
+          path: campaign-build/
