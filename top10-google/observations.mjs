@@ -2,7 +2,7 @@
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const timestamp = v => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(v) && Number.isFinite(Date.parse(v));
 const https = v => {try {const u=new URL(v);return u.protocol==='https:' && !u.username && !u.password;}catch{return false;}};
-const domains = ['ranking','indexing','pages','articles','publications'];
+const domains = ['ranking','indexing','pages','articles','publications','ai_citations'];
 export function validObservations(rows) {
   return Array.isArray(rows) && rows.every(r => object(r) && domains.includes(r.kind)
     && typeof r.key==='string' && r.key.trim().length>0
@@ -14,7 +14,8 @@ export function validObservations(rows) {
     && (r.note==null || typeof r.note==='string')
     && (r.value==null || typeof r.value==='string' || (typeof r.value==='number' && Number.isFinite(r.value)))
     && (r.status!=='observed' || (r.value!=null && https(r.url)))
-    && (r.kind!=='ranking' || r.status!=='observed' || (typeof r.value==='number' && r.value>0)));
+    && (r.kind!=='ranking' || r.status!=='observed' || (typeof r.value==='number' && r.value>0))
+    && (r.kind!=='ai_citations' || r.status!=='observed' || ['cited','mentioned_without_link','not_cited'].includes(r.value)));
 }
 export function summarizeObservations(rows=[]) {
   if(!validObservations(rows)) throw Error('Invalid observations');
