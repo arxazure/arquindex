@@ -1,12 +1,31 @@
 name: Arquindex GSC direct daily
 on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/coleta-gsc-direta.yml'
+      - 'painel-seo/collect_gsc.py'
+      - 'tests/test_collect_gsc.py'
   workflow_dispatch:
   schedule:
     - cron: '35 10 * * *'
 permissions:
   contents: write
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Testar limites e preservacao de dados GSC sem credenciais
+        run: python -m unittest discover -s tests -p test_collect_gsc.py -v
   collect:
+    needs: tests
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
