@@ -9,7 +9,7 @@ def put(f,p,b): f.storbinary('STOR '+p,io.BytesIO(b));assert read(f,p)==b
 def http(u):
  for attempt in range(3):
   try:
-   with urllib.request.urlopen(u,timeout=35) as r:return r.status,r.read()
+   with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0 ArquindexVerification'}),timeout=20) as r:return r.status,r.read()
   except Exception:
    if attempt==2:raise
    time.sleep(2)
@@ -29,7 +29,8 @@ with ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=45) as f:
    css='<style id="arq-brand-20261028">body{font-family:'+brand['font']+'}.arq-tech-manual,.arq-tech-manual h2,.arq-tech-manual h3{color:'+'#142d36'+'}a{color:'+brand['accent']+'}.arq-tech-manual{max-width:1120px;margin:48px auto;padding:clamp(20px,4vw,48px);border:1px solid #d6e5e3;border-top:8px solid '+brand['accent']+';border-radius:20px;background:#f4f8f8;line-height:1.8}.arq-tech-manual li{margin-bottom:14px}.arq-tech-manual a{overflow-wrap:anywhere}</style>'
    text=re.sub(r'<style id="arq-brand-20261028">.*?</style>', '', text, flags=re.S)
    text=text.replace('</head>',css+'</head>')
-   if 'id="manual-tecnico-20261028"' not in text:text=text.replace('</body>',manual+'</body>')
+   text=re.sub(r'<section id="manual-tecnico-20261028".*?</section>', '', text, flags=re.S)
+   text=text.replace('</body>',manual+'</body>',1)
    updated=text.encode();put(f,path+'.pre-campaign-'+stamp,old);put(f,path,updated)
    image=pathlib.Path('campaign-build/'+str(x['i'])+'.jpg').read_bytes();imagepath='/public_html/social/20261028/'+str(x['i'])+'.jpg';put(f,imagepath,image)
    record.update(published=True,image_url='https://www.arquindex.com.br/social/20261028/'+str(x['i'])+'.jpg',manual_url=x['url']+'#manual-tecnico-20261028')
