@@ -39,12 +39,12 @@ class LandingPages(unittest.TestCase):
     self.assertEqual(p.canonicals[0],f"https://{slug}.arquindex.com.br/")
     self.assertTrue(p.titles[0])
     self.assertIn('application/ld+json',html)
-    visible=re.sub(r"<(script|style)\\b[^>]*>.*?</\\1>"," ",html,flags=re.I|re.S)
+    visible=re.sub(r"<(script|style)\b[^>]*>.*?</\1>"," ",html,flags=re.I|re.S)
     visible=unescape(re.sub(r"<[^>]+>"," ",visible))
-    words=re.findall(r"\\b[\\wÀ-ÿ]+\\b",visible,flags=re.UNICODE)
+    words=re.findall(r"\b[\wÀ-ÿ]+\b",visible,flags=re.UNICODE)
     self.assertGreaterEqual(len(words),2000,f"{slug}: apenas {len(words)} palavras visíveis")
-    paragraphs=re.findall(r"<p(?:\\s[^>]*)?>(.*?)</p>",html,flags=re.I|re.S)
-    normalized=[re.sub(r"\\s+"," ",unescape(re.sub(r"<[^>]+>"," ",p))).strip().casefold() for p in paragraphs]
+    paragraphs=re.findall(r"<p(?:\s[^>]*)?>(.*?)</p>",html,flags=re.I|re.S)
+    normalized=[re.sub(r"\s+"," ",unescape(re.sub(r"<[^>]+>"," ",p))).strip().casefold() for p in paragraphs]
     substantial=[p for p in normalized if len(p.split())>=35]
     self.assertEqual(len(substantial),len(set(substantial)),f"{slug}: paragrafos longos duplicados")
     self.assertIn('name="description"',html)
