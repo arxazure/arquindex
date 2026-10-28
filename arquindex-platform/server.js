@@ -439,6 +439,7 @@ const server=http.createServer(async(req,res)=>{
  res.end=(body,...args)=>{const type=String(res.getHeader('content-type')||'');if(type.includes('text/html')&&typeof body==='string'&&body.includes('</body>')&&!body.includes('id="arqui-railway"'))body=body.replace('</body>',ARQUI_WIDGET+'</body>');return enhancedEnd(body,...args)};
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
  const gestaoLegacyAssets=new Set([
+  "/assets/index-CsI5cQYm.js",
   "/assets/index-BBjM0UaD.js",
   "/assets/FloatingWhatsApp-hEQiOKBe.js",
   "/assets/framework-DjPHiq1u.js",
