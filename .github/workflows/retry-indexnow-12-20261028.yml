@@ -1,0 +1,35 @@
+name: Retry IndexNow 12
+on:
+  push:
+    branches: [master]
+    paths: [.github/workflows/retry-indexnow-12-20261028.yml]
+permissions:
+  contents: read
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retomar sem substituir chaves existentes
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          python - <<'PY'
+          import urllib.request,time,runpy
+          original=urllib.request.urlopen
+          def retry(*a,**k):
+              for attempt in range(3):
+                  try: return original(*a,**k)
+                  except Exception:
+                      if attempt==2: raise
+                      time.sleep(2)
+          urllib.request.urlopen=retry
+          runpy.run_path('scripts/install-indexnow-keys-12-20261028.py',run_name='__main__')
+          runpy.run_path('scripts/submit-repaired-12-20261028.py',run_name='__main__')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indexnow-12-retry
+          path: indexnow-report/
