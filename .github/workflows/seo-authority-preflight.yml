@@ -1,0 +1,22 @@
+name: SEO Authority Preflight (read-only)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '33 10 * * *'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect versioned HTML without publishing
+        run: python3 scripts/seo_authority_preflight.py --out seo-report/authority-preflight.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seo-authority-preflight
+          path: seo-report/authority-preflight.json
+          retention-days: 30
