@@ -1,0 +1,77 @@
+name: Auditar ARQ-155 a ARQ-160 2026-10-28 noite
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/auditar-seo-20261028-noite.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install playwright
+      - name: Auditoria pública mobile e desktop
+        run: |
+          cat > audit.js <<'JS'
+          const { chromium, request } = require('playwright');
+          const dns = require('node:dns').promises;
+          const items = [
+            ['ARQ-155','https://tabela-de-temporalidade-documental.arquindex.com.br/'],
+            ['ARQ-156','https://acervos-medico-baixada-fluminense.arquindex.com.br/'],
+            ['ARQ-157','https://acervos-rh-santa-luzia.arquindex.com.br/'],
+            ['ARQ-158','https://adequacao-lgpd-especializada.arquindex.com.br/'],
+            ['ARQ-159','https://alfresco.arquindex.com.br/'],
+            ['ARQ-160','https://armazenamento.arquindex.com.br/']
+          ];
+          const line = value => console.log(JSON.stringify(value));
+          (async()=>{
+            const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+            const api=await request.newContext({ignoreHTTPSErrors:false});
+            for(const [id,url] of items){
+              const host=new URL(url).hostname;
+              let addresses=[];
+              try { addresses=await dns.resolve4(host); }
+              catch(error) { line({id,url,phase:'dns',ok:false,error:String(error.message||error)}); continue; }
+              line({id,url,phase:'dns',ok:true,addresses});
+              for(const asset of ['/robots.txt','/sitemap.xml']){
+                try { const response=await api.get('https://'+host+asset,{timeout:30000}); line({id,url,phase:asset,status:response.status(),contentType:response.headers()['content-type']||''}); }
+                catch(error) { line({id,url,phase:asset,status:null,error:String(error.message||error)}); }
+              }
+              for(const [device,width,height] of [['mobile',390,844],['desktop',1440,900]]){
+                const page=await browser.newPage({viewport:{width,height}});
+                try {
+                  const res=await page.goto(url,{waitUntil:'networkidle',timeout:60000});
+                  const data=await page.evaluate(()=>({
+                    finalUrl:location.href,title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.innerText.trim()),
+                    description:document.querySelector('meta[name="description"]')?.content||'',
+                    canonical:document.querySelector('link[rel="canonical"]')?.href||'',
+                    robots:document.querySelector('meta[name="robots"]')?.content||'',
+                    viewport:document.querySelector('meta[name="viewport"]')?.content||'',
+                    logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),
+                    menu:!!document.querySelector('#aq-nav, header nav'),
+                    widget:document.querySelectorAll('#arq-floating,.aq-brand-wa,#wa-widget-send-button').length,
+                    cta:[...document.querySelectorAll('a[href]')].filter(a=>/wa.me|solicitar-proposta|orcamento/i.test(a.href)).length,
+                    forms:document.querySelectorAll('form').length,
+                    jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,
+                    links:document.querySelectorAll('a[href]').length,
+                    words:(document.body.innerText.match(/\S+/g)||[]).length,
+                    clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth
+                  }));
+                  line({id,url,phase:'page',device,status:res?.status(),...data});
+                } catch(error) { line({id,url,phase:'page',device,status:null,error:String(error.message||error)}); }
+                finally { await page.close(); }
+              }
+            }
+            await api.dispose(); await browser.close();
+          })().catch(error=>{console.error(error);process.exit(1)});
+          JS
+          node audit.js
