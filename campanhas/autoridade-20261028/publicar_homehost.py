@@ -29,7 +29,7 @@ def validate_page(path, slug):
     assert '<html lang="pt-BR">' in text, path
     assert 'rel="canonical" href="' + expected + '"' in text, path
     assert '<meta name="robots" content="index,follow">' in text, path
-    assert '"@type": "Article"' in text, path
+    assert '"@type":"Article"' in text, path
     assert 'noindex' not in text.lower(), path
     return data
 
