@@ -80,3 +80,17 @@ Validação desta revisão: 11 testes locais aprovados com Node 24; incluindo re
 ### Empacotamento para futura implantação aprovada
 
 O backend agora importa observations.mjs: distribuir ambos os arquivos no mesmo diretório. A Function atual usa código embutido em startCommand; não colar server.mjs isoladamente nesse comando. Uma implantação futura deverá empacotar os módulos (ou usar bundle revisado), preservar os segredos privados e validar em ambiente isolado. Não substituir capture-hub.tsx pela cópia deste PR sem reconciliar alterações posteriores do Hub: a configuração consultada em 27/10 já inclui outras rotas que não fazem parte desta revisão. Os dois serviços usam imagem Function Bun, sem source repo seguindo este branch; nenhuma configuração foi modificada.
+
+## Citações em IA — contrato de observação (28/10/2026)
+
+O painel aceita `kind: "ai_citations"` no mesmo array opcional `observations`, sem coleta automática. Cada verificação representa uma resposta observada em sessão específica, não uma afirmação universal de visibilidade. Usar `key` contendo plataforma, pergunta literal ou ID do roteiro, idioma/localidade, modelo (quando disponível) e identificador da sessão; `source` identifica o provedor ou processo autorizado e `account` a conta/ambiente da coleta. `observedAt` deve conter fuso, `evidenceId` o identificador rastreável e `url` HTTPS o registro de evidência com acesso controlado. Nunca colocar prompts com dados pessoais, tokens ou respostas privadas no repositório público.
+
+Com `status: "observed"`, `value` deve ser exatamente `cited` (link/citação direta para domínio da Arquindex na resposta), `mentioned_without_link` (nome mencionado, mas sem link para domínio Arquindex) ou `not_cited` (verificação executada sem citação ou menção à Arquindex). Um link que aparece apenas na lista de fontes, quando comprovado na resposta, também pode ser `cited`. Registrar em `note` a URL citada, quando não sensível, e as limitações da coleta. `status: "unavailable"` ou `"error"` indica verificação não concluída; não transformar falha em `not_cited`. Para um mesmo conjunto de fonte/conta/chave, a observação mais recente prevalece e uma falha invalida a observação anterior. A contagem apresentada é de verificações observadas na amostra, **não de citações positivas**, nem de cobertura de todas as respostas, usuários ou regiões. Não tratar encaminhamentos GA4, menções sem URL ou snippets de busca como citação. Nenhuma solicitação externa ou publicação é executada por este módulo.
+
+Exemplo fictício, apenas para validar estrutura:
+
+```json
+{"kind":"ai_citations","key":"ChatGPT | roteiro-01 | pt-BR | sessao-teste-01","source":"verificacao-manual-autorizada","account":"ambiente-de-teste","observedAt":"2026-10-28T10:00:00-03:00","evidenceId":"evidencia-ficticia-01","status":"observed","value":"not_cited","url":"https://example.org/evidence","note":"Ficticio, nao e evidencia da Arquindex"}
+```
+
+Ranking regional continua exigindo ferramenta capaz de localizar resultados por municipio, dispositivo e consulta; GSC fornece posicao media agregada e nao um rank local pontual. Indexacao continua exigindo inspeção de URL no Search Console, sem inferir estado por sitemap, cliques ou resposta HTTP. O bloqueio de backup da issue #28 e a proibição de deploy/merge continuam vigentes.
