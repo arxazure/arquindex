@@ -1,0 +1,63 @@
+name: Reconstruir e publicar ARQ-153 sem sobrescrita
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/publicar-arq153-simagestao.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-arq153-simagestao
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_USER: ${{ vars.FTP_USER || 'arquind2' }}
+      FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+      INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar fonte antes da publicação
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text=Path('staging/seo/arq153-simagestao/index.html').read_text()
+          assert text.count('<h1>')==1
+          assert '<link rel="canonical" href="https://simagestao.arquindex.com.br/">' in text
+          assert 'data-aq-aeo="ARQ-153"' in text
+          assert 'arquindex-logo-oficial.webp' in text
+          assert 'id="arq-floating"' in text
+          assert '5531973632725' in text
+          assert 'Index of /' not in text
+          print('SOURCE_VALIDATED',len(text.split()))
+          PY
+      - name: Criar arquivos ausentes por FTPS e verificar
+        run: python seo-rotinas/publicar-arq153-simagestao.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install playwright
+      - name: Validar mobile e desktop publicados
+        run: |
+          node <<'JS'
+          const {chromium}=require('playwright');
+          (async()=>{const b=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+          const url='https://simagestao.arquindex.com.br/';
+          for(const [device,w,h] of [['mobile',390,844],['desktop',1440,900]]){
+            const p=await b.newPage({viewport:{width:w,height:h}});
+            const r=await p.goto(url+'?postcheck=20261028noite',{waitUntil:'networkidle',timeout:60000});
+            const d=await p.evaluate(()=>({title:document.title,h1:document.querySelectorAll('h1').length,canonical:document.querySelector('link[rel="canonical"]')?.href||'',robots:document.querySelector('meta[name="robots"]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('#aq-nav'),widget:document.querySelectorAll('#arq-floating').length,aeo:document.querySelectorAll('[data-aq-aeo="ARQ-153"]').length,cta:[...document.querySelectorAll('a[href]')].filter(a=>/wa.me|solicitar-proposta/i.test(a.href)).length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth,indexOf:document.body.innerText.includes('Index of /')}));
+            console.log('POSTCHECK',JSON.stringify({device,status:r?.status(),...d}));
+            if(r?.status()!==200||d.title!=='Gestão documental: diagnóstico e próximos passos | Arquindex'||d.h1!==1||d.canonical!==url||/noindex/i.test(d.robots)||!d.logo||!d.menu||d.widget!==1||d.aeo!==1||d.cta<2||d.sw>d.cw+2||d.indexOf)throw Error('POSTCHECK_FAILED '+device);
+            await p.close();
+          }
+          await b.close();console.log('PUBLIC_MOBILE_DESKTOP_VERIFIED');})().catch(e=>{console.error(e);process.exit(1)});
+          JS
