@@ -64,6 +64,10 @@ document.addEventListener('click',async e=>{
    const section=(active in defs&&active!=='company'&&active!=='service_request')?active:'company';
    const result=await api('/assistant/structure','POST',{company_id:companyId,instruction,consent:true,section});
    pendingAi=result.items||[];
+   if(section!=='company'&&pendingAi.some(x=>x.section!==section))throw Error('A IA retornou registros fora da seção; nenhum registro será aplicado.');
+   const duplicateNames=new Set(records.filter(r=>r.section===section&&r.company_id===companyId).map(r=>String(r.payload.name||'').trim().toLocaleLowerCase('pt-BR')));
+   pendingAi=pendingAi.filter(x=>!duplicateNames.has(String(x.name||'').trim().toLocaleLowerCase('pt-BR')));
+   if(!pendingAi.length){$('#aiFeedback').textContent='Nenhuma proposta nova: os nomes gerados já existem nesta seção ou a IA não encontrou registros suficientes.';$('#aiProposals').innerHTML='';$('#aiApply').hidden=true;return;}
    const container=$('#aiProposals');
    container.innerHTML='<h3>Registros propostos para esta seção</h3><p class="muted">Revise todos os campos antes de gravar. Vincule cada unidade à empresa, cada departamento à unidade, cada processo ROPA ao departamento e cada risco ao processo correspondente.</p>'+pendingAi.map((x,i)=>'<div class="card"><strong>'+E((defs[x.section]?.label||x.section)+' — '+x.name)+'</strong>'+Object.entries(defs[x.section]?.fields||{}).filter(([k])=>!['status','version'].includes(k)).map(([k,label])=>'<label class="field">'+E(label)+'<textarea data-ai-index="'+i+'" data-ai-field="'+E(k)+'" style="min-height:65px">'+E(x[k]||((k==='assessment'||k==='finding')?x.text:'')||'')+'</textarea></label>').join('')+'<label><input type="checkbox" data-ai-check="'+i+'" checked> Gravar esta proposta</label></div>').join('');
    $('#aiApply').hidden=!pendingAi.some(x=>!!defs[x.section]&&x.section!=='company');
@@ -72,7 +76,7 @@ document.addEventListener('click',async e=>{
  }
  if(e.target?.id==='aiApply'){
   if(!companyId||!pendingAi.length){notice('Selecione uma empresa e gere propostas antes de gravar.');return;}
-  if(!confirm('Gravar os registros selecionados como rascunhos?'))return;
+  if(!confirm('Gravar os registros selecionados como rascunhos nesta empresa? Verifique antes a origem e os vínculos dos dados.'))return;
   const chosen=[...document.querySelectorAll('[data-ai-check]:checked')];if(!chosen.length){notice('Marque ao menos uma proposta para gravar.');return;}
   const b=e.target;b.disabled=true;let saved=0;
   try{
@@ -91,7 +95,7 @@ document.addEventListener('click',async e=>{
     const inserted=await api('/records','POST',{section:x.section,company_id:companyId,parent_id:parentId,payload});records.push({id:inserted.id,section:x.section,company_id:companyId,parent_id:parentId,payload});saved++;
     check.checked=false;
    }
-   await refresh();active=chosen.length===1?pendingAi[Number(chosen[0].dataset.aiCheck)].section:'policy';await render();notice(saved+' registro(s) salvo(s) no banco. Abra a secao correspondente.');
+   const returnSection=active;await refresh();active=returnSection;await render();notice(saved+' registro(s) salvo(s) no banco. Confira nesta seção.');
   }catch(err){notice(saved+' salvo(s); erro: '+err.message);}finally{b.disabled=false;}
  }
 });
