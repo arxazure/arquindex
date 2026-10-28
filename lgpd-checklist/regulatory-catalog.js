@@ -5,6 +5,7 @@ export const regulatorySources=[
 {id:'anpd-encarregado',title:'ANPD - Guia de definicoes de agentes e encarregado',kind:'orientacao',url:'https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-para-definicoes-dos-agentes-de-tratamento-de-dados-pessoais-e-do-encarregado'},
 {id:'anpd-atpp',title:'ANPD - Resolucao CD/ANPD 2/2022 - Pequeno porte',kind:'norma',url:'https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-2-de-27-de-janeiro-de-2022'}
 ];
+// Fontes oficiais centrais verificadas em 28/10/2026. Revisar periodicamente os enderecos.
 export const regulatoryTemplates=[
 {id:'ropa-setor',title:'Levantamento das operacoes de tratamento (ROPA)',category:'registro',source:'anpd-seguranca',sectors:['Todos'],action:'Entrevistar responsavel pelo processo; levantar finalidade, dados, titulares, origem, sistemas, compartilhamentos, prazo de retencao e medidas de seguranca; registrar lacunas e validar hipoteses legais.',finding:'Pendente de levantamento por setor. Nao presumir conformidade.'},
 {id:'seguranca-ti',title:'Checklist de seguranca e controle de acesso',category:'orientacao',source:'anpd-seguranca',sectors:['TI','Administrativo','Todos'],action:'Verificar perfis de acesso, autenticacao, backups, restauracao, logs, atualizacoes, acesso de terceiros e evidencia documental.',finding:'Controles a verificar; medidas recomendadas devem ser adequadas ao risco.'},
