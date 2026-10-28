@@ -1,0 +1,33 @@
+name: RHDP review - offline tests only
+on:
+  push:
+    branches:
+      - seo/revisao-rhdp-matriz72-20261023
+    paths:
+      - "seo/review/2026-10-27/**"
+      - ".github/workflows/rhdp-review-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax check
+        run: |
+          python -m py_compile seo/review/2026-10-27/publicar-rhdp-homehost.py
+          python -m py_compile seo/review/2026-10-27/test_publicar_rhdp.py
+      - name: Run offline HTML integration tests
+        run: python -m unittest discover -s seo/review/2026-10-27 -p 'test_*.py' -v
+      - name: Assert review artifacts exist
+        run: |
+          test -s seo/review/2026-10-27/rhdp-dossies-bloco-editorial.html
+          test -s seo/review/2026-10-27/publicar-rhdp-homehost.py
+# No FTPS, production secrets, uploads, merges or deployments in this workflow.
