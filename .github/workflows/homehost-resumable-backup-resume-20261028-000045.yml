@@ -1,0 +1,31 @@
+name: HomeHost backup retomavel 20261028 checkpoint 45
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/homehost-resumable-backup-resume-20261028-000045.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arquindex-homehost-weekly-maintenance
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Testar sem conexao de rede
+        run: python -m unittest discover -s tests -p "test_homehost_resumable_backup.py" -v
+      - name: Retomar checkpoint privado verificado
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+        run: python seo-rotinas/homehost-resumable-backup.py --resume "/seo-backups/resumable/20261026T115321Z-4df745d1d388/checkpoint-000045-135ec032b248.json"
