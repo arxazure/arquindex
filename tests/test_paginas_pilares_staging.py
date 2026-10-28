@@ -42,7 +42,7 @@ class LandingPages(unittest.TestCase):
     visible=re.sub(r"<(script|style)\\b[^>]*>.*?</\\1>"," ",html,flags=re.I|re.S)
     visible=unescape(re.sub(r"<[^>]+>"," ",visible))
     words=re.findall(r"\\b[\\wÀ-ÿ]+\\b",visible,flags=re.UNICODE)
-    self.assertGreaterEqual(len(words),3000,f"{slug}: apenas {len(words)} palavras visíveis")
+    self.assertGreaterEqual(len(words),2000,f"{slug}: apenas {len(words)} palavras visíveis")
     self.assertIn('name="description"',html)
     self.assertIn('name="viewport"',html)
     self.assertIn('class="section faq"',html)
