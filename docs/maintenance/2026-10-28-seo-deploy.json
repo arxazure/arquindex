@@ -1,0 +1,260 @@
+{
+  "audit_date": "2026-10-28",
+  "timezone": "America/Sao_Paulo",
+  "outcome": {
+    "production_available": true,
+    "changes_published_today": false,
+    "destructive_actions": 0,
+    "bytes_freed": 0,
+    "gsc_submissions": 0,
+    "indexnow_submissions": 0,
+    "merchant_center_actions": 0
+  },
+  "production_origin": {
+    "repository": "arxazure/arquindex",
+    "railway_project": "Arquindex Plataforma",
+    "railway_project_id": "f652d9de-5f85-404f-baec-a48d552d9163",
+    "service": "arquindex-web",
+    "service_id": "57fb4cbc-213b-462c-9c66-920b4d620137",
+    "environment": "production",
+    "branch": "railway-production-2026",
+    "root_directory": "/arquindex-platform",
+    "builder": "RAILPACK V3",
+    "start_command": "npm start",
+    "healthcheck_path": "/health",
+    "public_domain": "https://arquindex-web-production.up.railway.app",
+    "staged_changes": null,
+    "staged_changes_destructive": false
+  },
+  "live_deployment": {
+    "id": "9b607e8a-e4ce-49c0-82c8-873e7040a856",
+    "commit": "f5d5603cfe9e0001a2ecf61dae5636c92072d8c6",
+    "status": "SUCCESS",
+    "active_health_response": {
+      "ok": true,
+      "service": "arquindex-web"
+    },
+    "rollback_available": true
+  },
+  "safe_fix_attempt": {
+    "reason": "Applebot requested /assets/index-CsI5cQYm.js and received 404 while /gestao-documental/assets/index-CsI5cQYm.js is the current valid bundle",
+    "change": "Added only /assets/index-CsI5cQYm.js to the existing exact-match legacy asset redirect set in arquindex-platform/server.js",
+    "commit": "77d357a4ae6bfbfe893030cca8b4bfa78433639f",
+    "github_actions": {
+      "workflow": "Homehost replica security tests",
+      "run_id": 40669607189,
+      "conclusion": "success"
+    },
+    "railway_deployment": {
+      "id": "84f59841-da49-4fce-9687-914a5fa0b1e4",
+      "status": "FAILED",
+      "failure_stage": "BUILD_IMAGE",
+      "error": "Failed to build an image. Please check the build logs for more details.",
+      "diagnosis_category": "infra_error",
+      "build_log_lines": [
+        "All aboard, next stop: builder v4"
+      ],
+      "deploy_log_count": 0,
+      "interpretation": "Railway failed before npm/install/build output; the change is committed and tested but is not published. No second write or redeploy was attempted."
+    }
+  },
+  "regional_campaign_24x3": {
+    "tested_urls": 72,
+    "status_loaded": 72,
+    "self_canonical": 72,
+    "exactly_one_h1": 72,
+    "exactly_one_main": 72,
+    "viewport_present": 72,
+    "noindex_count": 0,
+    "tracking_detected": 0,
+    "jsonld_blocks_per_page": 2,
+    "visible_word_range": [
+      392,
+      428
+    ],
+    "internal_links_per_page": 28,
+    "failures": 0,
+    "decision": "Do not add to sitemap or submit to IndexNow/GSC yet: pages are thin and mechanically similar, so publication expansion would risk doorway-page/cannibalization problems."
+  },
+  "regional_500_city_family": {
+    "railway_route": "https://arquindex-web-production.up.railway.app/gestao-documental/brasil/centro-oeste/df/brasilia",
+    "railway_canonical": "https://www.arquindex.com.br/gestao-documental/brasil/centro-oeste/df/brasilia",
+    "railway_route_words": 925,
+    "railway_sitemap": {
+      "url": "https://arquindex-web-production.up.railway.app/gestao-documental/sitemap-cidades.xml",
+      "loc_count": 500,
+      "unique_loc_count": 500,
+      "malformed_loc_count": 0
+    },
+    "official_route": "https://www.arquindex.com.br/gestao-documental/brasil/centro-oeste/df/brasilia",
+    "official_canonical_observed": "https://www.arquindex.com.br/gestao-documental/brasil/centro-oeste/df/gestao-documental/brasilia",
+    "issue": "The Railway replica is corrected, but HomeHost still serves the malformed duplicate canonical. No sitemap/indexing submission until the public origin is fixed.",
+    "github_issue": 69,
+    "issue_comment_id": 6466234020
+  },
+  "official_site_audit": {
+    "priority_pages": [
+      {
+        "url": "https://www.arquindex.com.br/",
+        "canonical": "self",
+        "h1": 1,
+        "main": 1,
+        "noindex": false,
+        "words": 3518
+      },
+      {
+        "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+        "canonical": "self",
+        "h1": 1,
+        "main": 0,
+        "noindex": false,
+        "words": 1633
+      },
+      {
+        "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+        "canonical": "self",
+        "h1": 1,
+        "main": 0,
+        "noindex": false,
+        "words": 3589
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao.html",
+        "canonical": "self",
+        "h1": 1,
+        "main": 1,
+        "noindex": false,
+        "words": 7656
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+        "canonical": "self",
+        "h1": 1,
+        "main": 1,
+        "noindex": false,
+        "words": 1376
+      }
+    ],
+    "recovered_pages": [
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao-processamento-dados.html",
+        "status": "loaded",
+        "canonical": "self",
+        "words": 622
+      },
+      {
+        "url": "https://www.arquindex.com.br/avaliacao-de-arquivos-para-digitalizacao.html",
+        "status": "loaded",
+        "canonical": "self",
+        "words": 639
+      }
+    ],
+    "robots": {
+      "url": "https://www.arquindex.com.br/robots.txt",
+      "accessible": true,
+      "content_type": "text/plain"
+    },
+    "sitemap": {
+      "url": "https://www.arquindex.com.br/sitemap.xml",
+      "accessible": true,
+      "type": "sitemap-index",
+      "loc_count": 14
+    },
+    "missing_sitemap_index": {
+      "url": "https://www.arquindex.com.br/sitemap-index.xml",
+      "status": 404
+    },
+    "internal_reference_crawl": {
+      "source_pages": 5,
+      "unique_same_host_refs": 135,
+      "accessible": 125,
+      "redirects": 10,
+      "confirmed_direct_404": [
+        "https://www.arquindex.com.br/arquindex-favicon.png",
+        "https://www.arquindex.com.br/img/about.webp",
+        "https://www.arquindex.com.br/assets/img/about.webp"
+      ],
+      "blocked_by_client_css_js": 7,
+      "note": "ERR_BLOCKED_BY_CLIENT entries were not counted as origin HTTP failures."
+    },
+    "other_known_404": [
+      "https://www.arquindex.com.br/css/IE-fix.css"
+    ],
+    "tracking": {
+      "google_ads_ids_seen": [
+        "AW-17029507720",
+        "AW-17020939105"
+      ],
+      "ads_present_on": [
+        "homepage",
+        "digitalizacao.html",
+        "digitalizacao-com-ocr.html"
+      ],
+      "absent_on": [
+        "guarda_de_documentos.html",
+        "gestao_de_colaboradores_documentos.html"
+      ],
+      "ga4_measurement_id_detected": false,
+      "gtm_detected": false
+    },
+    "github_issue": 28,
+    "issue_comment_id": 6466235718
+  },
+  "railway_24h": {
+    "total_http_requests": 625,
+    "http_2xx": 580,
+    "http_3xx": 31,
+    "http_4xx": 14,
+    "http_5xx": 0,
+    "cpu_avg": 0.0000494,
+    "cpu_max": 0.00585,
+    "memory_gb_avg": 0.06734,
+    "memory_gb_max": 0.12139,
+    "runtime_warning": "npm warn config production Use --omit=dev instead"
+  },
+  "homehost_backup_and_cleanup": {
+    "weekday_module_due": false,
+    "latest_backup_workflow_run": 40619269332,
+    "workflow_conclusion": "success",
+    "operational_state": "in_progress",
+    "latest_checkpoint": "/seo-backups/resumable/20261026T115321Z-4df745d1d388/checkpoint-000053-efba4b7cb8de.json",
+    "checkpoint_sha256": "8b047c665af5db0ace3a18f702cec4a840e56d96773d7110b42221800f980933",
+    "files_checkpointed": 13000,
+    "source_bytes_checkpointed": 264075600,
+    "complete_backup_confirmed": false,
+    "restore_validation_confirmed": false,
+    "cleanup_performed": false,
+    "reason": "No deletion, quarantine move, or HomeHost write is safe until the resumable backup finishes and a restore validation is recorded."
+  },
+  "connectors": {
+    "github_read_write": "working",
+    "railway_read_write": "working; latest build failed in Railway infrastructure before project build output",
+    "gsc_wizard": {
+      "read_test": "blocked",
+      "connector_error_code": "INVALID_ARGUMENT",
+      "service_state": [
+        "payment_required",
+        "subscription_required"
+      ],
+      "classification": "subscription expired; not 401, 403, 429 or 5xx",
+      "exact_next_step": "Activate a GSC Wizard subscription at https://tool.gscwizard.com/settings/subscription"
+    },
+    "homehost_authenticated_write": "not used; public reads worked, but backup/restore safety gate is incomplete",
+    "merchant_center": "not accessed; remains a separate authorized-access workstream"
+  },
+  "submissions": {
+    "sitemap_updates": [],
+    "gsc_url_submissions": [],
+    "indexnow_submissions": [],
+    "indexing_claims": [],
+    "note": "No submission was made because no new public URL was safely published and the HomeHost canonical defect remains."
+  },
+  "next_steps": [
+    "Retry deployment of commit 77d357a only after Railway infrastructure is stable; if the same pre-build failure repeats, send deployment 84f59841-da49-4fce-9687-914a5fa0b1e4 to Railway Support.",
+    "Finish and restore-validate the HomeHost backup, then deploy the canonical correction to the public origin with TLS-valid FTPS and verify HTTP/canonical.",
+    "Replace or remove only proven-unused references to the three directly linked missing assets after dependency checks.",
+    "Add consistent analytics coverage only after confirming the intended GA4/GTM property.",
+    "Resume current Search Console/cannibalization checks after the GSC Wizard subscription is active.",
+    "Enrich the 72 regional pages with distinct local evidence and useful intent-specific content before sitemap or IndexNow submission."
+  ]
+}
