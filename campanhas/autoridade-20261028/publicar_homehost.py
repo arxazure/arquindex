@@ -32,6 +32,7 @@ SLUGS = (
     "avaliacao-contaminacao-caixas-documentos",
     "recuperacao-documentos-embalagens-contaminadas",
     "processamento-seguro-acervo-contaminado",
+    "manual-poeira-ventilacao-arquivos-contaminados",
 )
 PUBLIC_BASE = "https://www.arquindex.com.br/guias/"
 
