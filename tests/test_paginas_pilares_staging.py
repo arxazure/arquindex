@@ -1,5 +1,6 @@
 """Regressão das três páginas comerciais estáticas em staging."""
 import json
+from html import unescape
 import re
 import unittest
 from html.parser import HTMLParser
@@ -38,6 +39,10 @@ class LandingPages(unittest.TestCase):
     self.assertEqual(p.canonicals[0],f"https://{slug}.arquindex.com.br/")
     self.assertTrue(p.titles[0])
     self.assertIn('application/ld+json',html)
+    visible=re.sub(r"<(script|style)\\b[^>]*>.*?</\\1>"," ",html,flags=re.I|re.S)
+    visible=unescape(re.sub(r"<[^>]+>"," ",visible))
+    words=re.findall(r"\\b[\\wÀ-ÿ]+\\b",visible,flags=re.UNICODE)
+    self.assertGreaterEqual(len(words),3000,f"{slug}: apenas {len(words)} palavras visíveis")
     self.assertIn('name="description"',html)
     self.assertIn('name="viewport"',html)
     self.assertIn('class="section faq"',html)
