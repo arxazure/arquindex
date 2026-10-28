@@ -1,0 +1,31 @@
+name: Repair audited pages 20261028
+on:
+  push:
+    branches: [master]
+    paths: [.github/workflows/repair-audit-pages-20261028.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile scripts/repair-audit-pages-20261028.py
+      - name: Repair and verify
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python scripts/repair-audit-pages-20261028.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: repair-audit-pages-20261028
+          path: repair-report/
+          retention-days: 90
