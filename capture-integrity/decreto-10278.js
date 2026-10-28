@@ -44,6 +44,7 @@ export function registerInput({ bytes, metadata, origem, actorId, tenantId, publ
   if (!nonempty(actorId) || !nonempty(tenantId)) throw new TypeError('Actor and tenant required');
   const inputHash = checksum(bytes);
   const id = metadata?.identificadorDigital || randomUUID();
+  if (!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(id)) throw new TypeError('Digital identifier must be a UUID');
   const fields = { ...metadata, identificadorDigital: id };
   const check = origem === 'nato_digital' ? { valid: true, missing: [], note: 'Fora do escopo do Decreto 10.278/2020; metadados a validar conforme politica do cliente' } : validateMetadata(fields, { publicBody });
   const timestamp = new Date().toISOString();

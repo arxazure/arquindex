@@ -7,5 +7,12 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.922.0",
+    "pg": "8.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.3.14"
   }
 }

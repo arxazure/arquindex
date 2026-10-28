@@ -5,9 +5,9 @@ import {registerInput,appendVersion,verifyVersion} from './decreto-10278.js';
  * under an immutable objectKey and verify storage ETag/size before committing metadata.
  * pool: pg Pool. No file bytes or document contents are logged.
  */
-export async function persistInitial(pool, {bytes,metadata,origem,actorId,tenantId,publicBody=false,objectKey}) {
+export async function persistInitial(pool, {bytes,metadata,origem,actorId,tenantId,publicBody=false,objectKey,manifest,channel}) {
  if(typeof objectKey!=='string'||!objectKey) throw new Error('Immutable object key required');
- const m=registerInput({bytes,metadata,origem,actorId,tenantId,publicBody});
+ const m=manifest || registerInput({bytes,metadata,origem,actorId,tenantId,publicBody});
  const v=m.versions[0];
  const db=await pool.connect();
  try{
@@ -20,18 +20,22 @@ export async function persistInitial(pool, {bytes,metadata,origem,actorId,tenant
    (tenant_id,document_id,version_number,stage,algorithm,hash_hex,size_bytes,object_key,created_by)
    VALUES ($1,$2,1,$3,$4,$5,$6,$7,$8)`,[tenantId,m.documentoId,v.stage,v.algoritmo,v.valor,v.tamanhoBytes,objectKey,actorId]);
   await db.query(`INSERT INTO capture_integrity_audit(tenant_id,document_id,action,actor_id,details)
-  VALUES ($1,$2,'received',$3,$4)`,[tenantId,m.documentoId,actorId,JSON.stringify({origem,version:1})]);
+  VALUES ($1,$2,'received',$3,$4)`,[tenantId,m.documentoId,actorId,JSON.stringify({origem,channel,version:1})]);
   await db.query('COMMIT');
   return {documentoId:m.documentoId,status:m.status,hash:v.valor};
  } catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}
 }
-export async function persistDerived(pool,{tenantId,documentId,bytes,stage,actorId,objectKey}) {
+export async function persistDerived(pool,{tenantId,documentId,bytes,stage,actorId,objectKey,sourceVersion,evidence={}}) {
  if(!objectKey)throw new Error('Immutable object key required');
  const db=await pool.connect();
  try{
   await db.query('BEGIN');
   const doc=await db.query('SELECT document_id FROM capture_integrity_documents WHERE tenant_id=$1 AND document_id=$2 FOR UPDATE',[tenantId,documentId]);
   if(doc.rowCount!==1)throw new Error('Document not found in tenant');
+  if(sourceVersion!==undefined){
+   const source=await db.query('SELECT version_number FROM capture_integrity_versions WHERE tenant_id=$1 AND document_id=$2 AND version_number=$3',[tenantId,documentId,sourceVersion]);
+   if(source.rowCount!==1)throw new Error('Source version not found in tenant');
+  }
   const prior=await db.query('SELECT COALESCE(MAX(version_number),0) AS n FROM capture_integrity_versions WHERE tenant_id=$1 AND document_id=$2',[tenantId,documentId]);
   const n=Number(prior.rows[0].n)+1;
   const v=appendVersion({versions:[]},{bytes,stage,actorId}).versions[0];
@@ -39,7 +43,7 @@ export async function persistDerived(pool,{tenantId,documentId,bytes,stage,actor
   (tenant_id,document_id,version_number,stage,algorithm,hash_hex,size_bytes,object_key,created_by)
   VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,[tenantId,documentId,n,stage,v.algoritmo,v.valor,v.tamanhoBytes,objectKey,actorId]);
   await db.query(`INSERT INTO capture_integrity_audit(tenant_id,document_id,action,actor_id,details)
-  VALUES($1,$2,'version_added',$3,$4)`,[tenantId,documentId,actorId,JSON.stringify({stage,version:n})]);
+  VALUES($1,$2,'version_added',$3,$4)`,[tenantId,documentId,actorId,JSON.stringify({stage,version:n,sourceVersion,evidence})]);
   await db.query('COMMIT');return {version:n,hash:v.valor};
  }catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}
 }
