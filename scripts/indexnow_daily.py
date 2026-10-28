@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from html.parser import HTMLParser
 
+
 ENDPOINT = 'https://api.indexnow.org/indexnow'
 STATE = Path('.indexnow-state/accepted.json')
 REPORT = Path('indexnow-report/report.json')
@@ -25,8 +26,12 @@ MAX_URLS = 25000
 KEY_RE = re.compile(r'[A-Za-z0-9-]{8,128}')
 
 
+
+
 class CanonicalAlias(ValueError):
     """The apex sitemap delegates exclusively to the configured www inventory."""
+
+
 
 
 def error_code(exc):
@@ -46,11 +51,14 @@ def error_code(exc):
     return 'validation_or_network'
 
 
+
+
 class SEOParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.canonicals = []
         self.noindex = False
+
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -59,6 +67,8 @@ class SEOParser(HTMLParser):
         if tag == 'meta' and attrs.get('name', '').lower() in ('robots', 'bingbot', 'msnbot'):
             tokens = re.split(r'[\s,;]+', attrs.get('content', '').lower())
             self.noindex |= bool({'noindex', 'none'} & set(tokens))
+
+
 
 
 def exclusion_reason(url, body, headers):
@@ -77,6 +87,8 @@ def exclusion_reason(url, body, headers):
     return None
 
 
+
+
 def robots_for(host):
     parser = urllib.robotparser.RobotFileParser()
     try:
@@ -92,15 +104,21 @@ def robots_for(host):
     return parser
 
 
+
+
 def valid_url(url, host):
     p = urllib.parse.urlsplit(url)
     return (p.scheme == 'https' and p.netloc == host and not p.fragment
             and not p.username and not p.password and not any(c.isspace() for c in url))
 
 
+
+
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
+
+
 
 
 def request(url, payload=None):
@@ -132,7 +150,9 @@ def request(url, payload=None):
             time.sleep(2 ** attempt)
 
 
-def hosts_from_repository(root=Path('.')):
+
+
+def candidate_hosts(root=Path('.')):
     hosts = {'www.arquindex.com.br', 'arquindex.com.br'}
     for path in root.rglob('sitemap*.xml'):
         if '.git' in path.parts:
@@ -140,6 +160,36 @@ def hosts_from_repository(root=Path('.')):
         text = path.read_text(encoding='utf-8', errors='replace')
         hosts.update(re.findall(r'https://([a-z0-9.-]+\.arquindex\.com\.br)(?=[/:<\s])', text))
     return sorted(h for h in hosts if re.fullmatch(r'(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)*arquindex\.com\.br', h))
+
+
+
+
+# Confirmed in run 40722664110: www has 549 valid public pages; apex delegates.
+# Repository sitemap files are candidate inventory, not evidence of publication.
+ACTIVE_HOSTS = ('arquindex.com.br', 'www.arquindex.com.br')
+
+
+def hosts_from_repository(root=Path('.')):
+    return list(ACTIVE_HOSTS)
+
+
+def audit_candidate(host):
+    result = {'host': host, 'status': 'not_approved', 'submitted': False}
+    try:
+        socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)
+    except socket.gaierror as exc:
+        result['status'] = ('dns_unresolved' if exc.errno == socket.EAI_NONAME
+                            else 'dns_temporary_or_resolver_failure')
+        result['dns_errno'] = exc.errno
+        # A resolver failure does not prove permanent nonexistence. Recheck daily.
+        return result
+    try:
+        pages = discover(host)
+        key_for(host)
+        result.update(status='sitemap_and_key_ready_for_review', pages=len(pages))
+    except Exception as exc:
+        result.update(status='publication_check_failed', code=error_code(exc), error=str(exc))
+    return result
 
 
 def discover(host):
@@ -184,6 +234,8 @@ def discover(host):
     return sorted(pages)
 
 
+
+
 def key_for(host):
     url = 'https://' + host + '/indexnow-key.txt'
     status, body, _ = request(url)
@@ -192,6 +244,8 @@ def key_for(host):
         raise ValueError('missing or invalid IndexNow key on this host')
     # keyLocation at the root authorizes this exact host, including all paths.
     return key, url
+
+
 
 
 def process_host(host, old):
@@ -256,11 +310,18 @@ def process_host(host, old):
     return result, accepted
 
 
+
+
 def main():
     old = json.loads(STATE.read_text()) if STATE.exists() else {}
     updated = dict(old)
     results = []
     hosts = hosts_from_repository()
+    candidates = sorted(set(candidate_hosts()) - set(hosts))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as audit_pool:
+        candidate_reports = list(audit_pool.map(audit_candidate, candidates))
+    for candidate in candidate_reports:
+        print(json.dumps(candidate, ensure_ascii=False), flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
         tasks = {pool.submit(process_host, host, old.get(host, {})): host for host in hosts}
         for future in concurrent.futures.as_completed(tasks):
@@ -276,18 +337,22 @@ def main():
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     report = {'checked_at': datetime.now(timezone.utc).isoformat(),
               'notice': 'HTTP 200 means received, not crawled or indexed. HTTP 202 means key validation pending.',
-              'hosts': sorted(results, key=lambda r: r['host'])}
+              'hosts': sorted(results, key=lambda r: r['host']),
+              'candidate_audit': candidate_reports}
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
     summary = ('IndexNow diário: ' + str(len(hosts)) + ' hosts; '
                + str(sum(r['received_200'] for r in results)) + ' URLs recebidas (200); '
                + str(sum(r['pending_202'] for r in results)) + ' pendentes (202); '
                + str(sum(bool(r['errors']) for r in results)) + ' hosts com erros.\n'
                'Recebimento não comprova rastreamento nem indexação. Consulte report.json.\n')
+    summary += str(len(candidates)) + ' candidate hosts audited, not submitted; see candidate_audit.\n'
     print(summary)
     if os.getenv('GITHUB_STEP_SUMMARY'):
         with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as file:
             file.write(summary)
     return 1 if any(r['errors'] for r in results) else 0
+
+
 
 
 if __name__ == '__main__':
