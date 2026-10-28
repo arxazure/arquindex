@@ -11,6 +11,7 @@ import {captureService} from './service.js';
 import {fileStorage, tenantKey} from './storage.js';
 import {checksum} from './decreto-10278.js';
 import {ocrProcessor} from './processing.js';
+import {veraPdfValidator} from './verapdf.js';
 const run = promisify(execFile);
 const metadata = {assunto:'Teste', autor:'Emitente ficticio', dataDigitalizacao:'2026-10-27T10:00:00-03:00',
   localDigitalizacao:'BH', responsavelDigitalizacao:'Operador ficticio', titulo:'Teste', tipoDocumental:'Teste'};
@@ -95,7 +96,7 @@ test('SQL persistence, tenant boundaries, rollback, append-only audit and storag
       const rows = await pool.query("SELECT * FROM capture_integrity_audit WHERE action='integrity_failed'");
       assert.equal(rows.rowCount,1);
     });
-    await t.test('real raster PDF -> OCR -> SQL version -> readback', {skip:!process.env.CAPTURE_REAL_OCR}, async () => {
+    await t.test('real raster PDF -> OCR -> SQL version -> readback', {skip:!process.env.CAPTURE_REAL_OCR}, async t => {
       const fixture = join(root, 'scan.pdf');
       await run('python', ['-c',
         'from PIL import Image,ImageDraw,ImageFont; import sys; im=Image.new("RGB",(1800,1100),"white"); d=ImageDraw.Draw(im); f=ImageFont.truetype("DejaVuSans.ttf",65); d.text((100,200),"ARQUINDEX TEST DOCUMENT 2026",font=f,fill="black"); im.save(sys.argv[1],"PDF",resolution=200)', fixture]);
@@ -115,6 +116,19 @@ test('SQL persistence, tenant boundaries, rollback, append-only audit and storag
         processor:ocrProcessor({pdfa:true,language:'eng'})}), /Independent PDF\/A validation required/);
       const versions = await pool.query('SELECT stage FROM capture_integrity_versions WHERE document_id=$1 ORDER BY version_number',[doc.documentoId]);
       assert.deepEqual(versions.rows.map(r=>r.stage),['recebido','ocr']);
+      await t.test('independent veraPDF validation gates persisted PDF/A version', {skip:!process.env.CAPTURE_VERAPDF}, async()=>{
+        const validate=veraPdfValidator({executable:process.env.CAPTURE_VERAPDF,flavour:'2b'});
+        assert.equal((await validate(output)).valid,false);
+        const pdfa=await service.process({documentId:doc.documentoId,sourceVersion:2,stage:'pdfa',
+          processor:ocrProcessor({pdfa:true,language:'eng',validatePdfa:validate})});
+        assert.equal(pdfa.version,3);
+        const stored=await service.readVersion(doc.documentoId,3);
+        const proof=await validate(stored);assert.equal(proof.valid,true);assert.equal(proof.sourceHash,pdfa.hash);
+        const evidence=await pool.query("SELECT details FROM capture_integrity_audit WHERE document_id=$1 AND action='version_added' ORDER BY id DESC LIMIT 1",[doc.documentoId]);
+        assert.equal(evidence.rows[0].details.evidence.validator,'veraPDF');
+        assert.equal(evidence.rows[0].details.sourceVersion,2);
+        assert.deepEqual(await service.readVersion(doc.documentoId,1),raw);
+      });
     });
   } finally {
     if (embedded) await embedded.close(); else await pool.end();

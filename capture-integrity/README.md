@@ -38,3 +38,14 @@ No projeto operacional: testes dos handlers com SQLite real e armazenamento em m
 Não houve merge na railway-production-2026, alteração de DNS, migração de dados, implantação operacional nem teste com documentos de clientes. Confirmar o destino efetivo do proxy, versão do backend, políticas e credenciais restritas do R2, D1/backup/restauração, isolamento de operadores (owner não é por si autorização individual por cliente), licença/driver/scanner físico e atualização do ZIP do agente antes de publicação. O fluxo local SQLite do agente ainda não usa o manifesto PostgreSQL/D1 novo; seus arquivos e dados existentes foram preservados. PDF/A validado, autoria/assinatura ICP-Brasil e conformidade integral continuam pendentes.
 
 Referências: Decreto https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/decreto/d10278.htm ; operações condicionais R2 https://developers.cloudflare.com/r2/api/s3/api/ . SHA-256 é verificação de integridade, não assinatura digital.
+
+
+## Validação adicional em 28/10/2026
+
+O Railway confirmou em seus registros DNS conexões ao host `arquindex-capture-clientes.arquindex-cloud.workers.dev`. Foi implantado separadamente o Worker de homologação `arquindex-capture-integrity-stage`, sem troca de DNS/proxy ou alterações em documentos de produção.
+
+Passaram por HTTPS real: entrada com backup independente obrigatório, OCR real com saída pesquisável, upload/releitura SHA-256, histórico de metadados, login de colaborador, segregação de empresas, entrega privada, revogação e negação de aprovação ao operador. Original e saída OCR foram restaurados de outro bucket, com os mesmos hashes; um segundo D1 recebeu o snapshot de cliente/modelo/documento/fontes/revisões e cinco eventos. Os três buckets novos tiveram r2.dev verificado como desabilitado. Evidências e fixtures fictícias ficam em deploy/evidence no repositório privado operacional.
+
+`verapdf.js` liga um veraPDF CLI independente ao processador Node. Execução local com veraPDF 1.30.3: 16 testes aprovados, zero ignorados; PDF normal recusado; PDF/A-2b real validado, persistido como versão 3, com hash do relatório e vínculo à versão OCR, preservando a versão 1. O binário CLI deve ser instalado separadamente num worker restrito e configurado por caminho confiável. A CI sem CAPTURE_VERAPDF ignora apenas esse teste adicional e não comprova PDF/A validado.
+
+A validação do arquivo fictício não é assinatura ICP-Brasil nem comprova o processo físico. O fluxo Workers continua marcando PDF/A como não validado; o processador Node com veraPDF ainda requer serviço de execução para operar nesse fluxo em produção. Scanner Windows, preservação pré-OCR proprietário PaperStream e validação ICP-Brasil continuam pendentes. Não houve merge ou implantação de produção.
