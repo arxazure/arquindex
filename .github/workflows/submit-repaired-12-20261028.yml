@@ -1,0 +1,19 @@
+name: Submit repaired 12 pages
+on:
+  push:
+    branches: [master]
+    paths: [.github/workflows/submit-repaired-12-20261028.yml]
+permissions:
+  contents: read
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/submit-repaired-12-20261028.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indexnow-repaired-12
+          path: indexnow-report/
