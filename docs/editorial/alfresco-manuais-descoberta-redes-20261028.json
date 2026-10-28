@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-28",
+  "manuals": "https://arquindex-capture-doc-ocr-scan.arquindex-capture.stream/manuais/alfresco/",
+  "indexnow": {
+    "http": 202,
+    "status": "accepted_pending_key_validation",
+    "keyFileVerifiedByClient": true,
+    "urlCount": 5,
+    "indexed": "not_confirmed",
+    "evidence": "https://github.com/arxazure/arquindex/actions/runs/40783060735"
+  },
+  "google": {
+    "submitted": false,
+    "gscWizardError": "payment_required/subscription_required",
+    "githubOAuth": "GSC_CLIENT_ID/GSC_CLIENT_SECRET/GSC_REFRESH_TOKEN and GOOGLE aliases unavailable",
+    "sitemapPublished": true,
+    "indexed": "not_confirmed"
+  },
+  "linkedin": {
+    "account": "94842130",
+    "status": "published_confirmed_by_provider",
+    "urn": "urn:li:share:7521342004316860416",
+    "link": "https://arquindex-capture-doc-ocr-scan.arquindex-capture.stream/manuais/alfresco/"
+  },
+  "googleBusiness": {
+    "account": "locations/2344229015359741158",
+    "status": "LIVE",
+    "postId": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/6986315767729003614",
+    "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CAIQACoeChxtc3BfaDo4VE9nWkhUODNjbDRUcWlxT1BrRHJR",
+    "cta": "https://arquindex-capture-doc-ocr-scan.arquindex-capture.stream/manuais/alfresco/"
+  },
+  "instagram": {
+    "account": "17841429848911605",
+    "status": "failed_no_publication_confirmed",
+    "providerError": "Media ID is not available",
+    "readback": "No matching manual post returned",
+    "retryPerformed": false
+  },
+  "scope": "No HomeHost FTP, DNS changes, paid campaigns, private/personal accounts or Alfresco environment modifications."
+}
