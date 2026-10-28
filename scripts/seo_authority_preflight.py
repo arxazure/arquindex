@@ -12,7 +12,6 @@ SKIP = {".git", "node_modules", ".next", "dist", "build", "vendor"}
 class Page(HTMLParser):
     def __init__(self):
         super().__init__()
-        self.title = False
         self.h1 = 0
         self.titles = []
         self.description = []
@@ -21,7 +20,6 @@ class Page(HTMLParser):
         self.jsonld = []
         self.authors = []
         self.links = []
-        self.in_heading = False
         self.in_title = False
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -58,7 +56,9 @@ def audit(path):
     if not page.jsonld: issues.append("structured_data_review")
     if not page.authors: issues.append("author_attribution_review")
     # For editorial inspection only; do not assert schema or visible biography from meta author.
-    if not any(x.startswith("https://") and "arquindex.com.br" in urlparse(x).hostname.lower()
+    if not any(urlparse(x).scheme == "https" and (
+               (host := urlparse(x).hostname) == "arquindex.com.br" or
+               host.endswith(".arquindex.com.br"))
                for x in page.links if urlparse(x).hostname):
         issues.append("cross_property_links_review")
     return {"path": str(path), "issues": issues, "canonical": page.canonicals[:2],
