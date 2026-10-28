@@ -1,0 +1,23 @@
+name: Campaign RMBH technical assets
+on:
+  push:
+    branches: [master]
+    paths: [.github/workflows/social-assets-20261028.yml]
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install playwright
+      - run: node scripts/build-social-20261028.cjs
+      - run: python scripts/publish-social-assets-20261028.py
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campaign-rmbh-technical-assets
+          path: campaign-build/
