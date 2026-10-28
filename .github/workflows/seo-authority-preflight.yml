@@ -13,6 +13,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Unit tests for preflight rules
+        run: python3 -m unittest discover -s tests -p test_seo_authority_preflight.py
       - name: Inspect versioned HTML without publishing
         run: python3 scripts/seo_authority_preflight.py --out seo-report/authority-preflight.json
       - uses: actions/upload-artifact@v4
