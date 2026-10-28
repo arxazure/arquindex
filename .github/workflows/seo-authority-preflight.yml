@@ -17,8 +17,12 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_seo_authority_preflight.py
       - name: Inspect versioned HTML without publishing
         run: python3 scripts/seo_authority_preflight.py --out seo-report/authority-preflight.json
+      - name: Audit versioned sitemap XML without submitting
+        run: python3 scripts/seo_sitemap_preflight.py --out seo-report/sitemap-preflight.json
       - uses: actions/upload-artifact@v4
         with:
           name: seo-authority-preflight
-          path: seo-report/authority-preflight.json
+          path: |
+            seo-report/authority-preflight.json
+            seo-report/sitemap-preflight.json
           retention-days: 30
