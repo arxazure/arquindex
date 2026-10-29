@@ -1,0 +1,28 @@
+name: HomeHost resumable backup resume checkpoint 79
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/homehost-resumable-backup-resume-20261029-000079.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-homehost-weekly-maintenance
+  cancel-in-progress: false
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Testar sem conexao de rede
+        run: python -m unittest discover -s tests -p 'test_homehost_resumable_backup.py' -v
+      - name: Retomar backup privado do checkpoint 79
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+          RESUME_CHECKPOINT: /seo-backups/resumable/20261026T115321Z-4df745d1d388/checkpoint-000079-b4d6982af544.json
+        run: python seo-rotinas/homehost-resumable-backup.py --resume "$RESUME_CHECKPOINT"
