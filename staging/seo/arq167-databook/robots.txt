@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://databook.arquindex.com.br/sitemap.xml
