@@ -39,6 +39,10 @@ def locate(ftp):
   "/public_html/"+HOSTNAME,
   "/subdominios/"+HOSTNAME,
   "/"+HOSTNAME,
+  "/public_html/subdominios/databook",
+  "/public_html/databook",
+  "/subdominios/databook",
+  "/databook",
  ]
  for path in candidates:
   try:
