@@ -1,0 +1,45 @@
+name: Verificar SEO publicado 2026-10-29 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/verificar-seo-20261029-noite.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install playwright
+      - name: Verificar mobile desktop e descoberta
+        run: |
+          cat > verify.js <<'JS'
+          const {chromium,request}=require('playwright');
+          const items=[
+            ['ARQ-174','https://digitalizar-arquivos-corporativo.arquindex.com.br/vantagens.html'],
+            ['ARQ-176','https://digitalizar-mapeamento-mg.arquindex.com.br/o-que-e.html'],
+            ['ARQ-178','https://docusign.arquindex.com.br/']
+          ];
+          (async()=>{
+            const b=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+            const api=await request.newContext();
+            for(const [id,url] of items){
+              for(const [device,width,height] of [['mobile',390,844],['desktop',1440,900]]){
+                const p=await b.newPage({viewport:{width,height}});
+                const r=await p.goto(url+'?qa=final-20261029',{waitUntil:'networkidle',timeout:60000});
+                const d=await p.evaluate(()=>({title:document.title,h1:document.querySelector('h1')?.innerText.trim()||'',canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),cta:document.querySelectorAll('a[href*="wa.me"]').length,clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth}));
+                console.log(JSON.stringify({id,device,status:r.status(),...d}));
+                if(r.status()!=200||!d.h1||!d.canonical||!d.robots.includes('index')||!d.logo||d.cta<1||d.scrollWidth>d.clientWidth)process.exitCode=1;
+                await p.close();
+              }
+            }
+            for(const u of ['https://docusign.arquindex.com.br/robots.txt','https://docusign.arquindex.com.br/sitemap.xml']){
+              const r=await api.get(u);console.log(JSON.stringify({url:u,status:r.status(),contentType:r.headers()['content-type']||''}));if(r.status()!=200)process.exitCode=1;
+            }
+            await api.dispose();await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node verify.js
