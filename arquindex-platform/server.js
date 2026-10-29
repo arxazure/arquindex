@@ -440,6 +440,9 @@ const server=http.createServer(async(req,res)=>{
  const u=new URL(req.url,"http://localhost"); const p=u.pathname;
  const gestaoLegacyAssets=new Set([
   "/assets/index-CsI5cQYm.js",
+  "/assets/index-DkBtAQR3.css",
+  "/assets/layout-segment-context-Q7I4MQnZ.js",
+  "/assets/SiteHeader-C-eS0vxn.js",
   "/assets/index-BBjM0UaD.js",
   "/assets/FloatingWhatsApp-hEQiOKBe.js",
   "/assets/framework-DjPHiq1u.js",
