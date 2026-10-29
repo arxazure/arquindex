@@ -1,0 +1,26 @@
+name: Publicar SEO ARQ-174 ARQ-176 ARQ-178 2026-10-29
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-rotinas/publicar-arq174-arq176-arq178-20261029.py'
+      - '.github/workflows/publicar-arq174-arq176-arq178-20261029.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publicar-arq174-arq176-arq178-20261029
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publicar com FTPS, backup individual e verificacao publica
+        env:
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+          FTP_USER: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: python3 seo-rotinas/publicar-arq174-arq176-arq178-20261029.py
