@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-29",
+  "manual": "https://github.com/arxazure/arquindex/blob/master/docs/alfresco-community-aspectos-temporalidade.md",
+  "linkedin": {
+    "id": "urn:li:share:7521718690871119872",
+    "status": "creation_confirmed",
+    "public_url": null
+  },
+  "instagram": {
+    "id": "18160526368549810",
+    "status": "creation_confirmed",
+    "public_url": null
+  },
+  "google": {
+    "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/1253939676134117738",
+    "status": "PROCESSING",
+    "public_url": null
+  },
+  "site": {
+    "status": "not_verified",
+    "http_observed": 503,
+    "paths": [
+      "/blog/alfresco-community-gestao-documental-sem-amps/",
+      "/manuais/alfresco-community-aspectos-temporalidade/"
+    ],
+    "workflow": "publicar-alfresco-aspectos-20261029.yml"
+  },
+  "note": "Não republicar posts aceitos sem consultar o provedor. Links cruzados entre artigo/manual e central configurados no código; publicação em produção ainda não verificada."
+}
