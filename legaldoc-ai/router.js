@@ -67,6 +67,18 @@ export function legalDocRouter({pool}){
    await db.query('COMMIT');res.status(201).json({id,state:'DRAFT',sha256:sha256(rendered)});
   }catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}
  }));
+ router.get('/documents',handler(async(req,res)=>{
+  const companyId=allowedCompany(req,res);if(!companyId)return;
+  const q=await pool.query('SELECT id,title,state,content_sha256,created_at,updated_at FROM legaldoc_documents WHERE company_id=$1 ORDER BY created_at DESC LIMIT 200',[companyId]);
+  res.json(q.rows);
+ }));
+ router.get('/documents/:id/audit',handler(async(req,res)=>{
+  const companyId=allowedCompany(req,res);if(!companyId)return;
+  const q=await pool.query('SELECT id FROM legaldoc_documents WHERE id=$1 AND company_id=$2',[req.params.id,companyId]);
+  if(!q.rowCount)return res.status(404).json({error:'Documento nao encontrado'});
+  const history=await pool.query('SELECT event,actor_id,detail,occurred_at FROM legaldoc_audit WHERE company_id=$1 AND document_id=$2 ORDER BY occurred_at,id LIMIT 500',[companyId,req.params.id]);
+  res.json(history.rows);
+ }));
  router.post('/documents/:id/transition',handler(async(req,res)=>{
   const companyId=allowedCompany(req,res);if(!companyId)return;
   const action=req.body?.action;
