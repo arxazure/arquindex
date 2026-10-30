@@ -1,3 +1,4 @@
+import { databookChecklist } from "./brasilia-seo.js";
 import { alfrescoIa2026Path, alfrescoIa2026Article } from "./alfresco-ia-2026-article.js";
 import { aiGuide, aiGuidePaths } from "./alfresco-ia-regional-2026.js";
 import { renderAuthorityGuide } from "./authority-guide-longform.js";
@@ -326,7 +327,7 @@ function solutionPage(slug,req){
  <h2 id="beneficios">Benefícios</h2><div class="kpis">${benefits}</div>${enhancementBlocks}
  <h2 id="processo">Processo técnico</h2><div class="steps"><div class="step"><strong>Diagnóstico</strong><p>Objetivo, volume, riscos, formatos, usuários e prazo.</p></div><div class="step"><strong>Preparação</strong><p>Regras, classificação, metadados, logística e critérios de aceite.</p></div><div class="step"><strong>Execução</strong><p>Produção em lotes com registros, controles e tratamento de exceções.</p></div><div class="step"><strong>Validação e entrega</strong><p>Qualidade, conferência, relatórios, entrega e continuidade.</p></div></div>
  <h2 id="preco">Preços e fatores de custo</h2><div class="card"><p class="price">${price}</p><p>O valor final depende de volume, formatos, preparação, prazo, deslocamento, indexação, requisitos técnicos, integrações e forma de entrega. Compare propostas pelo escopo completo, não apenas pelo valor unitário.</p></div>
- ${calculator}${fastSeoBlock(slug)}${ecosystemLinks(slug)}
+ ${calculator}${fastSeoBlock(slug)}${ecosystemLinks(slug)}${slug==="databook"?databookChecklist:""}
  <h2 id="conformidade">Conformidade, segurança e rastreabilidade</h2><p>O projeto pode envolver controles de acesso, registro de movimentações, confidencialidade, temporalidade, integridade e documentação de decisões. Requisitos legais e regulatórios devem ser avaliados conforme o tipo documental e o setor.</p>${extra}
  <h2 id="aplicacoes">Aplicações</h2><ul>${apps}</ul>
  <h2 id="experiencia">Experiência e evidências</h2><p>${caseTxt}</p><p>Estudos de caso detalhados, volumes, resultados e nomes de clientes só devem ser publicados quando houver informação verificável e autorização adequada.</p>
@@ -595,7 +596,7 @@ const server=http.createServer(async(req,res)=>{
  if(aiGuidePaths.includes(p)){const a=aiGuide(p);res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout(a.title,a.desc,a.body,req,a.head));}
  if(p===alfrescoIa2026Path){const a=alfrescoIa2026Article();res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout(a.title,a.description,a.body,req,a.head));}
  if(p==="/digitalizacao"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Digitalização por cidade e preços | Arquindex","Guias de digitalização de documentos e preço por página em capitais e cidades da Grande BH.",regionalIndex(),req));}
- const regionalMatch=p.match(/^\/digitalizacao\/(local|preco)\/([a-z0-9-]+)\/?$/);if(regionalMatch){const guide=regionalPage(regionalMatch[2],regionalMatch[1]);if(guide){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow"});return res.end(layout(guide.title,guide.description,guide.body,req,guide.head));}}
+ const regionalMatch=p.match(/^\/digitalizacao\/(local|preco)\/([a-z0-9-]+)\/?$/);if(regionalMatch){const guide=regionalPage(regionalMatch[2],regionalMatch[1],canonicalOrigin(req),p);if(guide){res.writeHead(200,{"content-type":"text/html; charset=utf-8","x-robots-tag":"index, follow"});return res.end(layout(guide.title,guide.description,guide.body,req,guide.head));}}
  if(p==="/guias"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(top10Listing(req));}
  const guide=p.match(/^\/guias\/([a-z0-9-]+)$/);if(guide){const h=top10GuidePage(guide[1],req);if(h){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(h);}}
  if(p==="/biblioteca-normativa"){res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(normativeLibrary(req));}

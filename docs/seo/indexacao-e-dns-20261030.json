@@ -1,0 +1,261 @@
+{
+  "checkedAt": "2026-10-30T04:26:39Z",
+  "issue": "https://github.com/arxazure/arquindex/issues/84",
+  "inspections": [
+    {
+      "url": "https://www.arquindex.com.br/digitalizacao.html",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "lastCrawlTime": "2026-09-20T13:42:11Z",
+      "googleCanonical": "https://www.arquindex.com.br/digitalizacao.html",
+      "userCanonical": "https://www.arquindex.com.br/digitalizacao.html",
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=SFSbedE4fY4OO8QusjogXg&utm_medium=link&utm_source=api"
+    },
+    {
+      "url": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "lastCrawlTime": "2026-10-13T16:08:30Z",
+      "googleCanonical": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+      "userCanonical": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=85o8icwlUqT1x9mfP4ZRtA&utm_medium=link&utm_source=api"
+    },
+    {
+      "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "lastCrawlTime": "2026-10-17T23:09:10Z",
+      "googleCanonical": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "userCanonical": "https://www.arquindex.com.br/guarda_de_documentos.html",
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=Ey8-blp6lVrmmh80mp6m3Q&utm_medium=link&utm_source=api"
+    },
+    {
+      "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "lastCrawlTime": "2026-09-07T13:44:51Z",
+      "googleCanonical": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+      "userCanonical": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=3G8zy0alSMfimE_Qyn9s6w&utm_medium=link&utm_source=api"
+    },
+    {
+      "url": "https://www.arquindex.com.br/blog/montagem-de-databooks-de-engenharia/",
+      "verdict": "NEUTRAL",
+      "coverageState": "Discovered - currently not indexed",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "googleCanonical": null,
+      "userCanonical": null,
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=PEw5Z3OjS5RLc9tsRxQzsw&utm_medium=link&utm_source=api"
+    },
+    {
+      "url": "https://www.arquindex.com.br/artigos-tecnicos/2026-10-27/transmittal-controle-revisoes-databook/",
+      "verdict": "NEUTRAL",
+      "coverageState": "URL is unknown to Google",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "googleCanonical": null,
+      "userCanonical": null,
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=2JJlIsqv2bWev_7mgIRd6A&utm_medium=link&utm_source=api"
+    },
+    {
+      "url": "https://www.arquindex.com.br/artigos-tecnicos/2026-10-26/metadados-decreto-10278-indice-digitalizacao/",
+      "verdict": "NEUTRAL",
+      "coverageState": "URL is unknown to Google",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "googleCanonical": null,
+      "userCanonical": null,
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=Uv0_pB8A3FDcSq5n0a7ycQ&utm_medium=link&utm_source=api"
+    },
+    {
+      "url": "https://www.arquindex.com.br/onde-digitalizar-documentos.html",
+      "verdict": "NEUTRAL",
+      "coverageState": "URL is unknown to Google",
+      "indexingState": "INDEXING_STATE_UNSPECIFIED",
+      "lastCrawlTime": null,
+      "googleCanonical": null,
+      "userCanonical": null,
+      "inspectionResultLink": "https://search.google.com/search-console/inspect?resource_id=sc-domain:arquindex.com.br&id=xgDAa5XWtslBZjFpZBQa0w&utm_medium=link&utm_source=api"
+    }
+  ],
+  "liveAudit": {
+    "siteUrl": "sc-domain:arquindex.com.br",
+    "contextRange": {
+      "startDate": "2026-09-30",
+      "endDate": "2026-10-27"
+    },
+    "auditedCount": 2,
+    "skipped": [],
+    "truncated": false,
+    "listKey": "pages",
+    "sortedBy": "issueCount",
+    "sortOrder": "desc",
+    "thenBy": "impressions",
+    "summary": {
+      "total_pages": 2,
+      "total_issues": 2,
+      "by_severity": {
+        "critical": 2,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "info": 0
+      },
+      "indexable_pages": 0,
+      "non_indexable_pages": 2
+    },
+    "pages": [
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao.html",
+        "finalUrl": "https://www.arquindex.com.br/digitalizacao.html",
+        "statusCode": null,
+        "redirected": false,
+        "redirectChain": [],
+        "responseTimeMs": null,
+        "impressions": 179,
+        "clicks": 3,
+        "indexable": false,
+        "indexabilityStatus": "Not crawlable",
+        "title": null,
+        "titleLength": 0,
+        "metaDescriptionLength": 0,
+        "metaKeywords": null,
+        "h1Count": 0,
+        "h3Count": 0,
+        "h4Count": 0,
+        "h5Count": 0,
+        "h6Count": 0,
+        "wordCount": 0,
+        "canonicalUrl": null,
+        "canonicalIsSelf": false,
+        "noindex": false,
+        "internalLinks": 0,
+        "externalLinks": 0,
+        "imagesMissingAlt": 0,
+        "imagesCount": 0,
+        "hasStructuredData": false,
+        "structuredDataTypes": [],
+        "schemaIssues": [],
+        "hasViewport": false,
+        "faviconPresent": false,
+        "lang": null,
+        "hreflangCount": 0,
+        "bodyBytes": null,
+        "contentEncoding": null,
+        "issueCount": 1,
+        "issues": [
+          {
+            "id": "fetch-failed",
+            "category": "technical",
+            "severity": "critical",
+            "message": "Could not fetch page: Could not resolve www.arquindex.com.br: the DNS lookup failed or timed out. Try again in a moment."
+          }
+        ]
+      },
+      {
+        "url": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+        "finalUrl": "https://www.arquindex.com.br/montagem_databook_organizar.html",
+        "statusCode": null,
+        "redirected": false,
+        "redirectChain": [],
+        "responseTimeMs": null,
+        "impressions": 91,
+        "clicks": 1,
+        "indexable": false,
+        "indexabilityStatus": "Not crawlable",
+        "title": null,
+        "titleLength": 0,
+        "metaDescriptionLength": 0,
+        "metaKeywords": null,
+        "h1Count": 0,
+        "h3Count": 0,
+        "h4Count": 0,
+        "h5Count": 0,
+        "h6Count": 0,
+        "wordCount": 0,
+        "canonicalUrl": null,
+        "canonicalIsSelf": false,
+        "noindex": false,
+        "internalLinks": 0,
+        "externalLinks": 0,
+        "imagesMissingAlt": 0,
+        "imagesCount": 0,
+        "hasStructuredData": false,
+        "structuredDataTypes": [],
+        "schemaIssues": [],
+        "hasViewport": false,
+        "faviconPresent": false,
+        "lang": null,
+        "hreflangCount": 0,
+        "bodyBytes": null,
+        "contentEncoding": null,
+        "issueCount": 1,
+        "issues": [
+          {
+            "id": "fetch-failed",
+            "category": "technical",
+            "severity": "critical",
+            "message": "Could not fetch page: Could not resolve www.arquindex.com.br: the DNS lookup failed or timed out. Try again in a moment."
+          }
+        ]
+      }
+    ],
+    "dataSource": "api"
+  },
+  "indexnow": {
+    "siteUrl": "sc-domain:arquindex.com.br",
+    "indexnowApiKeySet": false,
+    "indexnowApiKeyMasked": null,
+    "keyFileVerified": null,
+    "keyFileUrl": null,
+    "keyFileError": null,
+    "keyFileUrlHint": "No key configured. Call update_indexnow_settings with generateKey: true, publish the returned keyFileContent at the returned keyFileUrl, then submit with submit_indexnow_urls."
+  },
+  "bing": {
+    "siteUrl": "sc-domain:arquindex.com.br",
+    "notConfigured": true,
+    "hint": "No Bing Webmaster Tools API key is configured for this property in GSC Wizard. Add your Bing Webmaster API key on the connected Google account in the GSC Wizard app to enable Bing data.",
+    "dataSource": "bing"
+  },
+  "dns": {
+    "google": {
+      "status": 2,
+      "error": "Name servers did not respond [177.234.150.42, 177.234.150.43]",
+      "queries": [
+        "www.arquindex.com.br A",
+        "arquindex.com.br A",
+        "arquindex.com.br NS"
+      ]
+    },
+    "cloudflare": {
+      "status": 2,
+      "errors": [
+        "EDE(22): No Reachable Authority at delegation arquindex.com.br.",
+        "EDE(23): Network Error"
+      ]
+    },
+    "rdap": {
+      "status": "active",
+      "nameservers": [
+        "ns29.servidorwebsite.net",
+        "ns30.servidorwebsite.net"
+      ]
+    },
+    "connectedCloudflareZoneFound": false
+  },
+  "trackerUpdate": {
+    "requested": 8,
+    "added": 5,
+    "alreadyTracked": 3
+  },
+  "actions": {
+    "newSubmission": false,
+    "publication": false,
+    "indexationGainConfirmed": false
+  }
+}

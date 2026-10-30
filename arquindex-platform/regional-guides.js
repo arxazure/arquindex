@@ -1,6 +1,8 @@
+import { brasiliaDigitalizacao } from "./brasilia-seo.js";
 export const regionalGuides=[["belo-horizonte-mg","Belo Horizonte","MG","prontuários empresariais, cartórios e áreas administrativas"],["contagem-mg","Contagem","MG","indústria, logística e departamento pessoal"],["betim-mg","Betim","MG","indústrias, fornecedores automotivos e engenharia"],["nova-lima-mg","Nova Lima","MG","mineração, engenharia e serviços corporativos"],["santa-luzia-mg","Santa Luzia","MG","indústria e arquivos administrativos"],["ribeirao-das-neves-mg","Ribeirão das Neves","MG","serviços, comércio e arquivos de RH"],["sao-paulo-sp","São Paulo","SP","sedes corporativas e operações multidepartamentais"],["rio-de-janeiro-rj","Rio de Janeiro","RJ","setor de serviços, engenharia e documentação técnica"],["brasilia-df","Brasília","DF","instituições e fornecedores com exigências documentais"],["curitiba-pr","Curitiba","PR","indústrias e serviços com alto fluxo de documentos"]].flatMap(([slug,city,uf,sectors])=>["local","preco"].map(type=>({slug,city,uf,sectors,type,path:"/digitalizacao/"+type+"/"+slug})));
 const safe=v=>String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-export function regionalPage(slug,type){
+export function regionalPage(slug,type,origin,path){
+ if(slug==="brasilia-df"&&type==="local") return brasiliaDigitalizacao(origin,path);
  const g=regionalGuides.find(x=>x.slug===slug&&x.type===type);if(!g)return null;
  const title=type==="preco"?"Quanto custa digitalizar documentos em "+g.city+"?":"Digitalização de documentos em "+g.city+": guia empresarial";
  const other=type==="preco"?"local":"preco";

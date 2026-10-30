@@ -1,0 +1,30 @@
+name: Validate targeted Brasilia SEO changes
+on:
+  pull_request:
+    branches: [railway-production-2026]
+    paths:
+      - arquindex-platform/brasilia-seo.js
+      - arquindex-platform/regional-guides.js
+      - arquindex-platform/server.js
+      - arquindex-platform/test/**
+      - scripts/prepare-brasilia-homehost.py
+      - staging/seo/brasilia-20261029/**
+      - tests/test_brasilia_homehost.py
+      - .github/workflows/seo-brasilia-validation.yml
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: node --check arquindex-platform/server.js
+      - run: node --test arquindex-platform/test/brasilia-seo.test.js arquindex-platform/test/replica-canonical.test.js arquindex-platform/test/replica-redirect.test.js
+      - run: python -m unittest discover -s tests -p test_brasilia_homehost.py -v
