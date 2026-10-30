@@ -1,6 +1,7 @@
 import express from 'express';
 import {randomUUID} from 'node:crypto';
 import {sha256,nextState,fillTemplate} from './workflow.js';
+import {analyzeDocumentText} from './analysis.js';
 
 // Montar somente atras do middleware de autenticacao e CSRF do sistema anfitriao.
 // Contrato: req.user={id,role,company_id}; pool=pg.Pool.
@@ -23,6 +24,11 @@ export function legalDocRouter({pool}){
  const log=(db,companyId,actor,event,documentId=null,templateId=null,detail={})=>db.query(
  'INSERT INTO legaldoc_audit(id,company_id,actor_id,event,document_id,template_id,detail) VALUES($1,$2,$3,$4,$5,$6,$7)',
  [randomUUID(),companyId,actor,event,documentId,templateId,detail]);
+ router.post('/analyze-text',handler(async(req,res)=>{
+  const companyId=allowedCompany(req,res);if(!companyId)return;
+  if(typeof req.body?.text!=='string'||req.body.text.length>200000)return res.status(400).json({error:'Texto invalido ou excede limite'});
+  res.json(analyzeDocumentText(req.body.text));
+ }));
  router.get('/templates',handler(async(req,res)=>{
   const companyId=allowedCompany(req,res);if(!companyId)return;
   const q=await pool.query('SELECT id,title,version,status,body_sha256,created_at,approved_at FROM legaldoc_templates WHERE company_id=$1 ORDER BY created_at DESC LIMIT 200',[companyId]);res.json(q.rows);
