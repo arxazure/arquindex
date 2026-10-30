@@ -7,7 +7,7 @@ import dns.message, dns.query, dns.rdatatype, dns.flags
 
 # Scope comes exclusively from files already public in this repository.
 # No Search Console data or manifest is consumed or exported.
-pat=re.compile(r'https?://((?:[a-z0-9-]+\\.)*arquindex\\.com\\.br)(?:[/:"\\s<]|$)',re.I)
+pat=re.compile(r'https?://((?:[a-z0-9-]+\.)*arquindex\.com\.br)(?:[/:"\s<]|$)',re.I)
 public_hosts=set()
 for p in Path('.').rglob('*'):
     if not p.is_file() or '.git' in p.parts or 'tests' in p.parts or p.stat().st_size>5000000 or p.suffix not in {'.csv','.json','.html','.xml','.md','.txt'}:continue
