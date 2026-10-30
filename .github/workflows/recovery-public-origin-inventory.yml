@@ -2,7 +2,7 @@ name: Public website recovery inventory
 on:
   push:
     branches: [fix/restore-subdomains-pages-20261030]
-    paths: ['.github/workflows/recovery-public-origin-inventory.yml']
+    paths: ['.github/workflows/recovery-public-origin-inventory.yml', 'scripts/recovery-gsc-origin-inventory.py']
   workflow_dispatch:
 permissions:
   contents: read
