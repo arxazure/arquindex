@@ -1,0 +1,26 @@
+name: Publicar SEO ARQ-172 v2 2026-10-30
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-rotinas/publicar-arq172-20261030-v2.py'
+      - '.github/workflows/publicar-arq172-v2-20261030.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publicar-arq172-v2-20261030
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publicar ARQ-172 com backup individual e verificacao publica
+        env:
+          FTP_IP: 177.234.150.42
+          FTP_USER: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: python3 seo-rotinas/publicar-arq172-20261030-v2.py
