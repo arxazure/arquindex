@@ -30,3 +30,9 @@ Facebook não aparece conectado na marca do Metricool e, portanto, não foi publ
 A verificação de duplicação encontrou os dois conteúdos do dia já preparados no Metricool. O post das 10:00, sobre guarda física para acervo digital, estava em publicação para LinkedIn, TikTok e YouTube, e a mídia correspondente estava em publicação no Google Business Profile. O segundo vídeo, sobre LGPD e Checklist, permaneceu agendado para 18:00.
 
 A pauta editorial com maior oportunidade pendente na fila é **digitalização de documentos em Belo Horizonte** (`ARQ-003`), seguida por gestão documental GED/ECM e Alfresco em Belo Horizonte. Não foi criada nova página ou nova publicação neste ciclo para preservar a regra de não duplicação. A página existente de consultoria LGPD já contém resposta direta, entregáveis, referências oficiais e links para os guias de digitalização, guarda e Alfresco; o formulário de atendimento rápido existente conduz o interessado ao WhatsApp com consentimento explícito antes do envio.
+
+## Execução manual — 13:20 BRT
+
+A rotina foi executada manualmente. O conteúdo das 10:00 já estava publicado no TikTok, YouTube e Google Business Profile; o LinkedIn retornou falha de autenticação. Para não duplicar os demais canais, foi criada uma republicação somente no LinkedIn para 13:25 BRT, com o vídeo existente, manual técnico, CTA de análise gratuita e formulário com UTM. ID Metricool: `411412477`.
+
+O conteúdo das 18:00 permanece agendado para TikTok, YouTube, LinkedIn e Google Business Profile. Não foi criado novo vídeo ou novo post multicanal neste disparo.
