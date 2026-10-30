@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Publicar ARQ-172 com backup individual e verificacao publica
         env:
-          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+          FTP_IP: 177.234.150.42
           FTP_USER: arquind2
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
