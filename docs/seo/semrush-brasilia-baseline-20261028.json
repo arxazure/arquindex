@@ -1,0 +1,23 @@
+{
+  "source": "https://mail.google.com/mail/u/?authuser=arquindex%40gmail.com#all/1a184bab2f216713",
+  "source_received": "2026-10-28T22:56:30Z",
+  "period": {"start": "2026-10-21", "end": "2026-10-28"},
+  "scope": {"project": "Arquindex", "domain": "arquindex.com.br", "engine": "Google", "location": "Brasilia,Federal District,Brazil", "language": "Portuguese (Brazil)", "device": null, "tracked_keyword_set": "Not fully supplied by weekly email"},
+  "visibility_percent": {"stoque.com.br": 20.33, "arquindex.com.br": 10.50},
+  "gap_percentage_points": 9.83,
+  "queries": [
+    {"query": "digitalização de documentos", "position": 22, "reported_position_change": 78, "reported_volume": 50, "ranking_url": null},
+    {"query": "databook", "position": 29, "reported_position_change": 71, "reported_volume": 20, "ranking_url": null}
+  ],
+  "top_landing_pages_not_keyword_url_mapping": [
+    "https://aplicativos-facilitam-digitalizacao-documentos-pelo-celular.arquindex.com.br/setores.html?post=como-digitalizar-documentos-em-pdf",
+    "https://equipamentos-recomendados-digitalizar-documentos-alta-qualidade.arquindex.com.br/artigo.html?post=databook-de-engenharia",
+    "https://governanca.arquindex.com.br/bh.html?post=entenda-o-que-e-digitalizar-documento",
+    "https://www.arquindex.com.br/",
+    "https://www.arquindex.com.br/sliders_and_videos.html",
+    "https://digitalizardocumentos.arquindex.com.br/o-que-e.html",
+    "https://compliance-arquivos-corporativo.arquindex.com.br/o-que-e.html?post=databook-de-engenharia"
+  ],
+  "subsequent_observation": {"date": "2026-10-29", "new_semrush_report_found": false, "publication_confirmed": false, "indexing_confirmed": false, "ranking_gain_confirmed": false},
+  "limitations": ["Visibility is specific to the monitored keyword set and Brasilia, not national ranking.", "The email does not pair each query with a ranking URL.", "Reported volumes are Semrush estimates from this report, not verified demand or forecasts.", "Do not treat missing later observations as zero, an unchanged rank or a decline."]
+}
