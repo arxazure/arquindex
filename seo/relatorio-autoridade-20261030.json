@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-30",
+  "property": "sc-domain:arquindex.com.br",
+  "source": "GSC Wizard / Google Search Console",
+  "performance": {
+    "range": {
+      "start": "2026-09-30",
+      "end": "2026-10-27"
+    },
+    "clicks": 104,
+    "impressions": 7363,
+    "ctrPercent": 1.4124677441260356,
+    "averagePosition": 21.681651500746977
+  },
+  "indexing": {
+    "homepage": "Submitted and indexed; Google canonical matches www",
+    "guarda_de_documentos": "Submitted and indexed; Google canonical matches inspected URL",
+    "sitemapRows": 452,
+    "sitemapRowsWithErrors": 378,
+    "mainSitemapResubmission": {
+      "url": "https://www.arquindex.com.br/sitemap.xml",
+      "accepted": true,
+      "submittedAt": "2026-10-30T03:59:59.272Z",
+      "pendingDownload": true,
+      "indexingGuaranteed": false
+    }
+  },
+  "publication": {
+    "pr": "https://github.com/arxazure/arquindex/pull/82",
+    "merged": true,
+    "commit": "3f1b156929457fe063c20839663989236bf910aa",
+    "run": "https://github.com/arxazure/arquindex/actions/runs/41000197432",
+    "attempts": 2,
+    "status": "blocked_before_file_changes",
+    "reason": "FTPS 530 Login authentication failed",
+    "actionRequired": "Check the HomeHost FTPS account and update the FTP_PASSWORD repository secret through GitHub settings. Do not paste credentials in chat.",
+    "pages": [
+      {
+        "path": "gestao-documental-brasil/index.html",
+        "url": "https://www.arquindex.com.br/gestao-documental-brasil/",
+        "title": "Gestão documental no Brasil: digitalização, ECM e LGPD | Arquindex"
+      },
+      {
+        "path": "atendimento/gestao-documental-rm-bh/index.html",
+        "url": "https://www.arquindex.com.br/atendimento/gestao-documental-rm-bh/",
+        "title": "Digitalização e gestão documental na RM BH | Arquindex"
+      },
+      {
+        "path": "atendimento/gestao-documental-rm-sp/index.html",
+        "url": "https://www.arquindex.com.br/atendimento/gestao-documental-rm-sp/",
+        "title": "Serviços documentais na RM SP: como planejar | Arquindex"
+      },
+      {
+        "path": "guias/contratar-servicos-digitalizacao-documentos/index.html",
+        "url": "https://www.arquindex.com.br/guias/contratar-servicos-digitalizacao-documentos/",
+        "title": "Como contratar serviços de digitalização de documentos | Arquindex"
+      },
+      {
+        "path": "guias/alfresco-ecm-implantacao-e-automacao/index.html",
+        "url": "https://www.arquindex.com.br/guias/alfresco-ecm-implantacao-e-automacao/",
+        "title": "Alfresco ECM: implantação e automação documental | Arquindex"
+      },
+      {
+        "path": "guias/consultoria-lgpd-gestao-documental/index.html",
+        "url": "https://www.arquindex.com.br/guias/consultoria-lgpd-gestao-documental/",
+        "title": "Consultoria LGPD aplicada à gestão documental | Arquindex"
+      },
+      {
+        "path": "guias/gestao-documental-classificacao-temporalidade/index.html",
+        "url": "https://www.arquindex.com.br/guias/gestao-documental-classificacao-temporalidade/",
+        "title": "Gestão documental: classificação e temporalidade na prática | Arquindex"
+      },
+      {
+        "path": "guias/guarda-digital-documentos-seguranca/index.html",
+        "url": "https://www.arquindex.com.br/guias/guarda-digital-documentos-seguranca/",
+        "title": "Guarda digital de documentos: segurança e recuperação | Arquindex"
+      },
+      {
+        "path": "blog/do-papel-a-guarda-digital-metodologia-arquindex/index.html",
+        "url": "https://www.arquindex.com.br/blog/do-papel-a-guarda-digital-metodologia-arquindex/",
+        "title": "Do papel à guarda digital: metodologia Arquindex | Arquindex"
+      }
+    ],
+    "localValidation": "PASS: 9 pages; unique titles; H1; canonical; JSON-LD; links; XML sitemap; Python compilation",
+    "liveVerification": "not run: FTPS login failed",
+    "newSitemapSubmitted": false,
+    "newUrlsIndexNowSubmitted": false
+  },
+  "social": {
+    "linkedin": {
+      "status": "published",
+      "urn": "urn:li:share:7521782810446106624",
+      "url": "https://www.linkedin.com/feed/update/urn:li:share:7521782810446106624/"
+    },
+    "google": {
+      "status": "LIVE",
+      "id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/7327049499303359948",
+      "url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CAIQACoeChxtc3BfaDpiQVlMaHl5TXM5N09xUGpLYXlvakJR"
+    },
+    "content": {
+      "linkedin": {
+        "commentary": "Digitalizar documentos é só o começo. O resultado aparece quando a equipe encontra o arquivo certo, consulta a versão aprovada e controla quem pode acessá-lo.\n\nNa metodologia Arquindex, o projeto conecta cinco frentes:\n• Digitalização com preparação, OCR, indexação e conferência por lote.\n• Gestão documental com classificação, responsáveis e critérios de retenção.\n• Alfresco ECM com metadados, permissões e integrações planejadas.\n• Consultoria LGPD ligada ao fluxo real dos dados pessoais.\n• Guarda digital com backup, teste de recuperação e possibilidade de exportação.\n\nAntes de contratar, peça um piloto e critérios claros de aceite. Compare o que está incluído, como os erros serão corrigidos e quem aprova a entrega.\n\nA Arquindex tem sede operacional em Belo Horizonte e planeja projetos com foco na RM BH e na RM SP, conforme escopo e logística contratados.\n\nConheça nossas soluções e solicite uma avaliação do seu acervo.\n#GestãoDocumental #DigitalizaçãoDeDocumentos #Alfresco #LGPD #GuardaDigital",
+        "link": "https://www.arquindex.com.br/?utm_source=linkedin&utm_medium=organic_social&utm_campaign=autoridade_documental_20261030",
+        "link_title": "Arquindex: digitalização, gestão documental, ECM e LGPD",
+        "link_description": "Planejamento e execução de projetos documentais com foco na RM BH e na RM SP."
+      },
+      "google": {
+        "language_code": "pt-BR",
+        "summary": "Sua empresa precisa localizar documentos com mais agilidade e controlar o acesso aos arquivos?\n\nA Arquindex integra serviços de digitalização, OCR e indexação, organização documental, Alfresco ECM, consultoria LGPD e guarda digital.\n\nO projeto começa com diagnóstico do acervo e um piloto para validar qualidade, pesquisa e critérios de aceite. Na guarda digital, avalie também backup, recuperação, permissões e exportação dos documentos.\n\nSede operacional em Belo Horizonte. Atendimento a projetos na RM BH e na RM SP conforme escopo e logística contratados.\n\nConheça as soluções e solicite uma avaliação comercial.",
+        "cta_type": "LEARN_MORE",
+        "cta_url": "https://www.arquindex.com.br/?utm_source=google_business_profile&utm_medium=organic&utm_campaign=autoridade_documental_20261030"
+      }
+    }
+  },
+  "bing": {
+    "gscWizardConnected": false,
+    "indexNowKeyInGscWizardConfigured": false,
+    "note": "The prepared deployment uses an independently verified public IndexNow key. No submission for new pages occurred."
+  },
+  "nextSteps": [
+    "Restore FTPS authentication and rerun failed publication job.",
+    "Verify public desktop/mobile pages, sitemap and IndexNow verification file.",
+    "Submit dedicated sitemap via GSC Wizard after live verification.",
+    "Do not repost the two social publications: confirmed IDs above.",
+    "Review legacy sitemap errors by URL and replace invalid entries only after confirming intended destinations."
+  ]
+}
