@@ -81,3 +81,16 @@ PR de implementação: https://github.com/arxazure/arquindex/pull/83. A atualiza
 Backup mais recente localizado e lido nesta continuação: https://github.com/arxazure/arquindex/actions/runs/40975208048, job `123801438792`. O passo de backup real terminou às 21h28 de 29/10, horário de Brasília, com `BACKUP_PARTIAL_RESUME_REQUIRED`: checkpoint 87, 21.500 arquivos, 325.946.854 bytes, `state: in_progress`. O checkpoint de dois arquivos que aparece no início do log pertence aos testes sintéticos e não foi usado para avaliar a cópia real. Continua sem comprovação de backup integral ou restauração isolada. Nenhuma publicação foi realizada.
 
 A busca por e-mails posteriores de acompanhamento Semrush retornou somente o relatório de 28/10; não há nova posição observada nesta continuação. A linha de base permanece histórica, sem alegação de manutenção ou ganho de ranking.
+
+
+## Inspeção real de indexação — 30/10/2026, aproximadamente 01h26 BRT
+
+Acesso GSC Wizard confirmado ativo, com escopo Google webmasters de escrita. Evidência completa em `docs/seo/indexacao-e-dns-20261030.json`; incidente registrado em https://github.com/arxazure/arquindex/issues/84.
+
+O Google URL Inspection confirmou quatro URLs já indexadas e com canonical própria: digitalizacao.html, montagem_databook_organizar.html, guarda_de_documentos.html e digitalizacao-com-ocr.html. Isso atualiza a ausência de comprovação registrada nas rodadas anteriores; não é ganho novo atribuído a este PR. O guia blog/montagem-de-databooks-de-engenharia/ consta como descoberto e ainda não indexado. Os dois artigos técnicos de 26/27 de outubro e onde-digitalizar-documentos.html constam como desconhecidos pelo Google. Publicação efetiva dos quatro destinos ainda precisa ser verificada antes de submeter.
+
+Falha ao vivo confirmada por Google DNS-over-HTTPS e Cloudflare DNS-over-HTTPS: SERVFAIL, servidores autoritativos inacessíveis. O Registro.br informa ns29.servidorwebsite.net e ns30.servidorwebsite.net; o Google menciona ausência de resposta de 177.234.150.42 e 177.234.150.43. A zona não foi encontrada na conta Cloudflare conectada. A correção depende do provedor autoritativo/registrador, sem trocar nameservers ou endereços às cegas. Os campos de HTML vazios na auditoria são consequência da falha de leitura, não prova de ausência de metadados.
+
+O sitemap principal registra um erro e já havia sido reenviado em 30/10 às 00h59 BRT; a causa específica ainda não foi extraída. Não foi feita outra submissão enquanto o DNS está falhando. IndexNow e Bing Webmaster API não configurados no GSC Wizard; não se gerou chave nova, pois há uma rotina independente no GitHub e é necessário verificar a chave já publicada quando a resolução voltar.
+
+As oito URLs foram adicionadas ao Indexing Tracker: cinco novas e três já acompanhadas. Nenhuma publicação, submissão nova, ganho de indexação ou de ranking foi afirmado nesta rodada. Próxima condição técnica: DNS NOERROR em dois resolvedores, GET público 200, robots/canonical conferidos e sitemaps válidos; depois solicitar descoberta das URLs efetivamente publicadas.
