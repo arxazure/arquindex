@@ -1,13 +1,14 @@
 {
-  "generated_at": "2026-10-29T16:56:33.332338+00:00",
+  "generated_at": "2026-10-30T16:43:20.126517+00:00",
   "source": "Live public HTML + sitemap.xml; not Google Search Console",
   "sitemap_status": "ok",
-  "scanned": 1,
+  "scanned": 120,
   "issues_count": 1,
   "issues": [
     {
-      "url": "https://www.arquindex.com.br/",
+      "url": "https://www.arquindex.com.br/llms.txt",
       "issues": [
+        "Título HTML ausente",
         "Meta description ausente",
         "Canonical ausente"
       ]
@@ -16,15 +17,1087 @@
   "pages": [
     {
       "url": "https://www.arquindex.com.br/",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/",
+      "title": "Arquindex | Gestão Documental, Digitalização, LGPD e ECM",
+      "description": "Há 20 anos em gestão documental, digitalização, LGPD, Alfresco ECM, Databook e organização de arquivos.",
+      "canonical": "https://www.arquindex.com.br/"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local-open-source-2026",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local-open-source-2026",
+      "title": "Alfresco ECM com IA local open source: OCR, classificacao e governanca",
+      "description": "Alfresco ECM e inteligencia artificial local open source: OCR, extracao, classificacao, governanca, LGPD e custos.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local-open-source-2026"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local-open-source",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local-open-source",
+      "title": "Alfresco com inteligência artificial local open source | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local-open-source"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/belo-horizonte-mg",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/belo-horizonte-mg",
+      "title": "Alfresco com inteligência artificial local open source em Belo Horizonte | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Belo Horizonte. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/belo-horizonte-mg"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/contagem-mg",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/contagem-mg",
+      "title": "Alfresco com inteligência artificial local open source em Contagem | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Contagem. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/contagem-mg"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/betim-mg",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/betim-mg",
+      "title": "Alfresco com inteligência artificial local open source em Betim | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Betim. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/betim-mg"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/nova-lima-mg",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/nova-lima-mg",
+      "title": "Alfresco com inteligência artificial local open source em Nova Lima | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Nova Lima. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/nova-lima-mg"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/santa-luzia-mg",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/santa-luzia-mg",
+      "title": "Alfresco com inteligência artificial local open source em Santa Luzia | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Santa Luzia. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/santa-luzia-mg"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/ribeirao-das-neves-mg",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/ribeirao-das-neves-mg",
+      "title": "Alfresco com inteligência artificial local open source em Ribeirão das Neves | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Ribeirão das Neves. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/ribeirao-das-neves-mg"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/sao-paulo-sp",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/sao-paulo-sp",
+      "title": "Alfresco com inteligência artificial local open source em São Paulo | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em São Paulo. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/sao-paulo-sp"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/rio-de-janeiro-rj",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/rio-de-janeiro-rj",
+      "title": "Alfresco com inteligência artificial local open source em Rio de Janeiro | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Rio de Janeiro. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/rio-de-janeiro-rj"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/brasilia-df",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/brasilia-df",
+      "title": "Alfresco com inteligência artificial local open source em Brasília | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Brasília. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/brasilia-df"
+    },
+    {
+      "url": "https://www.arquindex.com.br/alfresco-ia-local/curitiba-pr",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/alfresco-ia-local/curitiba-pr",
+      "title": "Alfresco com inteligência artificial local open source em Curitiba | Arquindex",
+      "description": "Alfresco ECM, IA documental local, OCR, pesquisa, LGPD e análise de custos em Curitiba. Guia técnico Arquindex.",
+      "canonical": "https://www.arquindex.com.br/alfresco-ia-local/curitiba-pr"
+    },
+    {
+      "url": "https://www.arquindex.com.br/plano-autoridade-rmbh",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/plano-autoridade-rmbh",
+      "title": "Digitalização, Gestão Documental, GED e LGPD na RMBH | Arquindex",
+      "description": "Soluções documentais para empresas de Belo Horizonte, Contagem, Betim e Nova Lima.",
+      "canonical": "https://www.arquindex.com.br/plano-autoridade-rmbh"
+    },
+    {
+      "url": "https://www.arquindex.com.br/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd",
+      "title": "Manual técnico: digitalização, gestão documental, GED e LGPD | Arquindex",
+      "description": "Manual técnico completo com diagnóstico, OCR, PDF/A, temporalidade, GED, LGPD, segurança e implantação corporativa.",
+      "canonical": "https://www.arquindex.com.br/manual-tecnico-gestao-documental-digitalizacao-ged-lgpd"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes",
+      "title": "Soluções | Arquindex",
+      "description": "Soluções de gestão documental, digitalização, LGPD, Alfresco ECM, Databook e arquivos.",
+      "canonical": "https://www.arquindex.com.br/solucoes"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo",
+      "title": "Artigos sobre digitalização, Alfresco e LGPD | Arquindex",
+      "description": "Guias técnicos de digitalização, Alfresco ECM, proteção de dados e LGPD.",
+      "canonical": "https://www.arquindex.com.br/conteudo"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade",
+      "title": "Guias de autoridade | Arquindex",
+      "description": "Guias técnicos aprofundados sobre Databook, digitalização certificada, gestão documental, Alfresco ECM e LGPD.",
+      "canonical": "https://www.arquindex.com.br/autoridade"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores",
+      "title": "Soluções por setor | Arquindex",
+      "description": "Guias de digitalização, gestão documental, LGPD, Alfresco, Databook e guarda por setor.",
+      "canonical": "https://www.arquindex.com.br/setores"
+    },
+    {
+      "url": "https://www.arquindex.com.br/biblioteca-normativa",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/biblioteca-normativa",
+      "title": "Biblioteca normativa | Arquindex",
+      "description": "Fontes oficiais sobre Decreto 10.278/2020, LGPD e CONARQ.",
+      "canonical": "https://www.arquindex.com.br/biblioteca-normativa"
+    },
+    {
+      "url": "https://www.arquindex.com.br/metodologia",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/metodologia",
+      "title": "Metodologia editorial e técnica | Arquindex",
+      "description": "Como a Arquindex produz, revisa e atualiza conteúdos técnicos.",
+      "canonical": "https://www.arquindex.com.br/metodologia"
+    },
+    {
+      "url": "https://www.arquindex.com.br/contato",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/contato",
+      "title": "Contato | Arquindex",
+      "description": "Solicite um orçamento para soluções documentais.",
+      "canonical": "https://www.arquindex.com.br/contato"
+    },
+    {
+      "url": "https://www.arquindex.com.br/llms.txt",
       "issues": [
+        "Título HTML ausente",
         "Meta description ausente",
         "Canonical ausente"
       ],
       "status": 200,
-      "final_url": "https://www.arquindex.com.br/",
-      "title": "Arquindex | Digitalização de Documentos, Gestão Documental, LGPD e Databooks em Belo Horizonte | Arquindex",
+      "final_url": "https://arquindex.com.br/llms.txt",
+      "title": "",
       "description": "",
       "canonical": ""
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/digitalizacao-documentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/digitalizacao-documentos",
+      "title": "Digitalização de Documentos | Arquindex",
+      "description": "Digitalização profissional com OCR, PDF/A, indexação, controle de qualidade e rastreabilidade.",
+      "canonical": "https://www.arquindex.com.br/solucoes/digitalizacao-documentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/digitalizacao-certificada",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/digitalizacao-certificada",
+      "title": "Digitalização Certificada | Arquindex",
+      "description": "Projeto de digitalização alinhado aos requisitos técnicos do Decreto 10.278/2020, com integridade, metadados e controle de qualidade.",
+      "canonical": "https://www.arquindex.com.br/solucoes/digitalizacao-certificada"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/prontuarios-medicos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/prontuarios-medicos",
+      "title": "Digitalização de Prontuários Médicos | Arquindex",
+      "description": "Organização, captura, OCR e indexação de prontuários com foco em rastreabilidade, sigilo e acesso controlado.",
+      "canonical": "https://www.arquindex.com.br/solucoes/prontuarios-medicos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/gestao-documental",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/gestao-documental",
+      "title": "Gestão Documental | Arquindex",
+      "description": "Classificação, plano de classificação, temporalidade, retenção, destinação, governança e acesso seguro.",
+      "canonical": "https://www.arquindex.com.br/solucoes/gestao-documental"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/organizacao-arquivos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/organizacao-arquivos",
+      "title": "Organização de Arquivos | Arquindex",
+      "description": "Organização física e digital, inventário, endereçamento, empréstimos, temporalidade e padronização.",
+      "canonical": "https://www.arquindex.com.br/solucoes/organizacao-arquivos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/avaliacao-avancada-arquivos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/avaliacao-avancada-arquivos",
+      "title": "Avaliação Avançada de Arquivos | Arquindex",
+      "description": "Sessão realizada por especialistas para observar o acervo, identificar prioridades e orientar decisões de organização, digitalização, guarda e gestão eletrônica.",
+      "canonical": "https://www.arquindex.com.br/solucoes/avaliacao-avancada-arquivos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/alfresco-incloud",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/alfresco-incloud",
+      "title": "Alfresco inCloud | Arquindex",
+      "description": "ECM/GED em nuvem com permissões, metadados, versionamento, workflows, OCR, pesquisa e auditoria.",
+      "canonical": "https://www.arquindex.com.br/solucoes/alfresco-incloud"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/consultoria-lgpd",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/consultoria-lgpd",
+      "title": "Adequação LGPD | Arquindex",
+      "description": "Diagnóstico, mapeamento, ROPA, RIPD quando aplicável, políticas, contratos, cookies, direitos dos titulares e governança.",
+      "canonical": "https://www.arquindex.com.br/solucoes/consultoria-lgpd"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/dpo-terceirizado",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/dpo-terceirizado",
+      "title": "DPO Terceirizado | Arquindex",
+      "description": "Encarregado terceirizado, acompanhamento, orientação, registros, canal de titulares e governança de privacidade.",
+      "canonical": "https://www.arquindex.com.br/solucoes/dpo-terceirizado"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/databook",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/databook",
+      "title": "Databook de Engenharia | Organização, Revisões e Entrega Técnica",
+      "description": "Um Databook bem estruturado reúne documentação técnica de obra, engenharia, manutenção ou fornecimento em uma estrutura conferível, com índice, capítulos, revisões, certificados, desenhos, as built, pendências e critérios de aceite.",
+      "canonical": "https://www.arquindex.com.br/solucoes/databook"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/digitacao",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/digitacao",
+      "title": "Digitação e Processamento de Formulários | Arquindex",
+      "description": "Captura estruturada, validação, conferência, tratamento de dados e relatórios de produtividade.",
+      "canonical": "https://www.arquindex.com.br/solucoes/digitacao"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/guarda-documental",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/guarda-documental",
+      "title": "Guarda de Documentos para Empresas | Custódia, Inventário e SLA",
+      "description": "A guarda documental corporativa combina custódia física, inventário, localização, controle de consultas, temporalidade e descarte autorizado. O objetivo não é apenas armazenar caixas, mas garantir que cada documento possa ser localizado, movimentado e destinado com rastreabilidade.",
+      "canonical": "https://www.arquindex.com.br/solucoes/guarda-documental"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/incineracao-segura",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/incineracao-segura",
+      "title": "Incineração Segura | Arquindex",
+      "description": "Descarte controlado e documentado de arquivos após validação de temporalidade e autorização.",
+      "canonical": "https://www.arquindex.com.br/solucoes/incineracao-segura"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/storage-documental",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/storage-documental",
+      "title": "Storage Documental / SelfStorage | Arquindex",
+      "description": "Organização e operação de arquivos em unidades de self storage com inventário, estantes, endereçamento e consultas.",
+      "canonical": "https://www.arquindex.com.br/solucoes/storage-documental"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/seguranca-informacao",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/seguranca-informacao",
+      "title": "Segurança da Informação | Arquindex",
+      "description": "Controles, processos, políticas, gestão de acessos, incidentes e boas práticas de segurança.",
+      "canonical": "https://www.arquindex.com.br/solucoes/seguranca-informacao"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/livros-cartorios",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/livros-cartorios",
+      "title": "Digitalização de Livros e Cartórios | Arquindex",
+      "description": "Digitalização de livros e documentos cartorários com captura adequada ao formato, OCR e indexação.",
+      "canonical": "https://www.arquindex.com.br/solucoes/livros-cartorios"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/juridico",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/juridico",
+      "title": "Digitalização de Processos Jurídicos | Arquindex",
+      "description": "Digitalização, OCR, organização e indexação de processos e documentos jurídicos.",
+      "canonical": "https://www.arquindex.com.br/solucoes/juridico"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/farmaceutico",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/farmaceutico",
+      "title": "Documentos Farmacêuticos | Arquindex",
+      "description": "Digitalização e organização de documentação farmacêutica, administrativa e regulatória.",
+      "canonical": "https://www.arquindex.com.br/solucoes/farmaceutico"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/engenharia",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/engenharia",
+      "title": "Documentos de Engenharia | Arquindex",
+      "description": "Digitalização, organização e estruturação de desenhos, relatórios, databooks e documentação técnica.",
+      "canonical": "https://www.arquindex.com.br/solucoes/engenharia"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/meio-ambiente",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/meio-ambiente",
+      "title": "Relatórios de Meio Ambiente | Arquindex",
+      "description": "Digitalização e digitação de relatórios, laudos, estudos e documentação ambiental.",
+      "canonical": "https://www.arquindex.com.br/solucoes/meio-ambiente"
+    },
+    {
+      "url": "https://www.arquindex.com.br/solucoes/treinamentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/solucoes/treinamentos",
+      "title": "Treinamentos Corporativos | Arquindex",
+      "description": "Treinamentos em gestão documental, privacidade, LGPD, segurança e operação de processos documentais.",
+      "canonical": "https://www.arquindex.com.br/solucoes/treinamentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/lgpd-anpd-2026-resposta-incidentes-acervos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/lgpd-anpd-2026-resposta-incidentes-acervos",
+      "title": "LGPD e ANPD em 2026: resposta a incidentes em arquivos e repositórios digitais | Blog Arquindex",
+      "description": "Critérios legais, inventário, resposta a incidentes, comunicação à ANPD, orientações para OCR e ECM e aplicação prática para empresas.",
+      "canonical": "https://www.arquindex.com.br/conteudo/lgpd-anpd-2026-resposta-incidentes-acervos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/conarq-novas-normas-para-digitalizacao-de-documentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/conarq-novas-normas-para-digitalizacao-de-documentos",
+      "title": "CONARQ e ANPD: novidades de outubro de 2026 para gestão documental e LGPD | Blog Arquindex",
+      "description": "A Resolução CONARQ nº 60/2026 orienta estudos sobre usos e usuários de arquivos — não cria novas exigências de digitalização. A ANPD publicou resultados de testes de inteligência artificial, abriu consulta sobre seu processo regulatório e anunciou um canal específico de denúncias dos decretos do Marco Civil da Internet. Confira o que efetivamente mudou, os prazos de participação e as aplicações para empresas.",
+      "canonical": "https://www.arquindex.com.br/conteudo/conarq-novas-normas-para-digitalizacao-de-documentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/empresa-guarda-documentos-como-escolher",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/empresa-guarda-documentos-como-escolher",
+      "title": "Empresa de guarda de documentos: como escolher com segurança | Blog Arquindex",
+      "description": "Critérios práticos para comparar custódia física, inventário, rastreabilidade, SLA, temporalidade e digitalização sob demanda.",
+      "canonical": "https://www.arquindex.com.br/conteudo/empresa-guarda-documentos-como-escolher"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/classificacao-documentos-ocr",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/classificacao-documentos-ocr",
+      "title": "Classificação de documentos com OCR: como automatizar sem perder controle | Blog Arquindex",
+      "description": "OCR pode apoiar classificação e indexação, mas a qualidade depende de regras, campos-alvo, confiança, validação e tratamento de exceções.",
+      "canonical": "https://www.arquindex.com.br/conteudo/classificacao-documentos-ocr"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/rastreabilidade-digitalizacao-cadeia-custodia-ocr-hash",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/rastreabilidade-digitalizacao-cadeia-custodia-ocr-hash",
+      "title": "Rastreabilidade na digitalização: cadeia de custódia, OCR e hash SHA-256 | Blog Arquindex",
+      "description": "Como documentar a trajetória do arquivo físico ao documento digital pesquisável sem confundir controles de integridade com autenticação jurídica.",
+      "canonical": "https://www.arquindex.com.br/conteudo/rastreabilidade-digitalizacao-cadeia-custodia-ocr-hash"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/digitalizacao-certificada-decreto-10278",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/digitalizacao-certificada-decreto-10278",
+      "title": "Digitalização certificada e Decreto 10.278/2020 | Blog Arquindex",
+      "description": "O que muda ao digitalizar um documento para fins legais",
+      "canonical": "https://www.arquindex.com.br/conteudo/digitalizacao-certificada-decreto-10278"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/ocr-pdfa-diferencas",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/ocr-pdfa-diferencas",
+      "title": "OCR e PDF/A: diferenças e aplicações | Blog Arquindex",
+      "description": "Escolher o formato correto evita retrabalho",
+      "canonical": "https://www.arquindex.com.br/conteudo/ocr-pdfa-diferencas"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/prontuarios-medicos-digitais",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/prontuarios-medicos-digitais",
+      "title": "Digitalização de prontuários médicos com segurança | Blog Arquindex",
+      "description": "Saúde exige proteção reforçada dos dados",
+      "canonical": "https://www.arquindex.com.br/conteudo/prontuarios-medicos-digitais"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/preco-digitalizacao-documentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/preco-digitalizacao-documentos",
+      "title": "Quanto custa digitalizar documentos empresariais? | Blog Arquindex",
+      "description": "Preço por página depende de escopo, qualidade e logística",
+      "canonical": "https://www.arquindex.com.br/conteudo/preco-digitalizacao-documentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/digitalizacao-grandes-acervos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/digitalizacao-grandes-acervos",
+      "title": "Como planejar digitalização de grandes acervos | Blog Arquindex",
+      "description": "Uma operação escalável precisa de etapas claras",
+      "canonical": "https://www.arquindex.com.br/conteudo/digitalizacao-grandes-acervos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/alfresco-aplicacoes-empresas",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/alfresco-aplicacoes-empresas",
+      "title": "Alfresco ECM: aplicações práticas para empresas | Blog Arquindex",
+      "description": "Mais que guardar arquivos: organizar processos",
+      "canonical": "https://www.arquindex.com.br/conteudo/alfresco-aplicacoes-empresas"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/alfresco-nuvem-ou-local",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/alfresco-nuvem-ou-local",
+      "title": "Alfresco em nuvem ou servidor próprio | Blog Arquindex",
+      "description": "A decisão envolve governança e operação",
+      "canonical": "https://www.arquindex.com.br/conteudo/alfresco-nuvem-ou-local"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/alfresco-workflow-contratos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/alfresco-workflow-contratos",
+      "title": "Workflow de aprovação de contratos com Alfresco | Blog Arquindex",
+      "description": "Da minuta à aprovação, sem perder histórico",
+      "canonical": "https://www.arquindex.com.br/conteudo/alfresco-workflow-contratos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/alfresco-active-directory",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/alfresco-active-directory",
+      "title": "Integração do Alfresco com Active Directory | Blog Arquindex",
+      "description": "Identidade centralizada reduz inconsistências",
+      "canonical": "https://www.arquindex.com.br/conteudo/alfresco-active-directory"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/alfresco-databook-engenharia",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/alfresco-databook-engenharia",
+      "title": "Alfresco e Databooks de engenharia | Blog Arquindex",
+      "description": "Rastreabilidade documental por obra e disciplina",
+      "canonical": "https://www.arquindex.com.br/conteudo/alfresco-databook-engenharia"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/lgpd-anpd-2026",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/lgpd-anpd-2026",
+      "title": "LGPD e ANPD em 2026: como acompanhar novidades | Blog Arquindex",
+      "description": "Mudanças exigem verificar fonte e vigência",
+      "canonical": "https://www.arquindex.com.br/conteudo/lgpd-anpd-2026"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/dpo-terceirizado-responsabilidades",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/dpo-terceirizado-responsabilidades",
+      "title": "DPO terceirizado: atuação e responsabilidades | Blog Arquindex",
+      "description": "O encarregado facilita a governança de privacidade",
+      "canonical": "https://www.arquindex.com.br/conteudo/dpo-terceirizado-responsabilidades"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/ropa-inventario-dados",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/ropa-inventario-dados",
+      "title": "ROPA e inventário de dados pessoais na prática | Blog Arquindex",
+      "description": "Mapear dados torna a conformidade verificável",
+      "canonical": "https://www.arquindex.com.br/conteudo/ropa-inventario-dados"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/incidentes-lgpd-comunicacao",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/incidentes-lgpd-comunicacao",
+      "title": "Incidentes de segurança e comunicação à ANPD | Blog Arquindex",
+      "description": "Resposta preparada reduz danos e retrabalho",
+      "canonical": "https://www.arquindex.com.br/conteudo/incidentes-lgpd-comunicacao"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/lgpd-clinicas-hospitais",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/lgpd-clinicas-hospitais",
+      "title": "LGPD para clínicas e hospitais | Blog Arquindex",
+      "description": "Proteção de dados acompanha todo o atendimento",
+      "canonical": "https://www.arquindex.com.br/conteudo/lgpd-clinicas-hospitais"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/tabela-temporalidade-documental",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/tabela-temporalidade-documental",
+      "title": "Tabela de temporalidade documental: como estruturar e aplicar | Blog Arquindex",
+      "description": "Uma boa temporalidade reduz acervo acumulado e melhora a governança",
+      "canonical": "https://www.arquindex.com.br/conteudo/tabela-temporalidade-documental"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/como-organizar-arquivo-fisico-empresarial",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/como-organizar-arquivo-fisico-empresarial",
+      "title": "Como organizar um arquivo físico empresarial | Blog Arquindex",
+      "description": "Inventário, classificação e endereçamento evitam perda de documentos",
+      "canonical": "https://www.arquindex.com.br/conteudo/como-organizar-arquivo-fisico-empresarial"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/metadados-indexacao-documental",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/metadados-indexacao-documental",
+      "title": "Metadados e indexação documental: o que realmente ajuda na busca | Blog Arquindex",
+      "description": "Mais campos não significam necessariamente melhor pesquisa",
+      "canonical": "https://www.arquindex.com.br/conteudo/metadados-indexacao-documental"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/controle-qualidade-digitalizacao",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/controle-qualidade-digitalizacao",
+      "title": "Controle de qualidade em projetos de digitalização | Blog Arquindex",
+      "description": "Qualidade precisa ser medida, não presumida",
+      "canonical": "https://www.arquindex.com.br/conteudo/controle-qualidade-digitalizacao"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/pdfa-preservacao-documentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/pdfa-preservacao-documentos",
+      "title": "PDF/A e preservação digital de documentos | Blog Arquindex",
+      "description": "Preservação exige formato adequado e governança ao longo do tempo",
+      "canonical": "https://www.arquindex.com.br/conteudo/pdfa-preservacao-documentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/alfresco-permissoes-acesso",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/alfresco-permissoes-acesso",
+      "title": "Permissões no Alfresco: como estruturar acesso por função | Blog Arquindex",
+      "description": "Permissões claras reduzem exposição indevida de documentos",
+      "canonical": "https://www.arquindex.com.br/conteudo/alfresco-permissoes-acesso"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/alfresco-migracao-documentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/alfresco-migracao-documentos",
+      "title": "Migração de documentos para Alfresco: como evitar caos | Blog Arquindex",
+      "description": "Migrar pastas sem saneamento apenas transfere desorganização",
+      "canonical": "https://www.arquindex.com.br/conteudo/alfresco-migracao-documentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/lgpd-retencao-descarte-dados",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/lgpd-retencao-descarte-dados",
+      "title": "LGPD, retenção e descarte de dados pessoais | Blog Arquindex",
+      "description": "Guardar para sempre não é uma estratégia de conformidade",
+      "canonical": "https://www.arquindex.com.br/conteudo/lgpd-retencao-descarte-dados"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/lgpd-fornecedores-operadores",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/lgpd-fornecedores-operadores",
+      "title": "LGPD e fornecedores: como avaliar operadores de dados | Blog Arquindex",
+      "description": "Terceiros também fazem parte do risco de privacidade",
+      "canonical": "https://www.arquindex.com.br/conteudo/lgpd-fornecedores-operadores"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/lgpd-cookies-sites",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/lgpd-cookies-sites",
+      "title": "Cookies e LGPD: como estruturar um banner de consentimento | Blog Arquindex",
+      "description": "Banner deve refletir o que o site realmente faz",
+      "canonical": "https://www.arquindex.com.br/conteudo/lgpd-cookies-sites"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/databook-engenharia-organizacao",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/databook-engenharia-organizacao",
+      "title": "Como organizar um Databook de engenharia | Blog Arquindex",
+      "description": "Índice, capítulos e conferência reduzem pendências na entrega",
+      "canonical": "https://www.arquindex.com.br/conteudo/databook-engenharia-organizacao"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/documentos-engenharia-revisoes",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/documentos-engenharia-revisoes",
+      "title": "Controle de revisões em documentos de engenharia | Blog Arquindex",
+      "description": "Versões incorretas podem gerar retrabalho técnico e risco contratual",
+      "canonical": "https://www.arquindex.com.br/conteudo/documentos-engenharia-revisoes"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/digitalizacao-cartorios-livros",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/digitalizacao-cartorios-livros",
+      "title": "Digitalização de livros e acervos de cartórios | Blog Arquindex",
+      "description": "Livros encadernados exigem cuidado diferente de documentos avulsos",
+      "canonical": "https://www.arquindex.com.br/conteudo/digitalizacao-cartorios-livros"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/guarda-documental-terceirizada",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/guarda-documental-terceirizada",
+      "title": "Guarda documental terceirizada: quando faz sentido | Blog Arquindex",
+      "description": "Custódia externa pode reduzir espaço e profissionalizar consultas",
+      "canonical": "https://www.arquindex.com.br/conteudo/guarda-documental-terceirizada"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/descarte-seguro-documentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/descarte-seguro-documentos",
+      "title": "Descarte seguro de documentos: como reduzir riscos | Blog Arquindex",
+      "description": "Eliminar documentos exige autorização, rastreabilidade e método adequado",
+      "canonical": "https://www.arquindex.com.br/conteudo/descarte-seguro-documentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/agenda-anpd-2027-2028-lgpd-ia-governanca",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/agenda-anpd-2027-2028-lgpd-ia-governanca",
+      "title": "Agenda ANPD 2027–2028: o que empresas, DPOs e gestores de documentos precisam acompanhar | Blog Arquindex",
+      "description": "A consulta pública da Agenda Regulatória 2027–2028 ajuda organizações a antecipar temas de governança de dados sem tratar propostas como regras já aprovadas.",
+      "canonical": "https://www.arquindex.com.br/conteudo/agenda-anpd-2027-2028-lgpd-ia-governanca"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/gestao-documental-estudos-usuarios-conarq-60",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/gestao-documental-estudos-usuarios-conarq-60",
+      "title": "Gestão documental não termina na digitalização: como medir o uso e a recuperação dos arquivos | Blog Arquindex",
+      "description": "A Resolução CONARQ nº 60 reforça uma pergunta prática: o acervo digitalizado pode ser localizado, compreendido e usado por quem realmente precisa dele?",
+      "canonical": "https://www.arquindex.com.br/conteudo/gestao-documental-estudos-usuarios-conarq-60"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/piloto-digitalizacao-empresas-mais-20-funcionarios",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/piloto-digitalizacao-empresas-mais-20-funcionarios",
+      "title": "Como planejar um piloto de digitalização em empresas com mais de 20 funcionários | Blog Arquindex",
+      "description": "Um piloto útil testa consultas e exceções reais antes de ampliar a captura para todo o arquivo.",
+      "canonical": "https://www.arquindex.com.br/conteudo/piloto-digitalizacao-empresas-mais-20-funcionarios"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/tempo-busca-documental-indicadores",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/tempo-busca-documental-indicadores",
+      "title": "Como medir o tempo de busca documental sem confundir rapidez com qualidade | Blog Arquindex",
+      "description": "Uma consulta rápida só é útil quando devolve o documento correto, completo e autorizado.",
+      "canonical": "https://www.arquindex.com.br/conteudo/tempo-busca-documental-indicadores"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/ocr-contratos-campos-criticos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/ocr-contratos-campos-criticos",
+      "title": "Critérios de aceite de OCR para contratos e aditivos | Blog Arquindex",
+      "description": "Pesquisar nomes e números conhecidos ajuda a identificar falhas que a aparência do PDF não revela.",
+      "canonical": "https://www.arquindex.com.br/conteudo/ocr-contratos-campos-criticos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/frente-verso-lotes-heterogeneos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/frente-verso-lotes-heterogeneos",
+      "title": "Como conferir frente e verso em lotes de digitalização heterogêneos | Blog Arquindex",
+      "description": "A configuração de captura deve considerar páginas úteis no verso e não apenas a velocidade do scanner.",
+      "canonical": "https://www.arquindex.com.br/conteudo/frente-verso-lotes-heterogeneos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/metadados-mineracao-unidade-projeto",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/metadados-mineracao-unidade-projeto",
+      "title": "Inventário documental de mineração: como separar unidade, projeto e operação | Blog Arquindex",
+      "description": "Códigos repetidos entre unidades tornam o contexto tão importante quanto o identificador do documento.",
+      "canonical": "https://www.arquindex.com.br/conteudo/metadados-mineracao-unidade-projeto"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/databook-lista-mestra-tag",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/databook-lista-mestra-tag",
+      "title": "Databook por tag de equipamento: como usar uma lista mestra de pendências | Blog Arquindex",
+      "description": "A lista mestra deve mostrar o que é esperado, o que foi recebido e o que ainda precisa de conferência.",
+      "canonical": "https://www.arquindex.com.br/conteudo/databook-lista-mestra-tag"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/orcamento-guarda-documental-dados",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/orcamento-guarda-documental-dados",
+      "title": "Quais informações enviar para dimensionar guarda documental empresarial | Blog Arquindex",
+      "description": "Caixas, consultas e movimentações precisam ser descritas separadamente para comparar propostas.",
+      "canonical": "https://www.arquindex.com.br/conteudo/orcamento-guarda-documental-dados"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/arquivo-juridico-cliente-processo",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/arquivo-juridico-cliente-processo",
+      "title": "Arquivo jurídico: como organizar cliente, processo e tipo de peça | Blog Arquindex",
+      "description": "Identificadores claros ajudam a recuperar o documento certo sem abrir todo o acervo do escritório.",
+      "canonical": "https://www.arquindex.com.br/conteudo/arquivo-juridico-cliente-processo"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/medicina-trabalho-separar-clinico-administrativo",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/medicina-trabalho-separar-clinico-administrativo",
+      "title": "Medicina do trabalho: separar acervo clínico e administrativo na organização documental | Blog Arquindex",
+      "description": "Facilitar a consulta não deve ampliar indevidamente o acesso a informações de saúde.",
+      "canonical": "https://www.arquindex.com.br/conteudo/medicina-trabalho-separar-clinico-administrativo"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/duplicidades-migracao-ged",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/duplicidades-migracao-ged",
+      "title": "Duplicidades na migração para GED: quando arquivos iguais têm funções diferentes | Blog Arquindex",
+      "description": "Comparar conteúdo ajuda a identificar cópias, mas não decide sozinho o que pode ser eliminado.",
+      "canonical": "https://www.arquindex.com.br/conteudo/duplicidades-migracao-ged"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/amostragem-qualidade-captura-documental",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/amostragem-qualidade-captura-documental",
+      "title": "Como usar amostragem na conferência de digitalização sem esconder exceções | Blog Arquindex",
+      "description": "O relatório precisa mostrar o lote avaliado e os limites da conclusão, além do percentual de aprovação.",
+      "canonical": "https://www.arquindex.com.br/conteudo/amostragem-qualidade-captura-documental"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/acessos-escritorio-contabil",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/acessos-escritorio-contabil",
+      "title": "Permissões documentais em escritórios de contabilidade com múltiplos clientes | Blog Arquindex",
+      "description": "O índice pode ser compartilhado por equipe, mas os documentos precisam respeitar o contexto de cada cliente.",
+      "canonical": "https://www.arquindex.com.br/conteudo/acessos-escritorio-contabil"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/saida-contrato-guarda-documentos",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/saida-contrato-guarda-documentos",
+      "title": "Plano de saída de um contrato de guarda documental: inventário, caixas e consultas | Blog Arquindex",
+      "description": "A saída deve ser dimensionada antes do encerramento para preservar localização e continuidade das consultas.",
+      "canonical": "https://www.arquindex.com.br/conteudo/saida-contrato-guarda-documentos"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/consulta-documental-equipes-remotas",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/consulta-documental-equipes-remotas",
+      "title": "Consulta documental por equipes remotas: transformar pedidos informais em um fluxo controlado | Blog Arquindex",
+      "description": "Pedidos por mensagens precisam de identificação, autorização e registro de atendimento.",
+      "canonical": "https://www.arquindex.com.br/conteudo/consulta-documental-equipes-remotas"
+    },
+    {
+      "url": "https://www.arquindex.com.br/conteudo/demonstracao-ocr-sem-dados-reais",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/conteudo/demonstracao-ocr-sem-dados-reais",
+      "title": "Como demonstrar OCR e gestão documental sem expor documentos de clientes | Blog Arquindex",
+      "description": "Materiais fictícios claramente identificados permitem explicar o processo sem divulgar informação de terceiros.",
+      "canonical": "https://www.arquindex.com.br/conteudo/demonstracao-ocr-sem-dados-reais"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/databook-engenharia-industrial",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/databook-engenharia-industrial",
+      "title": "Databook de engenharia industrial: estrutura, conferência e entrega | Arquindex",
+      "description": "Guia para organizar documentação técnica por volumes, capítulos, itens, revisões, fornecedores e evidências de entrega.",
+      "canonical": "https://www.arquindex.com.br/autoridade/databook-engenharia-industrial"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/databook-mineracao-siderurgia",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/databook-mineracao-siderurgia",
+      "title": "Databook para mineração e siderurgia | Arquindex",
+      "description": "Organização de documentação técnica de engenharia, manutenção, fornecedores, inspeções e comissionamento.",
+      "canonical": "https://www.arquindex.com.br/autoridade/databook-mineracao-siderurgia"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/digitalizacao-certificada-decreto-10278-empresas",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/digitalizacao-certificada-decreto-10278-empresas",
+      "title": "Digitalização certificada para empresas e Decreto 10.278/2020 | Arquindex",
+      "description": "Requisitos técnicos, integridade, metadados, qualidade e cuidados antes do descarte de originais.",
+      "canonical": "https://www.arquindex.com.br/autoridade/digitalizacao-certificada-decreto-10278-empresas"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/digitalizacao-rh-departamento-pessoal",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/digitalizacao-rh-departamento-pessoal",
+      "title": "Digitalização de documentos de RH e Departamento Pessoal | Arquindex",
+      "description": "Dossiês de colaboradores, admissões, folhas, benefícios, treinamentos e documentos trabalhistas organizados para busca.",
+      "canonical": "https://www.arquindex.com.br/autoridade/digitalizacao-rh-departamento-pessoal"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/guarda-documental-corporativa",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/guarda-documental-corporativa",
+      "title": "Guarda documental corporativa com rastreabilidade | Arquindex",
+      "description": "Custódia, inventário, endereçamento, consultas, movimentação, temporalidade e descarte controlado.",
+      "canonical": "https://www.arquindex.com.br/autoridade/guarda-documental-corporativa"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/alfresco-ecm-ged-corporativo",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/alfresco-ecm-ged-corporativo",
+      "title": "Alfresco ECM/GED corporativo: repositório, workflow e governança | Arquindex",
+      "description": "Como estruturar documentos, permissões, metadados, versões, busca, auditoria e fluxos de aprovação.",
+      "canonical": "https://www.arquindex.com.br/autoridade/alfresco-ecm-ged-corporativo"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/alfresco-engenharia-databook",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/alfresco-engenharia-databook",
+      "title": "Alfresco para engenharia e Databook | Arquindex",
+      "description": "Controle de revisões, disciplinas, fornecedores, documentos técnicos e histórico de aprovação.",
+      "canonical": "https://www.arquindex.com.br/autoridade/alfresco-engenharia-databook"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/lgpd-adequacao-empresas",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/lgpd-adequacao-empresas",
+      "title": "Adequação LGPD para empresas: roteiro prático de governança | Arquindex",
+      "description": "Diagnóstico, inventário de dados, bases legais, ROPA, políticas, contratos, incidentes e treinamento.",
+      "canonical": "https://www.arquindex.com.br/autoridade/lgpd-adequacao-empresas"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/dpo-terceirizado-governanca",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/dpo-terceirizado-governanca",
+      "title": "DPO terceirizado e governança de privacidade | Arquindex",
+      "description": "Rotina de decisões, titulares, incidentes, fornecedores, políticas e acompanhamento de pendências.",
+      "canonical": "https://www.arquindex.com.br/autoridade/dpo-terceirizado-governanca"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/gestao-documental-industria",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/gestao-documental-industria",
+      "title": "Gestão documental para indústria: arquivos técnicos, RH, qualidade e contratos | Arquindex",
+      "description": "Como integrar classificação, temporalidade, segurança, digitalização e acesso em ambientes industriais.",
+      "canonical": "https://www.arquindex.com.br/autoridade/gestao-documental-industria"
+    },
+    {
+      "url": "https://www.arquindex.com.br/autoridade/digitalizacao-prontuarios-lgpd",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/autoridade/digitalizacao-prontuarios-lgpd",
+      "title": "Digitalização de prontuários, LGPD e rastreabilidade | Arquindex",
+      "description": "Separação por paciente, qualidade, OCR, acesso controlado e retenção em documentos de saúde.",
+      "canonical": "https://www.arquindex.com.br/autoridade/digitalizacao-prontuarios-lgpd"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-rh-departamento-pessoal",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-rh-departamento-pessoal",
+      "title": "Digitalização de documentos para RH e Departamento Pessoal | Arquindex",
+      "description": "Digitalização de documentos para RH e Departamento Pessoal: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-rh-departamento-pessoal"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-juridico",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-juridico",
+      "title": "Digitalização de documentos para Jurídico e escritórios de advocacia | Arquindex",
+      "description": "Digitalização de documentos para Jurídico e escritórios de advocacia: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-juridico"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-saude",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-saude",
+      "title": "Digitalização de documentos para Clínicas, hospitais e saúde ocupacional | Arquindex",
+      "description": "Digitalização de documentos para Clínicas, hospitais e saúde ocupacional: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-saude"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-engenharia",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-engenharia",
+      "title": "Digitalização de documentos para Engenharia e construção | Arquindex",
+      "description": "Digitalização de documentos para Engenharia e construção: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-engenharia"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-industria",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-industria",
+      "title": "Digitalização de documentos para Indústria e manufatura | Arquindex",
+      "description": "Digitalização de documentos para Indústria e manufatura: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-industria"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-mineracao",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-mineracao",
+      "title": "Digitalização de documentos para Mineração e siderurgia | Arquindex",
+      "description": "Digitalização de documentos para Mineração e siderurgia: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-mineracao"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-farmaceutico",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-farmaceutico",
+      "title": "Digitalização de documentos para Farmacêutico e laboratórios | Arquindex",
+      "description": "Digitalização de documentos para Farmacêutico e laboratórios: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-farmaceutico"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-educacao",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-educacao",
+      "title": "Digitalização de documentos para Educação e instituições de ensino | Arquindex",
+      "description": "Digitalização de documentos para Educação e instituições de ensino: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-educacao"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-cartorios",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-cartorios",
+      "title": "Digitalização de documentos para Cartórios e registros | Arquindex",
+      "description": "Digitalização de documentos para Cartórios e registros: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-cartorios"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-financeiro",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/digitalizacao-documentos-para-financeiro",
+      "title": "Digitalização de documentos para Financeiro, contábil e administrativo | Arquindex",
+      "description": "Digitalização de documentos para Financeiro, contábil e administrativo: OCR, PDF/A, indexação, controle de qualidade e rastreabilidade. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/digitalizacao-documentos-para-financeiro"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/gestao-documental-para-rh-departamento-pessoal",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/gestao-documental-para-rh-departamento-pessoal",
+      "title": "Gestão documental para RH e Departamento Pessoal | Arquindex",
+      "description": "Gestão documental para RH e Departamento Pessoal: classificação, temporalidade, organização, governança e acesso. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/gestao-documental-para-rh-departamento-pessoal"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/gestao-documental-para-juridico",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/gestao-documental-para-juridico",
+      "title": "Gestão documental para Jurídico e escritórios de advocacia | Arquindex",
+      "description": "Gestão documental para Jurídico e escritórios de advocacia: classificação, temporalidade, organização, governança e acesso. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/gestao-documental-para-juridico"
+    },
+    {
+      "url": "https://www.arquindex.com.br/setores/gestao-documental-para-saude",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/setores/gestao-documental-para-saude",
+      "title": "Gestão documental para Clínicas, hospitais e saúde ocupacional | Arquindex",
+      "description": "Gestão documental para Clínicas, hospitais e saúde ocupacional: classificação, temporalidade, organização, governança e acesso. Guia prático da Arquindex para projetos corporativos.",
+      "canonical": "https://www.arquindex.com.br/setores/gestao-documental-para-saude"
     }
   ]
 }
