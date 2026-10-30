@@ -1,0 +1,42 @@
+name: Arquindex Semantic SEO Audit
+on:
+  pull_request:
+    paths:
+      - "seo-semantico/**"
+      - ".github/workflows/arquindex-semantic-seo.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "25 10 * * 1"
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run offline unit tests
+        run: PYTHONPATH=seo-semantico python -m unittest discover -s seo-semantico/tests -v
+      - name: Compile Python modules
+        run: python -m compileall -q seo-semantico
+      - name: Audit approved URLs (read-only)
+        if: github.event_name != 'pull_request'
+        run: python seo-semantico/audit.py --sites seo-semantico/sites.txt --output seo-audit.json --workers 2
+      - name: Create Markdown report
+        if: github.event_name != 'pull_request'
+        run: python seo-semantico/report.py seo-audit.json seo-report.md
+      - name: Upload diagnostic artifacts
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-semantic-seo-audit
+          path: |
+            seo-audit.json
+            seo-report.md
+          if-no-files-found: ignore
+          retention-days: 30

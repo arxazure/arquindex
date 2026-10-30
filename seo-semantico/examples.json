@@ -1,0 +1,27 @@
+[
+  {
+    "type": "Service",
+    "url": "https://www.arquindex.com.br/servicos/digitalizacao-de-documentos/",
+    "title": "Digitalização de documentos para empresas",
+    "description": "Digitalização corporativa com classificação, OCR pesquisável e indexação documental.",
+    "serviceType": "Digitalização documental empresarial",
+    "areaServed": [
+      "Belo Horizonte",
+      "São Paulo"
+    ]
+  },
+  {
+    "type": "Service",
+    "url": "https://www.arquindex.com.br/servicos/alfresco-ecm/",
+    "title": "Implantação e configuração Alfresco ECM",
+    "description": "Implantação, parametrização e integração de gestão eletrônica de documentos Alfresco Community.",
+    "serviceType": "Gestão eletrônica de documentos"
+  },
+  {
+    "type": "Service",
+    "url": "https://www.arquindex.com.br/servicos/adequacao-lgpd/",
+    "title": "Consultoria de adequação à LGPD",
+    "description": "Serviços de diagnóstico, mapeamento de dados pessoais, políticas e apoio à governança de privacidade.",
+    "serviceType": "Consultoria em proteção de dados"
+  }
+]
