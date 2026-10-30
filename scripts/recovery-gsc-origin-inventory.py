@@ -17,6 +17,10 @@ for p in Path('.').rglob('*'):
         if h!='arquindex.com.br' and all(0<len(x)<=63 for x in h.split('.')):public_hosts.add(h)
 HOSTS=sorted(public_hosts)
 ORIGINAL_DNS=['177.234.150.42','177.234.150.43']
+class OriginHTTPS(http.client.HTTPSConnection):
+    def __init__(self,host,ip):
+        super().__init__(host,timeout=6,context=ssl.create_default_context())
+        self._create_connection=lambda address,timeout=6,source_address=None: socket.create_connection((ip,443),timeout,source_address)
 class Page(HTMLParser):
     def __init__(self): super().__init__(); self.canonical=[]; self.title=False; self.t=''; self.h1=0
     def handle_starttag(self,t,a):
@@ -43,11 +47,11 @@ def old_dns(host):
     out['a']=sorted(set(out['a']));out['cname']=sorted(set(out['cname']))
     return out
 def origin_get(host,ip,path='/'):
-    c=http.client.HTTPConnection(ip,80,timeout=8)
+    c=OriginHTTPS(host,ip)
     try:
         c.request('GET',path,headers={'Host':host,'User-Agent':'Arquindex-Recovery/1.0','Accept-Encoding':'identity'})
         r=c.getresponse();data=r.read(2000000)
-        result={'status':r.status,'bytes':len(data),'location':r.getheader('Location'),'content_type':r.getheader('Content-Type','')}
+        result={'status':r.status,'bytes':len(data),'location':r.getheader('Location'),'content_type':r.getheader('Content-Type',''),'tls_verified':True}
         if r.status==200 and 'html' in result['content_type']:
             html=data.decode('utf-8','replace');p=Page();p.feed(html)
             result.update(title=p.t[:170],canonical=p.canonical,h1=p.h1,sha256=hashlib.sha256(data).hexdigest(),directory_listing=bool(re.search(r'<title>Index of|<h1>Index of',html,re.I)),parked=any(x in html.lower() for x in ['default website page','account suspended','cgi-sys/defaultwebpage']))
@@ -56,16 +60,16 @@ def origin_get(host,ip,path='/'):
 def check(host):
     result={'host':host,'dns':old_dns(host)}
     ips=result['dns']['a']
-    if not ips and not result['dns']['cname']:ips=['177.234.150.42'];result['fallback_ip']=True
+    if not ips: result['not_published']='No original authoritative address; not guessing an origin'
     if ips:
         ip=ips[0];result['origin_ip']=ip
         try:result['origin']=origin_get(host,ip)
         except Exception as e:result['origin']={'error':type(e).__name__}
-    print('RESTORE_RECORD '+json.dumps(result,separators=(',',':'),ensure_ascii=False),flush=True)
+    print('RESTORE_RECORD '+json.dumps(result,separators=(',',':'),ensure_ascii=False)+'\n',end='',flush=True)
     return result
 # Discover additional hostnames only from public website sitemap/list files.
 for path in ['/lista_subdominios_e_sitemaps.txt','/sitemap_hosts.xml','/sitemap_index.xml','/sitemap.xml']:
-    c=http.client.HTTPConnection('177.234.150.42',80,timeout=10)
+    c=OriginHTTPS('www.arquindex.com.br','177.234.150.42')
     try:
         c.request('GET',path,headers={'Host':'www.arquindex.com.br','User-Agent':'Arquindex-Recovery/1.0'})
         r=c.getresponse()
@@ -77,7 +81,7 @@ for path in ['/lista_subdominios_e_sitemaps.txt','/sitemap_hosts.xml','/sitemap_
             print('PUBLIC_LIST_SOURCE',path,'HOST_COUNT',len(public_hosts),flush=True)
     except Exception as e:print('PUBLIC_LIST_ERROR',path,type(e).__name__,flush=True)
     finally:c.close()
-HOSTS=sorted(public_hosts)
+HOSTS=sorted(h for h in public_hosts if not re.match(r'^(cpanel|whm|webdisk|ftp|sftp|mail|webmail|autodiscover|autoconfig|smtp|imap|pop|ns[0-9]*)[.]',h))
 start=time.time()
-with concurrent.futures.ThreadPoolExecutor(max_workers=16) as pool:rows=list(pool.map(check,HOSTS))
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:rows=list(pool.map(check,HOSTS))
 print('RESTORE_SUMMARY '+json.dumps({'hosts':len(rows),'origin200':sum(x.get('origin',{}).get('status')==200 for x in rows),'seconds':round(time.time()-start)}),flush=True)
