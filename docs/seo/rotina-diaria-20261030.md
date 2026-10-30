@@ -36,3 +36,7 @@ A pauta editorial com maior oportunidade pendente na fila é **digitalização d
 A rotina foi executada manualmente. O conteúdo das 10:00 já estava publicado no TikTok, YouTube e Google Business Profile; o LinkedIn retornou falha de autenticação. Para não duplicar os demais canais, foi criada uma republicação somente no LinkedIn para 13:25 BRT, com o vídeo existente, manual técnico, CTA de análise gratuita e formulário com UTM. ID Metricool: `411412477`.
 
 O conteúdo das 18:00 permanece agendado para TikTok, YouTube, LinkedIn e Google Business Profile. Não foi criado novo vídeo ou novo post multicanal neste disparo.
+
+## Continuação manual — 14:20 BRT
+
+A republicação do vídeo de guarda física no LinkedIn (`411412477`, 13:25) também retornou `authentication failure`. O erro é de autenticação da conta LinkedIn no Metricool, não do vídeo ou da legenda. TikTok, YouTube e Google Business Profile permanecem publicados; o conteúdo LGPD permanece agendado para 18:00 nos canais configurados. Nenhuma nova duplicação foi criada.
