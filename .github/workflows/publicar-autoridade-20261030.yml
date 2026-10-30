@@ -1,0 +1,55 @@
+name: Publicar autoridade documental RM BH e RM SP
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/publicar-autoridade-20261030.yml'
+      - 'campanhas/autoridade-20261030/**'
+      - 'seo/autoridade-20261030-manifest.json'
+      - 'scripts/*autoridade-20261030.py'
+      - 'scripts/qa/autoridade-20261030.cjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publicar-autoridade-20261030
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate editorial collection before publication
+        run: python3 campanhas/autoridade-20261030/validate.py
+      - name: Publish with verified FTPS backups and concurrency guards
+        env:
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+          FTP_USER: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python3 scripts/publicar-autoridade-20261030.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --prefix "$RUNNER_TEMP/autoridade-qa" playwright --ignore-scripts --no-audit --no-fund
+      - run: "$RUNNER_TEMP/autoridade-qa/node_modules/.bin/playwright install --with-deps chromium"
+      - name: Verify public pages on mobile and desktop
+        env:
+          NODE_PATH: ${{ runner.temp }}/autoridade-qa/node_modules
+        run: node scripts/qa/autoridade-20261030.cjs
+      - name: Submit only publicly verified URLs
+        env:
+          GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
+          GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
+          GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: python3 scripts/descobrir-autoridade-20261030.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: autoridade-20261030-publicacao
+          path: publish-report/autoridade-20261030/
+          retention-days: 30
+          if-no-files-found: warn
