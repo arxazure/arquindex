@@ -21,7 +21,12 @@ jobs:
           node <<'JS'
           const {chromium,devices}=require('playwright');const dns=require('dns').promises;
           (async()=>{
-            console.log('DNS',JSON.stringify(await dns.lookup('www.arquindex.com.br',{all:true})));
+            for(const name of ['www.arquindex.com.br','arquindex.com.br']){
+              try{console.log('DNS',name,JSON.stringify(await dns.lookup(name,{all:true})))}catch(e){console.log('DNS_SYSTEM_ERROR',name,e.code)}
+              for(const endpoint of ['https://dns.google/resolve?name=','https://cloudflare-dns.com/dns-query?name=']){
+                try{const d=await fetch(endpoint+name+'&type=A',{headers:{accept:'application/dns-json'}});console.log('DNS_DOH',endpoint,name,JSON.stringify(await d.json()))}catch(e){console.log('DNS_DOH_ERROR',name,e.message)}
+              }
+            }
             const b=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
             const path='/blog/alfresco-recebimento-aprovacao-revisao-compartilhamento/';
             const targets=[
