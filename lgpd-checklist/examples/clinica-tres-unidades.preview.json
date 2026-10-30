@@ -1,0 +1,16 @@
+{
+  "tipo": "lgpd_checklist_preview",
+  "versao": "1.0",
+  "empresa": "Clínica não identificada",
+  "unidades": 3,
+  "sistema": "Prontuário eletrônico — fornecedor a identificar",
+  "modulos": [
+    "cadastro",
+    "ropa",
+    "politica",
+    "riscos",
+    "plano"
+  ],
+  "estado": "minuta_para_revisao",
+  "aprovado": false
+}
