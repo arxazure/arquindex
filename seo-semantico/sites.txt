@@ -1,0 +1,6 @@
+# Initial high-priority properties; expand only after verifying ownership, DNS and hosting
+https://www.arquindex.com.br/
+https://www.alfresco.arquindex.com.br/
+https://www.adequacaolgpd.arquindex.com.br/
+https://www.acervos.arquindex.com.br/
+http://databook.arquindex.com.br/
