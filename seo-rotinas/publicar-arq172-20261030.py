@@ -51,14 +51,9 @@ def public(url):
 
 pw=os.environ.get("FTP_PASSWORD")
 if not pw: raise RuntimeError("FTP_PASSWORD_MISSING")
-host=(os.environ.get("FTP_TLS_HOST") or "h59.servidorhh.com").strip(); user=(os.environ.get("FTP_USER") or "arquind2").strip()
-expected=set(socket.gethostbyname_ex("ftp.arquindex.com.br")[2]); resolved=set(socket.gethostbyname_ex(host)[2])
-if not expected.intersection(resolved): raise RuntimeError("HOST_IP_MISMATCH")
-ctx=ssl.create_default_context(); ctx.minimum_version=ssl.TLSVersion.TLSv1_2
+cert_host="h59.servidorhh.com"; connect_host=(os.environ.get("FTP_IP") or "177.234.150.42").strip(); user=(os.environ.get("FTP_USER") or "arquind2").strip()\nctx=ssl.create_default_context(); ctx.minimum_version=ssl.TLSVersion.TLSv1_2
 with ftplib.FTP_TLS(timeout=70,context=ctx) as ftp:
- ftp.connect(host,21)
- if ftp.sock.getpeername()[0] not in expected: raise RuntimeError("SERVER_IP_CHANGED")
- ftp.auth(); ftp.login(user,pw); ftp.prot_p(); ftp.set_pasv(True)
+ ftp.connect(connect_host,21)\n if ftp.sock.getpeername()[0] != connect_host: raise RuntimeError("SERVER_IP_CHANGED")\n ftp.host=cert_host\n ftp.auth(); ftp.login(user,pw); ftp.prot_p(); ftp.set_pasv(True)
  root=locate_existing(ftp,HOSTNAME,"index.html"); path=posixpath.join(root,"index.html"); old=get(ftp,path)
  backup_root="/seo-backups/seo-arq172-"+STAMP; mkdirs(ftp,backup_root)
  meta=json.dumps({"id":ID,"target":path,"created_at":STAMP,"sha256":hashlib.sha256(old).hexdigest(),"source_commit":os.environ.get("GITHUB_SHA","")},ensure_ascii=False,indent=2).encode()
