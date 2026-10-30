@@ -63,6 +63,21 @@ def check(host):
         except Exception as e:result['origin']={'error':type(e).__name__}
     print('RESTORE_RECORD '+json.dumps(result,separators=(',',':'),ensure_ascii=False),flush=True)
     return result
+# Discover additional hostnames only from public website sitemap/list files.
+for path in ['/lista_subdominios_e_sitemaps.txt','/sitemap_hosts.xml','/sitemap_index.xml','/sitemap.xml']:
+    c=http.client.HTTPConnection('177.234.150.42',80,timeout=10)
+    try:
+        c.request('GET',path,headers={'Host':'www.arquindex.com.br','User-Agent':'Arquindex-Recovery/1.0'})
+        r=c.getresponse()
+        if r.status==200:
+            body=r.read(5000000).decode('utf-8','replace')
+            for h in pat.findall(body):
+                h=h.lower().removeprefix('www.')
+                if h!='arquindex.com.br' and all(0<len(x)<=63 for x in h.split('.')):public_hosts.add(h)
+            print('PUBLIC_LIST_SOURCE',path,'HOST_COUNT',len(public_hosts),flush=True)
+    except Exception as e:print('PUBLIC_LIST_ERROR',path,type(e).__name__,flush=True)
+    finally:c.close()
+HOSTS=sorted(public_hosts)
 start=time.time()
 with concurrent.futures.ThreadPoolExecutor(max_workers=16) as pool:rows=list(pool.map(check,HOSTS))
 print('RESTORE_SUMMARY '+json.dumps({'hosts':len(rows),'origin200':sum(x.get('origin',{}).get('status')==200 for x in rows),'seconds':round(time.time()-start)}),flush=True)
