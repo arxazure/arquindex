@@ -2,7 +2,7 @@ name: Auditar SEO ARQ-191 a ARQ-196 2026-10-30 tarde
 on:
   push:
     branches: [master]
-    paths: ['.github/workflows/auditar-seo-20261030-tarde.yml']
+    paths: ['.github/workflows/auditar-seo-20261030-noite.yml']
   workflow_dispatch:
 permissions:
   contents: read
