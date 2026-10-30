@@ -1,0 +1,18 @@
+name: Public website recovery inventory
+on:
+  push:
+    branches: [fix/restore-subdomains-pages-20261030]
+    paths: ['.github/workflows/recovery-public-origin-inventory.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install DNS reader
+        run: pip install dnspython==2.8.0
+      - name: Check addresses already public in the repository only
+        run: python -u scripts/recovery-gsc-origin-inventory.py
