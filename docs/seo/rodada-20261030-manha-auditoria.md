@@ -71,7 +71,7 @@ Esses números são desempenho observado, não prova de indexação nova, causa 
 
 ## Registro persistente
 
-A fila foi atualizada com ARQ-179 a ARQ-184 e com o bloqueio atual de ARQ-172 no commit `355f3cf72881c4958a9e43db87c1daa37e4e9e70`.
+A fila foi atualizada com ARQ-179 a ARQ-184 e com o bloqueio atual de ARQ-172 no commit `0a302fd37a9e8e0d2f9d12d7c37d99b5ee01b513`.
 
 Não houve artigo/notícia artificial nem divulgação social. ARQ-007 e ARQ-099 permaneceram sem republicação.
 
