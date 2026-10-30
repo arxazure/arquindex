@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-10-30",
+  "campaign": "autoridade-documental-rmbh-rmsp",
+  "publication": {
+    "run": "https://github.com/arxazure/arquindex/actions/runs/41000197432",
+    "attempt": 3,
+    "job": 123890703440,
+    "status": "failure",
+    "error": "ftplib.error_perm: 530 Login authentication failed",
+    "remoteFileChanges": false
+  },
+  "dns": {
+    "source": "Google Public DNS JSON API",
+    "checks": [
+      {
+        "name": "arquindex.com.br",
+        "type": "NS",
+        "status": 2,
+        "comment": "Name servers did not respond [177.234.150.43, 177.234.150.42]."
+      },
+      {
+        "name": "www.arquindex.com.br",
+        "type": "A",
+        "status": 2,
+        "comment": "Name servers did not respond [177.234.150.42, 177.234.150.43]."
+      },
+      {
+        "name": "h59.servidorhh.com",
+        "type": "A",
+        "status": 0,
+        "address": "177.234.150.42"
+      }
+    ],
+    "interpretation": "Authoritative DNS failure observed. Does not establish billing, suspension, password changes or the root cause."
+  },
+  "cloudflare": {
+    "exactZoneLookup": "arquindex.com.br",
+    "success": true,
+    "zonesFound": 0,
+    "interpretation": "The current Cloudflare connection does not provide a zone for this exact domain; no DNS mutation was attempted."
+  },
+  "google": {
+    "sitemap": "https://www.arquindex.com.br/sitemap.xml",
+    "lastSubmitted": "2026-10-30T03:59:59.272Z",
+    "isPending": true,
+    "lastDownloaded": "2026-10-28T05:12:21.918Z",
+    "errors": 1,
+    "warnings": 0,
+    "interpretation": "Current error counter is reported by Search Console. This output does not identify its cause; DNS failure is separately observed."
+  },
+  "retained": {
+    "newPages": 9,
+    "pr": "https://github.com/arxazure/arquindex/pull/82",
+    "newPagesPublished": false,
+    "newSitemapSubmitted": false,
+    "newUrlsIndexNowSubmitted": false,
+    "socialReposted": false
+  },
+  "requiredRecovery": [
+    "Ask HomeHost to restore authoritative DNS responses for arquindex.com.br and www.arquindex.com.br.",
+    "Verify FTPS login for the existing account and update GitHub FTP_PASSWORD securely if the password changed.",
+    "After access is restored, rerun the failed publication job; it creates backups and performs public QA before discovery submission.",
+    "Use GSC Wizard to submit the new dedicated sitemap after confirmed public availability; do not treat acceptance as indexation."
+  ],
+  "supportText": "O domínio arquindex.com.br apresenta SERVFAIL no Google Public DNS. Os servidores autoritativos 177.234.150.42 e 177.234.150.43 não respondem para NS de arquindex.com.br nem A de www.arquindex.com.br. O host h59.servidorhh.com resolve para 177.234.150.42, porém o acesso FTPS da conta existente retorna 530 Login authentication failed. Solicito verificação da zona DNS, disponibilidade do serviço autoritativo e autenticação FTPS, preservando registros de e-mail e demais subdomínios. Favor informar a causa e o procedimento seguro de recuperação."
+}
