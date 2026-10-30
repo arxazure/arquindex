@@ -1,0 +1,31 @@
+name: Verificar acesso publico Alfresco
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/alfresco-public-verify-20261029.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install playwright --ignore-scripts --no-audit --no-fund
+      - name: Conferir paginas com navegador
+        run: |
+          node <<'JS'
+          const {chromium}=require('playwright');
+          (async()=>{
+            const b=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+            for(const url of ['https://www.arquindex.com.br/','https://www.arquindex.com.br/blog/alfresco-community-gestao-documental-sem-amps/','https://www.arquindex.com.br/manuais/alfresco-community-aspectos-temporalidade/']){
+              const p=await b.newPage();
+              try{const r=await p.goto(url,{waitUntil:'domcontentloaded',timeout:30000});console.log(JSON.stringify({url,status:r.status(),title:await p.title(),text:(await p.locator('body').innerText()).slice(0,180)}))}
+              catch(e){console.log(JSON.stringify({url,error:e.message.slice(0,200)}))}
+              await p.close();
+            }
+            await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
