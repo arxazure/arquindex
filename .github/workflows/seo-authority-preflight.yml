@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Unit tests for preflight rules
-        run: python3 -m unittest discover -s tests -p test_seo_authority_preflight.py
+        run: python3 -m unittest discover -s tests -p 'test_seo_*preflight.py'
       - name: Inspect versioned HTML without publishing
         run: python3 scripts/seo_authority_preflight.py --out seo-report/authority-preflight.json
       - name: Audit versioned sitemap XML without submitting
