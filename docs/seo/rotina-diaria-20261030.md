@@ -40,3 +40,7 @@ O conteúdo das 18:00 permanece agendado para TikTok, YouTube, LinkedIn e Google
 ## Continuação manual — 14:20 BRT
 
 A republicação do vídeo de guarda física no LinkedIn (`411412477`, 13:25) também retornou `authentication failure`. O erro é de autenticação da conta LinkedIn no Metricool, não do vídeo ou da legenda. TikTok, YouTube e Google Business Profile permanecem publicados; o conteúdo LGPD permanece agendado para 18:00 nos canais configurados. Nenhuma nova duplicação foi criada.
+
+## Continuação — 14:24 BRT
+
+A checagem de `getBrandSettings` confirmou que a marca Metricool 7366010 expõe TikTok, YouTube e Google Business Profile, mas não LinkedIn. Para evitar uma falha previsível às 18:00, o post LGPD foi atualizado para manter somente TikTok e YouTube, com o mesmo vídeo, legenda e declaração de conteúdo gerado por IA. Novo ID Metricool: `411481748`. O post separado do Google Business Profile permanece agendado. LinkedIn continua pendente de reconexão da conta no Metricool.
