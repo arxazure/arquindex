@@ -73,3 +73,11 @@ Estado nesta rodada: código e staging implementados/testados; publicação efet
 Depois do deploy validado, registrar data, commit, URL, hash público e cache. Em +7, +14 e +28 dias contar desde a publicação, comparar as mesmas duas consultas no mesmo projeto Semrush, localização, dispositivo e conjunto de palavras-chave. A diferença de posição é `22 − nova_posição` e `29 − nova_posição`; visibilidade é medida em pontos percentuais contra 10,50%. Se o conjunto/dispositivo mudar, iniciar uma série distinta. Isso é protocolo de acompanhamento, não automação agendada criada nesta rodada.
 
 Confirmar indexação e canonical escolhida com URL Inspection do GSC, com data de leitura. Acompanhar impressões, cliques, CTR e leads nas URLs publicadas; GSC por país não equivale ao recorte municipal de Brasília. Aceite IndexNow e inclusão no sitemap são descoberta, não indexação. Sem nova medição, o resultado é “não medido”, não “posição mantida”. Variações após publicar não demonstram causalidade isolada: registrar concorrência, sazonalidade e alterações paralelas.
+
+## Continuação em 30/10/2026
+
+PR de implementação: https://github.com/arxazure/arquindex/pull/83. A atualização da branch `railway-production-2026` para `992128baf85484bf7b671b01662d03611cdf2e75` foi integrada sem conflitos; as mudanças paralelas de LGPD foram preservadas.
+
+Backup mais recente localizado e lido nesta continuação: https://github.com/arxazure/arquindex/actions/runs/40975208048, job `123801438792`. O passo de backup real terminou às 21h28 de 29/10, horário de Brasília, com `BACKUP_PARTIAL_RESUME_REQUIRED`: checkpoint 87, 21.500 arquivos, 325.946.854 bytes, `state: in_progress`. O checkpoint de dois arquivos que aparece no início do log pertence aos testes sintéticos e não foi usado para avaliar a cópia real. Continua sem comprovação de backup integral ou restauração isolada. Nenhuma publicação foi realizada.
+
+A busca por e-mails posteriores de acompanhamento Semrush retornou somente o relatório de 28/10; não há nova posição observada nesta continuação. A linha de base permanece histórica, sem alegação de manutenção ou ganho de ranking.
