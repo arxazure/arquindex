@@ -5,8 +5,17 @@ from pathlib import Path
 from urllib.parse import urlsplit
 import dns.message, dns.query, dns.rdatatype, dns.flags
 
-M=json.loads(Path('recovery-gsc-manifest.json').read_text())
-HOSTS=M['baseHosts']
+# Scope comes exclusively from files already public in this repository.
+# No Search Console data or manifest is consumed or exported.
+pat=re.compile(r'https?://((?:[a-z0-9-]+\\.)*arquindex\\.com\\.br)(?:[/:"\\s<]|$)',re.I)
+public_hosts=set()
+for p in Path('.').rglob('*'):
+    if not p.is_file() or '.git' in p.parts or 'tests' in p.parts or p.stat().st_size>5000000 or p.suffix not in {'.csv','.json','.html','.xml','.md','.txt'}:continue
+    if p.name.startswith('recovery-'):continue
+    for h in pat.findall(p.read_text(errors='ignore')):
+        h=h.lower().removeprefix('www.')
+        if h!='arquindex.com.br' and all(0<len(x)<=63 for x in h.split('.')):public_hosts.add(h)
+HOSTS=sorted(public_hosts)
 ORIGINAL_DNS=['177.234.150.42','177.234.150.43']
 class Page(HTMLParser):
     def __init__(self): super().__init__(); self.canonical=[]; self.title=False; self.t=''; self.h1=0
