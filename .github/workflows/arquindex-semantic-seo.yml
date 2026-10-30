@@ -1,0 +1,34 @@
+name: Arquindex Semantic SEO Audit
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "25 10 * * 1"
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run offline schema tests
+        run: PYTHONPATH=seo-semantico python -m unittest discover -s seo-semantico/tests -v
+      - name: Audit approved URLs (read-only)
+        run: python seo-semantico/audit.py --sites seo-semantico/sites.txt --output seo-audit.json --workers 2
+      - name: Create Markdown report
+        run: python seo-semantico/report.py seo-audit.json seo-report.md
+      - name: Upload diagnostic artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-semantic-seo-audit
+          path: |
+            seo-audit.json
+            seo-report.md
+          if-no-files-found: ignore
+          retention-days: 30
