@@ -30,10 +30,17 @@ A falha do navegador não foi convertida em alegação de NXDOMAIN, HTTP ou SSL.
 
 ## Checagens pendentes
 
-A conclusão de DNS, SSL, HTTP, canonical, title, H1, meta description, mobile, robots, sitemap, links internos, conteúdo, CTA e formulários depende da execução do workflow enfileirado. A auditoria deve ser retomada pelo ID já existente, sem disparar uma duplicata enquanto ele estiver ativo.
+O workflow concluiu com sucesso e confirmou `ENOTFOUND` para os seis hosts. Como o DNS não resolveu, SSL, HTTP, canonical, title, H1, meta description, mobile, robots, sitemap, links, conteúdo, CTA e formulários não eram verificáveis. Nenhuma duplicata foi disparada.
 
 ## Próximas três prioridades
 
 1. Revalidar o run 41100568829; registrar logs e atualizar os seis estados somente quando o job concluir.
 2. Se os hosts existirem, localizar cada diretório/origem HomeHost e fazer backup individual antes de escolher no máximo três melhorias substantivas.
 3. Resolver sobreposição: ARQ-186/187/189 no cluster LGPD; ARQ-188 frente a GED/ECM/Alfresco; ARQ-185 frente às páginas de digitalização; ARQ-190 como página específica de IA documental.
+
+
+## Fechamento posterior
+
+- Workflow 41100568829 concluído com sucesso técnico.
+- ARQ-185–ARQ-190: `queryA ENOTFOUND` em todos os hosts.
+- Fila consolidada no commit [32cfc67](https://github.com/arxazure/arquindex/commit/32cfc6738f73c4744d221a552d7ff8926cafd022).
