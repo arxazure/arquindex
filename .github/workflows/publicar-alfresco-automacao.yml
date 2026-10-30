@@ -1,0 +1,56 @@
+name: Publicar Alfresco automacao e descoberta
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/publicar-alfresco-automacao.yml'
+      - 'seo/alfresco-automacao-manifest.json'
+      - 'scripts/publicar-alfresco-automacao.py'
+      - 'scripts/qa/alfresco-automacao.cjs'
+      - 'scripts/descobrir-alfresco-automacao.py'
+      - 'alfresco-automacao-documental/**'
+      - 'blog/alfresco-reducao-custos-processos-documentais/**'
+      - 'blog/alfresco-rpa-conectores-ia-automacao/**'
+      - 'blog/alfresco-recebimento-aprovacao-revisao-compartilhamento/**'
+      - 'sitemap-alfresco-automacao.xml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publicar-alfresco-automacao
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publicar com backup e verificacao FTPS
+        env:
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST || 'h59.servidorhh.com' }}
+          FTP_USER: arquind2
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python3 scripts/publicar-alfresco-automacao.py
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install --prefix "$RUNNER_TEMP/alfresco-qa" playwright --ignore-scripts --no-audit --no-fund
+      - name: Conferir publicacao no navegador mobile e desktop
+        env:
+          NODE_PATH: ${{ runner.temp }}/alfresco-qa/node_modules
+        run: node scripts/qa/alfresco-automacao.cjs
+      - name: Enviar sitemap Google e URLs IndexNow somente apos validacao
+        env:
+          GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
+          GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
+          GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: python3 scripts/descobrir-alfresco-automacao.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: alfresco-automacao-publicacao
+          path: publish-report/alfresco-automacao/
+          if-no-files-found: warn
+          retention-days: 30

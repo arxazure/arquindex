@@ -1,0 +1,57 @@
+[
+  {
+    "path": "alfresco-automacao-documental/index.html",
+    "title": "Alfresco e automação documental: conectores, IA e controle de processos",
+    "description": "Conheça a metodologia Arquindex para integrar Alfresco, conectores e IA no recebimento, aprovação, revisão e compartilhamento de documentos.",
+    "answer": "O Alfresco pode servir como repositório central de uma automação documental. A economia depende da redução comprovada de tarefas repetitivas e do custo de implantação, integração e operação.",
+    "refs": [
+      "api",
+      "model",
+      "workflow"
+    ],
+    "kind": "WebPage",
+    "url": "https://www.arquindex.com.br/alfresco-automacao-documental/",
+    "marker": "ARQ-ALFRESCO-AUTOMACAO-20261029"
+  },
+  {
+    "path": "blog/alfresco-reducao-custos-processos-documentais/index.html",
+    "title": "Redução de custos com Alfresco: como medir o ganho no processo documental",
+    "description": "Aprenda a calcular custo por documento aceito, esforço de revisão e retorno de uma automação com Alfresco, sem percentuais de economia inventados.",
+    "answer": "A redução de custos com Alfresco deve ser calculada por documento aceito, comparando trabalho, infraestrutura, integrações e manutenção antes e depois de um piloto.",
+    "refs": [
+      "licenca",
+      "api"
+    ],
+    "kind": "TechArticle",
+    "url": "https://www.arquindex.com.br/blog/alfresco-reducao-custos-processos-documentais/",
+    "marker": "ARQ-ALFRESCO-AUTOMACAO-20261029"
+  },
+  {
+    "path": "blog/alfresco-rpa-conectores-ia-automacao/index.html",
+    "title": "Alfresco com RPA, conectores e IA: arquitetura para automação documental",
+    "description": "Entenda como integrar Alfresco a APIs, RPA, OCR, IA, portais e mensageria com controle de acesso, idempotência e revisão das exceções.",
+    "answer": "O Alfresco pode integrar processos por APIs e conectores. RPA atua em tarefas de interface; OCR e IA apoiam extração e classificação. Cada camada exige validação e operação próprias.",
+    "refs": [
+      "api",
+      "licenca",
+      "rules"
+    ],
+    "kind": "TechArticle",
+    "url": "https://www.arquindex.com.br/blog/alfresco-rpa-conectores-ia-automacao/",
+    "marker": "ARQ-ALFRESCO-AUTOMACAO-20261029"
+  },
+  {
+    "path": "blog/alfresco-recebimento-aprovacao-revisao-compartilhamento/index.html",
+    "title": "Alfresco: recebimento, aprovação, revisão e compartilhamento documental",
+    "description": "Veja um fluxo de referência Arquindex para receber, conferir, aprovar, revisar e compartilhar documentos no Alfresco com permissões e versões rastreáveis.",
+    "answer": "O controle documental deve ligar cada recebimento, revisão e aprovação à versão correta, com responsáveis e permissões definidos. Integrações podem automatizar os encaminhamentos e avisos.",
+    "refs": [
+      "workflow",
+      "using",
+      "model"
+    ],
+    "kind": "TechArticle",
+    "url": "https://www.arquindex.com.br/blog/alfresco-recebimento-aprovacao-revisao-compartilhamento/",
+    "marker": "ARQ-ALFRESCO-AUTOMACAO-20261029"
+  }
+]
