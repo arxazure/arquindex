@@ -24,3 +24,9 @@ YouTube e TikTok foram marcados como conteúdo gerado por IA. Os vídeos finais 
 ## Pendências
 
 Facebook não aparece conectado na marca do Metricool e, portanto, não foi publicado. A rotina diária foi reativada para gerar dois vídeos por dia, alternando guarda documental, digitalização, transformação físico-digital, LGPD/Checklist e comparativos técnicos de ECM.
+
+## Execução da rotina — 10:03 BRT
+
+A verificação de duplicação encontrou os dois conteúdos do dia já preparados no Metricool. O post das 10:00, sobre guarda física para acervo digital, estava em publicação para LinkedIn, TikTok e YouTube, e a mídia correspondente estava em publicação no Google Business Profile. O segundo vídeo, sobre LGPD e Checklist, permaneceu agendado para 18:00.
+
+A pauta editorial com maior oportunidade pendente na fila é **digitalização de documentos em Belo Horizonte** (`ARQ-003`), seguida por gestão documental GED/ECM e Alfresco em Belo Horizonte. Não foi criada nova página ou nova publicação neste ciclo para preservar a regra de não duplicação. A página existente de consultoria LGPD já contém resposta direta, entregáveis, referências oficiais e links para os guias de digitalização, guarda e Alfresco; o formulário de atendimento rápido existente conduz o interessado ao WhatsApp com consentimento explícito antes do envio.
