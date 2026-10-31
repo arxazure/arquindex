@@ -1,0 +1,8 @@
+# Radar31/10/2026 manhã
+Janela28–31/10; menções25–31/10. Lido radar30/noite blobfc6f92235801b123a262e263d06b3ef7dae3ec7b. Pesquisa apenas; zero publicações e zero pautas novas liberadas.
+Aberta fonte ANPD https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-debate-governanca-de-dados-durante-conferencia-internacional-que-acontece-na-unb : publicação28/10/2026 19h, participação28/10 em conferência até30/10. Relata debate e normas existentes, sem anunciar obrigação nova. Usar eventualmente como contexto do briefingECA existente, sem terceira notícia artificial ou alegar participaçãoArquindex. Tema de acesso de pesquisadores a dados é proposta de agenda, não acesso já autorizado.
+BuscasHyland/Microsoft/CONARQ retornaram pautas conhecidas e normas antigas. SharePointmobile29/10 preservado sem republicar; MavenAlfresco27/10 permanece com validação técnica pendente. AgendaMicrosoft5/11 não prova lançamento.
+Menções: resultados PortalSoftware/Solutudo diretórios conhecidos; Scribd manual antigo com nome de usuário não é cobertura editorial nova. Não há menção substantiva elegível verificada; cobertura limitada, não conclusão absoluta de ausência.
+Sem novos textos/artes duplicados; pautasECA/DadosAbertos/Maven/SharePoint mantidas preparadas, não publicadas nesta pesquisa. Destinos/fichas pendentes. Nenhuma ficha marcada coberta; plano/fila não relidos. Sem alteraçãotitle/H1/description.
+Registro31/10 | fonteANPD acima | interno | pesquisa/deduplicação | conteúdo aberto e avaliado.
+Três próximas ações:1 validar suporte e página/fichaSharePoint;2 concluir validações específicas deMaven/ECA/DadosAbertos, escolhendo atualização existente;3 manter busca sobreposta de menções e novidades oficiais.
