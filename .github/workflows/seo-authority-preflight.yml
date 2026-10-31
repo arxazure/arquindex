@@ -1,0 +1,38 @@
+name: SEO Authority Preflight (read-only)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/seo_*preflight.py'
+      - 'scripts/seo_priority_queue.py'
+      - 'tests/test_seo_*preflight.py'
+      - '.github/workflows/seo-authority-preflight.yml'
+  schedule:
+    - cron: '33 10 * * *'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests for preflight rules
+        run: python3 -m unittest discover -s tests -p 'test_seo_*preflight.py'
+      - name: Inspect versioned HTML without publishing
+        run: python3 scripts/seo_authority_preflight.py --out seo-report/authority-preflight.json
+      - name: Audit versioned sitemap XML without submitting
+        run: python3 scripts/seo_sitemap_preflight.py --out seo-report/sitemap-preflight.json
+      - name: Generate human-review remediation queue
+        run: python3 scripts/seo_priority_queue.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seo-authority-preflight
+          path: |
+            seo-report/authority-preflight.json
+            seo-report/sitemap-preflight.json
+            seo-report/priority-queue.json
+            seo-report/priority-review.csv
+          retention-days: 30
