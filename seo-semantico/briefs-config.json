@@ -1,0 +1,20 @@
+{
+  "briefs": {
+    "digitalizacao": {
+      "title": "Digitalização de documentos para empresas: escopo, OCR e qualidade",
+      "competitor_urls": []
+    },
+    "alfresco": {
+      "title": "Alfresco ECM para gestão documental empresarial",
+      "competitor_urls": []
+    },
+    "lgpd": {
+      "title": "Adequação LGPD para empresas: diagnóstico e governança",
+      "competitor_urls": []
+    },
+    "ged": {
+      "title": "Gestão eletrônica de documentos: requisitos de um GED empresarial",
+      "competitor_urls": []
+    }
+  }
+}
