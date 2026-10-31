@@ -6,6 +6,7 @@ on:
       - 'scripts/seo_*preflight.py'
       - 'scripts/seo_priority_queue.py'
       - 'tests/test_seo_*preflight.py'
+      - 'tests/test_seo_priority_queue.py'
       - '.github/workflows/seo-authority-preflight.yml'
   schedule:
     - cron: '33 10 * * *'
@@ -21,6 +22,8 @@ jobs:
           python-version: '3.12'
       - name: Unit tests for preflight rules
         run: python3 -m unittest discover -s tests -p 'test_seo_*preflight.py'
+      - name: Unit tests for SEO priority queue
+        run: python3 -m unittest discover -s tests -p test_seo_priority_queue.py
       - name: Inspect versioned HTML without publishing
         run: python3 scripts/seo_authority_preflight.py --out seo-report/authority-preflight.json
       - name: Audit versioned sitemap XML without submitting
