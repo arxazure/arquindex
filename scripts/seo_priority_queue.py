@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Rank read-only SEO findings for human review; does not change pages."""
 import argparse
+import csv
 import json
 from pathlib import Path
 
@@ -44,6 +45,7 @@ def main():
     p.add_argument("--html", default="seo-report/authority-preflight.json")
     p.add_argument("--sitemaps", default="seo-report/sitemap-preflight.json")
     p.add_argument("--out", default="seo-report/priority-queue.json")
+    p.add_argument("--csv", default="seo-report/priority-review.csv")
     args = p.parse_args()
     html = json.loads(Path(args.html).read_text(encoding="utf-8"))
     sitemap = json.loads(Path(args.sitemaps).read_text(encoding="utf-8"))
@@ -51,6 +53,18 @@ def main():
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"findings": result["count"], "output": str(out)}))
+    csv_path = Path(args.csv)
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    with csv_path.open("w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.DictWriter(handle, fieldnames=[
+            "priority", "kind", "source", "issues", "classification", "decision",
+            "owner", "verified_live_url", "evidence", "reviewed_at"])
+        writer.writeheader()
+        for item in result["queue"]:
+            writer.writerow({"priority": item["priority"], "kind": item["kind"],
+                "source": item["source"], "issues": "; ".join(item["issues"]),
+                "classification": "UNREVIEWED", "decision": "", "owner": "",
+                "verified_live_url": "", "evidence": "", "reviewed_at": ""})
+    print(json.dumps({"findings": result["count"], "output": str(out), "csv": str(csv_path)}))
 if __name__ == "__main__":
     main()
