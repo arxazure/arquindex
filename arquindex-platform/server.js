@@ -1,3 +1,4 @@
+import { renderLegacyRecovery, recoveryPaths } from "./legacy-recovery-pages.js";
 import { alfrescoIa2026Path, alfrescoIa2026Article } from "./alfresco-ia-2026-article.js";
 import { aiGuide, aiGuidePaths } from "./alfresco-ia-regional-2026.js";
 import { renderAuthorityGuide } from "./authority-guide-longform.js";
@@ -507,6 +508,11 @@ const server=http.createServer(async(req,res)=>{
  html=html.replace(/<link rel="canonical" href="[^"]*">/,'<link rel="canonical" href="'+page.canonical+'">');
  res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(html);}
  res.writeHead(404,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Página não encontrada","Página não encontrada.","<section><h1>Página não encontrada</h1><a href='/atendimento-rmbh'>Grande BH</a></section>",req));
+ }
+ if(recoveryPaths.includes(p)){
+  const html=renderLegacyRecovery(p,canonicalOrigin(req));
+  res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});
+  return res.end(html);
  }
  if(await serveReplica(req,res)) return;
  if(legacyRedirects.has(p)){
