@@ -1,5 +1,10 @@
 name: RHDP review - offline tests only
 on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "seo/review/2026-10-27/**"
+      - ".github/workflows/rhdp-review-tests.yml"
   push:
     branches:
       - seo/revisao-rhdp-matriz72-20261023
