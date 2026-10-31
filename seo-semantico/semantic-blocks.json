@@ -1,0 +1,50 @@
+{
+  "targets": [
+    {
+      "path": "servicos/digitalizacao/index.html",
+      "block_id": "digitalizacao-b2b",
+      "content": {
+        "title": "Digitalização documental para empresas: etapas e controles",
+        "paragraphs": [
+          "O projeto de digitalização empresarial começa pelo inventário do acervo e pelos critérios de captura, OCR, indexação e conferência de qualidade.",
+          "A proposta deve especificar volumes, formatos, critérios de aceite e opções de entrega."
+        ],
+        "points": [
+          "Preparação e classificação documental",
+          "Captura, OCR pesquisável e metadados",
+          "Conferência, rastreabilidade e entrega"
+        ]
+      }
+    },
+    {
+      "path": "servicos/alfresco/index.html",
+      "block_id": "alfresco-ecm",
+      "content": {
+        "title": "Alfresco ECM: implantação e gestão de documentos",
+        "paragraphs": [
+          "A estrutura de um repositório documental corporativo inclui tipos de documento, permissões, metadados, retenção e integrações."
+        ],
+        "points": [
+          "Mapeamento de tipos documentais",
+          "Configuração de permissões e fluxos",
+          "Validação de importação e auditoria"
+        ]
+      }
+    },
+    {
+      "path": "servicos/lgpd/index.html",
+      "block_id": "adequacao-lgpd",
+      "content": {
+        "title": "Adequação à LGPD para organizações",
+        "paragraphs": [
+          "A adequação envolve diagnóstico, mapeamento de tratamentos de dados pessoais, avaliação de riscos e definição de responsabilidades."
+        ],
+        "points": [
+          "Inventário de dados e ROPA",
+          "Avaliação de riscos e RIPD quando aplicável",
+          "Governança e atendimento aos titulares"
+        ]
+      }
+    }
+  ]
+}
