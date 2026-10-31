@@ -1,0 +1,36 @@
+name: Auditar SEO ARQ-197 a ARQ-202 2026-10-31 manhã
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/auditar-seo-20261031-manha.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install playwright
+      - name: Auditoria publica mobile e desktop
+        run: |
+          cat > audit.js <<'JS'
+          const {chromium,request}=require('playwright');const dns=require('node:dns').promises;
+          const items=[
+            ['ARQ-197','https://mapeamento-juridico-sao-vicente.arquindex.com.br/'],
+            ['ARQ-198','https://melhores-consultorias-adequacao-lgpd-brasil.arquindex.com.br/'],
+            ['ARQ-199','https://ocr-rh-niteroi.arquindex.com.br/custo.html'],
+            ['ARQ-200','https://ocr.arquindex.com.br/'],
+            ['ARQ-201','https://scanners-digitalizacao-grandes-volumes-documentos.arquindex.com.br/'],
+            ['ARQ-202','https://servicos-consultoria-adequacao-lgpd-oferece-pequenas.arquindex.com.br/']
+          ];
+          const out=x=>console.log(JSON.stringify(x));
+          (async()=>{const b=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});const api=await request.newContext({ignoreHTTPSErrors:false});
+          for(const [id,url] of items){const host=new URL(url).hostname;try{out({id,url,phase:'dns',ok:true,addresses:await dns.resolve4(host)})}catch(e){out({id,url,phase:'dns',ok:false,error:e.message});continue}
+          for(const p of ['/robots.txt','/sitemap.xml']){try{const r=await api.get('https://'+host+p,{timeout:30000});out({id,url,phase:p,status:r.status(),contentType:r.headers()['content-type']||''})}catch(e){out({id,url,phase:p,status:null,error:e.message})}}
+          for(const [device,width,height] of [['mobile',390,844],['desktop',1440,900]]){const p=await b.newPage({viewport:{width,height}});try{const r=await p.goto(url,{waitUntil:'networkidle',timeout:60000});const d=await p.evaluate(()=>({finalUrl:location.href,title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.innerText.trim()),description:document.querySelector('meta[name="description"]')?.content||'',canonical:document.querySelector('link[rel="canonical"]')?.href||'',robots:document.querySelector('meta[name="robots"]')?.content||'',viewport:document.querySelector('meta[name="viewport"]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('#aq-nav,.aq-brandbar,header nav'),widget:document.querySelectorAll('#arq-floating,.aq-brand-wa,#wa-widget-send-button').length,cta:[...document.querySelectorAll('a[href]')].filter(a=>/wa.me|solicitar-proposta|orcamento/i.test(a.href)).length,forms:document.querySelectorAll('form').length,jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,links:document.querySelectorAll('a[href]').length,words:(document.body.innerText.match(/\S+/g)||[]).length,clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,indexOf:/Index of \/|Directory listing/i.test(document.body.innerText)}));out({id,url,phase:'page',device,status:r?.status(),...d})}catch(e){out({id,url,phase:'page',device,status:null,error:e.message})}finally{await p.close()}}}
+          await api.dispose();await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node audit.js
