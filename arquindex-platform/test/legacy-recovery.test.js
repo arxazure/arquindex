@@ -21,7 +21,7 @@ for(const path of recoveryPaths){
   assert.match(html,/<h1>[^<]+<\/h1>/);
   assert.match(html,/<h2>Etapas do processo<\/h2>/);
   assert.match(html,/<h2>Perguntas frequentes<\/h2>/);
-  assert.match(html,/<a href="https:\/\/wa.me\/5531973632725"/);
+  assert.match(html,/<a\b[^>]*href="https:\/\/wa\.me\/5531973632725"/);
   assert.match(html,/mailto:comercial@arquindex\.com\.br/);
   assert.doesNotMatch(html,/segurança (total|garantida)|validade jurídica automática/i);
  });
