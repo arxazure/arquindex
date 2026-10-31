@@ -34,4 +34,5 @@ jobs:
             seo-report/authority-preflight.json
             seo-report/sitemap-preflight.json
             seo-report/priority-queue.json
+            seo-report/priority-review.csv
           retention-days: 30
