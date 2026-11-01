@@ -1,4 +1,4 @@
-import { renderLegacyRecovery, recoveryPaths } from "./legacy-recovery-pages.js";
+import { renderLegacyRecovery, recoveryPaths, legacyPageMeta, renderLegacyTechnicalSections } from "./legacy-recovery-pages.js";
 import { alfrescoIa2026Path, alfrescoIa2026Article } from "./alfresco-ia-2026-article.js";
 import { aiGuide, aiGuidePaths } from "./alfresco-ia-regional-2026.js";
 import { renderAuthorityGuide } from "./authority-guide-longform.js";
@@ -510,7 +510,17 @@ const server=http.createServer(async(req,res)=>{
  res.writeHead(404,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Página não encontrada","Página não encontrada.","<section><h1>Página não encontrada</h1><a href='/atendimento-rmbh'>Grande BH</a></section>",req));
  }
  if(recoveryPaths.includes(p)){
-  const html=renderLegacyRecovery(p,canonicalOrigin(req));
+  const d=legacyPageMeta(p);
+  const technical=renderLegacyTechnicalSections(p);
+  const links=d.links.map(([href,label])=>'<a class="btn primary" href="'+href+'">'+esc(label)+'</a>').join(" ");
+  const faqs=d.faqs.map(([q,a])=>'<details class="faq"><summary>'+esc(q)+'</summary><p>'+esc(a)+'</p></details>').join("");
+  const body='<div class="hero"><div class="wrap"><div class="eyebrow">Arquindex · Conteúdo técnico e serviços</div><h1>'+esc(d.h1)+'</h1><p>'+esc(d.description)+'</p><div class="cta"><a class="btn primary" href="/solucoes">Conhecer soluções</a><a class="btn whats" href="https://wa.me/5531973632725">Solicitar avaliação</a></div></div></div>'+
+    '<section><nav class="toc"><a href="#resposta">Resposta direta</a><a href="#processo">Processo</a><a href="#conteudo-tecnico">Manual técnico</a><a href="#duvidas">Perguntas frequentes</a></nav><div class="answer" id="resposta"><h2>Resposta direta</h2><p>'+esc(d.answer)+'</p></div></section>'+
+    '<section class="band" id="processo"><h2>Etapas do processo</h2><div class="steps">'+d.steps.map(x=>'<article class="step">'+esc(x)+'</article>').join("")+'</div></section>'+
+    '<div id="conteudo-tecnico">'+technical+'</div>'+
+    '<section id="duvidas"><h2>Perguntas frequentes</h2>'+faqs+'</section>'+
+    '<section><h2>Serviços e temas relacionados</h2><div class="cta">'+links+'</div><p>Veja também as soluções de <a href="/solucoes">gestão documental</a>, <a href="/conteudo">artigos técnicos</a> e <a href="/contato">atendimento</a>.</p><p><a class="btn whats" href="https://wa.me/5531973632725">WhatsApp (31) 97363-2725</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></section>';
+  const html=layout(d.title,d.description,body,req);
   res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});
   return res.end(html);
  }
