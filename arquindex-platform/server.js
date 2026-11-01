@@ -65,6 +65,9 @@ const cities = [
 ];
 
 const legacyRedirects = new Map([
+ ["/digitalizacao.html","/solucoes/digitalizacao-documentos"],
+ ["/dpo-as-a-service-consultoria-lgpd.html","/solucoes/dpo-terceirizado"],
+ ["/gestao_documental_documentos.html","/solucoes/gestao-documental"],
  ["/guarda_de_documentos.html","/solucoes/guarda-documental"],
  ["/gestao_de_colaboradores_documentos.html","/setores/digitalizacao-documentos-rh-departamento-pessoal"],
  ["/montagem_databook_organizar.html","/solucoes/databook"],
