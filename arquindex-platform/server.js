@@ -207,7 +207,7 @@ function slugCity(c){return c.toLowerCase().normalize("NFD").replace(/[\u0300-\u
 function origin(req){return "https://arquindex-web-production.up.railway.app";}
 function canonicalOrigin(req){
  const host=(req.headers.host||"").toLowerCase().split(":")[0];
- if(host==="arquindex.com.br"||host==="www.arquindex.com.br") return "https://www.arquindex.com.br";
+ if(host==="arquindex.com.br"||host==="www.arquindex.com.br") return "https://arquindex.com.br";
  return origin(req);
 }
 function isRailwayPreview(req){
