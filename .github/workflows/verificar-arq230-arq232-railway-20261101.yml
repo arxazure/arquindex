@@ -1,0 +1,84 @@
+name: Verificar Railway ARQ-230 a ARQ-232 2026-11-01 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/verificar-arq230-arq232-railway-20261101.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: railway-production-2026
+      - name: Testes de regressão
+        working-directory: arquindex-platform
+        run: |
+          node --test test/digitalize-identity-arq230-232.test.js
+          node --test test/legacy-redirect-map.test.js
+      - name: Preparar navegador
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-postcheck" playwright --no-audit --no-fund
+      - name: Verificar publicação pública e ausência de regressão
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-postcheck/node_modules/playwright');let browser;
+          const base='https://www.arquindex.com.br';
+          const targets=[
+            ['ARQ-230','/digitalize/santa-luzia/','Digitalize em Santa Luzia: digitalização de documentos | Arquindex','Digitalize seus documentos em Santa Luzia','digitalize_santa-luzia'],
+            ['ARQ-231','/digitalize/ribeirao-das-neves/','Digitalize em Ribeirão das Neves: digitalização de documentos | Arquindex','Digitalize seus documentos em Ribeirão das Neves','digitalize_ribeirao-das-neves'],
+            ['ARQ-232','/digitalize/ibirite/','Digitalize em Ibirité: digitalização de documentos | Arquindex','Digitalize seus documentos em Ibirité','digitalize_ibirite']
+          ];
+          const controls=[
+            ['ARQ-227','/seo-regional/gestao-documental-ecm-databooks/belem/'],
+            ['ARQ-228','/seo-regional/gestao-documental-ecm-databooks/sabara/'],
+            ['ARQ-229','/digitalize/']
+          ];
+          (async()=>{
+            browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+            for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+              const ctx=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+              for(const [id,path,title,h1,campaign] of targets){
+                const page=await ctx.newPage();
+                const r=await page.goto(base+path+'?postcheck=20261101noite',{waitUntil:'networkidle',timeout:60000});
+                const d=await page.evaluate(()=>({
+                  title:document.title,
+                  h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),
+                  canonical:document.querySelector('link[rel=canonical]')?.href||'',
+                  robots:document.querySelector('meta[name=robots]')?.content||'',
+                  logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),
+                  logoLoaded:[...document.querySelectorAll('img[src*="arquindex-logo-oficial.webp"]')].every(x=>x.complete&&x.naturalWidth>0),
+                  menu:document.querySelectorAll('#aq-nav').length,
+                  widget:document.querySelectorAll('#arq-floating').length,
+                  proposal:[...document.querySelectorAll('a[href]')].some(a=>a.href.includes('/contato?')&&a.href.includes('utm_source=seo_local')&&a.href.includes('utm_medium=organic')),
+                  whatsapp:[...document.querySelectorAll('a[href]')].filter(a=>a.href.includes('5531973632725')).length,
+                  form:document.querySelectorAll('form').length,
+                  words:(document.body.innerText||'').trim().split(/\s+/).filter(Boolean).length,
+                  cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
+                }));
+                if(r?.status()!==200||d.title!==title||d.h1.length!==1||d.h1[0]!==h1||!d.canonical.replace('www.','').endsWith(path)||/noindex/i.test(d.robots)||!d.logo||!d.logoLoaded||d.menu!==1||d.widget!==1||!d.proposal||d.whatsapp<2||d.words<900||d.sw>d.cw+2) throw Error(id+' '+vp.name+' '+JSON.stringify(d));
+                const href=await page.locator('a[href*="utm_campaign"]').first().getAttribute('href');
+                if(!href||!href.includes('utm_campaign='+campaign))throw Error(id+' UTM '+href);
+                console.log('PUBLIC_VERIFIED',JSON.stringify({id,device:vp.name,status:r.status(),...d,proposalHref:href}));
+                await page.close();
+              }
+              for(const [id,path] of controls){
+                const page=await ctx.newPage();const r=await page.goto(base+path+'?control=20261101noite',{waitUntil:'domcontentloaded',timeout:45000});
+                const d=await page.evaluate(()=>({h1:document.querySelectorAll('h1').length,canonical:document.querySelector('link[rel=canonical]')?.href||'',cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));
+                if(r?.status()!==200||d.h1!==1||!d.canonical.replace('www.','').endsWith(path)||d.sw>d.cw+2)throw Error(id+' control '+JSON.stringify(d));
+                console.log('CONTROL_OK',JSON.stringify({id,device:vp.name,status:r.status(),...d}));await page.close();
+              }
+              await ctx.close();
+            }
+            const sm=await (await fetch(base+'/digitalize/sitemap.xml')).text();
+            for(const [,path] of targets)if(!sm.includes(path))throw Error('sitemap missing '+path);
+            console.log('SITEMAP_OK',targets.length);
+            await browser.close();
+          })().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exit(1)});
+          JS
