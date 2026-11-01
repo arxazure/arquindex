@@ -14,6 +14,7 @@ import {persistInitial,persistDerived} from './persistence.js';
 export async function ingestDocument({pool,storage,tenantId,actorId,bytes,metadata,origem,publicBody=false,channel}) {
  if(!(bytes instanceof Uint8Array) || bytes.byteLength===0) throw new TypeError('Nonempty file required');
  if(!tenantId || !actorId) throw new TypeError('Authenticated tenant and actor required');
+ if(!/^[a-zA-Z0-9_-]{1,100}$/.test(tenantId)) throw new TypeError('Invalid tenant identifier');
  bytes=Buffer.from(bytes);
  const manifest=registerInput({tenantId,actorId,bytes,metadata,origem,publicBody});
  const initialHash=checksum(bytes).valor;
@@ -26,6 +27,8 @@ export async function ingestDocument({pool,storage,tenantId,actorId,bytes,metada
 export async function createProcessingVersion({pool,storage,tenantId,documentId,actorId,stage,bytes,sourceVersion,evidence}) {
  if(!(bytes instanceof Uint8Array) || bytes.byteLength===0) throw new TypeError('Nonempty file required');
  if(!['conferencia','ocr','pdfa','assinado','entrega'].includes(stage)) throw new TypeError('Invalid stage');
+ if(!/^[a-zA-Z0-9_-]{1,100}$/.test(tenantId)) throw new TypeError('Invalid tenant identifier');
+ if(!/^[a-f0-9-]{36}$/i.test(documentId)) throw new TypeError('Invalid document identifier');
  bytes=Buffer.from(bytes);
  const initialHash=checksum(bytes).valor;
  const doc=await pool.query('SELECT document_id FROM capture_integrity_documents WHERE tenant_id=$1 AND document_id=$2',[tenantId,documentId]);
