@@ -1,0 +1,59 @@
+name: Auditar ARQ-221 a ARQ-226 e origem Railway 2026-11-01 tarde
+on:
+  push:
+    paths:
+      - '.github/workflows/auditar-arq221-226-origem-20261101.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auditoria DNS TLS HTTP e conteúdo
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const dns=require('node:dns').promises;
+          const tls=require('node:tls');
+          const crypto=require('node:crypto');
+          const paths=[
+            ['ARQ-221','/seo-regional/gestao-documental-ecm-databooks/boa-vista/'],
+            ['ARQ-222','/seo-regional/gestao-documental-ecm-databooks/manaus/'],
+            ['ARQ-223','/seo-regional/gestao-documental-ecm-databooks/cuiaba/'],
+            ['ARQ-224','/seo-regional/gestao-documental-ecm-databooks/pedro-leopoldo/'],
+            ['ARQ-225','/seo-regional/gestao-documental-ecm-databooks/santa-luzia/'],
+            ['ARQ-226','/seo-regional/gestao-documental-ecm-databooks/macapa/']
+          ];
+          const origins=[
+            ['official','https://www.arquindex.com.br'],
+            ['railway','https://arquindex-web-production.up.railway.app']
+          ];
+          const out=o=>console.log(JSON.stringify(o));
+          function text(html,re){const m=html.match(re);return m?m[1].replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim():''}
+          function tlsInfo(host){return new Promise(resolve=>{const s=tls.connect(443,host,{servername:host,rejectUnauthorized:true},()=>{const c=s.getPeerCertificate();resolve({ok:true,subject:c.subject,issuer:c.issuer,valid_to:c.valid_to,fingerprint256:c.fingerprint256});s.end()});s.on('error',e=>resolve({ok:false,error:e.message}));s.setTimeout(15000,()=>{s.destroy();resolve({ok:false,error:'timeout'})})})}
+          (async()=>{
+            for(const host of ['www.arquindex.com.br','arquindex.com.br','arquindex-web-production.up.railway.app']){
+              let a=[],c=[];try{a=await dns.resolve4(host)}catch(e){}try{c=await dns.resolveCname(host)}catch(e){}
+              out({phase:'dns',host,a,c});
+              out({phase:'tls',host,...await tlsInfo(host)});
+            }
+            for(const [id,path] of paths){
+              const bodies={};
+              for(const [origin,base] of origins){
+                const url=base+path;
+                try{
+                  const r=await fetch(url,{redirect:'follow',headers:{'user-agent':'Arquindex-Auditoria/2026-11-01'}});
+                  const h=await r.text(); bodies[origin]=h;
+                  const headers={}; for(const k of ['server','cf-ray','cf-cache-status','x-railway-request-id','x-powered-by','via','location','content-type']) headers[k]=r.headers.get(k);
+                  out({id,origin,url,status:r.status,finalUrl:r.url,headers,title:text(h,/<title[^>]*>([\s\S]*?)<\/title>/i),h1:[...h.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)].map(m=>m[1].replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()),description:(h.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)/i)||[])[1]||'',canonical:(h.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']*)/i)||[])[1]||'',robots:(h.match(/<meta[^>]+name=["']robots["'][^>]+content=["']([^"']*)/i)||[])[1]||'',logo:/arquindex-logo-oficial\.webp/i.test(h),menu:/<nav\b/i.test(h),widget:/id=["']arq-floating["']/i.test(h),cta:(h.match(/wa\.me|solicitar-proposta|\/contato/gi)||[]).length,forms:(h.match(/<form\b/gi)||[]).length,jsonld:(h.match(/application\/ld\+json/gi)||[]).length,links:(h.match(/<a\b[^>]+href=/gi)||[]).length,words:h.replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&\w+;/g,' ').trim().split(/\s+/).filter(Boolean).length,sha256:crypto.createHash('sha256').update(h).digest('hex')});
+                }catch(e){out({id,origin,url,error:e.message})}
+              }
+              if(bodies.official&&bodies.railway) out({id,phase:'compare',same_sha:crypto.createHash('sha256').update(bodies.official).digest('hex')===crypto.createHash('sha256').update(bodies.railway).digest('hex')});
+            }
+            for(const p of ['/health','/robots.txt','/sitemap.xml']){
+              for(const [origin,base] of origins){try{const r=await fetch(base+p,{redirect:'follow'});out({phase:'infra',origin,path:p,status:r.status,finalUrl:r.url,server:r.headers.get('server'),cfRay:r.headers.get('cf-ray'),railwayRequestId:r.headers.get('x-railway-request-id'),contentType:r.headers.get('content-type')})}catch(e){out({phase:'infra',origin,path:p,error:e.message})}}
+            }
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
