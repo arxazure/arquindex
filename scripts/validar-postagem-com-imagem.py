@@ -1,36 +1,40 @@
 #!/usr/bin/env python3
-"""Validador de publicacoes Arquindex: bloquear posts sem imagem.
-
-Uso: python scripts/validar-postagem-com-imagem.py post.json
-Entrada: {"channel":"linkedin|instagram|google","title":"...","body":"...","media":"https://...jpg"}
-Nao faz publicacao; executa apenas verificacoes locais. O agendador deve usar
-esta validacao antes de criar/encaminhar cada post e registrar o recibo remoto.
-"""
+"""Structural gate for Arquindex image posts; does not publish."""
 import json
-import re
 import sys
 from urllib.parse import urlsplit
 
-CHANNELS = {"linkedin", "instagram", "google"}
-MEDIA_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+LIMITS = {"linkedin": 3000, "instagram": 2200, "google": 1500}
+MEDIA_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
+RECONCILE = {"unknown", "accepted", "published"}
 
 def validate(post):
     errors = []
+    if not isinstance(post, dict):
+        return ["INVALID_POST"]
     channel = str(post.get("channel", "")).strip().lower()
-    if channel not in CHANNELS:
+    if channel not in LIMITS:
         errors.append("INVALID_CHANNEL")
-    if not str(post.get("body", "")).strip():
+    body = post.get("body")
+    if not isinstance(body, str) or not body.strip():
         errors.append("EMPTY_BODY")
+    elif channel in LIMITS and len(body) > LIMITS[channel]:
+        errors.append("BODY_TOO_LONG")
     media = post.get("media")
     if not isinstance(media, str) or not media.strip():
         errors.append("MISSING_IMAGE")
     else:
-        url = urlsplit(media.strip())
-        if url.scheme != "https" or not url.netloc or url.username or url.password:
+        try:
+            url = urlsplit(media.strip())
+            port = url.port
+            if (url.scheme != "https" or not url.hostname or port not in (None, 443)
+                    or url.username or url.password or url.fragment):
+                errors.append("INVALID_IMAGE_URL")
+            if not url.path.lower().endswith(MEDIA_EXTENSIONS):
+                errors.append("UNSUPPORTED_IMAGE_FORMAT")
+        except ValueError:
             errors.append("INVALID_IMAGE_URL")
-        if not any(url.path.lower().endswith(ext) for ext in MEDIA_EXTENSIONS):
-            errors.append("UNSUPPORTED_IMAGE_FORMAT")
-    if post.get("state") in {"unknown", "accepted", "published"}:
+    if post.get("state") in RECONCILE:
         errors.append("REQUIRES_REMOTE_STATUS_RECONCILIATION")
     return errors
 
@@ -43,7 +47,7 @@ def main():
     if errors:
         print("BLOCKED:", ",".join(errors))
         raise SystemExit(1)
-    print("PRECHECK_OK: image URL declared; remote reachability and platform rendering still require verification")
+    print("PRECHECK_OK: verify media HTTP and platform rendering before publishing")
 
 if __name__ == "__main__":
     main()
