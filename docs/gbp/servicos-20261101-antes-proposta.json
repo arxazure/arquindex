@@ -1,0 +1,341 @@
+{
+  "date": "2026-11-01",
+  "account": "locations/2344229015359741158",
+  "original": [
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Classificação de arquivos de acordo com a temporalidade documental."
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Organização de arquivos digitais."
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Digitalização de documentos"
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Digitalização de Arquivos e Documentos",
+          "description": "Digitalização e indexação de documentos com controle de qualidade. Quando aplicável, o projeto observa requisitos técnicos e legais do Decreto 10.278/2020; a validade depende do cumprimento das condições exigidas."
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Incineração de documentos",
+          "description": "Destruição segura de documentos conforme autorização, tabela de temporalidade aplicável e requisitos contratuais, com procedimentos de controle e registro da destinação."
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Digitalização de folhas até tamanho A4",
+          "description": "Digitalização de folhas até tamanho A4 com simples renomeação de um nome até 40 caracteres. Formato arquivo PDF ou TIFF."
+        }
+      },
+      "price": {
+        "currencyCode": "BRL",
+        "nanos": 130000000
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Serviços de organização de Documentos",
+          "description": "Organização de caixas de arquivo de departamentos financeiros, departamento pessoal, contábil e financeiro, de acordo com tabela de temporalidade."
+        }
+      },
+      "price": {
+        "currencyCode": "BRL",
+        "units": "69"
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Digitalização de acervos"
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Digitalização de prontuários médicos",
+          "description": "Digitalização e indexação de prontuários, com requisitos de confidencialidade, controle de acesso, qualidade das imagens e tratamento de dados pessoais sensíveis."
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Digitalização de processos"
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Gestão documental"
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Guarda de arquivos"
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Terceirizacao de arquivos"
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:archive",
+        "label": {
+          "displayName": "Organização de arquivos digitais",
+          "description": "Organização de documentos digitalizados e arquivos digitais, classificando por tipos documentais, assuntos, temporalidade."
+        }
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:typing_service",
+        "label": {
+          "displayName": "Gestão de Departamento Pessoal Home Office",
+          "description": "Gestão e organização de documentos de equipes em trabalho remoto, com coleta, digitalização e guarda conforme o escopo contratado. Valores e condições adicionais sujeitos à proposta."
+        }
+      },
+      "price": {
+        "currencyCode": "BRL",
+        "units": "550"
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:consultant",
+        "label": {
+          "displayName": "Módulo de LGPD, canal do titular de dados e portal do fornecedor",
+          "description": "Solução de apoio à gestão de solicitações de titulares, registros de privacidade, relatórios e avaliação de fornecedores. Implantação e recursos conforme o projeto."
+        }
+      },
+      "price": {
+        "currencyCode": "BRL",
+        "units": "6000"
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:consultant",
+        "label": {
+          "displayName": "Treinamento em LGPD aplicada à gestão de documentos",
+          "description": "Treinamento sobre a Lei 13.709/2018 aplicado à gestão documental: acesso, retenção, direitos dos titulares, segurança da informação e avaliação de fornecedores."
+        }
+      },
+      "price": {
+        "currencyCode": "BRL",
+        "units": "1250"
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:software_company",
+        "label": {
+          "displayName": "Sistema GED web e para empresas de guarda de documentos",
+          "description": "Sistema GED web e para empresas de guarda de documentos, com gestão de clientes, relatórios de acessos, arquivos e empréstimos. Protocolo de empréstimo."
+        }
+      },
+      "price": {
+        "currencyCode": "BRL",
+        "units": "8000"
+      }
+    },
+    {
+      "freeFormServiceItem": {
+        "category": "categories/gcid:software_company",
+        "label": {
+          "displayName": "Software GED",
+          "description": "Sistema de gestão de arquivos físicos e digitais."
+        }
+      },
+      "price": {
+        "currencyCode": "BRL",
+        "units": "375"
+      }
+    }
+  ],
+  "proposed": [
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Classificação de arquivos de acordo com a temporalidade documental.",
+      "description": "Classificação por funções, atividades e tipos documentais, com aplicação da tabela de temporalidade aprovada. Inclui definição de critérios de organização, retenção e destinação conforme o acervo. A partir de R$ 1.500, conforme escopo.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 1500
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de documentos",
+      "description": "Conversão de documentos físicos em arquivos digitais, com preparação, captura e conferência. OCR, indexação, formatos de saída, coleta e devolução são definidos na proposta. Orçamento conforme volume, estado do acervo e prazo.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de Arquivos e Documentos",
+      "description": "Digitalização e indexação com controle de qualidade e rastreabilidade por lote. Projetos sujeitos ao Decreto 10.278/2020 exigem avaliação dos requisitos aplicáveis; a captura isolada não garante equivalência jurídica. Escopo e preço sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Incineração de documentos",
+      "description": "Destinação de documentos após autorização e verificação dos prazos de guarda e impedimentos. Método de destruição, transporte, responsabilidades e registros são definidos no projeto. Não eliminar originais apenas porque foram digitalizados. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de folhas até tamanho A4",
+      "description": "Captura de folhas até A4 em PDF ou TIFF, com renomeação simples de até 40 caracteres. Valor cadastrado: R$ 0,13 por página. Preparação, OCR, indexação adicional, volume mínimo e logística devem ser confirmados na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 0.13
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Serviços de organização de Documentos",
+      "description": "Organização de documentos de RH, departamento pessoal, financeiro e contabilidade, com identificação, classificação e aplicação da temporalidade definida. Valor cadastrado: R$ 69; unidade de cobrança, volume e atividades incluídas conforme proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 69
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de acervos",
+      "description": "Planejamento e digitalização de acervos empresariais por lotes, com inventário, critérios de captura, conferência e registro de pendências. OCR, índices, entrega e tratamento dos originais conforme contratação. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de prontuários médicos",
+      "description": "Digitalização e indexação de prontuários com conferência de completude, sigilo e acesso controlado. Campos de busca, formatos, transporte e responsabilidades são definidos conforme o acervo e os requisitos aplicáveis. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de processos",
+      "description": "Digitalização de processos administrativos ou jurídicos, preservando sequência, anexos e vínculo entre volumes. OCR, nomenclatura, índices e critérios de conferência conforme projeto. Sigilo e acesso definidos antes da execução. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Gestão documental",
+      "description": "Diagnóstico, classificação, inventário e organização do ciclo documental, com regras de consulta, retenção e destinação. Responsabilidades, entregáveis e controles são definidos conforme os processos da empresa. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Guarda de arquivos",
+      "description": "Guarda física com identificação de caixas, inventário, localização e controle de movimentações e consultas. Coleta, devolução, digitalização sob demanda e prazos de atendimento conforme contrato. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Terceirização de arquivos",
+      "description": "Operação terceirizada de arquivos, com equipe, rotinas de organização, consulta e controle de movimentações dimensionadas para o acervo. Indicadores, responsabilidades e critérios de aceite definidos na proposta. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Organização de arquivos digitais",
+      "description": "Organização de documentos digitais e digitalizados por tipos, assuntos e processos. Padronização de nomes, índices e estrutura de pastas, com regras de acesso e revisão de duplicidades conforme escopo. Exclusões dependem de validação. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:typing_service",
+      "display_name": "Gestão de Departamento Pessoal Home Office",
+      "description": "Organização documental de RH e departamento pessoal para equipes remotas, com rotinas de recebimento, digitalização, consulta e guarda conforme contrato. Valor cadastrado: R$ 550; periodicidade, volume, coleta e demais condições definidos na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 550
+      }
+    },
+    {
+      "category_id": "categories/gcid:consultant",
+      "display_name": "Módulo de LGPD, canal do titular de dados e portal do fornecedor",
+      "description": "Módulo de apoio ao canal de titulares, registros de privacidade e avaliação documental de fornecedores. Funcionalidades, implantação, integrações, acesso e manutenção conforme projeto. Valor cadastrado: R$ 6.000; condições e entregáveis definidos na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 6000
+      }
+    },
+    {
+      "category_id": "categories/gcid:consultant",
+      "display_name": "Treinamento em LGPD aplicada à gestão de documentos",
+      "description": "Treinamento em LGPD aplicado à gestão documental: acesso, retenção, segurança, titulares e responsabilidades. Conteúdo e exercícios adaptados ao público e ao contexto. Valor cadastrado: R$ 1.250; carga horária, participantes e modalidade conforme proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 1250
+      }
+    },
+    {
+      "category_id": "categories/gcid:software_company",
+      "display_name": "Sistema GED web e para empresas de guarda de documentos",
+      "description": "GED web para operação documental, com cadastro de clientes, localização, consultas, empréstimos e relatórios conforme recursos contratados. Valor cadastrado: R$ 8.000; implantação, infraestrutura, licenças e suporte discriminados na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 8000
+      }
+    },
+    {
+      "category_id": "categories/gcid:software_company",
+      "display_name": "Software GED",
+      "description": "Software para gestão de arquivos físicos e digitais, com cadastro, localização e controle documental conforme os módulos contratados. Valor cadastrado: R$ 375; periodicidade, usuários, infraestrutura e suporte devem ser confirmados na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 375
+      }
+    }
+  ],
+  "price1500_source": "Captura enviada pela usuária 128852.jpg; conector sem preço neste item",
+  "status": "preparado"
+}
