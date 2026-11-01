@@ -1,0 +1,202 @@
+{
+  "date": "2026-11-01",
+  "account": "locations/2344229015359741158",
+  "service_items": [
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Classificação de arquivos de acordo com a temporalidade documental.",
+      "description": "Classificação por funções, atividades e tipos documentais, com aplicação da tabela de temporalidade aprovada. Inclui definição de critérios de organização, retenção e destinação conforme o acervo. A partir de R$ 1.500, conforme escopo.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 1500
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de documentos",
+      "description": "Digitalização comum a partir de R$ 0,09 por página. Captura e conferência de documentos; preparação, OCR, indexação, formatos, volume mínimo, prazo e logística definidos na proposta conforme o acervo.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 0.09
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de Arquivos e Documentos",
+      "description": "Digitalização e indexação com controle de qualidade e rastreabilidade por lote. Projetos sujeitos ao Decreto 10.278/2020 exigem avaliação dos requisitos aplicáveis; a captura isolada não garante equivalência jurídica. Escopo e preço sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Incineração de documentos",
+      "description": "Destinação de documentos após autorização e verificação dos prazos de guarda e impedimentos. Método de destruição, transporte, responsabilidades e registros são definidos no projeto. Não eliminar originais apenas porque foram digitalizados. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de folhas até tamanho A4",
+      "description": "Captura de folhas até A4 em PDF ou TIFF, com renomeação simples de até 40 caracteres. Valor cadastrado: R$ 0,13 por página. Preparação, OCR, indexação adicional, volume mínimo e logística devem ser confirmados na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 0.13
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Serviços de organização de Documentos",
+      "description": "Organização de documentos de RH, departamento pessoal, financeiro e contabilidade, com identificação, classificação e aplicação da temporalidade definida. Valor cadastrado: R$ 69; unidade de cobrança, volume e atividades incluídas conforme proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 69
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de acervos",
+      "description": "Planejamento e digitalização de acervos empresariais por lotes, com inventário, critérios de captura, conferência e registro de pendências. OCR, índices, entrega e tratamento dos originais conforme contratação. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de prontuários médicos",
+      "description": "Digitalização e indexação de prontuários com conferência de completude, sigilo e acesso controlado. Campos de busca, formatos, transporte e responsabilidades são definidos conforme o acervo e os requisitos aplicáveis. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização de processos",
+      "description": "Digitalização de processos administrativos ou jurídicos, preservando sequência, anexos e vínculo entre volumes. OCR, nomenclatura, índices e critérios de conferência conforme projeto. Sigilo e acesso definidos antes da execução. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Gestão documental",
+      "description": "Diagnóstico, classificação, inventário e organização do ciclo documental, com regras de consulta, retenção e destinação. Responsabilidades, entregáveis e controles são definidos conforme os processos da empresa. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Guarda de arquivos",
+      "description": "Guarda física com identificação de caixas, inventário, localização e controle de movimentações e consultas. Coleta, devolução, digitalização sob demanda e prazos de atendimento conforme contrato. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Terceirização de arquivos",
+      "description": "Operação terceirizada de arquivos, com equipe, rotinas de organização, consulta e controle de movimentações dimensionadas para o acervo. Indicadores, responsabilidades e critérios de aceite definidos na proposta. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Organização de arquivos digitais",
+      "description": "Organização de documentos digitais e digitalizados por tipos, assuntos e processos. Padronização de nomes, índices e estrutura de pastas, com regras de acesso e revisão de duplicidades conforme escopo. Exclusões dependem de validação. Sob orçamento.",
+      "language_code": "pt-BR"
+    },
+    {
+      "category_id": "categories/gcid:typing_service",
+      "display_name": "Gestão de Departamento Pessoal Home Office",
+      "description": "Organização documental de RH e departamento pessoal para equipes remotas, com rotinas de recebimento, digitalização, consulta e guarda conforme contrato. Valor cadastrado: R$ 550; periodicidade, volume, coleta e demais condições definidos na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 550
+      }
+    },
+    {
+      "category_id": "categories/gcid:consultant",
+      "display_name": "Módulo de LGPD, canal do titular de dados e portal do fornecedor",
+      "description": "Módulo de apoio ao canal de titulares, registros de privacidade e avaliação documental de fornecedores. Funcionalidades, implantação, integrações, acesso e manutenção conforme projeto. Valor cadastrado: R$ 6.000; condições e entregáveis definidos na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 6000
+      }
+    },
+    {
+      "category_id": "categories/gcid:consultant",
+      "display_name": "Treinamento em LGPD aplicada à gestão de documentos",
+      "description": "Treinamento em LGPD aplicado à gestão documental: acesso, retenção, segurança, titulares e responsabilidades. Conteúdo e exercícios adaptados ao público e ao contexto. Valor cadastrado: R$ 1.250; carga horária, participantes e modalidade conforme proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 1250
+      }
+    },
+    {
+      "category_id": "categories/gcid:software_company",
+      "display_name": "Sistema GED web e para empresas de guarda de documentos",
+      "description": "GED web para operação documental, com cadastro de clientes, localização, consultas, empréstimos e relatórios conforme recursos contratados. Valor cadastrado: R$ 8.000; implantação, infraestrutura, licenças e suporte discriminados na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 8000
+      }
+    },
+    {
+      "category_id": "categories/gcid:software_company",
+      "display_name": "Software GED",
+      "description": "Software para gestão de arquivos físicos e digitais, com cadastro, localização e controle documental conforme os módulos contratados. Valor cadastrado: R$ 375; periodicidade, usuários, infraestrutura e suporte devem ser confirmados na proposta.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 375
+      }
+    },
+    {
+      "category_id": "categories/gcid:archive",
+      "display_name": "Digitalização certificada de documentos",
+      "description": "Digitalização certificada a partir de R$ 0,12 por página. Projeto conforme requisitos aplicáveis do Decreto 10.278/2020. Metadados, integridade, assinaturas e critérios de conferência definidos no escopo; a validade depende do cumprimento das exigências legais.",
+      "language_code": "pt-BR",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 0.12
+      }
+    },
+    {
+      "display_name": "Alfresco inCloud — GED e ECM",
+      "category_id": "categories/gcid:software_company",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 750
+      },
+      "description": "Alfresco inCloud a partir de R$ 750. Gestão documental com metadados, permissões, versões e pesquisa. Implantação, usuários, armazenamento, integrações, OCR, backup e suporte conforme proposta. Periodicidade e custos de implantação devem ser confirmados.",
+      "language_code": "pt-BR"
+    },
+    {
+      "display_name": "Arquindex Capture — digitalização e OCR",
+      "category_id": "categories/gcid:software_company",
+      "description": "Plataforma de apoio à captura, OCR, indexação e conferência documental. Recursos, volumes, formatos, integrações e infraestrutura definidos no projeto. Demonstração e orçamento conforme o fluxo documental; preço do software não equivale ao preço por página.",
+      "language_code": "pt-BR"
+    },
+    {
+      "display_name": "Consultoria de adequação LGPD",
+      "category_id": "categories/gcid:consultant",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 550
+      },
+      "description": "Adequação LGPD para pequenos negócios a partir de R$ 550. Diagnóstico, mapeamento e plano de ação conforme escopo. ROPA, políticas, contratos, treinamento e RIPD quando aplicável são definidos na proposta. DPO e plataforma podem ter contratação separada.",
+      "language_code": "pt-BR"
+    },
+    {
+      "display_name": "Plataforma LGPD — gestão e governança",
+      "category_id": "categories/gcid:software_company",
+      "price": {
+        "currency_code": "BRL",
+        "amount": 299
+      },
+      "description": "Planos da plataforma LGPD a partir de R$ 299 por mês, conforme escopo. Organização de empresas, mapa de dados, riscos, políticas e canais por cliente. Usuários, módulos e suporte definidos na proposta. Não substitui a consultoria nem garante conformidade automática.",
+      "language_code": "pt-BR"
+    }
+  ],
+  "sources": [
+    "https://arquindex.com.br/solucoes/alfresco-incloud",
+    "https://arquindex.com.br/solucoes/consultoria-lgpd",
+    "https://arquindex-capture-doc-ocr-scan.arquindex-capture.stream/"
+  ],
+  "status": "gravação confirmada; exibição pública pendente; Capture sem preço verificado"
+}
