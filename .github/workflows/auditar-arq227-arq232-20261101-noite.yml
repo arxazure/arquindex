@@ -1,0 +1,85 @@
+name: Auditar ARQ-227 a ARQ-232 2026-11-01 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/auditar-arq227-arq232-20261101-noite.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Preparar navegador
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-audit" playwright --no-audit --no-fund
+      - name: Auditar desktop mobile infraestrutura e sitemaps
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-audit/node_modules/playwright');let browser;
+          const rows=[
+            ['ARQ-227','/seo-regional/gestao-documental-ecm-databooks/belem/','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml'],
+            ['ARQ-228','/seo-regional/gestao-documental-ecm-databooks/sabara/','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml'],
+            ['ARQ-229','/digitalize/','/digitalize/sitemap.xml'],
+            ['ARQ-230','/digitalize/santa-luzia/','/digitalize/sitemap.xml'],
+            ['ARQ-231','/digitalize/ribeirao-das-neves/','/digitalize/sitemap.xml'],
+            ['ARQ-232','/digitalize/ibirite/','/digitalize/sitemap.xml']
+          ];
+          const official='https://www.arquindex.com.br';
+          const railway='https://arquindex-web-production.up.railway.app';
+          const clean=s=>(s||'').replace(/\s+/g,' ').trim();
+          (async()=>{
+            for(const [baseName,base] of [['official',official],['railway',railway]]){
+              for(const p of ['/health','/robots.txt','/sitemap.xml','/digitalize/sitemap.xml','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml']){
+                const r=await fetch(base+p,{redirect:'follow',headers:{'user-agent':'Arquindex-Audit/2026-11-01'}});
+                const body=await r.text();
+                console.log('INFRA',JSON.stringify({base:baseName,path:p,status:r.status,final:r.url,type:r.headers.get('content-type'),server:r.headers.get('server'),railway:r.headers.get('x-railway-request-id'),size:body.length}));
+              }
+            }
+            const maps={};
+            for(const p of [...new Set(rows.map(x=>x[2]))]){
+              const r=await fetch(official+p);maps[p]=await r.text();
+            }
+            browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+            for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+              const c=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+              for(const [id,path,map] of rows){
+                const p=await c.newPage();
+                const r=await p.goto(official+path+'?audit=20261101noite',{waitUntil:'domcontentloaded',timeout:45000});
+                await p.waitForTimeout(700);
+                const d=await p.evaluate(()=>({
+                  final:location.href,title:document.title,
+                  h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),
+                  description:document.querySelector('meta[name=description]')?.content||'',
+                  canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),
+                  robots:document.querySelector('meta[name=robots]')?.content||'',
+                  words:(document.body.innerText||'').trim().split(/\s+/).filter(Boolean).length,
+                  logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),
+                  menu:!!document.querySelector('#aq-nav, nav'),
+                  widget:document.querySelectorAll('#arq-floating').length,
+                  whatsapp:[...document.querySelectorAll('a')].filter(a=>a.href.includes('5531973632725')).length,
+                  proposal:[...document.querySelectorAll('a')].filter(a=>a.href.includes('solicitar-proposta-contratacao')).length,
+                  ctas:[...document.querySelectorAll('a.btn,.cta,[role=button]')].length,
+                  forms:document.querySelectorAll('form').length,
+                  jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,
+                  internal:[...document.querySelectorAll('a[href]')].filter(a=>{try{return new URL(a.href).hostname.endsWith('arquindex.com.br')}catch{return false}}).length,
+                  cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
+                }));
+                const expected=official+path;
+                console.log('AUDIT',JSON.stringify({id,vp:vp.name,status:r?.status(),sitemap:maps[map].includes('<loc>'+expected+'</loc>'),...d}));
+                if(r?.status()!==200)throw new Error(id+' HTTP '+r?.status());
+                if(d.h1.length!==1)throw new Error(id+' H1 '+d.h1.length);
+                if(!d.canonical.some(x=>x.replace(/\/$/,'')===expected.replace(/\/$/,'')))throw new Error(id+' canonical');
+                if(d.sw>d.cw+2)throw new Error(id+' overflow '+d.sw+'/'+d.cw);
+                await p.close();
+              }
+              await c.close();
+            }
+            await browser.close();
+            console.log('AUDIT_COMPLETE');
+          })().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exit(1)});
+          JS
