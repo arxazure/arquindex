@@ -13,7 +13,9 @@ for(const [slug,title,h1] of targets){
   test('identidade e conversão preservam SEO em '+slug,()=>{
     const path='/digitalize/'+slug+'/';
     const html=renderDigitalize(path,origin).body;
-    assert.ok(html.includes('arquindex-logo-oficial.webp'));
+    assert.ok(html.includes('class="aq-logo"'));
+    assert.ok(html.includes('class="aq-logo-name"'));
+    assert.ok(html.includes('EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS'));
     assert.ok(html.includes('id="aq-nav"'));
     assert.ok(html.includes('id="arq-floating"'));
     assert.ok(html.includes('utm_source=seo_local&utm_medium=organic&utm_campaign=digitalize_'+slug));
@@ -27,5 +29,6 @@ for(const [slug,title,h1] of targets){
 test('mudança não é aplicada indiscriminadamente à família',()=>{
   const html=renderDigitalize('/digitalize/sabara/',origin).body;
   assert.ok(!html.includes('id="arq-floating"'));
-  assert.ok(!html.includes('arquindex-logo-oficial.webp'));
+  assert.ok(!html.includes('class="aq-logo"'));
+  assert.ok(!html.includes('class="aq-logo-name"'));
 });
