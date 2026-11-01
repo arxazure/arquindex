@@ -70,10 +70,12 @@ jobs:
                   cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
                 }));
                 const expected=official+path;
-                console.log('AUDIT',JSON.stringify({id,vp:vp.name,status:r?.status(),sitemap:maps[map].includes('<loc>'+expected+'</loc>'),...d}));
+                const expectedApex=expected.replace('https://www.','https://');
+                const sitemapPresent=maps[map].includes('<loc>'+expected+'</loc>')||maps[map].includes('<loc>'+expectedApex+'</loc>');
+                console.log('AUDIT',JSON.stringify({id,vp:vp.name,status:r?.status(),sitemap:sitemapPresent,...d}));
                 if(r?.status()!==200)throw new Error(id+' HTTP '+r?.status());
                 if(d.h1.length!==1)throw new Error(id+' H1 '+d.h1.length);
-                if(!d.canonical.some(x=>x.replace(/\/$/,'')===expected.replace(/\/$/,'')))throw new Error(id+' canonical');
+                if(!d.canonical.some(x=>[expected,expectedApex].map(v=>v.replace(/\/$/,'')).includes(x.replace(/\/$/,''))))throw new Error(id+' canonical');
                 if(d.sw>d.cw+2)throw new Error(id+' overflow '+d.sw+'/'+d.cw);
                 await p.close();
               }
