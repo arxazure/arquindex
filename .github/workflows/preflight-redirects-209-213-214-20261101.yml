@@ -1,0 +1,24 @@
+name: Preflight redirects ARQ-209 ARQ-213 ARQ-214 2026-11-01
+on:
+  push:
+    paths:
+      - '.github/workflows/preflight-redirects-209-213-214-20261101.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar origens e destinos
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const pairs=[
+            ['/digitalizacao.html','/solucoes/digitalizacao-documentos'],
+            ['/dpo-as-a-service-consultoria-lgpd.html','/solucoes/dpo-terceirizado'],
+            ['/gestao_documental_documentos.html','/solucoes/gestao-documental']
+          ];
+          const bases=[['official','https://arquindex.com.br'],['railway','https://arquindex-web-production.up.railway.app']];
+          const text=(h,re)=>(h.match(re)||[])[1]||'';
+          (async()=>{for(const [from,to] of pairs){for(const [origin,base] of bases){for(const path of [from,to]){const r=await fetch(base+path,{redirect:'manual'});const h=await r.text();console.log(JSON.stringify({origin,path,status:r.status,location:r.headers.get('location'),server:r.headers.get('server'),railwayRequestId:r.headers.get('x-railway-request-id'),title:text(h,/<title[^>]*>([\s\S]*?)<\/title>/i).replace(/<[^>]+>/g,' ').trim(),canonical:text(h,/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']*)/i),h1:[...h.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)].map(m=>m[1].replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()),robots:text(h,/<meta[^>]+name=["']robots["'][^>]+content=["']([^"']*)/i)}))}}}})().catch(e=>{console.error(e);process.exit(1)});
+          NODE
