@@ -52,8 +52,9 @@ jobs:
                   h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),
                   canonical:document.querySelector('link[rel=canonical]')?.href||'',
                   robots:document.querySelector('meta[name=robots]')?.content||'',
-                  logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),
-                  logoLoaded:[...document.querySelectorAll('img[src*="arquindex-logo-oficial.webp"]')].every(x=>x.complete&&x.naturalWidth>0),
+                  logo:document.querySelectorAll('.aq-logo').length>=2,
+                  wordmark:[...document.querySelectorAll('.aq-logo-name')].every(x=>x.textContent.trim()==='arquindex'),
+                  tagline:[...document.querySelectorAll('.aq-logo-tag')].every(x=>x.textContent.trim()==='EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS'),
                   menu:document.querySelectorAll('#aq-nav').length,
                   widget:document.querySelectorAll('#arq-floating').length,
                   proposal:[...document.querySelectorAll('a[href]')].some(a=>a.href.includes('/contato?')&&a.href.includes('utm_source=seo_local')&&a.href.includes('utm_medium=organic')),
@@ -62,7 +63,7 @@ jobs:
                   words:(document.body.innerText||'').trim().split(/\s+/).filter(Boolean).length,
                   cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
                 }));
-                if(r?.status()!==200||d.title!==title||d.h1.length!==1||d.h1[0]!==h1||!d.canonical.replace('www.','').endsWith(path)||/noindex/i.test(d.robots)||!d.logo||!d.logoLoaded||d.menu!==1||d.widget!==1||!d.proposal||d.whatsapp<2||d.words<900||d.sw>d.cw+2) throw Error(id+' '+vp.name+' '+JSON.stringify(d));
+                if(r?.status()!==200||d.title!==title||d.h1.length!==1||d.h1[0]!==h1||!d.canonical.replace('www.','').endsWith(path)||/noindex/i.test(d.robots)||!d.logo||!d.wordmark||!d.tagline||d.menu!==1||d.widget!==1||!d.proposal||d.whatsapp<2||d.words<900||d.sw>d.cw+2) throw Error(id+' '+vp.name+' '+JSON.stringify(d));
                 const href=await page.locator('a[href*="utm_campaign"]').first().getAttribute('href');
                 if(!href||!href.includes('utm_campaign='+campaign))throw Error(id+' UTM '+href);
                 console.log('PUBLIC_VERIFIED',JSON.stringify({id,device:vp.name,status:r.status(),...d,proposalHref:href}));
