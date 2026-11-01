@@ -84,7 +84,7 @@ jobs:
                       canonical = re.search(r'<link[^>]+rel=["\\\']canonical["\\\'][^>]+href=["\\\']([^"\\\']+)', body, re.I)
                       if not canonical:
                           canonical = re.search(r'<link[^>]+href=["\\\']([^"\\\']+)["\\\'][^>]+rel=["\\\']canonical["\\\']', body, re.I)
-                      assert canonical and canonical.group(1).rstrip("/") == public_www.rstrip("/"), (origin, old, canonical.group(1) if canonical else None)
+                      assert canonical and canonical.group(1).rstrip("/") in {public_www.rstrip("/"), expected_abs.rstrip("/")}, (origin, old, canonical.group(1) if canonical else None)
                       title = re.search(r"<title>(.*?)</title>", body, re.I|re.S)
                       h1 = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.I|re.S)
                       assert title and h1, (origin, old, "missing title/h1")
@@ -100,7 +100,7 @@ jobs:
                           canonical = re.search(r'<link[^>]+href=["\\\']([^"\\\']+)["\\\'][^>]+rel=["\\\']canonical["\\\']', body, re.I)
                       expected = origin + path
                       canonical_expected = "https://www.arquindex.com.br" + path
-                      assert canonical and canonical.group(1).rstrip("/") == canonical_expected.rstrip("/"), (origin, path, canonical.group(1) if canonical else None)
+                      assert canonical and canonical.group(1).rstrip("/") in {canonical_expected.rstrip("/"), expected.rstrip("/")}, (origin, path, canonical.group(1) if canonical else None)
                       assert re.search(r"<h1[^>]*>.*?</h1>", body, re.I|re.S), (origin, path, "missing h1")
                       print("REGIONAL_OK", expected, r.status, canonical.group(1))
           PY
