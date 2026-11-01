@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T15:45:00.340677+00:00",
+  "generated_at": "2026-11-01T16:49:10.973298+00:00",
   "source": "Live public HTML + sitemap.xml; not Google Search Console",
   "sitemap_status": "ok",
   "scanned": 120,
@@ -23,6 +23,15 @@
       "title": "Arquindex | Gestão Documental, Digitalização, LGPD e ECM",
       "description": "Há 20 anos em gestão documental, digitalização, LGPD, Alfresco ECM, Databook e organização de arquivos.",
       "canonical": "https://www.arquindex.com.br/"
+    },
+    {
+      "url": "https://www.arquindex.com.br/belo-horizonte/gestao-documental-digitalizacao-seguranca",
+      "issues": [],
+      "status": 200,
+      "final_url": "https://arquindex.com.br/belo-horizonte/gestao-documental-digitalizacao-seguranca",
+      "title": "Gestão Documental e Digitalização em Belo Horizonte | Arquindex",
+      "description": "Gestão documental e digitalização em Belo Horizonte: OCR, ECM Alfresco, LGPD, rastreabilidade, segurança e preservação. Conheça o processo Arquindex.",
+      "canonical": "https://arquindex.com.br/belo-horizonte/gestao-documental-digitalizacao-seguranca"
     },
     {
       "url": "https://www.arquindex.com.br/alfresco-ia-local-open-source-2026",
@@ -1089,15 +1098,6 @@
       "title": "Gestão documental para Jurídico e escritórios de advocacia | Arquindex",
       "description": "Gestão documental para Jurídico e escritórios de advocacia: classificação, temporalidade, organização, governança e acesso. Guia prático da Arquindex para projetos corporativos.",
       "canonical": "https://www.arquindex.com.br/setores/gestao-documental-para-juridico"
-    },
-    {
-      "url": "https://www.arquindex.com.br/setores/gestao-documental-para-saude",
-      "issues": [],
-      "status": 200,
-      "final_url": "https://arquindex.com.br/setores/gestao-documental-para-saude",
-      "title": "Gestão documental para Clínicas, hospitais e saúde ocupacional | Arquindex",
-      "description": "Gestão documental para Clínicas, hospitais e saúde ocupacional: classificação, temporalidade, organização, governança e acesso. Guia prático da Arquindex para projetos corporativos.",
-      "canonical": "https://www.arquindex.com.br/setores/gestao-documental-para-saude"
     }
   ]
 }
