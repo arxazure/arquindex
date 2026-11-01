@@ -1,0 +1,103 @@
+name: Verify Railway redirects 209 213 214
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verificar-redirects-209-213-214-20261101.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout production branch for regression test
+        uses: actions/checkout@v4
+        with:
+          ref: railway-production-2026
+
+      - name: Run redirect map regression test
+        working-directory: arquindex-platform
+        run: node --test test/legacy-redirect-map.test.js
+
+      - name: Verify health and public redirects
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re, ssl, urllib.request
+          from html import unescape
+
+          origins = [
+              "https://arquindex.com.br",
+              "https://arquindex-web-production.up.railway.app",
+          ]
+          cases = [
+              ("/digitalizacao.html", "/solucoes/digitalizacao-documentos"),
+              ("/dpo-as-a-service-consultoria-lgpd.html", "/solucoes/dpo-terceirizado"),
+              ("/gestao_documental_documentos.html", "/solucoes/gestao-documental"),
+          ]
+          regional = [
+              "/seo-regional/gestao-documental-ecm-databooks/boa-vista/",
+              "/seo-regional/gestao-documental-ecm-databooks/manaus/",
+              "/seo-regional/gestao-documental-ecm-databooks/cuiaba/",
+              "/seo-regional/gestao-documental-ecm-databooks/pedro-leopoldo/",
+              "/seo-regional/gestao-documental-ecm-databooks/santa-luzia/",
+              "/seo-regional/gestao-documental-ecm-databooks/macapa/",
+          ]
+
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  return None
+
+          opener = urllib.request.build_opener(NoRedirect)
+          sslctx = ssl.create_default_context()
+
+          def direct(url):
+              req = urllib.request.Request(url, headers={"User-Agent":"Arquindex-SEO-Verification/1.0"})
+              try:
+                  return opener.open(req, timeout=30, context=sslctx)
+              except urllib.error.HTTPError as e:
+                  return e
+
+          def follow(url):
+              req = urllib.request.Request(url, headers={"User-Agent":"Arquindex-SEO-Verification/1.0"})
+              return urllib.request.urlopen(req, timeout=30, context=sslctx)
+
+          for origin in origins:
+              with follow(origin + "/health") as r:
+                  assert r.status == 200, (origin, "health", r.status)
+                  print("HEALTH_OK", origin, r.status)
+
+              for old, target in cases:
+                  r = direct(origin + old)
+                  location = r.headers.get("Location", "")
+                  expected_abs = origin + target
+                  assert r.code == 301, (origin, old, r.code, location)
+                  assert location in (target, expected_abs), (origin, old, location, expected_abs)
+                  with follow(origin + old) as f:
+                      body = f.read().decode("utf-8", "replace")
+                      final = f.geturl()
+                      assert f.status == 200, (origin, old, f.status)
+                      assert final.rstrip("/") == expected_abs.rstrip("/"), (origin, old, final, expected_abs)
+                      canonical = re.search(r'<link[^>]+rel=["\\\']canonical["\\\'][^>]+href=["\\\']([^"\\\']+)', body, re.I)
+                      if not canonical:
+                          canonical = re.search(r'<link[^>]+href=["\\\']([^"\\\']+)["\\\'][^>]+rel=["\\\']canonical["\\\']', body, re.I)
+                      assert canonical and canonical.group(1).rstrip("/") == expected_abs.rstrip("/"), (origin, old, canonical.group(1) if canonical else None)
+                      title = re.search(r"<title>(.*?)</title>", body, re.I|re.S)
+                      h1 = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.I|re.S)
+                      assert title and h1, (origin, old, "missing title/h1")
+                      clean = lambda s: re.sub(r"<[^>]+>", "", unescape(s)).strip()
+                      print("REDIRECT_OK", origin + old, "301", location, "FINAL", final, "TITLE", clean(title.group(1)), "H1", clean(h1.group(1)))
+
+              for path in regional:
+                  with follow(origin + path) as r:
+                      body = r.read().decode("utf-8", "replace")
+                      assert r.status == 200, (origin, path, r.status)
+                      canonical = re.search(r'<link[^>]+rel=["\\\']canonical["\\\'][^>]+href=["\\\']([^"\\\']+)', body, re.I)
+                      if not canonical:
+                          canonical = re.search(r'<link[^>]+href=["\\\']([^"\\\']+)["\\\'][^>]+rel=["\\\']canonical["\\\']', body, re.I)
+                      expected = origin + path
+                      assert canonical and canonical.group(1).rstrip("/") == expected.rstrip("/"), (origin, path, canonical.group(1) if canonical else None)
+                      assert re.search(r"<h1[^>]*>.*?</h1>", body, re.I|re.S), (origin, path, "missing h1")
+                      print("REGIONAL_OK", expected, r.status, canonical.group(1))
+          PY
