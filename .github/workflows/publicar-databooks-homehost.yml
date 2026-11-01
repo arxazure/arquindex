@@ -2,11 +2,11 @@ name: Publicar Arquindex SEO na HomeHost
 
 on:
   push:
-    branches: [master, main]
+    branches: [master]
     paths:
       - 'blog/montagem-de-databooks-de-engenharia/index.html'
-      - 'seo-regional/gestao-documental-ecm-databooks/**'
-      - '.github/workflows/publicar-databooks-homehost.yml'
+      - 'seo-regional/gestao-documental-ecm-databooks/**/*.html'
+      - 'seo-regional/gestao-documental-ecm-databooks/index.html'
   workflow_dispatch:
 
 permissions:
@@ -19,88 +19,149 @@ concurrency:
 jobs:
   publicar:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Validar credenciais FTP
-        env:
-          FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
-          FTP_USER: arquind2
-          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          test -n "$FTP_HOST" || { echo "::error::Defina FTP_TLS_HOST nas variables"; exit 1; }
-          test -n "$FTP_USER" || { echo "::error::Usuario FTP nao configurado"; exit 1; }
-          test -n "$FTP_PASS" || { echo "::error::Defina FTP_PASSWORD nos GitHub Actions Secrets"; exit 1; }
-      - name: Detectar hostname FTPS valido
-        env:
-          FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
+        with: { fetch-depth: 2 }
+
+      - name: Selecionar somente HTML alterado
         shell: bash
         run: |
           set -euo pipefail
-          # Nao desabilita a verificacao TLS: exige nome valido e o mesmo IP.
-          cert=$(timeout 25 openssl s_client -starttls ftp -connect "$FTP_HOST:21" -servername "$FTP_HOST" </dev/null 2>/dev/null | openssl x509 -noout -subject -ext subjectAltName)
-          echo "$cert"
-          selected=""
-          if echo "$cert" | grep -Eq "DNS:$FTP_HOST([,[:space:]]|$)"; then
-            selected="$FTP_HOST"
+          before="${{ github.event.before }}"
+          if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" > all-changed.txt
           else
+            git diff --name-only "$before" "$GITHUB_SHA" > all-changed.txt
+          fi
+          grep -E '^(blog/montagem-de-databooks-de-engenharia/index\.html|seo-regional/gestao-documental-ecm-databooks/(.+/)?index\.html)$' all-changed.txt > changed.txt || true
+          test -s changed.txt || { echo "::error::Nenhum HTML autorizado foi alterado"; exit 1; }
+          while IFS= read -r file; do test -f "$file" || exit 1; done < changed.txt
+          cat changed.txt
+
+      - name: Validar HTML antes da publicação
+        run: |
+          python - <<'PY'
+          import re, pathlib
+          for raw in pathlib.Path('changed.txt').read_text().splitlines():
+              p=pathlib.Path(raw); s=p.read_text('utf-8')
+              assert len(re.findall(r'<h1\b',s,re.I))==1,(raw,'H1')
+              assert len(re.findall(r'<link[^>]+rel=["\']canonical["\']',s,re.I))==1,(raw,'canonical')
+              assert 'arquindex-logo-oficial.webp' in s,(raw,'logo')
+              assert '5531973632725' in s,(raw,'WhatsApp')
+              assert 'id="arq-floating"' in s,(raw,'atendimento')
+              assert 'noindex' not in s.lower(),(raw,'noindex')
+              assert '<meta name="viewport"' in s,(raw,'viewport')
+          print('HTML_VALIDADO')
+          PY
+
+      - name: Validar credenciais e hostname FTPS
+        env:
+          FTP_HOST: ${{ vars.FTP_TLS_HOST || 'ftp.arquindex.com.br' }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$FTP_PASS" || { echo "::error::FTP_PASSWORD ausente"; exit 1; }
+          cert=$(timeout 25 openssl s_client -starttls ftp -connect "$FTP_HOST:21" -servername "$FTP_HOST" </dev/null 2>/dev/null | openssl x509 -noout -subject -ext subjectAltName)
+          selected=""
+          if echo "$cert" | grep -Eq "DNS:$FTP_HOST([,[:space:]]|$)"; then selected="$FTP_HOST"; else
             original_ips=$(getent ahostsv4 "$FTP_HOST" | awk '{print $1}' | sort -u)
             while IFS= read -r candidate; do
               case "$candidate" in ""|*"*"*) continue ;; esac
               candidate_ips=$(getent ahostsv4 "$candidate" 2>/dev/null | awk '{print $1}' | sort -u || true)
               [ -n "$candidate_ips" ] || continue
-              if ! comm -12 <(printf '%s\n' "$original_ips") <(printf '%s\n' "$candidate_ips") | grep -q .; then
-                continue
-              fi
-              if timeout 25 openssl s_client -starttls ftp -connect "$candidate:21" -servername "$candidate" -verify_hostname "$candidate" -verify_return_error </dev/null 2>&1 | grep -q 'Verification: OK'; then
-                selected="$candidate"
-                break
-              fi
+              comm -12 <(printf '%s\n' "$original_ips") <(printf '%s\n' "$candidate_ips") | grep -q . || continue
+              if timeout 25 openssl s_client -starttls ftp -connect "$candidate:21" -servername "$candidate" -verify_hostname "$candidate" -verify_return_error </dev/null 2>&1 | grep -q 'Verification: OK'; then selected="$candidate"; break; fi
             done < <(echo "$cert" | grep -oE 'DNS:[A-Za-z0-9.*_-]+(\.[A-Za-z0-9.*_-]+)+' | sed 's/^DNS://' | sort -u)
           fi
-          if [ -z "$selected" ]; then
-            echo "::error::O certificado FTPS nao tem hostname verificavel no mesmo IP. Configure vars.FTP_TLS_HOST com o hostname correto indicado pela HomeHost, ou solicite a correcao do certificado."
-            exit 1
-          fi
+          test -n "$selected" || { echo "::error::Hostname FTPS verificável não encontrado"; exit 1; }
           echo "FTP_DEPLOY_HOST=$selected" >> "$GITHUB_ENV"
-          echo "Servidor FTPS validado: $selected"
-      - name: Instalar cliente FTP seguro
-        run: sudo apt-get update -qq && sudo apt-get install -y lftp
-      - name: Enviar somente a pagina solicitada
+
+      - name: Backup, publicação seletiva e readback
         env:
           FTP_HOST: ${{ env.FTP_DEPLOY_HOST }}
           FTP_USER: arquind2
           FTP_PASS: ${{ secrets.FTP_PASSWORD }}
-        shell: bash
         run: |
-          set -euo pipefail
-          lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<'LFTP'
-          set cmd:fail-exit yes
-          set net:max-retries 2
-          set ftp:ssl-allow yes
-          set ssl:verify-certificate yes
-          mkdir -f -p public_html/blog/montagem-de-databooks-de-engenharia
-          put -O public_html/blog/montagem-de-databooks-de-engenharia/ blog/montagem-de-databooks-de-engenharia/index.html
-          mkdir -f -p public_html/seo-regional/gestao-documental-ecm-databooks
-          mirror -R --verbose --no-perms seo-regional/gestao-documental-ecm-databooks public_html/seo-regional/gestao-documental-ecm-databooks
-          bye
-          LFTP
-      - name: Conferir URL publica
+          python - <<'PY'
+          import ftplib, ssl, pathlib, hashlib, io, json, os
+          files=[x for x in pathlib.Path('changed.txt').read_text().splitlines() if x]
+          root=pathlib.Path('backups'); root.mkdir()
+          ctx=ssl.create_default_context()
+          f=ftplib.FTP_TLS(context=ctx,timeout=45); f.connect(os.environ['FTP_HOST'],21); f.login(os.environ['FTP_USER'],os.environ['FTP_PASS']); f.prot_p()
+          manifest=[]
+          try:
+              for rel in files:
+                  remote='public_html/'+rel
+                  b=bytearray()
+                  f.retrbinary('RETR '+remote,b.extend)
+                  dst=root/(rel.replace('/','__')+'.before.html'); dst.write_bytes(b)
+                  manifest.append({'path':rel,'remote':remote,'before_sha256':hashlib.sha256(b).hexdigest()})
+              for row in manifest:
+                  rel=row['path']; data=pathlib.Path(rel).read_bytes(); remote=row['remote']
+                  f.storbinary('STOR '+remote,io.BytesIO(data))
+                  check=bytearray(); f.retrbinary('RETR '+remote,check.extend)
+                  assert hashlib.sha256(check).digest()==hashlib.sha256(data).digest(), rel+' readback divergente'
+                  row['after_sha256']=hashlib.sha256(data).hexdigest()
+          finally:
+              try:f.quit()
+              except Exception:pass
+          pathlib.Path('backups/manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2))
+          print(json.dumps(manifest,ensure_ascii=False))
+          PY
+
+      - name: Validar publicação mobile, canonical, CTA e sitemap
         run: |
-          set -euo pipefail
-          URL=https://www.arquindex.com.br/blog/montagem-de-databooks-de-engenharia/
-          for attempt in 1 2 3; do
-            if curl --fail --location --silent --show-error --retry 2 "$URL" | grep -q 'Montagem de Databooks de Engenharia'; then
-              echo "Pagina publicada e validada: $URL"
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "::error::A URL nao apresentou o conteudo esperado."
-          exit 1
-      - name: Verificar indice e sitemap regional
+          npm install --no-save playwright
+          cat > verify.js <<'JS'
+          const {chromium}=require('playwright');const fs=require('fs');
+          const files=fs.readFileSync('changed.txt','utf8').trim().split(/\r?\n/).filter(Boolean);
+          const toUrl=p=>'https://www.arquindex.com.br/'+p.replace(/index\.html$/,'');
+          (async()=>{const b=await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome'});
+          for(const file of files){const url=toUrl(file);for(const [w,h] of [[390,844],[1440,900]]){const p=await b.newPage({viewport:{width:w,height:h}});const r=await p.goto(url,{waitUntil:'networkidle',timeout:60000});if(!r||r.status()!=200)throw Error(url+' HTTP '+(r&&r.status()));const x=await p.evaluate(()=>({h1:document.querySelectorAll('h1').length,canonical:document.querySelector('link[rel=canonical]')?.href,logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),wa:!!document.querySelector('a[href*="5531973632725"]'),floating:!!document.querySelector('#arq-floating'),overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,title:document.title}));if(x.h1!==1||x.canonical!==url||!x.logo||!x.wa||!x.floating||x.overflow)throw Error(url+' '+JSON.stringify(x));console.log('PUBLIC_VERIFIED',url,w,x.title);await p.close()}}
+          await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node verify.js
+          sitemap=https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/sitemap.xml
+          curl -fsSL "$sitemap" > /tmp/sitemap.xml
+          python - <<'PY'
+          import pathlib,xml.etree.ElementTree as ET
+          root=ET.parse('/tmp/sitemap.xml').getroot()
+          urls={x.text for x in root.iter() if x.tag.endswith('loc')}
+          for p in pathlib.Path('changed.txt').read_text().splitlines():
+              u='https://www.arquindex.com.br/'+p.removesuffix('index.html')
+              assert u in urls,(u,'fora do sitemap')
+          print('SITEMAP_VALIDADO')
+          PY
+
+      - name: Guardar backups e hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-databooks-${{ github.run_id }}
+          path: backups/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Rollback automático em falha posterior à gravação
+        if: failure()
+        env:
+          FTP_HOST: ${{ env.FTP_DEPLOY_HOST }}
+          FTP_USER: arquind2
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
         run: |
-          set -euo pipefail
-          base="https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks"
-          curl -fsSL --retry 3 --retry-delay 5 "$base/" | grep -q 'Gestão documental'
-          curl -fsSL --retry 3 --retry-delay 5 "$base/sitemap.xml" | grep -q '<urlset'
-          echo "Indice e sitemap regional acessiveis"
+          test -f backups/manifest.json || { echo "Sem gravação comprovada; rollback não necessário"; exit 0; }
+          python - <<'PY'
+          import ftplib,ssl,pathlib,json,io,os
+          rows=json.loads(pathlib.Path('backups/manifest.json').read_text())
+          f=ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=45);f.connect(os.environ['FTP_HOST'],21);f.login(os.environ['FTP_USER'],os.environ['FTP_PASS']);f.prot_p()
+          try:
+              for row in rows:
+                  b=pathlib.Path('backups')/(row['path'].replace('/','__')+'.before.html')
+                  f.storbinary('STOR '+row['remote'],io.BytesIO(b.read_bytes()))
+                  print('ROLLBACK',row['path'])
+          finally:
+              try:f.quit()
+              except Exception:pass
+          PY
