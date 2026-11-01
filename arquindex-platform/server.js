@@ -1,3 +1,4 @@
+import { regionalRecoveryPaths, regionalRecoveryPage } from "./legacy-regional-pages.js";
 import { renderLegacyRecovery, recoveryPaths, legacyPageMeta, renderLegacyTechnicalSections } from "./legacy-recovery-pages.js";
 import { alfrescoIa2026Path, alfrescoIa2026Article } from "./alfresco-ia-2026-article.js";
 import { aiGuide, aiGuidePaths } from "./alfresco-ia-regional-2026.js";
@@ -508,6 +509,17 @@ const server=http.createServer(async(req,res)=>{
  html=html.replace(/<link rel="canonical" href="[^"]*">/,'<link rel="canonical" href="'+page.canonical+'">');
  res.writeHead(200,{"content-type":"text/html; charset=utf-8"});return res.end(html);}
  res.writeHead(404,{"content-type":"text/html; charset=utf-8"});return res.end(layout("Página não encontrada","Página não encontrada.","<section><h1>Página não encontrada</h1><a href='/atendimento-rmbh'>Grande BH</a></section>",req));
+ }
+ if(regionalRecoveryPaths.includes(p)){
+  const d=regionalRecoveryPage(p);
+  const sections=d.topics.map(([heading,paragraph],i)=>'<section id="reg-'+i+'"><h2>'+esc(heading)+'</h2><p>'+esc(paragraph)+'</p></section>').join("");
+  const toc=d.topics.map(([heading],i)=>'<a href="#reg-'+i+'">'+esc(heading)+'</a>').join("");
+  const body='<div class="hero"><div class="wrap"><div class="eyebrow">Arquindex · '+esc(d.city)+' · '+esc(d.uf)+'</div><h1>Digitalização de documentos para empresas em '+esc(d.city)+'</h1><p>'+esc(d.desc)+'</p><div class="cta"><a class="btn whats" href="https://wa.me/5531973632725">Solicitar avaliação logística e técnica</a></div></div></div>'+
+    '<section><div class="answer"><h2>Atendimento e escopo</h2><p>Projetos de digitalização, OCR, classificação e gestão documental para organizações em '+esc(d.city)+', conforme avaliação de volume, local de operação e disponibilidade logística. A Arquindex não anuncia endereço ou equipe permanente na cidade sem confirmação contratual.</p></div><nav class="toc">'+toc+'</nav></section>'+
+    '<div>'+sections+'</div><section><h2>Perguntas frequentes</h2><details class="faq"><summary>A Arquindex possui escritório local?</summary><p>Disponibilidade, endereço de execução e transporte precisam ser confirmados na proposta; este conteúdo não anuncia uma filial.</p></details><details class="faq"><summary>OCR está incluído?</summary><p>Depende do escopo e dos critérios de entrega acordados para o acervo.</p></details><details class="faq"><summary>É possível integrar com Alfresco?</summary><p>A integração depende de teste de biblioteca, permissões, tipos e metadados do sistema do cliente.</p></details></section>'+
+    '<section><h2>Serviços relacionados</h2><p><a href="/digitalizacao-com-ocr.html">Digitalização com OCR</a> · <a href="/gestao_de_colaboradores_documentos.html">Dossiês de colaboradores</a> · <a href="/solucoes/guarda-documental">Guarda documental</a> · <a href="/solucoes/consultoria-lgpd">Consultoria LGPD</a></p><p><a class="btn whats" href="https://wa.me/5531973632725">WhatsApp (31) 97363-2725</a></p></section>';
+  res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});
+  return res.end(layout('Digitalização de Documentos em '+d.city+' | Arquindex',d.desc,body,req));
  }
  if(recoveryPaths.includes(p)){
   const d=legacyPageMeta(p);
