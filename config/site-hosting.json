@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "effective_date_local": "2026-11-01",
+  "timezone": "America/Sao_Paulo",
+  "scope": [
+    "arquindex.com.br",
+    "www.arquindex.com.br"
+  ],
+  "production_hosting": "homehost",
+  "source": "explicit_user_instruction",
+  "public_propagation_status": "not_confirmed",
+  "publication_transport": "FTPS with verified TLS certificate",
+  "repository": "arxazure/arquindex",
+  "repository_default_branch": "master",
+  "deployment_root": "discover and verify on HomeHost before writing",
+  "railway_website_branch": "railway-production-2026",
+  "railway_website_role": "legacy implementation; not publication proof for official domains",
+  "other_applications": "unchanged; confirm each app host independently",
+  "dns_and_email_changes_authorized": false,
+  "requirements": [
+    "Preserve restored content, URLs, menus and assets.",
+    "Confirm backup, target root and FTPS access before publishing.",
+    "Validate HTTP, TLS, canonical, robots and actual content on official domains.",
+    "Distinguish user hosting decision from current DNS or HTTP evidence.",
+    "Do not submit preview or Railway URLs as official site URLs."
+  ],
+  "observed_cloudflare_zone": {
+    "checked_at_local_date": "2026-11-01",
+    "apex_cname": "tevuusva.up.railway.app",
+    "www_cname": "arquindex.com.br",
+    "zone_status": "active",
+    "nameservers_in_cloudflare": [
+      "armfazh.ns.cloudflare.com",
+      "naya.ns.cloudflare.com"
+    ],
+    "interpretation": "Connected Cloudflare zone still contains Railway target. Current registry delegation and propagation need independent verification; do not change DNS automatically."
+  }
+}
