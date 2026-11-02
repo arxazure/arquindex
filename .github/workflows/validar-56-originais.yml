@@ -1,0 +1,21 @@
+name: Validar 56 paginas originais
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - scripts/preflight_56_original.py
+      - .github/workflows/validar-56-originais.yml
+      - seo-regional/56-sites/**
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verificar arquivos, canonical, H1 e manifesto original
+        run: python scripts/preflight_56_original.py
