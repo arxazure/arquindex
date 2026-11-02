@@ -1,0 +1,16 @@
+{
+  "name": "arquindex-portal-wix",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@wix/sdk": "^1.0.0",
+    "@wix/blog": "^1.0.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
