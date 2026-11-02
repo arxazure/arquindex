@@ -1,0 +1,33 @@
+name: Auditar e reconstruir 56 paginas locais
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/gerar_restauracao_56.py
+      - .github/workflows/auditar-restauracao-56.yml
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Gerar e auditar 56 paginas
+        run: |
+          python scripts/gerar_restauracao_56.py
+          python - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('restauracao-56')
+          rows=json.loads((p/'inventario.json').read_text())
+          assert len(rows)==56
+          assert all((p/'paginas'/r['hostname']/'index.html').exists() for r in rows)
+          assert len({r['hostname'] for r in rows})==56
+          print('AUDITORIA OK: 56 arquivos HTML distintos')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-restauracao-56
+          path: restauracao-56/
