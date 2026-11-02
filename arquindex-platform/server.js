@@ -549,6 +549,13 @@ const server=http.createServer(async(req,res)=>{
  // The public documentation hub can be indexed; /seo/ remains noindex below.
  if(p==="/radar-concorrentes.json"){const data=await competitorRadar();res.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"public, max-age=3600"});return res.end(JSON.stringify(data));}
  if(p==="/radar-geo-aeo.json"){res.writeHead(200,{"content-type":"application/json; charset=utf-8"});return res.end(JSON.stringify(geoAudit(req)));}
+ if(p==="/empresa.html" || p==="/blog/alfresco-cloud-ocr-inteligencia-documental/"){
+  if(!["GET","HEAD"].includes(req.method)){res.writeHead(405,{"allow":"GET, HEAD"});return res.end();}
+  const filename=p==="/empresa.html"?"empresa.html":"alfresco-cloud-ocr-inteligencia-documental.html";
+  const html=readFileSync(new URL("./"+filename,import.meta.url),"utf8");
+  res.writeHead(200,{"content-type":"text/html; charset=utf-8","cache-control":"public, max-age=300"});
+  return res.end(req.method==="HEAD"?undefined:html);
+ }
  if(p==="/health"){res.writeHead(200,{"content-type":"application/json"});return res.end(JSON.stringify({ok:true,service:"arquindex-web"}));}
  if(p==="/favicon.ico"){res.writeHead(204);return res.end();}
  if(p==="/robots.txt"){
