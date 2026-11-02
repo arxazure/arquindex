@@ -1,6 +1,8 @@
 name: Auditar 56 subdominios publicos
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '15 11 * * 1'
   push:
     branches: [master]
     paths:
