@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "id": "prontuario",
+      "label": "Prontuário médico",
+      "identity_fields": [
+        "nome_paciente",
+        "cpf",
+        "data_nascimento"
+      ],
+      "primary_field": "nome_paciente",
+      "split_on": "confirmed_new_identity",
+      "keep_multipage": true,
+      "filename": "{nome_paciente}_{sequencia}.pdf",
+      "require_manual_approval": true
+    },
+    {
+      "id": "dossie",
+      "label": "Dossiê de funcionário",
+      "identity_fields": [
+        "nome_funcionario",
+        "matricula",
+        "situacao",
+        "data_demissao"
+      ],
+      "primary_field": "matricula",
+      "split_on": "confirmed_new_identity",
+      "keep_multipage": true,
+      "filename": "{matricula}_{nome_funcionario}_{sequencia}.pdf",
+      "require_manual_approval": true
+    }
+  ]
+}
