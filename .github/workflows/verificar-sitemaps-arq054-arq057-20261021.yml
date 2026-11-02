@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
+      - name: Contexto vigente do site institucional - HomeHost
+        shell: bash
+        run: |
+          echo 'ARQUINDEX_WEBSITE_HOSTING=homehost' >> "$GITHUB_ENV"
+          echo 'ARQUINDEX_WEBSITE_HOSTING_CONFIG=config/site-hosting.json' >> "$GITHUB_ENV"
+          echo '::notice title=Site institucional na HomeHost::Marina informou em 01/11/2026 o retorno de arquindex.com.br e www.arquindex.com.br à HomeHost. Confira DNS/HTTP/TLS atuais. Railway não comprova publicação nesses hosts; aplicativos independentes mantêm seus destinos.'
+          printf '%s\n' 'Site institucional: HomeHost, conforme instrução da usuária de 01/11/2026. Consulte AGENTS.md e config/site-hosting.json. Preserve o conteúdo restaurado; confirme FTPS/TLS, backup e leitura pública. Não altere DNS/e-mail nem migre aplicativos independentes. Esta etapa registra contexto; não publica conteúdo.' >> "$GITHUB_STEP_SUMMARY"
       - name: Validar robots e sitemaps
         run: |
           python - <<'PY'
