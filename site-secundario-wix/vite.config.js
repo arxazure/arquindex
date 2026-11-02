@@ -1,0 +1,3 @@
+import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
+export default defineConfig({build:{rollupOptions:{input:{main:resolve(__dirname,'index.html'),'preservacao-digital':resolve(__dirname,'insights/preservacao-digital/index.html'),'arquitetura-metadados':resolve(__dirname,'insights/arquitetura-metadados/index.html'),'inteligencia-artificial-documentos':resolve(__dirname,'insights/inteligencia-artificial-documentos/index.html'),'ecm-e-processos':resolve(__dirname,'insights/ecm-e-processos/index.html'),'acervos-engenharia':resolve(__dirname,'insights/acervos-engenharia/index.html')}}});
