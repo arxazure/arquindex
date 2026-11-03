@@ -207,9 +207,9 @@ function aiIndexBlock(title,desc,req){
 function slugCity(c){return c.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
 function origin(req){return "https://arquindex-web-production.up.railway.app";}
 function canonicalOrigin(req){
- const host=(req.headers.host||"").toLowerCase().split(":")[0];
- if(host==="arquindex.com.br"||host==="www.arquindex.com.br") return "https://arquindex.com.br";
- return origin(req);
+ // A identidade editorial da Arquindex pertence ao dominio corporativo.
+ // A instancia *.railway.app e uma previa tecnica, nao um dominio SEO concorrente.
+ return OFFICIAL;
 }
 function isRailwayPreview(req){
  const host=(req.headers.host||"").toLowerCase();
@@ -256,7 +256,8 @@ function analyticsSnippet(){
 }
 function layout(title,desc,body,req,extraHead=""){
  const o=canonicalOrigin(req);
- const robotsMeta='<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"><meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"><meta name="bingbot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">';
+ const robotsValue=isRailwayPreview(req)?"noindex,follow":"index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1";
+ const robotsMeta='<meta name="robots" content="'+robotsValue+'"><meta name="googlebot" content="'+robotsValue+'"><meta name="bingbot" content="'+robotsValue+'">';
  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}">${robotsMeta}<link rel="canonical" href="${o}${new URL(req.url,o).pathname}">${jsonLd(organizationSchema())}${extraHead}${analyticsSnippet()}
  <style>
  :root{--b:#0b3d91;--b2:#0b67c2;--ink:#0c1b33;--mut:#56657a;--bg:#f4f7fb;--card:#fff;--line:#d9e2ef;--g:#25d366}
