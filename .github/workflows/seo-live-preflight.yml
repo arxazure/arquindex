@@ -1,0 +1,27 @@
+name: SEO Live Preflight (read-only)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/seo_live_preflight.py'
+      - '.github/workflows/seo-live-preflight.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile preflight
+        run: python3 -m py_compile scripts/seo_live_preflight.py
+      - name: Probe approved public URLs only
+        run: python3 scripts/seo_live_preflight.py --out seo-report/live-preflight.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seo-live-preflight
+          path: seo-report/live-preflight.json
+          retention-days: 14
