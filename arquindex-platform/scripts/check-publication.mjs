@@ -22,7 +22,8 @@ try{
  item.hasFaq=text.includes('Perguntas frequentes');
  if(!item.title)item.errors.push('missing title');
  if(!item.hasArticleSchema)item.errors.push('missing article schema');
- if(item.canonical&&item.canonical!==report.canonical+path)item.errors.push('canonical differs from primary domain');
+ if(base===report.canonical&&item.canonical&&item.canonical!==report.canonical+path)item.errors.push('canonical differs from primary domain');
+ if(base!==report.canonical&&item.canonical&&item.canonical!==base+path&&item.canonical!==report.canonical+path)item.errors.push('unexpected preview canonical');
  }
  if(path==='/sitemap.xml'){item.articleUrlsFound=slugs.filter(s=>text.includes('/conteudo/'+s)).length;if(item.articleUrlsFound!==5)item.errors.push('five articles not listed');}
  if(path==='/robots.txt')item.hasSitemap=text.includes('Sitemap:');
