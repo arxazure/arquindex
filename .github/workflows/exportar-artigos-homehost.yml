@@ -20,6 +20,10 @@ jobs:
           node --check arquindex-platform/arquindex-seo-nov2026.js
       - name: Gerar HTML estatico
         run: node arquindex-platform/export-homehost-artigos.mjs arquindex-platform/dist-homehost
+      - name: Preparar chave IndexNow na raiz do pacote
+        run: |
+          cp homehost-hardening/f406ec601406a56dcf9b6d934a481f80.txt arquindex-platform/dist-homehost/
+          test "$(cat arquindex-platform/dist-homehost/f406ec601406a56dcf9b6d934a481f80.txt)" = "f406ec601406a56dcf9b6d934a481f80"
       - name: Validar cinco paginas e manifest
         run: |
           test "$(find arquindex-platform/dist-homehost/conteudo -name index.html | wc -l)" -eq 5
