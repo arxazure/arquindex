@@ -11,6 +11,9 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     defaults:
       run:
         working-directory: site-secundario-wix
@@ -34,15 +37,13 @@ jobs:
           test -f dist/sitemap.xml
           test -f dist/robots.txt
       - name: Deploy to Cloudflare Pages
-        if: ${{ env.CF_TOKEN != '' }}
-        env:
-          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        if: ${{ env.CF_TOKEN != '' && env.CF_ACCOUNT != '' }}
         run: npx wrangler@4 pages deploy dist --project-name=arquindex-portal --branch=master
-      - name: Explain missing Cloudflare credentials
-        if: ${{ env.CF_TOKEN == '' }}
         env:
-          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ env.CF_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT }}
+      - name: Explain missing Cloudflare credentials
+        if: ${{ env.CF_TOKEN == '' || env.CF_ACCOUNT == '' }}
         run: |
           echo "::error::Set repository secret CLOUDFLARE_API_TOKEN (Pages Edit) and CLOUDFLARE_ACCOUNT_ID."
           exit 1
