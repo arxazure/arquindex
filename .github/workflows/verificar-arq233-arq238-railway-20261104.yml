@@ -1,0 +1,76 @@
+name: Verificar ARQ-233 ARQ-235 ARQ-236 Railway 2026-11-04
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/verificar-arq233-arq238-railway-20261104.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: railway-production-2026
+      - name: Testes de regressao
+        working-directory: arquindex-platform
+        run: |
+          node --test test/digitalize-identity-arq230-232.test.js
+          node --test test/legacy-redirect-map.test.js
+      - name: Preparar navegador
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-verify" playwright --no-audit --no-fund
+      - name: Verificar publicacao e controles
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-verify/node_modules/playwright');let browser;
+          const base='https://www.arquindex.com.br';
+          const targets=[
+            ['ARQ-233','/digitalize/sabara/','Digitalize em Sabará: digitalização de documentos | Arquindex','Digitalize seus documentos em Sabará','digitalize_sabara'],
+            ['ARQ-235','/digitalize/lagoa-santa/','Digitalize em Lagoa Santa: digitalização de documentos | Arquindex','Digitalize seus documentos em Lagoa Santa','digitalize_lagoa-santa'],
+            ['ARQ-236','/digitalize/pedro-leopoldo/','Digitalize em Pedro Leopoldo: digitalização de documentos | Arquindex','Digitalize seus documentos em Pedro Leopoldo','digitalize_pedro-leopoldo']
+          ];
+          (async()=>{
+            browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+            const sm=await (await fetch(base+'/digitalize/sitemap.xml')).text();
+            for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+              const ctx=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+              for(const [id,path,title,h1,campaign] of targets){
+                const page=await ctx.newPage();const r=await page.goto(base+path+'?verify=20261104',{waitUntil:'domcontentloaded',timeout:45000});await page.waitForTimeout(400);
+                const d=await page.evaluate(()=>({
+                  title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),
+                  canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',
+                  logo:document.querySelectorAll('.aq-logo').length>=2,wordmark:[...document.querySelectorAll('.aq-logo-name')].every(x=>x.textContent.trim()==='arquindex'),
+                  tagline:[...document.querySelectorAll('.aq-logo-tag')].every(x=>x.textContent.trim()==='EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS'),
+                  menu:document.querySelectorAll('#aq-nav').length,widget:document.querySelectorAll('#arq-floating').length,
+                  proposal:[...document.querySelectorAll('a[href]')].some(a=>a.href.includes('/contato?')&&a.href.includes('utm_source=seo_local')),
+                  whatsapp:[...document.querySelectorAll('a[href]')].filter(a=>a.href.includes('5531973632725')).length,
+                  words:(document.body.innerText||'').trim().split(/\s+/).filter(Boolean).length,
+                  cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
+                }));
+                const href=await page.locator('a[href*="utm_campaign"]').first().getAttribute('href');
+                console.log('PUBLIC_VERIFIED',JSON.stringify({id,device:vp.name,status:r.status(),...d,proposalHref:href}));
+                if(r.status()!==200||d.title!==title||d.h1.length!==1||d.h1[0]!==h1||!d.canonical.replace('www.','').endsWith(path)||/noindex/i.test(d.robots)||!d.logo||!d.wordmark||!d.tagline||d.menu!==1||d.widget!==1||!d.proposal||d.whatsapp<2||d.words<900||d.sw>d.cw+2||!href?.includes('utm_campaign='+campaign)||!sm.includes(path)) throw Error(id+' '+vp.name+' failed');
+                await page.close();
+              }
+              const control=await ctx.newPage();const cr=await control.goto(base+'/digitalize/vespasiano/?verify=control',{waitUntil:'domcontentloaded'});
+              const cd=await control.evaluate(()=>({h1:document.querySelectorAll('h1').length,widget:document.querySelectorAll('#arq-floating').length,canonical:document.querySelector('link[rel=canonical]')?.href||'',cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));
+              console.log('CONTROL_OK',JSON.stringify({id:'ARQ-234',device:vp.name,status:cr.status(),...cd}));
+              if(cr.status()!==200||cd.h1!==1||cd.widget!==0||cd.sw>cd.cw+2)throw Error('ARQ-234 control failed');
+              for(const [id,host] of [['ARQ-237','ocr'],['ARQ-238','ecm']]){
+                const p=await ctx.newPage();const path='/sitechecker5e8991ab0e9e7199188accf65b36dd02.html';const r=await p.goto('https://'+host+'.arquindex.com.br'+path+'?verify=control',{waitUntil:'domcontentloaded'});
+                const d=await p.evaluate(()=>({text:(document.body.innerText||'').trim(),canonical:document.querySelector('link[rel=canonical]')?.href||'',h1:document.querySelectorAll('h1').length}));
+                console.log('TECHNICAL_CONTROL_OK',JSON.stringify({id,device:vp.name,status:r.status(),...d}));
+                if(r.status()!==200||!d.text.includes('sitecheckerpro-site-verification')||d.h1!==0||!d.canonical.endsWith(path))throw Error(id+' technical changed');
+                await p.close();
+              }
+              await ctx.close();
+            }
+            await browser.close();console.log('SITEMAP_OK',targets.length);
+          })().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exit(1)});
+          JS
