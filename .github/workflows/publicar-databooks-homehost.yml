@@ -1,11 +1,9 @@
 name: Publicar Arquindex SEO na HomeHost
-# dispatch-marker: 2026-11-04-tarde
 
 on:
   push:
     branches: [master]
     paths:
-      - '.github/workflows/publicar-databooks-homehost.yml'
       - 'blog/montagem-de-databooks-de-engenharia/index.html'
       - 'seo-regional/gestao-documental-ecm-databooks/**/*.html'
       - 'seo-regional/gestao-documental-ecm-databooks/index.html'
