@@ -19,10 +19,11 @@ function displayStage(s){return ({SOLICITACAO:'Solicitação',MINUTA:'Elaboraç�
 async function init(){
  let login=null;try{login=await api('/api/me');}catch{}
  if(!login){
-  $('auth').hidden=false;$('dashboard').hidden=true;$('logout').hidden=true;
+  $('auth').hidden=false;$('dashboard').hidden=true;$('password-panel').hidden=true;$('logout').hidden=true;
   const s=await api('/api/setup-status');$('setup-panel').hidden=!s.needsSetup;$('login-panel').hidden=s.needsSetup;return;
  }
- me=login;$('auth').hidden=true;$('dashboard').hidden=false;$('logout').hidden=false;$('identity').textContent=login.email+' ('+login.role+')';
+ me=login;$('auth').hidden=true;$('logout').hidden=false;$('password-panel').hidden=!login.mustChangePassword;$('dashboard').hidden=!!login.mustChangePassword;
+ if(login.mustChangePassword){$('identity').textContent=login.email+' · Senha temporária';return;}$('identity').textContent=login.email+' ('+login.role+')';
  $('new-panel').hidden=!['admin','author'].includes(login.role);$('user-panel').hidden=login.role!=='admin';
  await refresh();if(login.role==='admin')await loadUsers();
 }
@@ -67,3 +68,8 @@ $('refresh').addEventListener('click',()=>safe(refresh));
 $('create-doc').addEventListener('click',()=>safe(async()=>{const b={title:$('new-title').value,kind:$('new-kind').value,description:$('new-description').value,legalEmails:$('new-emails').value.split(/[;,]/).map(x=>x.trim()).filter(Boolean),rounds:Number($('new-rounds').value),destination:$('new-dest').value};const result=await api('/api/docs','POST',b);notify('Documento criado.');await refresh();await openDoc(result.doc.id);}));
 $('create-user').addEventListener('click',()=>safe(async()=>{const u=await api('/api/users','POST',{email:$('user-email').value,role:$('user-role').value});const box=$('one-time-password');box.hidden=false;box.textContent='Senha temporária do participante '+u.email+': '+u.temporaryPassword+' — copie e envie somente por canal seguro. Não será exibida novamente.';await loadUsers();notify('Participante criado, aguardando confirmação de identidade.');}));
 safe(init);
+
+$('password-submit').addEventListener('click',()=>safe(async()=>{
+ await api('/api/change-password','POST',{currentPassword:$('old-password').value,newPassword:$('new-password').value});
+ $('old-password').value='';$('new-password').value='';notify('Senha pessoal atualizada.');await init();
+}));
