@@ -54,3 +54,22 @@ A meta de 60.000 modelos é um objetivo do catálogo, **não um número já disp
 - `intake.js` mostra a sequência de estados e permite simular transições, com exportação JSON. **Não envia e-mails, convites, PDF ou assinatura; nenhum evento equivale a aprovação jurídica real**.
 - `intake-workflow-schema.sql` contém uma proposta **não aplicada** para solicitações, revisores, pareceres e eventos segregados por empresa. O backend deverá autenticar revisores, exigir autorização, registrar hash da versão analisada, invalidar aprovações quando houver mudanças e aceitar assinatura somente por webhook verificado do provedor.
 - Para IA conversacional em produção: servidor autenticado com provedor LLM configurado por segredo, limites de custo e rate limiting, regras de privacidade, RAG em fontes verificadas e confirmação humana. Não incluir segredos ou documentos privados no JavaScript público.
+
+## Revisão jurídica autenticada — camada de backend (novembro de 2026)
+
+- `intake-api.js`: API Express de **integração futura** com PostgreSQL, autenticação e diretório de usuários verificados, com cadastro de solicitações, consulta sob escopo da empresa, atribuição de revisores e decisão da etapa vinculada a versão documental.
+- `decision-policy.js`: política de segregação de funções, verificação de perfil, justificativa, hash SHA-256 e continuidade de aprovações em uma mesma versão. A devolução exige repetir as revisões posteriores.
+- `invite-security.js`: gera tokens aleatórios de 32 bytes, guarda somente hash e valida uso único/expiração. Não há envio de e-mails implementado.
+- `intake-schema.sql`: estrutura SQL proposta incluindo solicitações, etapas, eventos e convites; **não aplicada em banco de dados de produção**.
+- `decision-policy.test.js`, `invite-security.test.js`: testes unitários para controles de autorização; execução do CI ainda precisa ser confirmada.
+
+A API deliberadamente **não está incluída no Dockerfile do site público** e não está montada em `public-server.js`. As funções `lookupVerifiedMember` e `getCurrentDocumentVersion` precisam ser fornecidas pelo serviço privado; caso não existam, endpoints de atribuição e decisão recusam a operação. O envio real de convites, a homologação e a assinatura ficam bloqueados até haver verificação de identidade, banco de dados privado, auditoria imutável e integração de prestador com evidências.
+
+### Checklist antes do deploy privado
+
+1. Autenticação com sessão protegida, MFA para aprovadores, CSRF e verificação de tenant em cada operação.
+2. Banco com RLS, migrações revisadas, criptografia, backups, restauração testada e logs de acesso.
+3. Adaptadores de identidade verificada e armazenamento imutável de versões/hashes.
+4. Convites com identidade/e-mail confirmados, expiração e revogação; provedor transacional para envio e eventos de entrega.
+5. Trilha de revisão técnica/jurídica, aprovações independentes, revogação após nova versão e testes end-to-end.
+6. Assinatura eletrônica/digital em provedor apropriado e validação de integridade antes de concluir.
