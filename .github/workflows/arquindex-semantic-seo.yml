@@ -6,7 +6,7 @@ on:
       - ".github/workflows/arquindex-semantic-seo.yml"
   workflow_dispatch:
   schedule:
-    - cron: "25 10 * * 1"
+    - cron: "25 10 * * *"
 permissions:
   contents: read
 jobs:
@@ -37,6 +37,9 @@ jobs:
       - name: Create Markdown report
         if: github.event_name != 'pull_request'
         run: python seo-semantico/report.py seo-audit.json seo-report.md
+      - name: Summarize semantic audit health
+        if: github.event_name != 'pull_request'
+        run: python seo-semantico/daily_health.py --input seo-audit.json --output seo-health.json --markdown seo-health.md --github-summary "$GITHUB_STEP_SUMMARY"
       - name: Upload diagnostic artifacts
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
@@ -45,5 +48,7 @@ jobs:
           path: |
             seo-audit.json
             seo-report.md
+            seo-health.json
+            seo-health.md
           if-no-files-found: ignore
           retention-days: 30
