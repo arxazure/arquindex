@@ -26,3 +26,16 @@ CREATE INDEX IF NOT EXISTS legaldoc_request_stages_tenant ON legaldoc_request_st
 -- Production gate: tenant isolation/RLS, invite token with expiry, verified email ownership,
 -- CSRF/session auth, per-stage authorization, two-review limits, distinct reviewer/approver,
 -- tamper evident append-only events, document version hash and signatures provider callback.
+
+CREATE TABLE IF NOT EXISTS legaldoc_request_events (
+ id uuid PRIMARY KEY,
+ request_id uuid NOT NULL REFERENCES legaldoc_requests(id),
+ company_id uuid NOT NULL,
+ actor_id uuid NOT NULL,
+ event text NOT NULL,
+ detail jsonb NOT NULL DEFAULT '{}'::jsonb,
+ occurred_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS legaldoc_request_events_tenant ON legaldoc_request_events(company_id,request_id,occurred_at);
+-- Configure INSERT-only privilege for this audit table; revoke UPDATE/DELETE.
+-- All tenant tables require RLS policies before any migration is deployed.
