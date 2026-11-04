@@ -10,3 +10,5 @@ CREATE TABLE IF NOT EXISTS ldw_decisions(id uuid PRIMARY KEY,tenant_id uuid NOT 
 CREATE INDEX IF NOT EXISTS ldw_decisions_lookup ON ldw_decisions(tenant_id,doc_id,revision_cycle);
 CREATE TABLE IF NOT EXISTS ldw_events(id uuid PRIMARY KEY,tenant_id uuid NOT NULL,doc_id uuid REFERENCES ldw_docs(id),actor_id uuid NOT NULL REFERENCES ldw_users(id),kind varchar(50) NOT NULL,detail jsonb NOT NULL DEFAULT '{}'::jsonb,created_at timestamptz DEFAULT now());
 CREATE INDEX IF NOT EXISTS ldw_events_lookup ON ldw_events(tenant_id,doc_id,created_at);
+
+ALTER TABLE ldw_users ADD COLUMN IF NOT EXISTS must_change_password boolean NOT NULL DEFAULT true;
