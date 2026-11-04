@@ -46,3 +46,5 @@ export function renderDigitalize(path,origin){
  const match=normalized.match(/^\/digitalize\/([a-z-]+)\/$/);const city=match&&digitalizeCities.find(c=>c.slug===match[1]);
  return city?{type:'text/html; charset=utf-8',body:cityPage(city,origin)}:null;
 }
+
+// publication-marker: ARQ-234 HomeHost 2026-11-04 tarde
