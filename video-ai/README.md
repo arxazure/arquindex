@@ -23,3 +23,7 @@ O arquivo gerado será `out/arquindex-promo.mp4`. Este MVP **não** gera voz, le
 5. Construir aprovação humana e publicação via APIs autorizadas.
 
 Não incluir segredos de APIs, tokens ou dados de clientes no repositório.
+
+## Validação técnica
+
+Veja [VALIDATION.md](VALIDATION.md) para evidências do MP4 existente, testes SRT/FFmpeg, limites e requisitos de integração/licença. Execute `python -m unittest discover -s tests -v` (Python 3.10+, FFmpeg e ffprobe com libass) e `python scripts/validate-video.py out/arquindex-promo.mp4`.
