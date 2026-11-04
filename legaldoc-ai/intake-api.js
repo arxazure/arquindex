@@ -3,7 +3,7 @@
 import express from 'express';
 import {randomUUID} from 'node:crypto';
 import {questions,validateAnswer,buildStages} from './intake-flow.js';
-import {roleFor,evaluateDecision,applyDecision} from './decision-policy.js';
+import {roleFor,evaluateDecision,applyDecision,hasVerifiedRole,hasConsistentApprovals} from './decision-policy.js';
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const hash=/^[a-f0-9]{64}$/i;
 const handler=fn=>(req,res,next)=>Promise.resolve(fn(req,res)).catch(next);
@@ -64,7 +64,7 @@ export function intakeApi({pool,lookupVerifiedMember,getCurrentDocumentVersion})
    const stage=q.rows[0],role=roleFor(stage.stage);
    if(!role||['signer','publisher'].includes(role)){await db.query('ROLLBACK');return res.status(409).json({error:'Etapa nao atribuivel aqui'});}
    const member=await lookupVerifiedMember({companyId:company,userId:req.body.userId,db});
-   if(!member?.verified||member.role!==role){await db.query('ROLLBACK');return res.status(403).json({error:'Usuario verificado com perfil correspondente exigido'});}
+   if(!hasVerifiedRole(member,role)){await db.query('ROLLBACK');return res.status(403).json({error:'Usuario verificado com perfil correspondente exigido'});}
    if(role==='legal'){
     const invited=await db.query("SELECT 1 FROM legaldoc_request_reviewers WHERE request_id=$1 AND company_id=$2 AND role='LEGAL' AND lower(email)=lower($3)",[req.params.id,company,member.email||'']);
     if(!invited.rowCount){await db.query('ROLLBACK');return res.status(403).json({error:'Revisor juridico deve ter email previamente autorizado'});}
@@ -91,13 +91,13 @@ export function intakeApi({pool,lookupVerifiedMember,getCurrentDocumentVersion})
    const stage=steps.rows[index];
    if(String(stage.assigned_user_id)!==String(req.user.id)){await db.query('ROLLBACK');return res.status(403).json({error:'Revisor designado e autenticado exigido'});}
    const member=await lookupVerifiedMember({db,companyId:company,userId:req.user.id});
-   if(!member?.verified||member.role!==roleFor(stage.stage)){await db.query('ROLLBACK');return res.status(403).json({error:'Identidade ou papel nao validos'});}
+   if(!hasVerifiedRole(member,roleFor(stage.stage))){await db.query('ROLLBACK');return res.status(403).json({error:'Identidade ou papel nao validos'});}
    const document=await getCurrentDocumentVersion({db,companyId:company,requestId:req.params.id});
    if(!hash.test(String(document?.sha256||''))||!document?.versionId){await db.query('ROLLBACK');return res.status(409).json({error:'Documento armazenado e versionado obrigatorio'});}
-   if(index>1&&steps.rows.slice(1,index).some(s=>s.status!=='APPROVED'||s.document_version_hash!==document.sha256)){
+   if(index>1&&!hasConsistentApprovals(steps.rows,index,document.sha256)){
     await db.query('ROLLBACK');return res.status(409).json({error:'Versao alterada: revisoes anteriores precisam ser repetidas'});
    }
-   const result=evaluateDecision({stage:stage.stage,decision:req.body?.decision,actorRole:req.user.role,note:req.body?.note,documentHash:document.sha256,authorId:document.authorUserId||q.rows[0].created_by,actorId:req.user.id});
+   const result=evaluateDecision({stage:stage.stage,decision:req.body?.decision,actorRole:roleFor(stage.stage),note:req.body?.note,documentHash:document.sha256,authorId:document.authorUserId||q.rows[0].created_by,actorId:req.user.id});
    if(!result.ok){await db.query('ROLLBACK');return res.status(403).json({error:result.error});}
    const next=applyDecision({stages:steps.rows.map(s=>s.stage),index,decision:req.body.decision});
    if(!next.ok){await db.query('ROLLBACK');return res.status(409).json({error:next.error});}
