@@ -43,8 +43,7 @@ async function openDoc(id){
  const head=text('div',undefined,'doc-header'),left=text('div');left.append(text('h2',d.title),text('div','Versão '+d.version+' · '+d.kind,'muted'));head.append(left,text('span',displayStage(d.stage),'pill'));host.append(head);
  host.append(detail('Destino',d.destination==='SIGN'?'Assinatura':'Publicação'),detail('Revisões jurídicas',d.rounds),detail('Hash SHA-256',d.bodyHash));
  const stages=text('ol');d.stages.forEach((s,i)=>{const li=text('li',displayStage(s)+(i===d.stageIndex?' — atual':i<d.stageIndex?' — concluída nesta sequência':' — futura'));if(i===d.stageIndex)li.style.color='#87edf4';stages.append(li);});host.append(stages);
- const label=text('label','Texto integral da minuta'),area=text('textarea');area.id='doc-body';area.value=d.body;area.readOnly=!(d.stage==='MINUTA'&&d.docCreatedBy===me?.id); // adjusted using author identity below
- const canEdit=d.stage==='MINUTA'&&(['admin','author'].includes(me.role));
+ const label=text('label','Texto integral da minuta'),area=text('textarea');area.id='doc-body';area.value=d.body;const canEdit=d.stage==='MINUTA'&&d.createdBy===me.id;
  area.readOnly=!canEdit;host.append(label,area);
  if(canEdit)host.append(button('Salvar nova versão',async()=>{await api('/api/docs/'+id+'/body','PUT',{body:area.value});notify('Nova versão salva.');await openDoc(id);},'secondary'));
  host.append(button('Baixar texto da minuta',async()=>{const file=new Blob([area.value],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download='legaldoc-minuta-'+id+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);},'secondary'));
