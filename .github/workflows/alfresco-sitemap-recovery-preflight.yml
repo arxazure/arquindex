@@ -1,0 +1,32 @@
+name: Alfresco sitemap recovery preflight
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'seo-rotinas/reconstruir-sitemap-alfresco.py'
+      - 'seo/alfresco-cloud-manifest.json'
+      - '.github/workflows/alfresco-sitemap-recovery-preflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate live canonical pages and generate candidate
+        id: preflight
+        continue-on-error: true
+        run: python3 seo-rotinas/reconstruir-sitemap-alfresco.py
+      - name: Upload diagnostic artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alfresco-sitemap-preflight
+          path: publish-report/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Fail if fewer than ten pages pass
+        if: steps.preflight.outcome != 'success'
+        run: exit 1
