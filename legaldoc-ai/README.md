@@ -19,3 +19,32 @@ Este diretório contém duas páginas estáticas independentes:
 
 ## Publicação
 Servir o diretório `legaldoc-ai/` como estático em ambiente de homologação. Antes de produção, remover noindex apenas após revisão de preços, termos, política de privacidade, proposta de suporte e QA. Evitar configurar o deploy existente do LGPD Checklist para servir este diretório por engano.
+
+## Catálogo brasileiro estruturado — etapa inicial
+
+A área `builder.html` agora oferece um catálogo editorial inicial de 16 famílias documentais em Contratos, LGPD, Governança, SESMT/SST, RH e Gestão Documental. `legal-catalog.js` contém as cláusulas e os metadados, com status **DRAFT_UNREVIEWED**. As referências oficiais remetem à legislação/órgãos competentes para conferência humana; não equivalem a parecer jurídico ou certificação de conformidade.
+
+- **Essencial do modelo**: exige presença no documento-base, mas não significa obrigatoriedade legal universal.
+- **Condicional**: exige análise do contexto de aplicação para determinar se deve entrar no documento.
+- **Opcional**: escolhida conscientemente, sujeita a compatibilidade com a lei e a finalidade.
+- As versões exportadas do catálogo recebem o aviso **MINUTA EDITORIAL — MODELO NÃO HOMOLOGADO JURIDICAMENTE** e informam campos pendentes.
+- O exportador cria HTML A4 estilizado, que pode ser impresso em PDF no navegador. Não gera DOCX fiel, PDF/A, assinatura ICP-Brasil nem certificado de validade.
+- As normas técnicas ABNT/ISO são protegidas por direitos e licenças; o sistema deve cadastrar referências, controles e modelos originais, **não copiar o texto integral de normas sem autorização**.
+
+### Meta escalável de 60 mil modelos
+
+A meta de 60.000 modelos é um objetivo do catálogo, **não um número já disponível**. A expansão deve seguir: família documental -> versão -> setor, riscos, jurisdição, cláusulas condicionais -> revisão legal -> homologação -> publicação. O esquema proposto `legal-catalog-schema.sql` implementa entidades de fontes legais, famílias, versões, referências e fila de revisão; **a migração não foi executada**.
+
+### Radar diário das fontes oficiais
+
+`check-legal-sources.mjs` verifica disponibilidade, última alteração informada pelo servidor e fingerprint do conteúdo público em URLs oficiais em lista permitida. `.github/workflows/legaldoc-legal-radar.yml` define agendamento diário e artefato JSON para inspeção. **O agendamento GitHub Actions baseado em `schedule` precisa estar na branch padrão para começar a executar; neste PR ainda não está ativado.** Resultados não aprovam modelos nem atualizam automaticamente cláusulas: apenas sinalizam pontos para revisão. Mudanças legais, vigência e exceções exigem confirmação especializada.
+
+### Próximas dependências para produção
+
+- Base relacional privada multiempresa, autenticação e segregação de usuários, ações auditadas, backups e retenção LGPD;
+- Coleta e versionamento de fontes oficiais, comparação com versão previamente aprovada e fila de revisão humana;
+- Editor rico de DOCX/PDF com formatação preservada e exportação A4 testada em documentos reais;
+- Regras legais de elegibilidade e cláusulas aplicáveis com evidências e validade temporal;
+- Homologação de cláusulas/modelos por profissional habilitado, sem autopublicação da IA;
+- Provedor de assinatura eletrônica/digital com identidade dos signatários, trilha de autenticação e integridade;
+- Integração autorizada com LGPD Checklist, Capture Pro e Alfresco.
