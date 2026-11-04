@@ -48,3 +48,9 @@ A meta de 60.000 modelos é um objetivo do catálogo, **não um número já disp
 - Homologação de cláusulas/modelos por profissional habilitado, sem autopublicação da IA;
 - Provedor de assinatura eletrônica/digital com identidade dos signatários, trilha de autenticação e integridade;
 - Integração autorizada com LGPD Checklist, Capture Pro e Alfresco.
+
+## Assistente de entrada e roteamento de revisão
+- `intake.html` oferece um **assistente guiado local**, sem API de IA generativa ou envio ao servidor, para colher solicitação, tipo de documento, contexto, e-mails jurídicos (até oito), 1 ou 2 rodadas jurídicas, revisão técnica, aprovação/homologação e destino `ASSINAR` ou `PUBLICAR`.
+- `intake.js` mostra a sequência de estados e permite simular transições, com exportação JSON. **Não envia e-mails, convites, PDF ou assinatura; nenhum evento equivale a aprovação jurídica real**.
+- `intake-workflow-schema.sql` contém uma proposta **não aplicada** para solicitações, revisores, pareceres e eventos segregados por empresa. O backend deverá autenticar revisores, exigir autorização, registrar hash da versão analisada, invalidar aprovações quando houver mudanças e aceitar assinatura somente por webhook verificado do provedor.
+- Para IA conversacional em produção: servidor autenticado com provedor LLM configurado por segredo, limites de custo e rate limiting, regras de privacidade, RAG em fontes verificadas e confirmação humana. Não incluir segredos ou documentos privados no JavaScript público.
