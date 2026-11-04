@@ -1,0 +1,28 @@
+-- LegalDoc AI: proposed secure intake workflow. NOT applied on public landing.
+CREATE TABLE IF NOT EXISTS legaldoc_requests (
+ id uuid PRIMARY KEY, company_id uuid NOT NULL, created_by uuid NOT NULL,
+ document_type text NOT NULL, description text NOT NULL,
+ review_rounds smallint NOT NULL CHECK(review_rounds IN (1,2)),
+ outcome text NOT NULL CHECK(outcome IN ('PUBLISH','SIGN')),
+ status text NOT NULL DEFAULT 'DRAFT',
+ created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS legaldoc_request_reviewers (
+ request_id uuid NOT NULL REFERENCES legaldoc_requests(id), company_id uuid NOT NULL,
+ reviewer_user_id uuid, email text NOT NULL,
+ role text NOT NULL CHECK(role IN ('CLIENT','LEGAL','TECHNICAL','APPROVER','HOMOLOGATOR','SIGNATORY')),
+ verified_at timestamptz, accepted_at timestamptz,
+ PRIMARY KEY(request_id,email,role)
+);
+CREATE TABLE IF NOT EXISTS legaldoc_request_stages (
+ id uuid PRIMARY KEY, request_id uuid NOT NULL REFERENCES legaldoc_requests(id),
+ company_id uuid NOT NULL, step_number integer NOT NULL, stage text NOT NULL,
+ status text NOT NULL DEFAULT 'PENDING' CHECK(status IN ('PENDING','ACTIVE','APPROVED','REJECTED','CANCELLED')),
+ assigned_user_id uuid, completed_by uuid, completed_at timestamptz,
+ document_version_hash char(64), review_notes text,
+ UNIQUE(request_id,step_number)
+);
+CREATE INDEX IF NOT EXISTS legaldoc_request_stages_tenant ON legaldoc_request_stages(company_id,request_id,status);
+-- Production gate: tenant isolation/RLS, invite token with expiry, verified email ownership,
+-- CSRF/session auth, per-stage authorization, two-review limits, distinct reviewer/approver,
+-- tamper evident append-only events, document version hash and signatures provider callback.
