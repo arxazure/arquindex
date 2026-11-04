@@ -27,11 +27,15 @@ jobs:
       - name: Test SRT structure and FFmpeg interoperability
         run: python -m unittest discover -s tests -v
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Validate TypeScript
         run: npx tsc --noEmit
       - name: Render preview
         run: npm run render:sample
+      - name: Render editorial caption demo (no voice)
+        run: npx remotion render src/index.ts ArquindexPromo out/arquindex-caption-demo.mp4 --props=sample-caption-props.json
+      - name: Validate caption demo
+        run: python scripts/validate-video.py out/arquindex-caption-demo.mp4 > out/caption-validation.json
       - name: Validate MP4 properties and full decode
         run: python scripts/validate-video.py > out/validation.json
       - name: Upload preview artifact
@@ -41,4 +45,6 @@ jobs:
           path: |
             video-ai/out/arquindex-promo.mp4
             video-ai/out/validation.json
+            video-ai/out/arquindex-caption-demo.mp4
+            video-ai/out/caption-validation.json
           retention-days: 7
