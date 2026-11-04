@@ -181,4 +181,21 @@ async function init(){
  }
 }
 async function dbSelfTest(){const db=await pool.connect();try{await db.query('BEGIN');const a=randomUUID(),b=randomUUID(),dep=randomUUID();for(const id of [a,b])await db.query("INSERT INTO lgpd_records(id,section,company_id,payload) VALUES($1,'company',$1,$2)",[id,JSON.stringify({company_name:'SYNTHETIC SELF TEST'})]);await db.query("INSERT INTO lgpd_records(id,section,company_id,parent_id,payload) VALUES($1,'branch',$2,$2,'{}')",[dep,b]);const user={role:'manager',company_id:a};if(await record(db,dep,user))throw Error('Tenant isolation failed');const foreign=await record(db,dep,{role:'admin'});let rejected=false;try{validateParent('department',foreign,a);}catch{rejected=true;}if(!rejected)throw Error('Cross tenant parent accepted');const q=await db.query("SELECT id FROM lgpd_records WHERE ($1::text='admin' OR company_id=$2) AND id=ANY($3::uuid[])",[user.role,a,[a,b,dep]]);if(q.rows.length!==1||q.rows[0].id!==a)throw Error('Tenant query failed');console.log('DB_SELF_TEST_PASS tenant_read,tenant_query,parent_boundary,rollback');}finally{await db.query('ROLLBACK');db.release();}}
-init().then(()=>app.listen(Number(process.env.PORT||3000),'0.0.0.0',()=>console.log('LGPD_READY 0.3.0'))).catch(e=>{console.error('LGPD_START_FAILED',e.code||e.message);process.exit(1);});
+// Verificacao diaria no proprio servico: sem alterar documentos de clientes.
+let regulatoryTimer=null;
+let regulatoryBusy=false;
+let regulatoryLastDay='';
+async function scheduledRegulatoryCheck(){
+ const day=new Date().toISOString().slice(0,10);
+ if(regulatoryBusy||regulatoryLastDay===day)return;
+ regulatoryBusy=true;
+ try{
+  const q=await pool.query("SELECT checked_at FROM lgpd_regulatory_checks ORDER BY checked_at DESC LIMIT 1");
+  if(q.rowCount&&new Date(q.rows[0].checked_at).toISOString().slice(0,10)===day){regulatoryLastDay=day;return;}
+  const results=await runOfficialChecks(pool);
+  regulatoryLastDay=day;
+  console.log('ANPD_DAILY_CHECK',JSON.stringify(results.map(x=>({source_id:x.source_id,state:x.state}))));
+ }catch(error){console.error('ANPD_DAILY_CHECK_FAILED',error.code||error.message);}
+ finally{regulatoryBusy=false;}
+}
+init().then(()=>app.listen(Number(process.env.PORT||3000),'0.0.0.0',()=>{console.log('LGPD_READY 0.3.0');if(process.env.ANPD_AUTO_CHECK==='true'){regulatoryTimer=setInterval(()=>scheduledRegulatoryCheck().catch(()=>{}),60*60*1000);regulatoryTimer.unref();scheduledRegulatoryCheck().catch(()=>{});}})).catch(e=>{console.error('LGPD_START_FAILED',e.code||e.message);process.exit(1);});
