@@ -26,3 +26,12 @@ export function applyDecision({stages,index,decision}){
  if(index===stages.length-1)return {ok:false,error:'Etapa final exige provedor externo'};
  return {ok:true,index:index+1,state:'IN_REVIEW'};
 }
+
+export function hasVerifiedRole(member,expected){
+ return member?.verified===true &&
+  (member.role===expected || (Array.isArray(member.roles) && member.roles.includes(expected)));
+}
+export function hasConsistentApprovals(stages,index,currentHash){
+ if(!Array.isArray(stages)||!Number.isInteger(index)||index<1||index>=stages.length||!/^[a-f0-9]{64}$/i.test(String(currentHash||'')))return false;
+ return stages.slice(1,index).every(item=>item.status==='APPROVED'&&item.document_version_hash===currentHash);
+}
