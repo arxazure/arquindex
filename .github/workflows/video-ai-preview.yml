@@ -1,0 +1,33 @@
+name: Video AI preview
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'video-ai/**'
+      - '.github/workflows/video-ai-preview.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: video-ai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Validate TypeScript
+        run: npx tsc --noEmit
+      - name: Render preview
+        run: npm run render:sample
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-video-ai-preview
+          path: video-ai/out/arquindex-promo.mp4
+          retention-days: 7
