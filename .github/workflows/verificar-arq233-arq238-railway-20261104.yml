@@ -1,4 +1,4 @@
-name: Verificar ARQ-233 ARQ-235 ARQ-236 Railway 2026-11-04
+name: Verificar ARQ-233 ARQ-235 ARQ-236 HomeHost 2026-11-04
 on:
   push:
     branches: [master]
@@ -53,7 +53,7 @@ jobs:
                   words:(document.body.innerText||'').trim().split(/\s+/).filter(Boolean).length,
                   cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
                 }));
-                const href=await page.locator('a[href*="utm_campaign"]').first().getAttribute('href');
+                const href=await page.evaluate(()=>document.querySelector('a[href*="utm_campaign"]')?.getAttribute('href')||'');
                 console.log('PUBLIC_VERIFIED',JSON.stringify({id,device:vp.name,status:r.status(),...d,proposalHref:href}));
                 if(r.status()!==200||d.title!==title||d.h1.length!==1||d.h1[0]!==h1||!d.canonical.replace('www.','').endsWith(path)||/noindex/i.test(d.robots)||!d.logo||!d.wordmark||!d.tagline||d.menu!==1||d.widget!==1||!d.proposal||d.whatsapp<2||d.words<900||d.sw>d.cw+2||!href?.includes('utm_campaign='+campaign)||!sm.includes(path)) throw Error(id+' '+vp.name+' failed');
                 await page.close();
