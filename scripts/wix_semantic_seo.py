@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Daily Arquindex semantic SEO research; draft-only Wix integration.
 
-Required env: OPENAI_API_KEY, GOOGLE_API_KEY, GOOGLE_CX_ID, WIX_API_KEY,
-WIX_SITE_ID. Does not publish or overwrite existing posts. Never logs secrets.
+Required env: OPENAI_API_KEY, GOOGLE_API_KEY, GOOGLE_CX_ID.
+WIX_API_KEY and WIX_SITE_ID are required only when WIX_CREATE_DRAFT=true. Does not publish or overwrite existing posts. Never logs secrets.
 """
 import json
 import logging
 import os
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -42,7 +43,7 @@ def search(term: str) -> list[dict]:
 
 
 def research(term: str, results: list[dict]) -> dict:
-    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"], max_retries=0, timeout=60)
     prompt = {
         "term": term,
         "search_snippets_untrusted": results,
@@ -65,6 +66,7 @@ def research(term: str, results: list[dict]) -> dict:
             {"role": "user", "content": json.dumps(prompt, ensure_ascii=False)},
         ],
         temperature=0.3,
+        max_completion_tokens=2000,
     )
     data = json.loads(response.choices[0].message.content)
     if not all(isinstance(data.get(k), str) and data[k].strip()
@@ -107,26 +109,85 @@ def create_wix_draft(data: dict) -> str:
     return response.json()["draftPost"]["id"]
 
 
-def main() -> None:
+def atomic_json(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix + ".tmp")
+    temp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    temp.replace(path)
+
+
+def main() -> int:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     topic = TOPICS[datetime.now(timezone.utc).toordinal() % len(TOPICS)]
     target = OUTPUT_DIR / f"{day}.json"
-    if target.exists():
-        logging.info("Existing daily research; avoiding duplicate: %s", target)
-        return
-    results = search(topic)
-    if not results:
-        raise RuntimeError("No Google results; no synthetic trend claims")
-    data = research(topic, results)
-    report = {"date_utc": day, "topic": topic, "sources": results, "draft": data}
-    if os.getenv("WIX_CREATE_DRAFT", "false").lower() == "true":
-        report["wix_draft_id"] = create_wix_draft(data)
-    else:
-        report["status"] = "review_required"
-    target.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    logging.info("Prepared SEO research for review at %s", target)
+    search_path = OUTPUT_DIR / f"{day}.research.json"
+    status = {"platform": "wix", "research": "not_started", "generation": "not_started",
+              "wix_draft": "not_requested", "publication": "not_attempted",
+              "indexation": "not_verified"}
+    stage = "configuration"
+    try:
+        required = ["GOOGLE_API_KEY", "GOOGLE_CX_ID", "OPENAI_API_KEY"]
+        draft_enabled = os.getenv("WIX_CREATE_DRAFT", "false").strip().lower()
+        if draft_enabled not in ("true", "false"):
+            raise ValueError("INVALID_WIX_CREATE_DRAFT")
+        if draft_enabled == "true":
+            required += ["WIX_API_KEY", "WIX_SITE_ID"]
+        missing = [key for key in required if not os.getenv(key, "").strip()]
+        if missing:
+            status.update(code="SEO_NOT_CONFIGURED", missing=missing)
+            return 2
+        if target.exists():
+            # A prior completed result must never be overwritten or submitted twice.
+            existing = json.loads(target.read_text(encoding="utf-8"))
+            status.update(code="EXISTING_RESULT_PRESERVED", result=str(target),
+                          research="previous_result", generation="previous_result",
+                          wix_draft="previously_created" if existing.get("wix_draft_id") else "not_confirmed")
+            return 3 if draft_enabled == "true" and not existing.get("wix_draft_id") else 0
+        stage = "google_research"
+        if search_path.exists():
+            cached = json.loads(search_path.read_text(encoding="utf-8"))
+            results = cached["sources"]
+            if cached.get("topic") != topic or not isinstance(results, list) or not results:
+                raise ValueError("INVALID_RESEARCH_CACHE")
+        else:
+            results = search(topic)
+            if not results:
+                raise ValueError("NO_GOOGLE_RESULTS")
+            atomic_json(search_path, {"date_utc": day, "topic": topic, "sources": results})
+        status["research"] = "completed"
+        stage = "openai_generation"
+        data = research(topic, results)
+        report = {"date_utc": day, "topic": topic, "sources": results, "draft": data,
+                  "status": "review_required", "publication": "not_attempted",
+                  "indexation": "not_verified"}
+        # Keep the local draft even if the Wix request fails later.
+        atomic_json(target, report)
+        status["generation"] = "completed"
+        if draft_enabled == "true":
+            stage = "wix_draft"
+            status["wix_draft"] = "attempted"
+            report["wix_draft_status"] = "attempted_confirmation_pending"
+            atomic_json(target, report)
+            report["wix_draft_id"] = create_wix_draft(data)
+            report["wix_draft_status"] = "created"
+            report["status"] = "wix_draft_created"
+            atomic_json(target, report)
+            status["wix_draft"] = "created"
+        status["code"] = "COMPLETED"
+        return 0
+    except Exception as error:
+        # Never print exception text: HTTP errors may include URLs with API keys.
+        response = getattr(error, "response", None)
+        status.update(code="SEO_STAGE_FAILED", stage=stage, error_type=type(error).__name__,
+                      http_status=getattr(response, "status_code", None))
+        if stage == "wix_draft":
+            status["wix_draft"] = "unconfirmed_do_not_retry_automatically"
+        return 1
+    finally:
+        atomic_json(OUTPUT_DIR / "status.json", status)
+        logging.info("SEO diagnostic: %s", json.dumps(status, ensure_ascii=False))
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

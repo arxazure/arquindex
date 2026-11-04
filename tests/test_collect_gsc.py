@@ -1,5 +1,7 @@
 """Offline regression tests; placeholders are not credentials or API evidence."""
 import importlib.util
+import contextlib
+import json
 import tempfile
 import unittest
 import urllib.error
@@ -36,6 +38,28 @@ class GSCTests(unittest.TestCase):
                 self.run_fixture(directory, urllib.error.HTTPError('https://example.invalid/', 403, 'private-error-content', {}, None))
             self.assertNotIn('private-error-content', str(error.exception))
             self.assertEqual(output.read_text(), 'previous-verified-data')
+
+    def test_empty_result_preserves_previous_data(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'gsc-real.json'
+            output.write_text('previous-verified-data')
+            with self.assertRaisesRegex(RuntimeError, 'GSC_EMPTY_RESULT'):
+                self.run_fixture(directory, {'rows': []})
+            self.assertEqual(output.read_text(), 'previous-verified-data')
+
+    def test_whitespace_credentials_do_not_call_oauth(self):
+        with patch.dict(gsc.os.environ, {key: '  ' for key in ('GSC_CLIENT_ID', 'GSC_CLIENT_SECRET', 'GSC_REFRESH_TOKEN')}, clear=True), patch.object(gsc, 'oauth_token') as oauth:
+            with self.assertRaisesRegex(RuntimeError, 'GSC_NOT_CONFIGURED'):
+                gsc.main()
+            oauth.assert_not_called()
+
+    def test_diagnostic_does_not_claim_missing_previous_data_was_preserved(self):
+        with tempfile.TemporaryDirectory() as directory, contextlib.chdir(directory), patch.object(gsc, '__file__', str(Path(directory) / 'collect_gsc.py')), patch.dict(gsc.os.environ, {}, clear=True), patch.object(gsc, 'oauth_token') as oauth:
+            self.assertEqual(gsc.run(), 2)
+            status = json.loads(Path('artifacts/gsc/status.json').read_text())
+            self.assertEqual(status['previous_data'], 'not_available')
+            self.assertEqual(status['code'], 'GSC_NOT_CONFIGURED')
+            oauth.assert_not_called()
 
     def test_success_replaces_data_after_complete_response(self):
         import json

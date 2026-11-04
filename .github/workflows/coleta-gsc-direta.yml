@@ -31,6 +31,9 @@ jobs:
       - name: Testar limites e preservacao de dados GSC sem credenciais
         run: python -m unittest discover -s tests -p test_collect_gsc.py -v
   collect:
+    concurrency:
+      group: gsc-direct-collection
+      cancel-in-progress: false
     needs: tests
     if: github.event_name != 'push'
     runs-on: ubuntu-latest
@@ -52,6 +55,16 @@ jobs:
           GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
           GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
         run: python3 painel-seo/collect_gsc.py
+      - name: Upload GSC diagnostics and verified data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-direct-evidence
+          path: |
+            artifacts/gsc/status.json
+            painel-seo/gsc-real.json
+          retention-days: 30
+          if-no-files-found: error
       - name: Commit collected data
         run: |
           if test -f painel-seo/gsc-real.json; then
