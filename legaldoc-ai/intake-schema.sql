@@ -42,3 +42,25 @@ CREATE TABLE IF NOT EXISTS legaldoc_request_events (
 CREATE INDEX IF NOT EXISTS legaldoc_request_events_tenant ON legaldoc_request_events(company_id,request_id,occurred_at);
 -- Configure INSERT-only privilege for this audit table; revoke UPDATE/DELETE.
 -- All tenant tables require RLS policies before any migration is deployed.
+
+CREATE TABLE IF NOT EXISTS legaldoc_reviewer_invites (
+ id uuid PRIMARY KEY,
+ company_id uuid NOT NULL,
+ request_id uuid NOT NULL REFERENCES legaldoc_requests(id),
+ invited_email text NOT NULL,
+ role text NOT NULL,
+ token_hash char(64) NOT NULL UNIQUE,
+ invited_by uuid NOT NULL,
+ expires_at timestamptz NOT NULL,
+ consumed_at timestamptz,
+ revoked_at timestamptz,
+ created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS legaldoc_reviewer_invites_pending
+ ON legaldoc_reviewer_invites(company_id,request_id,expires_at)
+ WHERE consumed_at IS NULL AND revoked_at IS NULL;
+-- Before real invitation dispatch:
+-- * authenticate client, rate limit invite creation and enforce per-tenant roles
+-- * store only token hash, send raw token through approved mail service, never logs
+-- * require recipient email ownership/verified identity before linking reviewer_user_id
+-- * consume atomically, check expiry/revocation and require re-authentication for decisions
