@@ -115,6 +115,17 @@ def main() -> None:
     if target.exists():
         logging.info("Existing daily research; avoiding duplicate: %s", target)
         return
+    required = ("GOOGLE_API_KEY", "GOOGLE_CX_ID", "OPENAI_API_KEY")
+    if os.getenv("WIX_CREATE_DRAFT", "false").lower() == "true":
+        required += ("WIX_API_KEY", "WIX_SITE_ID")
+    missing = [name for name in required if not os.getenv(name, "").strip()]
+    if missing:
+        report = {"date_utc": day, "topic": topic, "status": "blocked_missing_configuration",
+                  "missing_environment_variables": missing, "published": False,
+                  "message": "No research, draft or publication was executed."}
+        target.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        logging.error("SEO research blocked: missing variables %s", ", ".join(missing))
+        return
     results = search(topic)
     if not results:
         raise RuntimeError("No Google results; no synthetic trend claims")
