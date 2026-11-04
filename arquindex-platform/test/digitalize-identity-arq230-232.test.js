@@ -6,7 +6,10 @@ const origin='https://arquindex.com.br';
 const targets=[
   ['santa-luzia','Digitalize em Santa Luzia: digitalização de documentos | Arquindex','Digitalize seus documentos em Santa Luzia'],
   ['ribeirao-das-neves','Digitalize em Ribeirão das Neves: digitalização de documentos | Arquindex','Digitalize seus documentos em Ribeirão das Neves'],
-  ['ibirite','Digitalize em Ibirité: digitalização de documentos | Arquindex','Digitalize seus documentos em Ibirité']
+  ['ibirite','Digitalize em Ibirité: digitalização de documentos | Arquindex','Digitalize seus documentos em Ibirité'],
+  ['sabara','Digitalize em Sabará: digitalização de documentos | Arquindex','Digitalize seus documentos em Sabará'],
+  ['lagoa-santa','Digitalize em Lagoa Santa: digitalização de documentos | Arquindex','Digitalize seus documentos em Lagoa Santa'],
+  ['pedro-leopoldo','Digitalize em Pedro Leopoldo: digitalização de documentos | Arquindex','Digitalize seus documentos em Pedro Leopoldo']
 ];
 
 for(const [slug,title,h1] of targets){
@@ -27,7 +30,7 @@ for(const [slug,title,h1] of targets){
 }
 
 test('mudança não é aplicada indiscriminadamente à família',()=>{
-  const html=renderDigitalize('/digitalize/sabara/',origin).body;
+  const html=renderDigitalize('/digitalize/vespasiano/',origin).body;
   assert.ok(!html.includes('id="arq-floating"'));
   assert.ok(!html.includes('class="aq-logo"'));
   assert.ok(!html.includes('class="aq-logo-name"'));
