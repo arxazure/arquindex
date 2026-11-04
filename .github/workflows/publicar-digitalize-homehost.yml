@@ -96,9 +96,37 @@ jobs:
           mirror -R --no-perms /tmp/digitalize-backup $backup_dir/digitalize
           get public_html/robots.txt -o /tmp/robots-original.txt
           put /tmp/robots-original.txt -o $backup_dir/robots.txt
-          mirror -R --verbose --no-perms digitalize-output/digitalize public_html/digitalize
           bye
           LFTP
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          local=Path('digitalize-output/digitalize')
+          remote=Path('/tmp/digitalize-backup')
+          changed=[]
+          for p in sorted(local.rglob('*')):
+              if not p.is_file(): continue
+              rel=p.relative_to(local)
+              old=remote/rel
+              if not old.exists() or hashlib.sha256(p.read_bytes()).digest()!=hashlib.sha256(old.read_bytes()).digest():
+                  changed.append(rel.as_posix())
+          Path('/tmp/digitalize-changed.txt').write_text('\n'.join(changed)+('\n' if changed else ''))
+          print('CHANGED_FILES',len(changed),*changed)
+          PY
+          while IFS= read -r rel; do
+            [ -n "$rel" ] || continue
+            remote_dir=$(dirname "$rel")
+            lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<LFTP
+          set cmd:fail-exit yes
+          set net:max-retries 2
+          set ftp:ssl-force yes
+          set ftp:ssl-protect-data yes
+          set ssl:verify-certificate yes
+          mkdir -f -p "public_html/digitalize/$remote_dir"
+          put "digitalize-output/digitalize/$rel" -o "public_html/digitalize/$rel"
+          bye
+          LFTP
+          done < /tmp/digitalize-changed.txt
           python - <<'PY'
           from pathlib import Path
           p=Path('/tmp/robots-original.txt')
@@ -134,6 +162,17 @@ jobs:
               path=url[len(base):]; page=get(path)
               assert 'href="'+url+'"' in page and '<h1>' in page and 'Digitalize' in page
               print('PUBLIC_VERIFIED',url)
+          checks={
+              '/digitalize/sabara/':'digitalize_sabara',
+              '/digitalize/lagoa-santa/':'digitalize_lagoa-santa',
+              '/digitalize/pedro-leopoldo/':'digitalize_pedro-leopoldo',
+          }
+          for path,campaign in checks.items():
+              page=get(path)
+              assert 'id="aq-nav"' in page and 'id="arq-floating"' in page
+              assert 'class="aq-logo-name"' in page and 'EFICIÊNCIA MÁXIMA EM GESTÃO DE DOCUMENTOS' in page
+              assert 'utm_campaign='+campaign in page
+              print('IDENTITY_CONVERSION_VERIFIED',path)
           assert '/digitalize/sitemap.xml' in get('/robots.txt')
           print('SITEMAP_ROBOTS_VERIFIED')
           PY
