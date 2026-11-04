@@ -1,0 +1,92 @@
+name: Auditar ARQ-233 a ARQ-238 2026-11-04 manha
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/auditar-arq233-arq238-20261104-manha.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Verificar DNS TLS e HTTP
+        shell: bash
+        run: |
+          set -u
+          for host in www.arquindex.com.br ocr.arquindex.com.br ecm.arquindex.com.br; do
+            echo "DNS $host"
+            getent ahostsv4 "$host" | awk '{print $1}' | sort -u || true
+            echo | openssl s_client -servername "$host" -connect "$host:443" 2>/dev/null | openssl x509 -noout -subject -issuer -dates || true
+          done
+          urls=(
+            "https://www.arquindex.com.br/digitalize/sabara/"
+            "https://www.arquindex.com.br/digitalize/vespasiano/"
+            "https://www.arquindex.com.br/digitalize/lagoa-santa/"
+            "https://www.arquindex.com.br/digitalize/pedro-leopoldo/"
+            "https://ocr.arquindex.com.br/sitechecker5e8991ab0e9e7199188accf65b36dd02.html"
+            "https://ecm.arquindex.com.br/sitechecker5e8991ab0e9e7199188accf65b36dd02.html"
+          )
+          for url in "${urls[@]}"; do
+            curl -L --max-time 30 -sS -o /dev/null -w "HTTP %{http_code} TYPE %{content_type} FINAL %{url_effective} TIME %{time_total}\n" "$url" || true
+          done
+      - name: Preparar navegador
+        run: |
+          CHROME_PATH=$(command -v google-chrome || command -v chromium)
+          test -n "$CHROME_PATH"
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          npm install --prefix "$RUNNER_TEMP/arq-audit" playwright --no-audit --no-fund
+      - name: Auditar SEO mobile desktop e sitemap
+        run: |
+          node <<'JS'
+          const {chromium}=require(process.env.RUNNER_TEMP+'/arq-audit/node_modules/playwright');let browser;
+          const rows=[
+            ['ARQ-233','https://www.arquindex.com.br/digitalize/sabara/','https://www.arquindex.com.br/digitalize/sitemap.xml',true],
+            ['ARQ-234','https://www.arquindex.com.br/digitalize/vespasiano/','https://www.arquindex.com.br/digitalize/sitemap.xml',true],
+            ['ARQ-235','https://www.arquindex.com.br/digitalize/lagoa-santa/','https://www.arquindex.com.br/digitalize/sitemap.xml',true],
+            ['ARQ-236','https://www.arquindex.com.br/digitalize/pedro-leopoldo/','https://www.arquindex.com.br/digitalize/sitemap.xml',true],
+            ['ARQ-237','https://ocr.arquindex.com.br/sitechecker5e8991ab0e9e7199188accf65b36dd02.html',null,false],
+            ['ARQ-238','https://ecm.arquindex.com.br/sitechecker5e8991ab0e9e7199188accf65b36dd02.html',null,false]
+          ];
+          const clean=s=>(s||'').replace(/\s+/g,' ').trim();
+          (async()=>{
+            const mapText=await (await fetch('https://www.arquindex.com.br/digitalize/sitemap.xml')).text();
+            browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
+            for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){
+              const c=await browser.newContext({viewport:{width:vp.width,height:vp.height},isMobile:vp.name==='mobile'});
+              for(const [id,url,map,commercial] of rows){
+                const p=await c.newPage();
+                const r=await p.goto(url+'?audit=20261104manha',{waitUntil:'domcontentloaded',timeout:45000}).catch(()=>null);
+                if(r) await p.waitForTimeout(500);
+                const d=await p.evaluate(()=>({
+                  final:location.href,title:document.title,
+                  h1:[...document.querySelectorAll('h1')].map(x=>clean(x.textContent)),
+                  description:document.querySelector('meta[name=description]')?.content||'',
+                  canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),
+                  robots:document.querySelector('meta[name=robots]')?.content||'',
+                  words:(document.body.innerText||'').trim().split(/\s+/).filter(Boolean).length,
+                  wordmark:document.querySelectorAll('.aq-logo-name').length,
+                  menu:document.querySelectorAll('#aq-nav,nav').length,
+                  widget:document.querySelectorAll('#arq-floating').length,
+                  whatsapp:[...document.querySelectorAll('a[href]')].filter(a=>a.href.includes('5531973632725')).length,
+                  proposal:[...document.querySelectorAll('a[href]')].some(a=>a.href.includes('utm_campaign=')),
+                  forms:document.querySelectorAll('form').length,
+                  jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,
+                  internal:[...document.querySelectorAll('a[href]')].filter(a=>{try{return new URL(a.href).hostname.endsWith('arquindex.com.br')}catch{return false}}).length,
+                  body:clean(document.body.innerText).slice(0,240),
+                  cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
+                }));
+                const path=new URL(url).pathname;
+                const sitemap=map?mapText.includes(path):false;
+                console.log('AUDIT',JSON.stringify({id,device:vp.name,status:r?.status()||0,sitemap,...d}));
+                if(commercial){
+                  if(r?.status()!==200||d.h1.length!==1||!d.canonical.some(x=>x.replace('www.','').endsWith(path))||/noindex/i.test(d.robots)||d.sw>d.cw+2||!sitemap) throw Error(id+' '+vp.name+' failed');
+                }
+                await p.close();
+              }
+              await c.close();
+            }
+            await browser.close();console.log('AUDIT_COMPLETE');
+          })().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exit(1)});
+          JS
