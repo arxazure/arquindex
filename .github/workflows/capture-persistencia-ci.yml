@@ -1,0 +1,22 @@
+name: Capture Pro - Persistencia e Decreto 10278
+on:
+  pull_request:
+    paths:
+      - 'capture-pro/**'
+      - '.github/workflows/capture-persistencia-ci.yml'
+  workflow_dispatch:
+jobs:
+  unit-tests:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxe e testes
+        run: |
+          node --check capture-pro/decreto10278.js
+          node --check capture-pro/persistencia.js
+          node --test capture-pro/decreto10278.test.js capture-pro/persistencia.test.js
