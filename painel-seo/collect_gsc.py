@@ -100,7 +100,8 @@ def run():
         code = str(error).split(':', 1)[0]
         diagnostic.update(code=code if code in known else 'GSC_COLLECTION_FAILED',
                           missing=missing, error_type=type(error).__name__,
-                          http_status=getattr(error, 'code', None), previous_data='preserved')
+                          http_status=getattr(error, 'code', None),
+                          previous_data='preserved' if Path(__file__).with_name('gsc-real.json').exists() else 'not_available')
         return 2 if missing else 1
     finally:
         directory = Path('artifacts/gsc')
