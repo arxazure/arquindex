@@ -2,7 +2,7 @@
 Required GitHub secrets: GSC_CLIENT_ID, GSC_CLIENT_SECRET, GSC_REFRESH_TOKEN.
 No synthetic rows, no credentials written to disk.
 """
-import os,json,datetime,urllib.request,urllib.parse
+import os,json,datetime,urllib.request,urllib.parse,sys
 from pathlib import Path
 
 
@@ -41,11 +41,17 @@ def authorized_property(site):
 
 
 def main():
-    missing=[x for x in ('GSC_CLIENT_ID','GSC_CLIENT_SECRET','GSC_REFRESH_TOKEN') if not os.environ.get(x)]
+    missing=[x for x in ('GSC_CLIENT_ID','GSC_CLIENT_SECRET','GSC_REFRESH_TOKEN') if not os.environ.get(x, "").strip()]
     if missing:
         raise RuntimeError('GSC_NOT_CONFIGURED: missing GitHub Actions secrets '+', '.join(missing))
-    token=oauth_token()
-    sites=request_json('https://www.googleapis.com/webmasters/v3/sites',token=token).get('siteEntry',[])
+    try:
+        token=oauth_token()
+    except Exception as error:
+        raise RuntimeError('GSC_OAUTH_FAILED: HTTP '+str(getattr(error, 'code', 'n/a'))) from None
+    try:
+        sites=request_json('https://www.googleapis.com/webmasters/v3/sites',token=token).get('siteEntry',[])
+    except Exception as error:
+        raise RuntimeError('GSC_PROPERTY_LIST_FAILED: HTTP '+str(getattr(error, 'code', 'n/a'))) from None
     allowed=sorted({s['siteUrl'] for s in sites if authorized_property(s)})
     today=datetime.date.today()
     end=today-datetime.timedelta(days=3)
@@ -72,10 +78,35 @@ def main():
         property_reports.append({'property':site,'rows':count})
     if not allowed:
         raise RuntimeError('GSC_NO_VERIFIED_ARQUINDEX_PROPERTIES: check OAuth authorization and Search Console access')
+    if not allrows:
+        raise RuntimeError('GSC_EMPTY_RESULT: prior verified data preserved; review property and date range')
     output={'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'start_date':start.isoformat(),'end_date':end.isoformat(),'source':'Google Search Console API OAuth','properties':property_reports,'rows':allrows}
     p=Path(__file__).with_name('gsc-real.json')
     temp=p.with_suffix('.json.tmp')
     temp.write_text(json.dumps(output,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
     temp.replace(p)
     print('GSC properties:',len(property_reports),'rows:',len(allrows))
-if __name__=='__main__':main()
+def run():
+    diagnostic = {'platform': 'gsc', 'collection': 'failed', 'source': 'Google Search Console API OAuth',
+                  'publication': 'not_attempted', 'indexation': 'not_verified'}
+    try:
+        main()
+        diagnostic.update(collection='completed', code='GSC_COLLECTED')
+        return 0
+    except Exception as error:
+        missing = [key for key in ('GSC_CLIENT_ID', 'GSC_CLIENT_SECRET', 'GSC_REFRESH_TOKEN')
+                   if not os.getenv(key, '').strip()]
+        known = ('GSC_NOT_CONFIGURED', 'GSC_OAUTH_FAILED', 'GSC_PROPERTY_LIST_FAILED', 'GSC_PROPERTY_READ_FAILED', 'GSC_NO_VERIFIED_ARQUINDEX_PROPERTIES', 'GSC_EMPTY_RESULT')
+        code = str(error).split(':', 1)[0]
+        diagnostic.update(code=code if code in known else 'GSC_COLLECTION_FAILED',
+                          missing=missing, error_type=type(error).__name__,
+                          http_status=getattr(error, 'code', None), previous_data='preserved')
+        return 2 if missing else 1
+    finally:
+        directory = Path('artifacts/gsc')
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / 'status.json').write_text(json.dumps(diagnostic) + '\n', encoding='utf-8')
+        print(json.dumps(diagnostic))
+
+
+if __name__=='__main__':sys.exit(run())

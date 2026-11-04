@@ -37,6 +37,20 @@ class GSCTests(unittest.TestCase):
             self.assertNotIn('private-error-content', str(error.exception))
             self.assertEqual(output.read_text(), 'previous-verified-data')
 
+    def test_empty_result_preserves_previous_data(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'gsc-real.json'
+            output.write_text('previous-verified-data')
+            with self.assertRaisesRegex(RuntimeError, 'GSC_EMPTY_RESULT'):
+                self.run_fixture(directory, {'rows': []})
+            self.assertEqual(output.read_text(), 'previous-verified-data')
+
+    def test_whitespace_credentials_do_not_call_oauth(self):
+        with patch.dict(gsc.os.environ, {key: '  ' for key in ('GSC_CLIENT_ID', 'GSC_CLIENT_SECRET', 'GSC_REFRESH_TOKEN')}, clear=True), patch.object(gsc, 'oauth_token') as oauth:
+            with self.assertRaisesRegex(RuntimeError, 'GSC_NOT_CONFIGURED'):
+                gsc.main()
+            oauth.assert_not_called()
+
     def test_success_replaces_data_after_complete_response(self):
         import json
         with tempfile.TemporaryDirectory() as directory:
