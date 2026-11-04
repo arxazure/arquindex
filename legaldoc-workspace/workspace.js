@@ -56,9 +56,9 @@ async function openDoc(id){
    if(!Array.isArray(parsed.sections)||parsed.sections.length>100||!parsed.sections.every(s=>typeof s.title==='string'&&typeof s.body==='string'&&s.title.length<=180&&s.body.length<=20000))throw Error('Formato de projeto inválido.');
    if(!parsed.fields||typeof parsed.fields!=='object'||Array.isArray(parsed.fields))throw Error('Campos inválidos.');
    const raw=parsed.sections.map((section,i)=>{
-    const value=section.body.replace(/\\{\\{\\s*([A-Za-z][A-Za-z0-9_]{0,63})\\s*\\}\\}/g,(all,key)=>typeof parsed.fields[key]==='string'?parsed.fields[key].slice(0,300):all);
-    return (i+1)+'. '+section.title+'\\n'+value;
-   }).join('\\n\\n');
+    const value=section.body.replace(/\{\{\s*([A-Za-z][A-Za-z0-9_]{0,63})\s*\}\}/g,(all,key)=>typeof parsed.fields[key]==='string'?parsed.fields[key].slice(0,300):all);
+    return (i+1)+'. '+section.title+'\n'+value;
+   }).join('\n\n');
    if(raw.length<40||raw.length>180000)throw Error('Documento montado fora dos limites.');
    area.value=raw;notify('Projeto carregado no editor. Revise e clique em Salvar nova versão.');
    upload.value='';
