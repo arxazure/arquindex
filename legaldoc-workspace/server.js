@@ -133,8 +133,6 @@ async function route(req,res,url){
   });
   await issueSession(res,{...user,must_change_password:false});return;
  }
- if(user.must_change_password)fail(403,'Troque a senha temporária antes de usar o sistema');
-
  if(pathname==='/api/logout'&&method==='POST'){
   await pool.query('DELETE FROM ldw_sessions WHERE token_hash=$1',[sha(cookie(req,'ldw_session'))]);clearCookies(res);send(res,200,{ok:true});return;
  }
