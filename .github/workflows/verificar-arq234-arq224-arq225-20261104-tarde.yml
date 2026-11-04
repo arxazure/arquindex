@@ -1,0 +1,28 @@
+name: Verificar ARQ-234 ARQ-224 ARQ-225 HomeHost 2026-11-04 tarde
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/verificar-arq234-arq224-arq225-20261104-tarde.yml']
+  workflow_dispatch:
+permissions: { contents: read }
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar público mobile e desktop
+        run: |
+          mkdir -p "$RUNNER_TEMP/verify" && cd "$RUNNER_TEMP/verify"
+          npm init -y >/dev/null
+          npm install playwright@1.56.1 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > verify.js <<'JS'
+          const {chromium}=require('playwright');
+          const rows=[
+            ['ARQ-234','/digitalize/vespasiano/','Digitalize em Vespasiano: digitalização de documentos | Arquindex','Digitalize seus documentos em Vespasiano','digitalize_vespasiano','/digitalize/sitemap.xml'],
+            ['ARQ-224','/seo-regional/gestao-documental-ecm-databooks/pedro-leopoldo/','Databooks de Engenharia em Pedro Leopoldo | Arquindex','Databooks de engenharia e gestão documental em Pedro Leopoldo','arq224_databook_pedro_leopoldo_20261104','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml'],
+            ['ARQ-225','/seo-regional/gestao-documental-ecm-databooks/santa-luzia/','Databooks de RH e Documentos Trabalhistas em Santa Luzia | Arquindex','Databooks de RH e gestão documental em Santa Luzia','arq225_databook_rh_santa_luzia_20261104','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml']
+          ];
+          (async()=>{const b=await chromium.launch({headless:true});const base='https://www.arquindex.com.br';for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){const ctx=await b.newContext({viewport:vp});for(const [id,path,title,h1,campaign,smPath] of rows){const p=await ctx.newPage();const r=await p.goto(base+path+'?verify=20261104tarde',{waitUntil:'domcontentloaded',timeout:60000});const d=await p.evaluate(()=>({title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"],.aq-logo-name'),menu:document.querySelectorAll('header nav,nav[aria-label]').length,floating:!!document.querySelector('#arq-floating,.arq-floating'),proposal:[...document.querySelectorAll('a[href]')].find(a=>a.href.includes('utm_campaign='))?.href||'',marker:!!document.querySelector('[data-aq-aeo]'),words:(document.body.innerText.match(/\S+/g)||[]).length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));const sm=await (await ctx.request.get(base+smPath)).text();console.log('VERIFY',JSON.stringify({id,device:vp.name,status:r.status(),...d,sitemap:sm.includes(base+path)}));if(r.status()!==200||d.title!==title||d.h1.length!==1||d.h1[0]!==h1||d.canonical!==base+path||/noindex/i.test(d.robots)||!d.logo||d.menu<1||!d.floating||!d.proposal.includes(campaign)||d.sw>d.cw+2||!sm.includes(base+path)||(id!=='ARQ-234'&&!d.marker))throw Error(id+' '+vp.name+' invalid');await p.close()}await ctx.close()}await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node verify.js
