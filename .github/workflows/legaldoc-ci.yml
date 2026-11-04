@@ -25,6 +25,8 @@ jobs:
           node --check public-server.js
           node --check builder.js
           node --check legal-catalog.js
+          node --check governance.js
+          node --check governance-templates.js
           node --check demo-review.js
           node --check workflow.js
           node --check analysis.js
@@ -36,6 +38,8 @@ jobs:
           test -s builder.html
           test -s builder.css
           test -s builder.js
+          test -s governance.html
+          test -s governance.js
           test -s Dockerfile
           grep -q 'builder.js' builder.html
           grep -q 'builder.html' public-server.js
