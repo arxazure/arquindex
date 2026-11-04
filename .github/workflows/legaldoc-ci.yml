@@ -24,12 +24,13 @@ jobs:
         run: |
           node --check public-server.js
           node --check builder.js
+          node --check legal-catalog.js
           node --check demo-review.js
           node --check workflow.js
           node --check analysis.js
           node --check router.js
       - name: Run unit tests
-        run: node --test workflow.test.js analysis.test.js
+        run: node --test workflow.test.js analysis.test.js legal-catalog.test.js
       - name: Check document builder assets
         run: |
           test -s builder.html
