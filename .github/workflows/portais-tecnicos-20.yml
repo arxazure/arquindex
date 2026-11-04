@@ -1,0 +1,49 @@
+name: Portais técnicos Arquindex - 20 temas
+on:
+  push:
+    branches: [feature/portais-tecnicos-20-20261104]
+    paths:
+      - 'portais-tecnicos/catalogo.json'
+      - 'scripts/portais-tecnicos/**'
+      - '.github/workflows/portais-tecnicos-20.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: homehost-portais-tecnicos-20
+  cancel-in-progress: false
+jobs:
+  build-qa-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preparar renderização de vídeos
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install Pillow==11.3.0
+      - name: Gerar os 20 portais, 40 páginas e 20 vídeos
+        run: python scripts/portais-tecnicos/build.py --videos
+      - name: Validar conteúdo, SEO e mídia
+        run: python scripts/portais-tecnicos/qa.py
+      - name: Provisionar somente os novos subdomínios e publicar na HomeHost
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+        run: python scripts/portais-tecnicos/publish.py
+      - name: Preservar entrega e comprovantes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portais-tecnicos-20
+          path: |
+            portais-tecnicos/dist/
+            portais-tecnicos/qa-report.json
+            publish-report/portais-tecnicos-20.json
+          retention-days: 30
