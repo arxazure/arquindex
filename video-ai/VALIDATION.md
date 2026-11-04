@@ -61,4 +61,4 @@ Esta revisão cobre os componentes diretos identificados; não equivale a uma au
 
 ## Aprovação futura
 
-Nenhuma mesclagem, publicação social ou ativação de serviço pago foi feita. Antes dessas ações, apresentar escopo, canais, vídeo final, enquadramento/licença e eventuais custos para aprovação expressa. O PR continua rascunho. Também há conflito de mesclagem informado pelo GitHub; não foi resolvido incorporando mudanças institucionais fora deste escopo.
+Nenhuma mesclagem, publicação social ou ativação de serviço pago foi feita. Antes dessas ações, apresentar escopo, canais, vídeo final, enquadramento/licença e eventuais custos para aprovação expressa. O PR continua rascunho. O estado de mesclagem pode ser recalculado pelo GitHub; nenhuma atualização da base institucional foi incorporada neste trabalho.
