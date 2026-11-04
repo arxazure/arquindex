@@ -1,3 +1,4 @@
+import {registerInventarioReports} from './inventario-relatorios.js';
 import {initTemporalidade,registerTemporalidade} from './temporalidade.js';
 import {readFileSync} from 'node:fs';
 import express from 'express';import pg from 'pg';import bcrypt from 'bcryptjs';import helmet from 'helmet';import {randomUUID,createHmac,timingSafeEqual} from 'node:crypto';
@@ -43,6 +44,7 @@ app.post('/api/requests',wrap(async(req,res)=>{if(!['admin','operator'].includes
 app.get('/api/retention',wrap(async(req,res)=>res.json((await Q('select * from retention where tenant_id=$1 order by doc_type',[req.user.tenant_id])).rows)));
 app.post('/api/retention',wrap(async(req,res)=>{if(req.user.role!=='admin')return res.sendStatus(403);const {doc_type,years,final_action}=req.body||{};if(!doc_type||!Number.isInteger(years)||years<0||!['review','permanent','eligible_for_disposal'].includes(final_action))return res.sendStatus(400);const r=await Q('insert into retention(id,tenant_id,doc_type,years,final_action) values($1,$2,$3,$4,$5) on conflict(tenant_id,doc_type) do update set years=excluded.years,final_action=excluded.final_action returning *',[randomUUID(),req.user.tenant_id,doc_type,years,final_action]);res.json(r.rows[0])}));
 registerTemporalidade(app,db,wrap);
+registerInventarioReports(app,db,wrap);
 app.get('/inventory-ui.js',(req,res)=>res.type('js').send(readFileSync(new URL('./inventory-ui.js',import.meta.url),'utf8')));
 app.get('/',(req,res)=>res.type('html').send(readFileSync(new URL('./inventory-ui.html',import.meta.url),'utf8')));
 app.post('/api/requests/:id/reject',wrap(async(req,res)=>{if(req.user.role!=='admin')return res.sendStatus(403);if(!uuid(req.params.id))return res.sendStatus(400);const r=await Q("update requests set status='rejected' where id=$1 and tenant_id=$2 and status='pending' returning *",[req.params.id,req.user.tenant_id]);res.status(r.rowCount?200:409).json(r.rows[0]||{error:'Indisponivel'})}));
