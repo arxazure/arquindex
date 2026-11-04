@@ -1,0 +1,9 @@
+# 04/11/2026 — tarde, Brasília
+Registro da manhã lido (ffb188d); sandbox ANPD já pautado. ARQ-209 conferida na versão 2 do plano e na página renderizada https://www.arquindex.com.br/digitalizacao.html (atualização editorial 07/10/2026).
+| Data | URL/tema | Canal | Ação | Estado |
+|---|---|---|---|---|
+| 04/11 | digitalizacao.html / comparação de orçamentos | Site | Preparar complemento à FAQ de orçamento com tabela de escopo e unidade de cobrança | Preparado; nenhuma implantação |
+| 04/11 | ARQ-209 / mesmo tema | LinkedIn, Instagram, Google Business, Bing | Briefing de distribuição | Preparado; zero posts |
+| 04/11 | Arquindex, BH | Web | Busca sobreposta de menções, 29/10–04/11 | Nenhuma nova menção substantiva confirmada; Solutudo e oHub são diretórios |
+Oferta informada pela usuária: comum a partir de R$ 0,09; certificada a partir de R$ 0,12. Unidade, lote mínimo, inclusões e vigência ainda não comprovados; não divulgar cifras até validação. Nenhum valor inferido para Alfresco, Capture ou LGPD. O diferencial é comparação de propostas com o mesmo escopo, não uma página nova. Link interno: https://www.arquindex.com.br/onde-digitalizar-documentos.html. Fonte normativa: https://legis.senado.leg.br/norma/31990460 (DOU 19/03/2020). DigitalizeJá consultado para classificação de termos, sem estimar volume ou leads. Hyland Community consultada; newsletter não confirmada como lançamento novo.
+Próximas: reconciliar histórico e confirmar eventual URL dedicada; validar unidade e tabela comercial; revisar texto com responsável e revalidar novos fatos técnicos nas fontes primárias. Sem publicação, mudança de título ou post ID.
