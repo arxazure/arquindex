@@ -20,9 +20,9 @@ export async function checkOfficialSource(source){
  }
  return {hash:createHash('sha256').update(normalized).digest('hex'),bytes:total,mime:mime.slice(0,100),http_status:response.status};
 }
-export async function runOfficialChecks(db){
+export async function runOfficialChecks(db,sources=regulatorySources){
  const results=[];
- for(const source of regulatorySources){
+ for(const source of sources){
   const previous=await db.query("SELECT content_hash FROM lgpd_regulatory_checks WHERE source_id=$1 AND state<>'error' ORDER BY checked_at DESC,id DESC LIMIT 1",[source.id]);
   try{
    const result=await checkOfficialSource(source);
@@ -37,3 +37,4 @@ export async function runOfficialChecks(db){
  }
  return results;
 }
+
