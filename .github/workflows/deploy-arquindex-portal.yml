@@ -42,6 +42,15 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ env.CF_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ env.CF_ACCOUNT }}
+      - name: Verify public preview and sitemap
+        if: ${{ env.CF_TOKEN != '' && env.CF_ACCOUNT != '' }}
+        run: |
+          set -eu
+          for path in / /insights/preservacao-digital/ /insights/arquitetura-metadados/ /insights/inteligencia-artificial-documentos/ /insights/ecm-e-processos/ /insights/acervos-engenharia/ /sitemap.xml /robots.txt; do
+            echo "Checking $path"
+            curl --fail --location --retry 5 --retry-delay 4 --retry-all-errors --silent --show-error "https://arquindex-portal.pages.dev$path" -o /dev/null
+          done
+          echo "Preview HTTP checks passed; search-engine submission is a separate step."
       - name: Explain missing Cloudflare credentials
         if: ${{ env.CF_TOKEN == '' || env.CF_ACCOUNT == '' }}
         run: |
