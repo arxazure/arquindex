@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'scripts/seo_live_preflight.py'
+      - 'scripts/seo_robots_sitemap_live.py'
       - '.github/workflows/seo-live-preflight.yml'
 permissions:
   contents: read
@@ -20,8 +21,12 @@ jobs:
         run: python3 -m py_compile scripts/seo_live_preflight.py
       - name: Probe approved public URLs only
         run: python3 scripts/seo_live_preflight.py --out seo-report/live-preflight.json
+      - name: Inspect public robots and sitemap contents
+        run: python3 scripts/seo_robots_sitemap_live.py
       - uses: actions/upload-artifact@v4
         with:
           name: seo-live-preflight
-          path: seo-report/live-preflight.json
+          path: |
+            seo-report/live-preflight.json
+            seo-report/robots-sitemap-live.json
           retention-days: 14
