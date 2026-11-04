@@ -70,7 +70,7 @@ function cleanEmail(v){return typeof v==='string'?v.trim().toLowerCase():'';}
 function goodEmail(v){return v.length<=254&&/^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]+$/.test(v);}
 async function transact(fn){const db=await pool.connect();try{await db.query('BEGIN');const result=await fn(db);await db.query('COMMIT');return result;}catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}}
 async function docRow(db,id,tenant){const q=await db.query('SELECT * FROM ldw_docs WHERE id=$1 AND tenant_id=$2 FOR UPDATE',[id,tenant]);if(!q.rowCount)fail(404,'Documento não encontrado');return q.rows[0];}
-function docSummary(d){return {id:d.id,title:d.title,kind:d.kind,description:d.description,rounds:d.rounds,destination:d.destination,stage:d.stages[d.stage_index],stageIndex:d.stage_index,stages:d.stages,status:d.status,version:d.version,bodyHash:d.body_hash,updatedAt:d.updated_at,createdAt:d.created_at};}
+function docSummary(d){return {id:d.id,createdBy:d.created_by,title:d.title,kind:d.kind,description:d.description,rounds:d.rounds,destination:d.destination,stage:d.stages[d.stage_index],stageIndex:d.stage_index,stages:d.stages,status:d.status,version:d.version,bodyHash:d.body_hash,updatedAt:d.updated_at,createdAt:d.created_at};}
 function checkRole(user,expected){return user.role===expected||(expected==='author'&&user.role==='admin');}
 function extractDoc(body){
  const title=String(body.title||'').trim(),kind=String(body.kind||'').trim(),description=String(body.description||'').trim();
@@ -98,6 +98,7 @@ async function route(req,res,url){
   const email=cleanEmail(body.email),password=body.password,company=String(body.company||'').trim();
   if(!goodEmail(email)||typeof password!=='string'||password.length<14||password.length>200||company.length<3||company.length>180)fail(400,'Informe empresa, e-mail e senha de pelo menos 14 caracteres');
   const user=await transact(async db=>{
+   await db.query('SELECT pg_advisory_xact_lock(82913764)');
    const count=await db.query('SELECT id FROM ldw_tenants FOR UPDATE');if(count.rowCount)fail(409,'Instalação já concluída');
    const tenant=randomUUID(),id=randomUUID();
    await db.query('INSERT INTO ldw_tenants(id,name) VALUES($1,$2)',[tenant,company]);
@@ -143,7 +144,7 @@ async function route(req,res,url){
   send(res,200,{ok:true});return;
  }
  if(pathname==='/api/docs'&&method==='GET'){
-  const q=await pool.query('SELECT * FROM ldw_docs WHERE tenant_id=$1 ORDER BY updated_at DESC LIMIT 100',[user.tenant_id]);
+  const q=await pool.query("SELECT d.* FROM ldw_docs d WHERE d.tenant_id=$1 AND (d.created_by=$2 OR $3='admin' OR EXISTS(SELECT 1 FROM ldw_assignments a WHERE a.doc_id=d.id AND a.tenant_id=$1 AND a.user_id=$2)) ORDER BY d.updated_at DESC LIMIT 100",[user.tenant_id,user.id,user.role]);
   send(res,200,{docs:q.rows.map(docSummary)});return;
  }
  if(pathname==='/api/docs'&&method==='POST'){
@@ -213,7 +214,7 @@ async function route(req,res,url){
     }
     if(['APROVACAO','HOMOLOGACAO'].includes(stage)&&d.created_by===user.id)fail(403,'Segregação entre autor e aprovador');
     if(decision==='APPROVE'){
-     if(stage==='MINUTA'&&d.body.length<80)fail(409,'Minuta curta; conclua o documento antes de enviar');
+     if(stage==='MINUTA'&&(d.body.length<80||d.version<2))fail(409,'Minuta curta; conclua o documento antes de enviar');
      if(d.stage_index>1){
       const prior=await db.query("SELECT stage,document_hash FROM ldw_decisions WHERE doc_id=$1 AND tenant_id=$2 AND revision_cycle=$3 AND action='APPROVE'",[id,user.tenant_id,d.revision_cycle]);
       for(const required of d.stages.slice(1,d.stage_index))if(!prior.rows.some(x=>x.stage===required&&x.document_hash===d.body_hash))fail(409,'Etapa anterior não revisada nesta versão');
