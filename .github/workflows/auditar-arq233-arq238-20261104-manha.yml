@@ -61,7 +61,7 @@ jobs:
                 if(r) await p.waitForTimeout(500);
                 const d=await p.evaluate(()=>({
                   final:location.href,title:document.title,
-                  h1:[...document.querySelectorAll('h1')].map(x=>clean(x.textContent)),
+                  h1:[...document.querySelectorAll('h1')].map(x=>(x.textContent||'').replace(/\\s+/g,' ').trim()),
                   description:document.querySelector('meta[name=description]')?.content||'',
                   canonical:[...document.querySelectorAll('link[rel=canonical]')].map(x=>x.href),
                   robots:document.querySelector('meta[name=robots]')?.content||'',
@@ -74,7 +74,7 @@ jobs:
                   forms:document.querySelectorAll('form').length,
                   jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,
                   internal:[...document.querySelectorAll('a[href]')].filter(a=>{try{return new URL(a.href).hostname.endsWith('arquindex.com.br')}catch{return false}}).length,
-                  body:clean(document.body.innerText).slice(0,240),
+                  body:(document.body.innerText||'').replace(/\\s+/g,' ').trim().slice(0,240),
                   cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth
                 }));
                 const path=new URL(url).pathname;
