@@ -1,3 +1,4 @@
+import {legalCatalog,legalSources,catalogSectors,modelById,selectedClauses,reviewIssues} from './legal-catalog.js';
 const $=id=>document.getElementById(id);
 const library={
 identification:['Identificação das partes','Este documento é celebrado entre {{razao_social}}, inscrita no CNPJ {{cnpj}}, com sede em {{endereco}}, doravante denominada CONTRATANTE, e {{contratada}}, doravante denominada CONTRATADA.'],
@@ -36,8 +37,60 @@ function renderFields(){const host=$('field-list');host.replaceChildren();for(co
 function interpolate(text){return text.replace(/\{\{\s*([A-Za-z][A-Za-z0-9_]{0,63})\s*\}\}/g,(all,name)=>{const val=safeText(data.fields[name]).trim();return val||all;});}
 function previewContent(){const missing=new Set();const sections=data.sections.map(s=>({title:s.title,body:s.body.replace(/\{\{\s*([A-Za-z][A-Za-z0-9_]{0,63})\s*\}\}/g,(all,key)=>{const v=safeText(data.fields[key]).trim();if(!v)missing.add(key);return v||all;})}));return {sections,missing:[...missing]};}
 function appendHighlighted(parent,text){const re=/\{\{\s*[A-Za-z][A-Za-z0-9_]{0,63}\s*\}\}/g;let start=0;for(const m of text.matchAll(re)){parent.append(document.createTextNode(text.slice(start,m.index)));parent.append(node('mark',m[0],'missing'));start=m.index+m[0].length;}parent.append(document.createTextNode(text.slice(start)));}
+
+let catalogSelection={};
+function selectedModel(){return modelById($('catalog-model').value);}
+function renderCatalogReview(){
+ const model=selectedModel();const host=$('catalog-review');
+ if(!model){host.textContent='Escolha um modelo editorial.';return;}
+ const issues=reviewIssues(model,catalogSelection,data.fields);
+ host.replaceChildren();
+ host.append(node('p',issues.length?issues.length+' ponto(s) a revisar antes de qualquer aprovação ou assinatura.':'Revisão de integridade concluída; homologação jurídica ainda é necessária.'));
+ const ul=node('ul');issues.slice(0,12).forEach(issue=>ul.append(node('li',issue)));host.append(ul);
+}
+function renderCatalogClauses(){
+ const model=selectedModel();const host=$('catalog-clauses');host.replaceChildren(node('legend','Selecionar cláusulas'));
+ catalogSelection={};const meta=$('catalog-meta');meta.replaceChildren();
+ if(!model)return;
+ meta.append(node('p','Versão '+model.version+' · STATUS: RASCUNHO NÃO HOMOLOGADO · responsável: '+model.owner+'.'));
+ const sources=node('div');sources.append(node('strong','Fontes a conferir: '));
+ if(!model.sources.length)sources.append(node('span','Nenhuma fonte normativa registrada; política baseada em diretrizes gerais e sujeita a revisão.'));
+ for(const key of model.sources){const source=legalSources[key];if(!source)continue;const link=node('a',source.authority+' — '+source.title);link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.style.display='block';sources.append(link);}
+ meta.append(sources);
+ for(const clause of model.sections){
+  const label=node('label',undefined,'catalog-clause');
+  const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.checked=clause.requirement==='core';checkbox.disabled=clause.requirement==='core';
+  if(checkbox.checked)catalogSelection[clause.id]=true;
+  checkbox.addEventListener('change',()=>{catalogSelection[clause.id]=checkbox.checked;renderCatalogReview();});
+  const status=clause.requirement==='core'?'Estrutura essencial do modelo':clause.requirement==='conditional'?'Aplicação condicional, requer análise':'Opcional';
+  const txt=node('span',clause.title+' · '+status+(clause.condition?' — '+clause.condition:''));
+  label.append(checkbox,txt);host.append(label);
+ }
+ renderCatalogReview();
+}
+function renderCatalogModels(){
+ const sector=$('catalog-sector').value;const models=legalCatalog.filter(x=>x.sector===sector);
+ const select=$('catalog-model');select.replaceChildren();
+ for(const m of models){const opt=document.createElement('option');opt.value=m.id;opt.textContent=m.title;select.append(opt);}
+ renderCatalogClauses();
+}
+function initCatalog(){
+ const sector=$('catalog-sector');catalogSectors.forEach(name=>{const o=document.createElement('option');o.value=name;o.textContent=name;sector.append(o);});
+ sector.addEventListener('change',renderCatalogModels);
+ $('catalog-model').addEventListener('change',renderCatalogClauses);
+ $('catalog-apply').addEventListener('click',()=>{
+  const model=selectedModel();if(!model)return;
+  if(data.sections.length&&!confirm('Substituir as seções existentes pela seleção atual? Exporte o projeto anterior antes.'))return;
+  const sections=selectedClauses(model,catalogSelection);
+  data.title=model.title;data.sections=sections.map(c=>({id:crypto.randomUUID?.()||String(Math.random()),title:c.title,body:c.body,sourceClauseId:c.id,requirement:c.requirement}));
+  data.catalog={modelId:model.id,version:model.version,status:model.status,choices:{...catalogSelection},sources:model.sources};
+  $('doc-name').value=data.title;selected=data.sections[0]?.id||null;render();renderCatalogReview();
+ });
+ renderCatalogModels();
+}
+
 function renderPreview(){const host=$('document-preview');host.replaceChildren();host.append(node('h1',data.title||'Documento sem título'));const {sections,missing}=previewContent();sections.forEach((s,i)=>{host.append(node('h2',(i+1)+'. '+s.title));const p=node('p');appendHighlighted(p,s.body);host.append(p);});$('missing-fields').replaceChildren(node('p',missing.length?'Campos pendentes: '+missing.join(', '):'Nenhum campo variável pendente. A conferência jurídica e documental continua obrigatória.',missing.length?'warning':'status'));}
-function render(){renderList();renderEditor();renderFields();renderPreview();}
+function render(){renderList();renderEditor();renderFields();renderPreview();renderCatalogReview();}
 function download(filename,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const link=document.createElement('a');link.href=url;link.download=filename;link.click();setTimeout(()=>URL.revokeObjectURL(url),3000);}
 function fileName(){return (data.title.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-|-$/g,'').slice(0,55)||'documento');}
 function escapeHtml(str){return safeText(str).replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
@@ -47,9 +100,10 @@ $('add-section').addEventListener('click',()=>{const s=section($('module-type').
 $('use-template').addEventListener('click',()=>{if(data.sections.length&&!confirm('Substituir todas as seções atuais pelo modelo selecionado?'))return;data.sections=presets[$('doc-type').value].map(section);selected=data.sections[0]?.id||null;render();});
 $('doc-name').addEventListener('input',e=>{data.title=e.target.value;renderPreview();});
 $('refresh-fields').addEventListener('click',renderFields);
-$('save-project').addEventListener('click',()=>download(fileName()+'.json',JSON.stringify({schemaVersion:1,title:data.title,sections:data.sections,fields:data.fields},null,2),'application/json'));
+$('save-project').addEventListener('click',()=>download(fileName()+'.json',JSON.stringify({schemaVersion:2,title:data.title,sections:data.sections,fields:data.fields,catalog:data.catalog||null},null,2),'application/json'));
 $('save-document').addEventListener('click',exportHtml);
 $('print-document').addEventListener('click',()=>window.print());
 $('import-button').addEventListener('click',()=>$('import-file').click());
-$('import-file').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>250000){alert('Projeto muito grande. Limite: 250 KB.');return;}try{const x=JSON.parse(await file.text());if(!validImport(x))throw Error('Formato inválido ou excede limites.');data={title:x.title,sections:x.sections.map(s=>({id:crypto.randomUUID?.()||String(Math.random()),title:s.title,body:s.body})),fields:Object.fromEntries(Object.entries(x.fields).filter(([key])=>/^[A-Za-z][A-Za-z0-9_]{0,63}$/.test(key)))};$('doc-name').value=data.title;selected=data.sections[0]?.id||null;render();}catch(err){alert('Não foi possível importar: '+err.message);}finally{e.target.value='';}});
+$('import-file').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>250000){alert('Projeto muito grande. Limite: 250 KB.');return;}try{const x=JSON.parse(await file.text());if(!validImport(x))throw Error('Formato inválido ou excede limites.');data={title:x.title,sections:x.sections.map(s=>({id:crypto.randomUUID?.()||String(Math.random()),title:s.title,body:s.body})),fields:Object.fromEntries(Object.entries(x.fields).filter(([key])=>/^[A-Za-z][A-Za-z0-9_]{0,63}$/.test(key)))};$('doc-name').value=data.title;selected=data.sections[0]?.id||null;data.catalog=null;render();}catch(err){alert('Não foi possível importar: '+err.message);}finally{e.target.value='';}});
+initCatalog();
 render();
