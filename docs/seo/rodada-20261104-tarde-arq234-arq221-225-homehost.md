@@ -8,7 +8,7 @@ Foram auditadas seis URLs da fila persistente. Três receberam melhorias substan
 - Commit de conteúdo: [6016ec5](https://github.com/arxazure/arquindex/commit/6016ec549ff379affdce5dcfa60edda53b1abb01)
 - Auditoria inicial: [workflow 41880277658](https://github.com/arxazure/arquindex/actions/runs/41880277658)
 - Verificação independente final: [workflow 41882373759](https://github.com/arxazure/arquindex/actions/runs/41882373759), sucesso
-- Fila persistente: commit [8454bdd](https://github.com/arxazure/arquindex/commit/8454bdd214e6f964c181be33e5b053283fd86ca1)
+- Fila persistente: commit [8454bdd](https://github.com/arxazure/arquindex/commit/8454bdd214e6f964c181be33e5b053283fd86ca1); validação [workflow 41883032071](https://github.com/arxazure/arquindex/actions/runs/41883032071), sucesso
 - ARQ-099 não foi alterada nem republicada.
 
 ## URLs auditadas
