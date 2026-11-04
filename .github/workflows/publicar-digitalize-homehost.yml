@@ -165,6 +165,7 @@ jobs:
               print('PUBLIC_VERIFIED',url)
           checks={
               '/digitalize/sabara/':'digitalize_sabara',
+              '/digitalize/vespasiano/':'digitalize_vespasiano',
               '/digitalize/lagoa-santa/':'digitalize_lagoa-santa',
               '/digitalize/pedro-leopoldo/':'digitalize_pedro-leopoldo',
           }
