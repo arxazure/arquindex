@@ -14,8 +14,18 @@ function render(){
  const summary=$('summary'),list=$('workflow-stages'),actions=$('workflow-actions'),log=$('event-log');list.replaceChildren();actions.replaceChildren();log.replaceChildren();
  summary.textContent=Object.keys(answers).length?('Solicitante: '+(answers.customer||'—')+' | Documento: '+(answers.documentType||'—')+' | Revisões: '+(answers.rounds||'—')+' | Jurídico: '+(Array.isArray(answers.legalEmails)?answers.legalEmails.length:0)+' destinatário(s) | Destino: '+(answers.outcome||'—')):'Complete as perguntas para estruturar o fluxo.';
  for(let i=0;i<stages.length;i++){const li=element('li',label(stages[i])+(i<stageIndex?' · Simulado':i===stageIndex?' · Etapa atual':' · Pendente'));li.className=i===stageIndex?'current':i<stageIndex?'completed':'';list.append(li);}
- if(stageIndex>=0){const current=stages[stageIndex],terminal=stageIndex===stages.length-1;const p=element('p','Etapa simulada: '+label(current));actions.append(p);if(!terminal){const advance=element('button','Registrar conclusão simulada e avançar','button');advance.type='button';advance.addEventListener('click',()=>{event('Etapa simulada concluída: '+label(current));stageIndex=nextLocalStage(stages,stageIndex);render();});actions.append(advance);}else{actions.append(element('p','Fim do fluxo demonstrativo. Em produção, esta etapa dependerá de publicação autorizada ou assinatura verificada.','note'));}}
- for(const e of events.slice(-15))log.append(element('p',new Date(e.date).toLocaleString('pt-BR')+' · '+e.event));
+ if(stageIndex>=0){const current=stages[stageIndex],terminal=stageIndex===stages.length-1;const p=element('p','Etapa simulada: '+label(current));actions.append(p);if(!terminal){
+ const labelNote=element('label','Parecer / observação da etapa (simulação)');labelNote.htmlFor='decision-note';
+ const note=element('textarea');note.id='decision-note';note.rows=3;note.maxLength=2000;note.placeholder='Descreva critérios, evidências e justificativa (mínimo 10 caracteres).';
+ const approve=element('button','Concluir etapa simulada','button');approve.type='button';
+ const reject=element('button','Solicitar ajustes na minuta','button secondary');reject.type='button';
+ const decide=(outcome)=>{const reason=note.value.trim();if(reason.length<10){alert('Registre justificativa de no mínimo 10 caracteres.');return;}
+ events.push({date:new Date().toISOString(),event:label(current)+' — '+(outcome==='approve'?'simulada como concluída':'devolvida para ajustes'),note:reason,kind:'SIMULATION_ONLY'});
+ if(outcome==='request_changes'){stageIndex=stages.indexOf('MINUTA');}else{stageIndex=nextLocalStage(stages,stageIndex);}render();};
+ approve.addEventListener('click',()=>decide('approve'));reject.addEventListener('click',()=>decide('request_changes'));
+ actions.append(labelNote,note,approve,reject);
+ }else{actions.append(element('p','Fim do fluxo demonstrativo. Em produção, esta etapa dependerá de publicação autorizada ou assinatura verificada.','note'));}}
+ for(const e of events.slice(-15))log.append(element('p',new Date(e.date).toLocaleString('pt-BR')+' · '+e.event+(e.note?' | Observação: '+e.note:'')));
 }
 form.addEventListener('submit',e=>{e.preventDefault();if(answerIndex>=questions.length)return;const q=questions[answerIndex],v=validateAnswer(q,input.value);if(!v.ok){$('chat-error').textContent=v.message;return;}$('chat-error').textContent='';answers[q.key]=v.value;message(q.key==='legalEmails'?'[e-mails informados para roteamento futuro, sem envio]':input.value.trim(),'client');input.value='';answerIndex++;render();ask();});
 $('restart').addEventListener('click',()=>{if(Object.keys(answers).length&&!confirm('Reiniciar a solicitação local? Exporte os dados antes se necessário.'))return;begin();});
