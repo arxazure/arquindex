@@ -1,6 +1,9 @@
 -- LegalDoc AI: proposed secure intake workflow. NOT applied on public landing.
 CREATE TABLE IF NOT EXISTS legaldoc_requests (
  id uuid PRIMARY KEY, company_id uuid NOT NULL, created_by uuid NOT NULL,
+ client_organisation_label text NOT NULL,
+ technical_role_label text NOT NULL,
+ approver_role_label text NOT NULL,
  document_type text NOT NULL, description text NOT NULL,
  review_rounds smallint NOT NULL CHECK(review_rounds IN (1,2)),
  outcome text NOT NULL CHECK(outcome IN ('PUBLISH','SIGN')),
