@@ -46,7 +46,24 @@ async function openDoc(id){
  const stages=text('ol');d.stages.forEach((s,i)=>{const li=text('li',displayStage(s)+(i===d.stageIndex?' — atual':i<d.stageIndex?' — concluída nesta sequência':' — futura'));if(i===d.stageIndex)li.style.color='#87edf4';stages.append(li);});host.append(stages);
  const label=text('label','Texto integral da minuta'),area=text('textarea');area.id='doc-body';area.value=d.body;const canEdit=d.stage==='MINUTA'&&d.createdBy===me.id;
  area.readOnly=!canEdit;host.append(label,area);
- if(canEdit)host.append(button('Salvar nova versão',async()=>{await api('/api/docs/'+id+'/body','PUT',{body:area.value});notify('Nova versão salva.');await openDoc(id);},'secondary'));
+ if(canEdit){
+  host.append(button('Salvar nova versão',async()=>{await api('/api/docs/'+id+'/body','PUT',{body:area.value});notify('Nova versão salva.');await openDoc(id);},'secondary'));
+  const upload=document.createElement('input');upload.type='file';upload.accept='.json,application/json';upload.id='project-import';upload.style.display='none';host.append(upload);
+  host.append(button('Importar projeto do construtor (.json)',async()=>upload.click(),'secondary'));
+  upload.addEventListener('change',()=>safe(async()=>{
+   const file=upload.files?.[0];if(!file)return;if(file.size>250000)throw Error('Projeto excede 250 KB.');
+   const parsed=JSON.parse(await file.text());
+   if(!Array.isArray(parsed.sections)||parsed.sections.length>100||!parsed.sections.every(s=>typeof s.title==='string'&&typeof s.body==='string'&&s.title.length<=180&&s.body.length<=20000))throw Error('Formato de projeto inválido.');
+   if(!parsed.fields||typeof parsed.fields!=='object'||Array.isArray(parsed.fields))throw Error('Campos inválidos.');
+   const raw=parsed.sections.map((section,i)=>{
+    const value=section.body.replace(/\\{\\{\\s*([A-Za-z][A-Za-z0-9_]{0,63})\\s*\\}\\}/g,(all,key)=>typeof parsed.fields[key]==='string'?parsed.fields[key].slice(0,300):all);
+    return (i+1)+'. '+section.title+'\\n'+value;
+   }).join('\\n\\n');
+   if(raw.length<40||raw.length>180000)throw Error('Documento montado fora dos limites.');
+   area.value=raw;notify('Projeto carregado no editor. Revise e clique em Salvar nova versão.');
+   upload.value='';
+  }));
+ }
  host.append(button('Baixar texto da minuta',async()=>{const file=new Blob([area.value],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download='legaldoc-minuta-'+id+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);},'secondary'));
  const role=roleFor(d.stage);if(role){host.append(text('h3','Parecer da etapa: '+displayStage(d.stage)));const note=text('textarea');note.placeholder='Justificativa e evidências (mínimo 10 caracteres)';note.rows=3;host.append(note);
  host.append(button('Aprovar etapa',async()=>{const r=await api('/api/docs/'+id+'/decision','POST',{decision:'APPROVE',note:note.value});notify('Etapa registrada. Próxima: '+displayStage(r.nextStage));await refresh();}));
