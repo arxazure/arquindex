@@ -49,7 +49,7 @@ function clearCookies(res){
 async function session(req){
  const token=cookie(req,'ldw_session');
  if(!/^[0-9a-f]{64}$/.test(token))return null;
- const q=await pool.query("SELECT u.id,u.tenant_id,u.email,u.role,u.verified,u.active,s.csrf_hash FROM ldw_sessions s JOIN ldw_users u ON u.id=s.user_id WHERE s.token_hash=$1 AND s.expires_at>now() AND u.active=true",[sha(token)]);
+ const q=await pool.query("SELECT u.id,u.tenant_id,u.email,u.role,u.verified,u.active,u.must_change_password,s.csrf_hash FROM ldw_sessions s JOIN ldw_users u ON u.id=s.user_id WHERE s.token_hash=$1 AND s.expires_at>now() AND u.active=true",[sha(token)]);
  return q.rows[0]||null;
 }
 function requireCsrf(req,user){
@@ -61,7 +61,7 @@ async function issueSession(res,user){
  const token=randomBytes(32).toString('hex'),csrf=randomBytes(24).toString('hex');
  await pool.query("INSERT INTO ldw_sessions(token_hash,csrf_hash,user_id,expires_at) VALUES($1,$2,$3,now()+interval '8 hours')",[sha(token),sha(csrf),user.id]);
  setCookies(res,token,csrf);
- send(res,200,{id:user.id,email:user.email,role:user.role,verified:user.verified,tenantId:user.tenant_id});
+ send(res,200,{id:user.id,email:user.email,role:user.role,verified:user.verified,mustChangePassword:user.must_change_password,tenantId:user.tenant_id});
 }
 async function event(db,tenant,actor,kind,docId=null,detail={}){
  await db.query("INSERT INTO ldw_events(id,tenant_id,doc_id,actor_id,kind,detail) VALUES($1,$2,$3,$4,$5,$6)",[randomUUID(),tenant,docId,actor,kind,detail]);
@@ -102,9 +102,9 @@ async function route(req,res,url){
    const count=await db.query('SELECT id FROM ldw_tenants FOR UPDATE');if(count.rowCount)fail(409,'Instalação já concluída');
    const tenant=randomUUID(),id=randomUUID();
    await db.query('INSERT INTO ldw_tenants(id,name) VALUES($1,$2)',[tenant,company]);
-   await db.query("INSERT INTO ldw_users(id,tenant_id,email,password_hash,role,verified) VALUES($1,$2,$3,$4,'admin',true)",[id,tenant,email,passwordHash(password)]);
+   await db.query("INSERT INTO ldw_users(id,tenant_id,email,password_hash,role,verified,must_change_password) VALUES($1,$2,$3,$4,'admin',true,false)",[id,tenant,email,passwordHash(password)]);
    await event(db,tenant,id,'INITIAL_SETUP',null,{company});
-   return {id,tenant_id:tenant,email,role:'admin',verified:true};
+   return {id,tenant_id:tenant,email,role:'admin',verified:true,must_change_password:false};
   });await issueSession(res,user);return;
  }
  if(pathname==='/api/login'&&method==='POST'){
@@ -118,9 +118,23 @@ async function route(req,res,url){
  const user=await session(req);
  if(!user)fail(401,'Faça login');
  if(pathname==='/api/me'&&method==='GET'){
-  send(res,200,{id:user.id,email:user.email,role:user.role,verified:user.verified,tenantId:user.tenant_id});return;
+  send(res,200,{id:user.id,email:user.email,role:user.role,verified:user.verified,mustChangePassword:user.must_change_password,tenantId:user.tenant_id});return;
  }
  if(method!=='GET'&&method!=='HEAD')requireCsrf(req,user);
+ if(pathname==='/api/change-password'&&method==='POST'){
+  const b=await bodyOf(req),current=b.currentPassword,next=b.newPassword;
+  if(typeof current!=='string'||typeof next!=='string'||next.length<14||next.length>200||current===next)fail(400,'Informe a senha atual e uma nova senha de pelo menos 14 caracteres');
+  const q=await pool.query('SELECT password_hash FROM ldw_users WHERE id=$1 AND tenant_id=$2',[user.id,user.tenant_id]);
+  if(!q.rowCount||!validPassword(current,q.rows[0].password_hash))fail(403,'Senha atual inválida');
+  await transact(async db=>{
+   await db.query('UPDATE ldw_users SET password_hash=$1,must_change_password=false WHERE id=$2 AND tenant_id=$3',[passwordHash(next),user.id,user.tenant_id]);
+   await db.query('DELETE FROM ldw_sessions WHERE user_id=$1',[user.id]);
+   await event(db,user.tenant_id,user.id,'PASSWORD_CHANGED');
+  });
+  await issueSession(res,{...user,must_change_password:false});return;
+ }
+ if(user.must_change_password)fail(403,'Troque a senha temporária antes de usar o sistema');
+
  if(pathname==='/api/logout'&&method==='POST'){
   await pool.query('DELETE FROM ldw_sessions WHERE token_hash=$1',[sha(cookie(req,'ldw_session'))]);clearCookies(res);send(res,200,{ok:true});return;
  }
@@ -191,7 +205,7 @@ async function route(req,res,url){
    const result=await transact(async db=>{
     const d=await docRow(db,id,user.tenant_id);
     const stage=String(b.stage||''),needed=roleFor(stage);
-    if(!needed||!d.stages.includes(stage)||stage==='MINUTA')fail(400,'Etapa não atribuível');
+    if(!needed||!d.stages.includes(stage)||stage==='MINUTA'||d.stages.indexOf(stage)<d.stage_index)fail(400,'Etapa não atribuível ou já concluída');
     const q=await db.query('SELECT id,email,role,verified FROM ldw_users WHERE id=$1 AND tenant_id=$2 AND active=true',[b.userId,user.tenant_id]);
     if(!q.rowCount||q.rows[0].role!==needed||!q.rows[0].verified)fail(403,'Revisor requer conta cadastrada e conferida');
     if(['APROVACAO','HOMOLOGACAO'].includes(stage)&&d.created_by===b.userId)fail(403,'Autor não pode aprovar sua própria minuta');
@@ -214,7 +228,11 @@ async function route(req,res,url){
     }
     if(['APROVACAO','HOMOLOGACAO'].includes(stage)&&d.created_by===user.id)fail(403,'Segregação entre autor e aprovador');
     if(decision==='APPROVE'){
-     if(stage==='MINUTA'&&(d.body.length<80||d.version<2))fail(409,'Minuta curta; conclua o documento antes de enviar');
+     if(stage==='MINUTA'&&(d.body.length<80||d.version<2))fail(409,'Minuta incompleta; salve uma versão editada antes de enviar');
+     if(stage==='MINUTA'){
+      const rework=await db.query("SELECT document_hash FROM ldw_decisions WHERE doc_id=$1 AND tenant_id=$2 AND action='CHANGES' ORDER BY created_at DESC LIMIT 1",[id,user.tenant_id]);
+      if(rework.rowCount&&rework.rows[0].document_hash===d.body_hash)fail(409,'É necessário revisar o texto e salvar nova versão após a devolução');
+     }
      if(d.stage_index>1){
       const prior=await db.query("SELECT stage,document_hash FROM ldw_decisions WHERE doc_id=$1 AND tenant_id=$2 AND revision_cycle=$3 AND action='APPROVE'",[id,user.tenant_id,d.revision_cycle]);
       for(const required of d.stages.slice(1,d.stage_index))if(!prior.rows.some(x=>x.stage===required&&x.document_hash===d.body_hash))fail(409,'Etapa anterior não revisada nesta versão');
