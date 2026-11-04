@@ -1,0 +1,42 @@
+name: Auditar ARQ-234 e ARQ-221 a ARQ-225 - 2026-11-04 tarde
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/auditar-arq234-arq221-225-20261104-tarde.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: DNS TLS HTTP e metadados
+        shell: bash
+        run: |
+          set -euo pipefail
+          getent ahosts www.arquindex.com.br | head -3
+          timeout 25 openssl s_client -connect www.arquindex.com.br:443 -servername www.arquindex.com.br </dev/null 2>/dev/null | openssl x509 -noout -subject -issuer -dates
+          mkdir -p "$RUNNER_TEMP/audit"
+          cd "$RUNNER_TEMP/audit"
+          npm init -y >/dev/null
+          npm install playwright@1.56.1 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > audit.js <<'JS'
+          const {chromium}=require('playwright');
+          const base='https://www.arquindex.com.br';
+          const rows=[
+            ['ARQ-234','/digitalize/vespasiano/','/digitalize/sitemap.xml'],
+            ['ARQ-221','/seo-regional/gestao-documental-ecm-databooks/boa-vista/','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml'],
+            ['ARQ-222','/seo-regional/gestao-documental-ecm-databooks/manaus/','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml'],
+            ['ARQ-223','/seo-regional/gestao-documental-ecm-databooks/cuiaba/','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml'],
+            ['ARQ-224','/seo-regional/gestao-documental-ecm-databooks/pedro-leopoldo/','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml'],
+            ['ARQ-225','/seo-regional/gestao-documental-ecm-databooks/santa-luzia/','/seo-regional/gestao-documental-ecm-databooks/sitemap.xml']
+          ];
+          (async()=>{const browser=await chromium.launch({headless:true});for(const vp of [{name:'mobile',width:390,height:844},{name:'desktop',width:1440,height:900}]){const ctx=await browser.newContext({viewport:{width:vp.width,height:vp.height},userAgent:'ArquindexSEOAudit/20261104'});for(const [id,path,smPath] of rows){const page=await ctx.newPage();const r=await page.goto(base+path+'?audit=20261104tarde',{waitUntil:'domcontentloaded',timeout:60000});const d=await page.evaluate(()=>({title:document.title,desc:document.querySelector('meta[name=description]')?.content||'',canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),words:(document.body.innerText.match(/\S+/g)||[]).length,logo:!!document.querySelector('img[alt*="Arquindex" i],.brand,.wordmark'),menu:document.querySelectorAll('header nav,nav[aria-label]').length,widget:document.querySelectorAll('#arq-floating,.whatsapp-float,a[href*="wa.me"]').length,proposal:[...document.querySelectorAll('a')].some(a=>/solicitar-proposta-contratacao/.test(a.href)),forms:document.querySelectorAll('form').length,internal:[...document.querySelectorAll('a[href]')].filter(a=>{try{return new URL(a.href).hostname.endsWith('arquindex.com.br')}catch{return false}}).length,jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));const sm=await (await ctx.request.get(base+smPath)).text();const out={id,device:vp.name,status:r.status(),...d,sitemap:sm.includes(base+path)};console.log('AUDIT',JSON.stringify(out));if(r.status()!==200||d.h1.length!==1||!d.canonical.replace('www.','').endsWith(path)||/noindex/i.test(d.robots)||!d.desc||d.sw>d.cw+2||!out.sitemap)throw Error(id+' '+vp.name+' invalid');await page.close()}await ctx.close()}await browser.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node audit.js
