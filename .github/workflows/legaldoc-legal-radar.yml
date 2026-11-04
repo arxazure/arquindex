@@ -1,0 +1,27 @@
+name: LegalDoc - Radar de Fontes Oficiais
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '25 10 * * *'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: legaldoc-ai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Coletar status e impressões digitais das fontes oficiais
+        run: node check-legal-sources.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: legal-source-report
+          path: legaldoc-ai/legal-source-report/status.json
+          retention-days: 30
