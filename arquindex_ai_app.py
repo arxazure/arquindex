@@ -29,13 +29,40 @@ def authorized(authorization: str | None):
     if not supplied or not secrets.compare_digest(supplied, TOKEN):
         raise HTTPException(status_code=401, detail="Não autorizado")
 
+async def docling_extract(raw: bytes, name: str, mime: str) -> str | None:
+    base = os.getenv("DOCLING_URL", "").rstrip("/")
+    if not base:
+        return None
+    headers = {}
+    key = os.getenv("DOCLING_API_KEY", "")
+    if key:
+        headers["X-Api-Key"] = key
+    try:
+        async with httpx.AsyncClient(timeout=180.0) as client:
+            response = await client.post(
+                base + "/v1/convert/file",
+                headers=headers,
+                files={"files": (name, raw, mime)},
+                data={"to_formats": "md", "do_ocr": "true", "image_export_mode": "placeholder"},
+            )
+            response.raise_for_status()
+            payload = response.json()
+            if payload.get("status") not in ("success", "partial_success"):
+                raise ValueError("Docling conversion unsuccessful")
+            markdown = payload.get("document", {}).get("md_content", "")
+            return markdown.strip() or None
+    except Exception:
+        logging.exception("DOCLING_CONVERSION_FAILED")
+        return None
+
+
 def safe_name(s):
     return pathlib.Path(s.replace("\\","/")).name[:180] or "documento.pdf"
 
 @app.get("/health")
 @app.get("/railway_health")
 def health():
-    return {"status":"ok","service":"Arquindex IA Documental","auth_configured":bool(TOKEN),"storage_path":str(DATA_DIR),"llm_configured":bool(os.getenv("LLM_BASE_URL") and os.getenv("LLM_MODEL"))}
+    return {"status":"ok","service":"Arquindex IA Documental","auth_configured":bool(TOKEN),"storage_path":str(DATA_DIR),"llm_configured":bool(os.getenv("LLM_BASE_URL") and os.getenv("LLM_MODEL")),"docling_configured":bool(os.getenv("DOCLING_URL"))}
 
 @app.get("/", response_class=HTMLResponse)
 def home():
@@ -65,6 +92,12 @@ async def upload(file: UploadFile = File(...), authorization: str | None = Heade
         raise HTTPException(400,"Arquivo vazio")
     pages=0
     chunks=[]
+    extraction_engine="tesseract"
+    docling_text=await docling_extract(raw, name, file.content_type or "application/octet-stream")
+    if docling_text:
+        extraction_engine="docling"
+    else:
+        extraction_engine="pymupdf+tesseract"
     try:
         if name.lower().endswith(".pdf"):
             if not raw.startswith(b"%PDF"):
@@ -91,13 +124,33 @@ async def upload(file: UploadFile = File(...), authorization: str | None = Heade
     except Exception:
         raise HTTPException(422,"Não foi possível interpretar este documento")
     docid=str(uuid.uuid4())
-    text="\n\n".join(chunks)
+    text=docling_text or "\n\n".join(chunks)
     created=datetime.now(timezone.utc).isoformat()
     with closing(db()) as c:
         c.execute("INSERT INTO documents VALUES (?,?,?,?,?,?,?)",(docid,name,file.content_type or "application/octet-stream",pages,len(text),text,created))
         c.commit()
     (DATA_DIR / (docid+".bin")).write_bytes(raw)
-    return {"id":docid,"name":name,"pages":pages,"chars":len(text),"ocr":True}
+    return {"id":docid,"name":name,"pages":pages,"chars":len(text),"ocr":True,"engine":extraction_engine}
+
+@app.get("/api/search")
+def search_documents(q: str = "", authorization: str | None = Header(default=None)):
+    authorized(authorization)
+    term = q.strip().lower()
+    if len(term) < 2:
+        return {"results": [], "query": term}
+    with closing(db()) as c:
+        rows = c.execute("SELECT id,name,pages,chars,text FROM documents ORDER BY created_at DESC LIMIT 500").fetchall()
+    matches=[]
+    for row in rows:
+        lower = row["text"].lower()
+        at = lower.find(term)
+        if at >= 0 or term in row["name"].lower():
+            snippet = row["text"][max(0, at-100):at+250] if at >= 0 else ""
+            matches.append({"id":row["id"],"name":row["name"],"excerpt":snippet, "pages":row["pages"]})
+        if len(matches)>=30:
+            break
+    return {"query": term, "results": matches}
+
 
 @app.get("/api/documents/{docid}")
 def get_document(docid:str, authorization: str | None = Header(default=None)):
@@ -148,7 +201,7 @@ async def chat(payload:ChatQuery, authorization: str | None = Header(default=Non
 
 HTML = r'''<!doctype html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Arquindex | IA Documental</title><style>
 :root{color-scheme:dark;font-family:Inter,system-ui,Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:#090f1f;color:#e9f1ff}header{padding:22px 5%;border-bottom:1px solid #263650;background:#101a2e}h1{margin:4px 0;font-size:23px}small,.sub{color:#9dacc8}.logo{color:#4dd6c2;font-weight:800;letter-spacing:.15em}main{max-width:1120px;margin:32px auto;padding:0 20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:#152239;border:1px solid #2d405e;padding:25px;border-radius:18px}h2{margin-top:0;font-size:18px}input,select,textarea,button{font:inherit;border-radius:9px;padding:12px;width:100%;margin:9px 0;color:#fff;background:#0d172a;border:1px solid #435470}button{background:#12a993;color:#061c1a;font-weight:700;border:0;cursor:pointer}button:hover{background:#46dfc9}pre{white-space:pre-wrap;word-break:break-word;background:#0c1528;border-radius:9px;padding:16px;max-height:360px;overflow:auto}#status{color:#afc3d7}.feature{font-size:13px;color:#a5bed7;padding:8px 0} .hidden{display:none}@media(max-width:760px){.grid{grid-template-columns:1fr}}</style></head><body><header><div class="logo">ARQUINDEX</div><h1>IA Documental · Homologação</h1><div class="sub">Processamento, OCR e consulta inteligente de documentos</div></header><main><div class="grid">
-<section class="panel"><h2>1. Acesso administrativo</h2><label>Token de acesso</label><input id="token" type="password" placeholder="ADMIN_TOKEN do Railway" autocomplete="off"><button onclick="login()">Validar acesso</button><div id="status" role="status">Aguardando autenticação.</div><hr><h2>2. Enviar documento</h2><input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg"><button onclick="upload()">Processar com OCR</button><div class="feature">PDF, PNG ou JPEG · até 20 MB · até 100 páginas por PDF</div><h2>Documentos processados</h2><select id="docs" onchange="loadDoc()"><option>Faça login</option></select><button onclick="loadDocs()">Atualizar lista</button></section>
+<section class="panel"><h2>1. Acesso administrativo</h2><label>Token de acesso</label><input id="token" type="password" placeholder="ADMIN_TOKEN do Railway" autocomplete="off"><button onclick="login()">Validar acesso</button><div id="status" role="status">Aguardando autenticação.</div><hr><h2>2. Enviar documento</h2><input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg"><button onclick="upload()">Processar com OCR</button><div class="feature">PDF, PNG ou JPEG · até 20 MB · até 100 páginas por PDF</div><h2>Documentos processados</h2><input id="search" placeholder="Buscar palavra nos documentos"><button onclick="searchDocs()">Pesquisar</button><pre id="searchResults" style="font-size:12px;max-height:130px"></pre><select id="docs" onchange="loadDoc()"><option>Faça login</option></select><button onclick="loadDocs()">Atualizar lista</button></section>
 <section class="panel"><h2>3. Conteúdo extraído</h2><pre id="extracted">Selecione um documento para consultar o texto.</pre><h2>4. Chat documental</h2><textarea id="question" rows="3" placeholder="Pergunte sobre o documento selecionado"></textarea><button onclick="ask()">Consultar IA</button><pre id="answer">A IA requer um modelo LLM configurado no Railway.</pre></section></div><div class="feature">Ambiente de homologação. Não envie dados reais de clientes antes de validar controle de acesso, política de retenção e armazenamento persistente.</div></main><script>
 const $=id=>document.getElementById(id);const auth=()=>({'Authorization':'Bearer '+$('token').value});const note=s=>$('status').textContent=s;
 async function request(path,opts={}){const r=await fetch(path,{...opts,headers:{...auth(),...(opts.headers||{})}});let d;try{d=await r.json()}catch{d={detail:'Resposta inválida'}}if(!r.ok)throw Error(d.detail||'HTTP '+r.status);return d}
@@ -156,5 +209,6 @@ async function login(){try{await request('/api/session');note('Acesso validado.'
 async function loadDocs(){try{let d=await request('/api/documents');$('docs').innerHTML='<option value="">Selecione um documento</option>';for(let x of d.documents){let o=document.createElement('option');o.value=x.id;o.textContent=x.name+' ('+x.pages+' pág.)';$('docs').append(o)}note(d.documents.length+' documento(s) registrado(s).')}catch(e){note(e.message)}}
 async function upload(){let f=$('file').files[0];if(!f){note('Selecione um arquivo');return}let fd=new FormData();fd.append('file',f);note('Processando OCR...');try{let d=await request('/api/documents',{method:'POST',body:fd});await loadDocs();$('docs').value=d.id;await loadDoc();note('Documento processado: '+d.pages+' página(s), '+d.chars+' caracteres.')}catch(e){note('Falha: '+e.message)}}
 async function loadDoc(){let id=$('docs').value;if(!id)return;try{let d=await request('/api/documents/'+id);$('extracted').textContent=d.text||'Nenhum texto reconhecido.'}catch(e){note(e.message)}}
+async function searchDocs(){try{let d=await request('/api/search?q='+encodeURIComponent($('search').value));$('searchResults').textContent=d.results.map(x=>x.name+': '+x.excerpt).join('\\n\\n')||'Nenhum resultado.'}catch(e){note(e.message)}}
 async function ask(){let id=$('docs').value;if(!id){note('Selecione um documento');return} $('answer').textContent='Consultando...';try{let d=await request('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({document_id:id,message:$('question').value})});$('answer').textContent=d.answer}catch(e){$('answer').textContent=e.message}}
 </script></body></html>'''
