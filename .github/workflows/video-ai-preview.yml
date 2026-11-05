@@ -1,0 +1,50 @@
+name: Video AI preview
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'video-ai/**'
+      - '.github/workflows/video-ai-preview.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: video-ai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install FFmpeg for subtitle and video validation
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Test SRT structure and FFmpeg interoperability
+        run: python -m unittest discover -s tests -v
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Validate TypeScript
+        run: npx tsc --noEmit
+      - name: Render preview
+        run: npm run render:sample
+      - name: Render editorial caption demo (no voice)
+        run: npx remotion render src/index.ts ArquindexPromo out/arquindex-caption-demo.mp4 --props=sample-caption-props.json
+      - name: Validate caption demo
+        run: python scripts/validate-video.py out/arquindex-caption-demo.mp4 > out/caption-validation.json
+      - name: Validate MP4 properties and full decode
+        run: python scripts/validate-video.py > out/validation.json
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-video-ai-preview
+          path: |
+            video-ai/out/arquindex-promo.mp4
+            video-ai/out/validation.json
+            video-ai/out/arquindex-caption-demo.mp4
+            video-ai/out/caption-validation.json
+          retention-days: 7
