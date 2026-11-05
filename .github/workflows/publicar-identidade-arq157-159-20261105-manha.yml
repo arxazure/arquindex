@@ -1,0 +1,59 @@
+name: Publicar identidade ARQ-157 ARQ-158 ARQ-159 - 2026-11-05 manha
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/publicar-identidade-arq157-159-20261105-manha.yml']
+  workflow_dispatch:
+permissions: { contents: read }
+concurrency:
+  group: publicar-identidade-arq157-159-20261105-manha
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencias
+        run: |
+          pip install beautifulsoup4
+          npm install playwright@1.56.1
+          npx playwright install --with-deps chromium >/dev/null
+      - name: Publicar ARQ-157 com backup isolado
+        env:
+          DESIGN_TARGET: https://acervos-rh-santa-luzia.arquindex.com.br/
+        run: |
+          python scripts/padronizar-identidade-arquindex.py
+          cp design-report/identity-report.json design-report/arq157.json
+          cat design-report/arq157.json
+      - name: Publicar ARQ-158 com backup isolado
+        env:
+          DESIGN_TARGET: https://adequacao-lgpd-especializada.arquindex.com.br/
+        run: |
+          python scripts/padronizar-identidade-arquindex.py
+          cp design-report/identity-report.json design-report/arq158.json
+          cat design-report/arq158.json
+      - name: Publicar ARQ-159 com backup isolado
+        env:
+          DESIGN_TARGET: https://alfresco.arquindex.com.br/
+        run: |
+          python scripts/padronizar-identidade-arquindex.py
+          cp design-report/identity-report.json design-report/arq159.json
+          cat design-report/arq159.json
+      - name: Verificar publicação mobile e desktop
+        run: |
+          cat > verify.js <<'JS'
+          const {chromium}=require('playwright');
+          const rows=[
+            ['ARQ-157','https://acervos-rh-santa-luzia.arquindex.com.br/'],
+            ['ARQ-158','https://adequacao-lgpd-especializada.arquindex.com.br/'],
+            ['ARQ-159','https://alfresco.arquindex.com.br/']
+          ];
+          (async()=>{const b=await chromium.launch({headless:true});for(const [id,url] of rows){for(const vp of [{device:'mobile',width:390,height:844},{device:'desktop',width:1440,height:900}]){const c=await b.newContext({viewport:vp});const p=await c.newPage();const r=await p.goto(url+'?verify=20261105manha',{waitUntil:'domcontentloaded',timeout:60000});const d=await p.evaluate(()=>({title:document.title,h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',marker:!!document.querySelector('#arquindex-identidade-20261018'),logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"]'),menu:!!document.querySelector('.aq-header nav'),footer:!!document.querySelector('.aq-footer'),wa:!!document.querySelector('a[href*="5531973632725"],a[href*="wa.me/5531973632725"]'),cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));const out={id,url,...vp,status:r?.status()||0,...d};console.log('PUBLIC_VERIFY',JSON.stringify(out));if(out.status!==200||!out.marker||!out.logo||!out.menu||!out.footer||!out.wa||out.h1.length!==1||out.canonical!==url||out.sw>out.cw)throw new Error('VERIFY_FAILED '+JSON.stringify(out));await c.close()}}await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node verify.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: identidade-arq157-159-20261105
+          path: design-report/
