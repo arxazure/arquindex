@@ -1,0 +1,103 @@
+name: Publicar identidade ARQ-171 e verificar ARQ-167-172 - 2026-11-05 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/publicar-identidade-arq171-20261105-noite.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      DESIGN_TARGET: https://decreto10278.arquindex.com.br/
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencias
+        run: |
+          pip install beautifulsoup4
+          npm install playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Backup e publicacao isolada ARQ-171
+        run: python scripts/padronizar-identidade-arquindex.py
+      - name: Verificar publicacao e descoberta do lote
+        run: |
+          cat > verify.js <<'JS'
+          const {chromium}=require('playwright');
+          const rows=[
+            ['ARQ-167','https://databook.arquindex.com.br/'],
+            ['ARQ-168','https://decreto10278-contratos-sao-paulo.arquindex.com.br/'],
+            ['ARQ-169','https://decreto10278-educacao.arquindex.com.br/custo.html'],
+            ['ARQ-170','https://decreto10278-medico-sao-vicente.arquindex.com.br/'],
+            ['ARQ-171','https://decreto10278.arquindex.com.br/'],
+            ['ARQ-172','https://digitalizaca.arquindex.com.br/']
+          ];
+          const pause=ms=>new Promise(r=>setTimeout(r,ms));
+          async function getWithRetry(page,url){
+            let last;
+            for(let i=1;i<=2;i++){
+              try{return await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000})}
+              catch(e){last=e;if(i<2)await pause(1500)}
+            }
+            throw last;
+          }
+          (async()=>{
+            const b=await chromium.launch({headless:true});
+            for(const [id,url] of rows){
+              const ctx=await b.newContext({viewport:{width:390,height:844}});
+              const p=await ctx.newPage();
+              const r=await getWithRetry(p,url+'?verify=20261105-noite');
+              const d=await p.evaluate(()=>({
+                title:document.title,
+                h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),
+                canonical:document.querySelector('link[rel=canonical]')?.href||'',
+                robots:document.querySelector('meta[name=robots]')?.content||'',
+                logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"],.aq-logo-name'),
+                menu:document.querySelectorAll('header nav,nav[aria-label]').length,
+                floating:!!document.querySelector('#arq-floating,.arq-floating,.aq-brand-wa'),
+                wa:!!document.querySelector('a[href*="5531973632725"]'),
+                marker:!!document.querySelector('#arquindex-identidade-20261018'),
+                utm:document.querySelectorAll('a[href*="utm_"]').length,
+                cw:document.documentElement.clientWidth,
+                sw:document.documentElement.scrollWidth
+              }));
+              if(r.status()!==200) throw new Error(id+' HTTP '+r.status());
+              if(!d.canonical) throw new Error(id+' sem canonical');
+              if(d.h1.length!==1) throw new Error(id+' H1='+d.h1.length);
+              if(id==='ARQ-171'){
+                if(d.canonical!==url) throw new Error('ARQ-171 canonical '+d.canonical);
+                if(!d.logo||!d.menu||!d.floating||!d.wa||!d.marker) throw new Error('ARQ-171 identidade incompleta '+JSON.stringify(d));
+                if(d.sw>d.cw) throw new Error('ARQ-171 overflow mobile');
+                await p.setViewportSize({width:1440,height:900});
+                const desktop=await p.evaluate(()=>({cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));
+                if(desktop.sw>desktop.cw) throw new Error('ARQ-171 overflow desktop');
+                console.log('PUBLIC_VERIFIED',JSON.stringify({id,url,status:r.status(),...d,desktop}));
+              } else {
+                console.log('PAGE_VERIFIED',JSON.stringify({id,url,status:r.status(),...d}));
+              }
+              const origin=new URL(url).origin;
+              for(const path of ['/robots.txt','/sitemap.xml']){
+                const rp=await ctx.newPage();
+                let rr;
+                try{rr=await getWithRetry(rp,origin+path)}
+                catch(e){console.log('DISCOVERY_ERROR',JSON.stringify({id,path,error:e.message}));await rp.close();continue}
+                const body=(await rp.textContent('body').catch(()=>''))||'';
+                console.log('DISCOVERY_CHECK',JSON.stringify({id,path,status:rr.status(),contentType:rr.headers()['content-type']||'',mentionsUrl:body.includes(url),length:body.length}));
+                await rp.close();
+              }
+              await ctx.close();
+            }
+            await b.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node verify.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: identidade-arq171-20261105-noite
+          path: design-report/
