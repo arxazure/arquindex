@@ -52,10 +52,13 @@ def exists(ftp,path):
   if str(ex).startswith('550'):return None
   raise
 def ensure(ftp,path):
+ if path in getattr(ftp,'_verified_dirs',set()):return
  for n in range(1,len(path.strip('/').split('/'))+1):
   p='/'+'/'.join(path.strip('/').split('/')[:n])
   try:ftp.cwd(p)
   except ftplib.error_perm:ftp.mkd(p)
+ if not hasattr(ftp,'_verified_dirs'):ftp._verified_dirs=set()
+ ftp._verified_dirs.add(path)
 def put(ftp,path,data):
  ensure(ftp,path.rsplit('/',1)[0]);ftp.storbinary('STOR '+path,io.BytesIO(data));assert get(ftp,path)==data,'FTPS_READBACK_FAILED'
 def public(target):
@@ -135,7 +138,7 @@ def main():
      promoted=[]
      try:
       for rel in ('index.html','manual/index.html'):
-       put(ftp,'/'+r['root']+'/'+rel,(OUT/host(t)/rel).read_bytes());promoted.append(rel)
+       promoted.append(rel);put(ftp,'/'+r['root']+'/'+rel,(OUT/host(t)/rel).read_bytes())
       for rel in promoted:assert public(url(t,'' if rel=='index.html' else 'manual/'))==(OUT/host(t)/rel).read_bytes(),'INDEXABLE_PUBLIC_MISMATCH'
      except Exception:
       for rel in promoted:put(ftp,'/'+r['root']+'/'+rel,(OUT/host(t)/rel).read_bytes().replace(b'content="index,follow,max-image-preview:large"',b'content="noindex,follow,max-image-preview:large"'))
