@@ -19,6 +19,13 @@ export async function initTemporalidade(db){
  await db.query("ALTER TABLE boxes ADD COLUMN IF NOT EXISTS trigger_date date");
  await db.query("ALTER TABLE boxes ADD COLUMN IF NOT EXISTS legal_hold boolean NOT NULL DEFAULT false");
  await db.query("ALTER TABLE boxes ADD COLUMN IF NOT EXISTS legal_hold_reason text");
+ await db.query(`CREATE TABLE IF NOT EXISTS inventory_audit (
+ id uuid PRIMARY KEY,tenant_id uuid NOT NULL REFERENCES tenants(id),
+ box_id uuid NOT NULL,actor_id uuid NOT NULL REFERENCES users(id),
+ action text NOT NULL,old_value jsonb,new_value jsonb,created_at timestamptz NOT NULL DEFAULT now()
+ )`);
+ await db.query('CREATE INDEX IF NOT EXISTS inventory_audit_tenant_time_idx ON inventory_audit(tenant_id,created_at DESC)');
+
 }
 export function registerTemporalidade(app,db,wrap){
  const Q=(sql,args)=>db.query(sql,args);
@@ -42,18 +49,35 @@ export function registerTemporalidade(app,db,wrap){
   const {description,period_start,period_end,document_date,trigger_date}=q.body||{};
   const dates=[period_start,period_end,document_date,trigger_date];
   if(dates.some(v=>v!=null&&v!==''&&!yyyyMmDd(v))||(period_start&&period_end&&period_start>period_end)||description!=null&&(typeof description!=='string'||description.length>4000))return s.status(400).json({error:'Descricao, datas ou periodo invalidos'});
-  const r=await Q(`UPDATE boxes SET description=$3,period_start=$4,period_end=$5,document_date=$6,trigger_date=$7 WHERE id=$1 AND tenant_id=$2 RETURNING id,code,description,period_start,period_end,document_date,trigger_date`,[q.params.id,q.user.tenant_id,description||null,period_start||null,period_end||null,document_date||null,trigger_date||null]);
-  if(!r.rowCount)return s.sendStatus(404);
-  s.json(r.rows[0])
+  const client=await db.connect();
+  try{
+   await client.query('BEGIN');
+   const prior=await client.query('SELECT id,code,description,period_start,period_end,document_date,trigger_date FROM boxes WHERE id=$1 AND tenant_id=$2 FOR UPDATE',[q.params.id,q.user.tenant_id]);
+   if(!prior.rowCount){await client.query('ROLLBACK');return s.sendStatus(404)}
+   const r=await client.query(`UPDATE boxes SET description=$3,period_start=$4,period_end=$5,document_date=$6,trigger_date=$7 WHERE id=$1 AND tenant_id=$2 RETURNING id,code,description,period_start,period_end,document_date,trigger_date`,[q.params.id,q.user.tenant_id,description||null,period_start||null,period_end||null,document_date||null,trigger_date||null]);
+   await client.query('INSERT INTO inventory_audit(id,tenant_id,box_id,actor_id,action,old_value,new_value) VALUES($1,$2,$3,$4,$5,$6,$7)',[randomUUID(),q.user.tenant_id,q.params.id,q.user.id,'METADATA_UPDATED',JSON.stringify(prior.rows[0]),JSON.stringify(r.rows[0])]);
+   await client.query('COMMIT');s.json(r.rows[0]);
+  }catch(e){await client.query('ROLLBACK');throw e}finally{client.release()}
  }));
  app.patch('/api/boxes/:id/legal-hold',wrap(async(q,s)=>{
   if(q.user.role!=='admin')return s.sendStatus(403);
   if(!/^[a-f0-9-]{36}$/i.test(q.params.id))return s.sendStatus(400);
   const {legal_hold,legal_hold_reason}=q.body||{};
   if(typeof legal_hold!=='boolean'||legal_hold&&(typeof legal_hold_reason!=='string'||legal_hold_reason.trim().length<8||legal_hold_reason.length>1000))return s.status(400).json({error:'Indique justificativa do impedimento legal'});
-  const r=await Q('UPDATE boxes SET legal_hold=$3,legal_hold_reason=$4 WHERE id=$1 AND tenant_id=$2 RETURNING id,code,legal_hold,legal_hold_reason',[q.params.id,q.user.tenant_id,legal_hold,legal_hold?legal_hold_reason.trim():null]);
-  if(!r.rowCount)return s.sendStatus(404);
-  s.json(r.rows[0])
+  const client=await db.connect();
+  try{
+   await client.query('BEGIN');
+   const prior=await client.query('SELECT id,code,legal_hold,legal_hold_reason FROM boxes WHERE id=$1 AND tenant_id=$2 FOR UPDATE',[q.params.id,q.user.tenant_id]);
+   if(!prior.rowCount){await client.query('ROLLBACK');return s.sendStatus(404)}
+   const r=await client.query('UPDATE boxes SET legal_hold=$3,legal_hold_reason=$4 WHERE id=$1 AND tenant_id=$2 RETURNING id,code,legal_hold,legal_hold_reason',[q.params.id,q.user.tenant_id,legal_hold,legal_hold?legal_hold_reason.trim():null]);
+   await client.query('INSERT INTO inventory_audit(id,tenant_id,box_id,actor_id,action,old_value,new_value) VALUES($1,$2,$3,$4,$5,$6,$7)',[randomUUID(),q.user.tenant_id,q.params.id,q.user.id,legal_hold?'LEGAL_HOLD_SET':'LEGAL_HOLD_CLEARED',JSON.stringify(prior.rows[0]),JSON.stringify(r.rows[0])]);
+   await client.query('COMMIT');s.json(r.rows[0]);
+  }catch(e){await client.query('ROLLBACK');throw e}finally{client.release()}
+ }));
+ app.get('/api/audit',wrap(async(q,s)=>{
+  if(q.user.role!=='admin')return s.sendStatus(403);
+  const r=await Q('SELECT a.id,a.box_id,a.action,a.created_at,a.old_value,a.new_value,u.email AS actor_email FROM inventory_audit a JOIN users u ON u.id=a.actor_id WHERE a.tenant_id=$1 ORDER BY a.created_at DESC LIMIT 500',[q.user.tenant_id]);
+  s.json(r.rows)
  }));
  app.get('/api/temporalidade',wrap(async(q,s)=>{
   const [b,t]=await Promise.all([Q('SELECT id,code,doc_type,description,period_start,period_end,document_date,trigger_date,legal_hold,legal_hold_reason FROM boxes WHERE tenant_id=$1 ORDER BY created_at DESC LIMIT 1000',[q.user.tenant_id]),Q('SELECT * FROM document_types WHERE tenant_id=$1',[q.user.tenant_id])]);
