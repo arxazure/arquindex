@@ -124,9 +124,9 @@ async function route(req,res,url){
  if(pathname==='/api/change-password'&&method==='POST'){
   const b=await bodyOf(req),current=b.currentPassword,next=b.newPassword;
   if(typeof current!=='string'||typeof next!=='string'||next.length<14||next.length>200||current===next)fail(400,'Informe a senha atual e uma nova senha de pelo menos 14 caracteres');
-  const q=await pool.query('SELECT password_hash FROM ldw_users WHERE id=$1 AND tenant_id=$2',[user.id,user.tenant_id]);
-  if(!q.rowCount||!validPassword(current,q.rows[0].password_hash))fail(403,'Senha atual inválida');
   await transact(async db=>{
+   const q=await db.query('SELECT password_hash FROM ldw_users WHERE id=$1 AND tenant_id=$2 AND active=true FOR UPDATE',[user.id,user.tenant_id]);
+   if(!q.rowCount||!validPassword(current,q.rows[0].password_hash))fail(403,'Senha atual inválida');
    await db.query('UPDATE ldw_users SET password_hash=$1,must_change_password=false WHERE id=$2 AND tenant_id=$3',[passwordHash(next),user.id,user.tenant_id]);
    await db.query('DELETE FROM ldw_sessions WHERE user_id=$1',[user.id]);
    await event(db,user.tenant_id,user.id,'PASSWORD_CHANGED');
@@ -136,6 +136,9 @@ async function route(req,res,url){
  if(pathname==='/api/logout'&&method==='POST'){
   await pool.query('DELETE FROM ldw_sessions WHERE token_hash=$1',[sha(cookie(req,'ldw_session'))]);clearCookies(res);send(res,200,{ok:true});return;
  }
+ // Deny by default after the exact authentication/password/logout handlers.
+ // The flag is read from the database on every request, never trusted from a cookie.
+ if(user.must_change_password)fail(403,'Substitua a senha temporária antes de continuar');
  if(pathname==='/api/users'&&method==='GET'){
   if(user.role!=='admin')fail(403,'Administrador exigido');
   const q=await pool.query('SELECT id,email,role,verified,active,created_at FROM ldw_users WHERE tenant_id=$1 ORDER BY created_at DESC LIMIT 200',[user.tenant_id]);send(res,200,{users:q.rows});return;
