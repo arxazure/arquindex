@@ -1,30 +1,30 @@
 # Rodada noturna — ARQ-167–172 — 05/11/2026
 
-## Evidência executada
-- Workflow read-only: https://github.com/arxazure/arquindex/actions/runs/42106259703
-- Artefato JSON: https://github.com/arxazure/arquindex/actions/runs/42106259703/artifacts/13452556308
-- Commit do auditor: c538b3ba2f727f27ad8d67ca461d5b933dde5052
-- Resultado do job: success (execução da auditoria, **não** sucesso dos sites).
-- Seis hosts resolvem para 177.234.150.42.
-- ARQ-167: handshake TLSv1.3 válido, HTTP página/robots/sitemap encerrou conexão.
-- ARQ-168, 169, 170, 171, 172: TLS não validado por reset; página/robots/sitemap sem resposta HTTP.
-- Status 200, canonical, H1, mobile, conteúdo, CTAs, formulários e sitemap: **não verificáveis nesta rodada**. Não confundir falha de conexão do runner com prova de indisponibilidade global.
+## Evidências executadas
+- Auditoria inicial read-only: https://github.com/arxazure/arquindex/actions/runs/42106259703 — o runner encontrou resets transitórios.
+- Repetição única e limitada: https://github.com/arxazure/arquindex/actions/runs/42131311835 — os seis hosts resolveram para 177.234.150.42, TLS foi autorizado e todas as páginas responderam HTTP 200.
+- Publicação isolada ARQ-171: https://github.com/arxazure/arquindex/actions/runs/42131701619 — sucesso.
+- Commit do publicador: 5503db7b606e9106cf1d5bc6f54e0c4b0abe7205.
+- Artefato: https://github.com/arxazure/arquindex/actions/runs/42131701619/artifacts/13462973083.
+- Backup ARQ-171: `/seo-backups/identidade-20261105T234525Z/830ed69b56f806d6bdb1.html`.
+- SHA-256 publicado: `aac8c178b04561c47c478f12a07029613a31c17a0815bff875e164ea4a08de8c`.
 
-## Decisão e ações pendentes
-1. Investigar no provedor a origem de resets TCP/TLS para 177.234.150.42 e logs de vhost/firewall; comparar outro ponto de rede e validar DNS, certificado/SNI e resposta HTTP por host.
-2. Confirmar root FTPS de cada host e backup íntegro individual antes de qualquer escrita; ARQ-172 já teve TARGET_NOT_FOUND em tentativa anterior.
-3. Após restabelecer respostas, reexecutar auditoria por host, revisar canonical/title/H1/description/viewport/robots/sitemap/links e validar mobile visualmente (o auditor atual **não** mede overflow nem layout).
-4. Não atualizar sitemap ou IndexNow sem URLs canônicas acessíveis e comprovadas; preservar ARQ-167 e ARQ-169 publicadas anteriormente até confirmar estado.
-5. Inventário de 56 hosts **não** foi reexecutado nesta rodada; status histórico não deve ser tratado como estado atual.
+## Resultado por ficha
 
-## Log por ficha
-| Ficha | Antes (fila) | Depois da auditoria | Commit de conteúdo | Publicação | Sitemap/envio | Estado |
-|---|---|---|---|---|---|---|
-| ARQ-167 | Publicada anteriormente, aguarda métricas | DNS/TLS ok; HTTP sem resposta | Nenhum | Não | Não | bloqueada por conectividade |
-| ARQ-168 | Divergência São Paulo/BH, identidade ausente | DNS ok; TLS/HTTP reset | Nenhum | Não | Não | bloqueada por conectividade e atendimento |
-| ARQ-169 | Publicada anteriormente, revisão de preços/fontes | DNS ok; TLS/HTTP reset | Nenhum | Não | Não | bloqueada por conectividade |
-| ARQ-170 | Revisar logística e saúde | DNS ok; TLS/HTTP reset | Nenhum | Não | Não | bloqueada por conectividade e atendimento |
-| ARQ-171 | Diferenciar conteúdo Decreto 10.278/2020 | DNS ok; TLS/HTTP reset | Nenhum | Não | Não | bloqueada por conectividade |
-| ARQ-172 | FTPS TARGET_NOT_FOUND anteriormente | DNS ok; TLS/HTTP reset | Nenhum | Não | Não | bloqueada por conectividade e origem |
- 
-ARQ-007 e ARQ-099 preservadas. Nenhum deploy, post social ou submissão. Zero melhorias publicadas nesta rodada por falta de pré-condições técnicas.
+| Ficha | Verificação pública | Ação | Descoberta | Estado |
+|---|---|---|---|---|
+| ARQ-167 | HTTP 200, canonical própria, H1 único, identidade, WhatsApp, 390/390 | Preservada; já publicada em 29/10 | robots 200 e sitemap 200 com URL | Aguardar janela e métricas |
+| ARQ-168 | HTTP 200; canonical própria; title/H1 dizem Belo Horizonte em URL São Paulo; 512/390 | Nenhuma escrita | robots 200; sitemap 200 sem a URL | Bloqueada por conflito regional e atendimento |
+| ARQ-169 | HTTP 200, canonical própria, H1 único e 390/390 | Preservada; title corrigido em 29/10 | robots 200; sitemap 200 sem a URL | Aguardar janela; identidade/CTA ainda incompletos |
+| ARQ-170 | HTTP 200, canonical própria, H1 único; intenção saúde/São Vicente; 512/390 | Nenhuma escrita | robots 200; sitemap 200 sem a URL | Confirmar atendimento, logística e requisitos de saúde |
+| ARQ-171 | HTTP 200, canonical própria, H1 único, index/follow, logo, menu, rodapé, WhatsApp e 390/390 mobile / 1440/1440 desktop | Identidade oficial publicada via FTPS com backup; title/H1 e conteúdo preservados | robots 200; sitemap 200, mas a URL não consta | Publicada e verificada; próxima etapa é revisão editorial diferenciada |
+| ARQ-172 | HTTP 200, canonical própria, H1 vazio, sem meta robots, 390/390 | Nenhuma escrita; origem FTPS continua não mapeada | robots 404; sitemap 200 com URL | Corrigir somente após localizar root real e efetuar backup |
+
+## Decisões
+- O reset inicial foi tratado como transitório e não como indisponibilidade comprovada.
+- ARQ-168 e ARQ-170 não foram promovidas por falta de confirmação regional/comercial.
+- ARQ-167 e ARQ-169 não foram republicadas, pois já tiveram alterações recentes.
+- ARQ-172 permanece intacta porque a tentativa anterior retornou `TARGET_NOT_FOUND` antes de backup/escrita.
+- O sitemap de ARQ-171 não foi alterado nesta rodada: o publicador de identidade preservou o escopo, e incluir a URL exige localizar e validar o arquivo de origem correspondente.
+- Não houve submissão ao Search Console, Bing ou IndexNow, nem publicação social. Envio não deve ser confundido com indexação.
+- ARQ-007 e ARQ-099 foram preservadas.
