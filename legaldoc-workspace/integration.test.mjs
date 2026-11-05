@@ -93,7 +93,7 @@ try{
   }
  }
  assert.equal((await call('/api/users/'+userId+'/verify','POST',{justification:'Teste de isolamento entre empresas fictícias.'},foreign)).r.status,404);
- assert.equal((await call('/api/docs/'+id+'/assign','POST',{stage:'REVISAO_CLIENTE',userId:foreignUser},admin)).r.status,403);
+ assert.equal((await call('/api/docs/'+id+'/assign','POST',{stage:'REVISAO_JURIDICA_1',userId:foreignUser},admin)).r.status,403);
  // Exercise each independent review profile and require its explicit assignment.
  for(const [role,stages] of [['legal',['REVISAO_JURIDICA_1','REVISAO_JURIDICA_2']],['technical',['REVISAO_TECNICA']],['approver',['APROVACAO']],['homologator',['HOMOLOGACAO']]]){
   const email=role==='legal'?'legal@example.org':role+'@example.org';
