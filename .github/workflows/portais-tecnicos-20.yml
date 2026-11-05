@@ -54,15 +54,14 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
           python scripts/portais-tecnicos/qa.py
-      - name: Preflight ou piloto explicitamente autorizado
-        if: github.event_name == 'workflow_dispatch'
+      - name: Preflight de leitura ou piloto manual autorizado
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
           CPANEL_USER: ${{ secrets.CPANEL_USER }}
           CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
-          MODE: ${{ inputs.mode }}
-          PORTAL: ${{ inputs.portal }}
+          MODE: ${{ inputs.mode || 'preflight' }}
+          PORTAL: ${{ inputs.portal || 'conarq-guias' }}
           APPROVAL: ${{ inputs.approval }}
         run: python scripts/portais-tecnicos/publish.py --mode "$MODE" --portal "$PORTAL" --approval "$APPROVAL"
       - name: Preservar entrega e comprovantes
