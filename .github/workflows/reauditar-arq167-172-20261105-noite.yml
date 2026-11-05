@@ -1,0 +1,36 @@
+name: Reauditar ARQ-167 a ARQ-172 - 2026-11-05 noite
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/reauditar-arq167-172-20261105-noite.yml']
+  workflow_dispatch:
+permissions: { contents: read }
+jobs:
+  retry-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Revalidar uma vez DNS TLS HTTP e SEO
+        run: |
+          mkdir -p "$RUNNER_TEMP/audit" && cd "$RUNNER_TEMP/audit"
+          npm init -y >/dev/null
+          npm install playwright@1.56.1 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+          cat > audit.js <<'JS'
+          const {chromium}=require('playwright');
+          const dns=require('node:dns').promises;
+          const tls=require('node:tls');
+          const rows=[
+            ['ARQ-167','https://databook.arquindex.com.br/'],
+            ['ARQ-168','https://decreto10278-contratos-sao-paulo.arquindex.com.br/'],
+            ['ARQ-169','https://decreto10278-educacao.arquindex.com.br/custo.html'],
+            ['ARQ-170','https://decreto10278-medico-sao-vicente.arquindex.com.br/'],
+            ['ARQ-171','https://decreto10278.arquindex.com.br/'],
+            ['ARQ-172','https://digitalizaca.arquindex.com.br/']
+          ];
+          const cert=host=>new Promise(resolve=>{const s=tls.connect(443,host,{servername:host,rejectUnauthorized:true,timeout:10000},()=>{const c=s.getPeerCertificate();resolve({authorized:s.authorized,subject:c.subject?.CN||'',validTo:c.valid_to||''});s.end()});s.on('timeout',()=>{s.destroy();resolve({error:'timeout'})});s.on('error',e=>resolve({error:e.code||e.message}))});
+          const pause=ms=>new Promise(r=>setTimeout(r,ms));
+          (async()=>{const b=await chromium.launch({headless:true});for(const [id,url] of rows){const host=new URL(url).hostname;let addresses=[],dnsError='';try{addresses=(await dns.resolve4(host)).slice(0,4)}catch(e){dnsError=e.code||e.message}let tlsInfo=await cert(host);if(tlsInfo.error){await pause(1500);tlsInfo=await cert(host)}let out={id,url,host,addresses,dnsError,tls:tlsInfo};for(let attempt=1;attempt<=2;attempt++){const ctx=await b.newContext({viewport:{width:390,height:844}});const p=await ctx.newPage();try{const r=await p.goto(url+'?audit=20261105noite-retry',{waitUntil:'domcontentloaded',timeout:45000});const d=await p.evaluate(()=>({title:document.title,description:document.querySelector('meta[name=description]')?.content||'',h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"],.aq-logo-name'),menu:document.querySelectorAll('header nav,nav[aria-label]').length,floating:!!document.querySelector('#arq-floating,.arq-floating,.aq-brand-wa'),wa:!!document.querySelector('a[href*="5531973632725"]'),forms:document.querySelectorAll('form').length,utm:[...document.querySelectorAll('a[href*="utm_"]')].length,internal:[...document.querySelectorAll('a[href]')].filter(a=>{try{return new URL(a.href).hostname.endsWith('arquindex.com.br')}catch{return false}}).length,jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,words:(document.body.innerText.match(/\S+/g)||[]).length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));out={...out,attempt,status:r?.status()||0,finalUrl:p.url(),...d};await ctx.close();break}catch(e){out={...out,attempt,error:e.message};await ctx.close();if(attempt<2)await pause(2000)}}console.log('RETRY_AUDIT',JSON.stringify(out))}await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node audit.js
