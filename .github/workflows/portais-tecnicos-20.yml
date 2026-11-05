@@ -1,7 +1,7 @@
 name: Portais técnicos Arquindex - 20 temas
 on:
   push:
-    branches: [feature/portais-tecnicos-20-20261104]
+    branches: [pilot/conarq-guias-approved-20261104]
     paths:
       - 'portais-tecnicos/catalogo.json'
       - 'scripts/portais-tecnicos/**'
@@ -30,6 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build-qa-publish:
+    if: github.event_name == 'push' && github.event.head_commit.message == 'deploy: approved conarq-guias pilot 20261104'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
@@ -40,15 +41,13 @@ jobs:
       - name: Testar validação sem acessar hospedagem
         run: python -m unittest discover -s scripts/portais-tecnicos -p 'test_*.py' -v
       - name: Recuperar conteúdo já aprovado
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'pilot'
         uses: actions/download-artifact@v4
         with:
           name: portais-tecnicos-20
-          run-id: ${{ inputs.artifact_run }}
+          run-id: '41931224469'
           github-token: ${{ github.token }}
           path: restored
       - name: Restaurar e revalidar entrega
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'pilot'
         run: |
           cp -a restored/portais-tecnicos/dist portais-tecnicos/dist
           sudo apt-get update -qq
@@ -60,9 +59,9 @@ jobs:
           CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
           CPANEL_USER: ${{ secrets.CPANEL_USER }}
           CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
-          MODE: ${{ inputs.mode || 'preflight' }}
-          PORTAL: ${{ inputs.portal || 'conarq-guias' }}
-          APPROVAL: ${{ inputs.approval }}
+          MODE: pilot
+          PORTAL: conarq-guias
+          APPROVAL: APPROVED:conarq-guias
         run: python scripts/portais-tecnicos/publish.py --mode "$MODE" --portal "$PORTAL" --approval "$APPROVAL"
       - name: Preservar entrega e comprovantes
         if: always()
