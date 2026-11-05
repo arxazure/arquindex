@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-23",
+  "timezone": "America/Sao_Paulo",
+  "repository": "arxazure/arquindex",
+  "branch": "railway-production-2026",
+  "codeCommit": "f0ebc9ccfa965f33217cecf7d910da332ef3da30",
+  "deployment": {
+    "id": "f48cf6d1-6101-4762-99e7-fa1d3d67fb83",
+    "status": "SUCCESS",
+    "createdAt": "2026-10-23T20:59:53.080Z",
+    "updatedAt": "2026-10-23T21:01:48.932Z",
+    "serviceId": "57fb4cbc-213b-462c-9c66-920b4d620137",
+    "environmentId": "5ba32ff7-5386-4867-8250-2a87def0d9d4",
+    "url": null,
+    "snapshotId": "be2e6d29-54f0-4411-a3bb-fbb867eb8877",
+    "creator": {
+      "id": "a94e2bfc-6804-4fdb-9cfa-e949df7760c4",
+      "name": "Marina G Lopes",
+      "email": "arquindex@gmail.com"
+    },
+    "canRollback": true,
+    "canRedeploy": true,
+    "regions": [
+      "sfo"
+    ],
+    "meta": {
+      "reason": "deploy",
+      "commitMessage": "feat: expose public IndexNow verification for news URLs",
+      "commitHash": "f0ebc9ccfa965f33217cecf7d910da332ef3da30",
+      "branch": "railway-production-2026"
+    }
+  },
+  "publicBase": "https://arquindex-web-production.up.railway.app",
+  "published": {
+    "newPages": [
+      "/noticias/anpd-audiencia-dosimetria-outubro-2026.html",
+      "/noticias/lgpd-dpo-rmbh-capitais-governanca-documental.html"
+    ],
+    "updatedPages": [
+      "/noticias/sandbox-anpd-ia-lgpd-evidencias-conformidade.html",
+      "/noticias/"
+    ],
+    "sitemaps": [
+      "/noticias/sitemap.xml",
+      "/sitemap.xml",
+      "/sitemap-index.xml"
+    ],
+    "validation": "HTTP 200 confirmed for news hub, new pages, sitemap and image. Local XML, JSON-LD, canonical and HEAD/missing-path checks passed."
+  },
+  "indexnow": {
+    "status": 202,
+    "accepted": true,
+    "urls": [
+      "https://arquindex-web-production.up.railway.app/noticias/",
+      "https://arquindex-web-production.up.railway.app/noticias/anpd-audiencia-dosimetria-outubro-2026.html",
+      "https://arquindex-web-production.up.railway.app/noticias/lgpd-dpo-rmbh-capitais-governanca-documental.html",
+      "https://arquindex-web-production.up.railway.app/noticias/sandbox-anpd-ia-lgpd-evidencias-conformidade.html"
+    ],
+    "body": ""
+  },
+  "social": {
+    "linkedin": {
+      "urn": "urn:li:share:7519503144595197952",
+      "state": "published"
+    },
+    "instagram": {
+      "media_id": "17940537258386645",
+      "media_permalink": "https://www.instagram.com/p/De2eaWjkeS2/"
+    },
+    "googleBusiness": {
+      "post_id": "accounts/111390525053034972643/locations/2344229015359741158/localPosts/3133640841232234444",
+      "post_state": "LIVE",
+      "post_search_url": "https://local.google.com/place?id=13787100657679265672&use=posts&lpsid=CIHM0ogKEN7SkaX6oYb-Kg"
+    }
+  },
+  "blocked": {
+    "homehost": "FTPS authentication failed: 530. No files uploaded. HTTPS checks from this environment returned 503 envoy upstream connect error; not proof of a global outage.",
+    "cloudflareSubdomains": "GET /zones?name=arquindex.com.br returned an empty list for the connected account. No DNS changes made.",
+    "googleSearchConsole": "GSC Wizard returned payment_required. No sitemap submission completed.",
+    "bingSitemap": "Windsor bing_webmaster exposes no write actions. IndexNow accepted four Railway news URLs with HTTP 202; direct sitemap submission not completed.",
+    "bingPlaces": "No supported post action verified."
+  },
+  "sources": [
+    "https://www.gov.br/anpd/pt-br/acesso-a-informacao/participacao-social/audiencias-e-consultas-publicas/audiencias-publicas/aviso-de-audiencia-publica-anpd-no-3_2026.pdf/@@display-file/file",
+    "https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-publica-3o-relatorio-parcial-de-monitoramento-do-sandbox-regulatorio-em-ia"
+  ]
+}

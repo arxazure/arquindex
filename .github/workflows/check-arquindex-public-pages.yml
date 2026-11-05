@@ -1,0 +1,43 @@
+name: Validate Arquindex public routes and origin
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '20 11 * * *'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check exact responses and detect unexpected hosting
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import urllib.request, urllib.error, sys, json
+          cases=[
+            ("https://arquindex.com.br/alfresco-ia-local-open-source-2026", "alfresco"),
+            ("https://arquindex.com.br/digitalizacao/local/belo-horizonte-mg", "digitaliza"),
+            ("https://arquindex.com.br/sitemap.xml", "sitemap"),
+            ("https://www.arquindex.com.br/alfresco-ia-local-open-source-2026", "alfresco"),
+            ("https://www.arquindex.com.br/digitalizacao/local/belo-horizonte-mg", "digitaliza"),
+            ("https://www.arquindex.com.br/sitemap.xml", "sitemap"),
+            ("https://arquindex-web-production.up.railway.app/alfresco-ia-local-open-source-2026", "alfresco"),
+            ("https://arquindex-web-production.up.railway.app/digitalizacao/local/belo-horizonte-mg", "digitaliza")
+          ]
+          passed=True
+          for url,kind in cases:
+              try:
+                  req=urllib.request.Request(url,headers={"User-Agent":"Arquindex-Route-Monitor/1.0"})
+                  with urllib.request.urlopen(req,timeout=25) as r:
+                      status=r.status; final=r.url; server=r.headers.get("Server","")
+                      body=r.read(180000).decode("utf-8","replace").lower()
+                  needles={"alfresco":["alfresco","ia"],"digitaliza":["digitaliza","belo horizonte"],"sitemap":["<sitemapindex","<urlset"]}
+                  valid= status==200 and (any(word in body for word in needles[kind]) if kind=="sitemap" else all(word in body for word in needles[kind]))
+                  print(json.dumps({"url":url,"status":status,"final":final,"server":server,"content_ok":valid},ensure_ascii=False))
+                  if not valid: passed=False
+              except Exception as e:
+                  passed=False
+                  print(json.dumps({"url":url,"error":str(e)[:220]},ensure_ascii=False))
+          if not passed: sys.exit("Public routes or hosting origin do not match expectations.")
+          PY
