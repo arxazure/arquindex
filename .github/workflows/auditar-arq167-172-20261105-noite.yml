@@ -1,0 +1,62 @@
+name: Auditar ARQ-167 a ARQ-172 - 2026-11-05 noite
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/auditar-arq167-172-20261105-noite.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4
+      - name: Auditoria publica somente leitura
+        run: |
+          mkdir -p audit-arq167-172
+          python - <<'PY'
+          import csv, json, socket, ssl, requests, urllib.parse, xml.etree.ElementTree as ET
+          from bs4 import BeautifulSoup
+          from pathlib import Path
+          wanted={f'ARQ-{i:03d}' for i in range(167,173)}
+          with open('seo/fila-seo-geo-aeo.csv',encoding='utf-8-sig',newline='') as f: rows=[r for r in csv.DictReader(f,delimiter=';') if r['id'] in wanted]
+          out=[]
+          for row in rows:
+            url=row['url']; host=urllib.parse.urlparse(url).hostname
+            a={'id':row['id'],'url':url,'issues':[]}
+            try:a['dns']=sorted({x[4][0] for x in socket.getaddrinfo(host,443,type=socket.SOCK_STREAM)})
+            except Exception as e:a['issues'].append('DNS '+str(e))
+            try:
+              with socket.create_connection((host,443),timeout=7) as sock:
+                with ssl.create_default_context().wrap_socket(sock,server_hostname=host) as tls:a['tls']={'valid':True,'version':tls.version()}
+            except Exception as e:a['tls']={'valid':False,'error':str(e)};a['issues'].append('TLS')
+            for key,target in [('page',url),('robots','https://'+host+'/robots.txt'),('sitemap','https://'+host+'/sitemap.xml')]:
+              try:
+                r=requests.get(target,timeout=14);a[key]={'status':r.status_code,'final_url':r.url}
+                if key=='page' and r.status_code==200:
+                  s=BeautifulSoup(r.text,'html.parser')
+                  a.update(title=s.title.get_text(' ',strip=True) if s.title else '',h1=[x.get_text(' ',strip=True) for x in s.select('h1')],canonical=[x.get('href') for x in s.select('link[rel~=canonical]')],description=[x.get('content') for x in s.select('meta[name=description]')],robots_meta=[x.get('content') for x in s.select('meta[name=robots]')],viewport=bool(s.select('meta[name=viewport]')),jsonld=len(s.select('script[type="application/ld+json"]')),forms=len(s.select('form')),cta=len([x for x in s.select('a[href]') if any(z in x.get('href','').lower() for z in ['whatsapp','wa.me','contato','orcamento','proposta'])]),words=len(s.get_text(' ',strip=True).split()),internal_links=len([x for x in s.select('a[href]') if urllib.parse.urlparse(urllib.parse.urljoin(url,x.get('href',''))).hostname==host]))
+                  if len(a['h1'])!=1:a['issues'].append('H1 count')
+                  if len(a['canonical'])!=1 or a['canonical'][0]!=url:a['issues'].append('canonical differs from queued URL')
+                  if not a['description']:a['issues'].append('meta description missing')
+                  if a['cta']==0:a['issues'].append('CTA absent')
+                if key=='sitemap' and r.status_code==200:
+                  try:
+                    root=ET.fromstring(r.content);locs=[x.text for x in root.iter() if x.tag.endswith('loc')]
+                    a['sitemap_contains_url']=url in locs
+                  except Exception as e:a['sitemap_error']=str(e)
+              except Exception as e:a[key]={'error':str(e)};a['issues'].append(key+' unavailable')
+            out.append(a);print(json.dumps(a,ensure_ascii=False),flush=True)
+          Path('audit-arq167-172/results.json').write_text(json.dumps(out,ensure_ascii=False,indent=2))
+          assert len(out)==6, 'Six queued IDs required'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: auditoria-arq167-172
+          path: audit-arq167-172/
