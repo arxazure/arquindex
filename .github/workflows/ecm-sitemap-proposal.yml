@@ -1,0 +1,28 @@
+name: ECM Sitemap Proposal (read-only)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/seo_ecm_sitemap_proposal.py'
+      - '.github/workflows/ecm-sitemap-proposal.yml'
+permissions:
+  contents: read
+jobs:
+  propose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate script syntax
+        run: python3 -m py_compile scripts/seo_ecm_sitemap_proposal.py
+      - name: Inspect ECM and generate review-only sitemap
+        run: python3 scripts/seo_ecm_sitemap_proposal.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ecm-sitemap-proposal
+          path: seo-report/ecm-sitemap-proposal/
+          retention-days: 14
