@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build-qa-publish:
-    if: github.event_name == 'push' && github.event.head_commit.message == 'deploy-approved-remaining-19-20261105'
+    if: github.event_name == 'push' && github.event.head_commit.message == 'deploy-approved-resume-16-20261105'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
@@ -65,7 +65,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p publish-report/remaining-19
-          for portal in anpd-orientacoes governanca-documental digitalizacao-tecnica ocr-pdfa temporalidade-documental arquivo-morto-seguro guarda-rastreavel descarte-documental alfresco-implantacao alfresco-manuais ecm-custos ia-documental-local preservacao-digital metadados-documentais lgpd-registros dpo-operacional databooks-tecnicos documentos-rh auditoria-documental; do
+          python scripts/portais-tecnicos/publish.py --mode verify --portal digitalizacao-tecnica --approval APPROVED:digitalizacao-tecnica
+          cp publish-report/portais-tecnicos-20.json publish-report/remaining-19/digitalizacao-tecnica.json
+          for portal in ocr-pdfa temporalidade-documental arquivo-morto-seguro guarda-rastreavel descarte-documental alfresco-implantacao alfresco-manuais ecm-custos ia-documental-local preservacao-digital metadados-documentais lgpd-registros dpo-operacional databooks-tecnicos documentos-rh auditoria-documental; do
             echo "Publishing authorized portal: $portal"
             set +e
             python scripts/portais-tecnicos/publish.py --mode pilot --portal "$portal" --approval "APPROVED:$portal"
