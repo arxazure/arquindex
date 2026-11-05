@@ -125,7 +125,7 @@ def main():
      for rel in [f.relative_to(OUT/host(t)).as_posix() for f in (OUT/host(t)).rglob('*') if f.is_file() and f.suffix!='.html']:
       assert public(url(t,rel))==(OUT/host(t)/rel).read_bytes(),'PUBLIC_ASSET_MISMATCH'
      assert get(ftp,'/public_html/index.html')==home,'INSTITUTIONAL_HOME_CHANGED'
-    promoted=[]
+     promoted=[]
      try:
       for rel in ('index.html','manual/index.html'):
        put(ftp,'/'+r['root']+'/'+rel,(OUT/host(t)/rel).read_bytes());promoted.append(rel)
