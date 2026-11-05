@@ -1,7 +1,7 @@
 name: Portais técnicos Arquindex - 20 temas
 on:
   push:
-    branches: [pilot/conarq-guias-approved-20261104]
+    branches: [publish/remaining-19-approved-20261105]
     paths:
       - 'portais-tecnicos/catalogo.json'
       - 'scripts/portais-tecnicos/**'
@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build-qa-publish:
-    if: github.event_name == 'push' && github.event.head_commit.message == 'deploy-approved-conarq-guias-pilot-20261104'
+    if: github.event_name == 'push' && github.event.head_commit.message == 'deploy-approved-remaining-19-20261105'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
@@ -62,15 +62,26 @@ jobs:
           MODE: pilot
           PORTAL: conarq-guias
           APPROVAL: APPROVED:conarq-guias
-        run: python scripts/portais-tecnicos/publish.py --mode "$MODE" --portal "$PORTAL" --approval "$APPROVAL"
+        run: |
+          set -euo pipefail
+          mkdir -p publish-report/remaining-19
+          for portal in anpd-orientacoes governanca-documental digitalizacao-tecnica ocr-pdfa temporalidade-documental arquivo-morto-seguro guarda-rastreavel descarte-documental alfresco-implantacao alfresco-manuais ecm-custos ia-documental-local preservacao-digital metadados-documentais lgpd-registros dpo-operacional databooks-tecnicos documentos-rh auditoria-documental; do
+            echo "Publishing authorized portal: $portal"
+            set +e
+            python scripts/portais-tecnicos/publish.py --mode pilot --portal "$portal" --approval "APPROVED:$portal"
+            result=$?
+            set -e
+            cp publish-report/portais-tecnicos-20.json "publish-report/remaining-19/$portal.json"
+            if [ "$result" -ne 0 ]; then exit "$result"; fi
+          done
       - name: Preservar entrega e comprovantes
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: portais-tecnicos-20
+          name: portais-tecnicos-remaining-19
           path: |
             portais-tecnicos/dist/
             portais-tecnicos/qa-report.json
-            publish-report/portais-tecnicos-20.json
+            publish-report/
           retention-days: 30
 
