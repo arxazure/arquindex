@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build-qa-publish:
-    if: github.event_name == 'push' && github.event.head_commit.message == 'deploy: approved conarq-guias pilot 20261104'
+    if: github.event_name == 'push' && github.event.head_commit.message == 'deploy-approved-conarq-guias-pilot-20261104'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
