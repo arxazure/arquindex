@@ -5,6 +5,7 @@ Reads only public HTTPS pages at ecm.arquindex.com.br, never publishes or submit
 """
 import json
 import re
+import urllib.robotparser
 import ssl
 import urllib.error
 import urllib.request
@@ -94,7 +95,7 @@ def validate(url):
         parsed = HTMLMeta()
         parsed.feed(body.decode("utf-8", errors="replace"))
         robots = ",".join(parsed.robots + [headers.get("X-Robots-Tag", "")]).lower()
-        if re.search(r"(?:^|[,;\s])noindex(?:$|[,;\s])", robots):
+        if re.search(r"(?:^|[,;\s])(?:noindex|none)(?:$|[,;\s])", robots):
             row["reason"] = "noindex"
         elif len(parsed.canonicals) != 1:
             row["reason"] = "canonical_count_" + str(len(parsed.canonicals))
@@ -108,27 +109,59 @@ def validate(url):
         row["error"] = str(exc)[:240]
     return row
 
+def complete_review(checked):
+    """A failed editorial URL is a blocker, never permission to drop it."""
+    return bool(checked) and all(row["accepted"] for row in checked)
+
 def run():
     status, headers, body = fetch(ORIGIN + "/sitemap.xml")
     if status != 200:
         raise ValueError("Live sitemap did not return HTTP 200")
     candidates, rejected = extract_candidates(body)
     checked = [validate(url) for url in candidates]
-    passed = [item["url"] for item in checked if item["accepted"]]
+    for row in checked:
+        if (row.get("canonical") == ORIGIN + "/"
+                and row["url"] == ORIGIN + "/index.html"
+                and row.get("http_status") == 200):
+            root_check = validate(ORIGIN + "/")
+            row["root_check"] = root_check
+            if root_check["accepted"]:
+                _, _, alias_body = fetch(row["url"])
+                _, _, root_body = fetch(ORIGIN + "/")
+                if alias_body == root_body:
+                    row.update(accepted=True, reason="verified_root_alias",
+                               sitemap_url=ORIGIN + "/")
+    # robots must be readable and explicitly checked for every final URL.
+    robots_status, _, robots_body = fetch(ORIGIN + "/robots.txt")
+    robots = urllib.robotparser.RobotFileParser()
+    if robots_status == 200:
+        robots.parse(robots_body.decode("utf-8", errors="replace").splitlines())
+    elif robots_status == 404:
+        robots.parse([])
+    for row in checked:
+        target = row.get("sitemap_url", row["url"])
+        if robots_status not in (200, 404):
+            row.update(accepted=False, reason="robots_unverified")
+        elif not all(robots.can_fetch(bot, target) for bot in ("Googlebot", "bingbot", "*")):
+            row.update(accepted=False, reason="robots_disallowed")
+    passed = list(dict.fromkeys(item.get("sitemap_url", item["url"])
+                               for item in checked if item["accepted"]))
     # Refuse to produce an incomplete replacement if a page cannot be verified.
     report = {"generated_at": datetime.now(timezone.utc).isoformat(),
               "source": ORIGIN + "/sitemap.xml", "source_count": len(candidates) + len(rejected),
               "eligible": passed, "checked": checked, "excluded": rejected,
-              "ready_for_human_review": len(passed) > 0 and all(
-                  r["accepted"] or r.get("reason") in {"canonical_other_target", "noindex", "not_http_200", "canonical_count_0", "canonical_count_2"}
-                  for r in checked),
+              "ready_for_human_review": complete_review(checked),
+              "blocking_urls": [r["url"] for r in checked if not r["accepted"]],
               "published": False, "submitted": False,
               "warning": "Candidate only: human approval, backed-up deployment and post-deploy verification required."}
     dest = Path("seo-report/ecm-sitemap-proposal")
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "review.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    if not passed:
-        print("No eligible pages: XML not produced")
+    # Remove a stale candidate from a previous successful execution as well.
+    candidate_path = dest / "sitemap.xml"
+    candidate_path.unlink(missing_ok=True)
+    if not report["ready_for_human_review"]:
+        print("Incomplete editorial coverage: XML not produced; see review.json")
         return
     ET.register_namespace("", NS)
     root = ET.Element("{" + NS + "}urlset")
