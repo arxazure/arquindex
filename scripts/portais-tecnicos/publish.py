@@ -23,17 +23,18 @@ def failure(ex):
   return {401:'CPANEL_AUTH_REJECTED',403:'CPANEL_ACCESS_DENIED',429:'CPANEL_RATE_LIMITED'}.get(ex.code,'CPANEL_HTTP_ERROR')
  if isinstance(ex,ssl.SSLError):return 'COMMUNICATION_TLS'
  if isinstance(ex,(TimeoutError,socket.timeout)):return 'COMMUNICATION_TIMEOUT'
- if isinstance(ex,urllib.error.URLError):return failure(ex.reason) if isinstance(ex.reason,(ssl.SSLError,TimeoutError,socket.timeout)) else 'COMMUNICATION_NETWORK'
+ if isinstance(ex,urllib.error.URLError):return failure(ex.reason) if isinstance(ex.reason,(ssl.SSLError,TimeoutError,socket.timeout,socket.gaierror)) else 'COMMUNICATION_NETWORK'
+ if isinstance(ex,socket.gaierror):return 'COMMUNICATION_DNS'
  if isinstance(ex,json.JSONDecodeError):return 'CPANEL_INVALID_RESPONSE'
  if isinstance(ex,ftplib.error_perm):return 'FTPS_ACCESS_REJECTED'
  return 'VALIDATION_OR_OPERATION_FAILED'
 def options():
  ap=argparse.ArgumentParser()
- ap.add_argument('--mode',choices=('preflight','pilot'),default='preflight')
+ ap.add_argument('--mode',choices=('preflight','pilot','verify'),default='preflight')
  ap.add_argument('--portal',choices=[t['slug'] for t in DATA['topics']])
  ap.add_argument('--approval',default='')
  args=ap.parse_args()
- if args.mode=='pilot' and (not args.portal or args.approval!='APPROVED:'+args.portal):raise PreflightError('PUBLICATION_APPROVAL_REQUIRED')
+ if args.mode in ('pilot','verify') and (not args.portal or args.approval!='APPROVED:'+args.portal):raise PreflightError('PUBLICATION_APPROVAL_REQUIRED')
  return args
 def save():REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2))
 def api(path,params=None):
@@ -79,7 +80,7 @@ def main():
  try:
   args=options()
   cp,user,auth,password=config(os.environ)
-  selected=[t for t in DATA['topics'] if t['slug']==args.portal] if args.mode=='pilot' else DATA['topics']
+  selected=[t for t in DATA['topics'] if t['slug']==args.portal] if args.mode in ('pilot','verify') else DATA['topics']
   inventory=domains();report['cpanel_authenticated']=True;save()
   with ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=50) as ftp:
    ftp.connect('h59.servidorhh.com',21);ftp.login(user,password);ftp.prot_p()
@@ -88,30 +89,36 @@ def main():
     report['status']='preflight_passed';save();print(json.dumps(report));sys.exit(0)
    for t in selected:
     if not (OUT/host(t)/'media/guia.mp4').is_file():raise PreflightError('GENERATED_ARTIFACT_MISSING')
-   # Refuse all existing domains, even if their root appears compatible. This job creates new sites only.
-   conflicts=[host(t) for t in selected if host(t) in inventory]
-   assert not conflicts,'EXISTING_DOMAINS_REQUIRE_REVIEW: '+','.join(conflicts)
-   for t in selected:
-    root='/public_html/portais-tecnicos/'+t['slug']
-    try:
-     ftp.cwd(root);assert not ftp.nlst(),'DESTINATION_NOT_EMPTY: '+t['slug']
-    except ftplib.error_perm as ex:
-     if not str(ex).startswith('550'):raise
-   report['status']='provisioning';save()
-   for t in selected:
-    fqdn=host(t);root='public_html/portais-tecnicos/'+t['slug'];r={'host':fqdn,'url':url(t),'root':root,'state':'pending'};report['results'].append(r);save()
-    params={'cpanel_jsonapi_user':user,'cpanel_jsonapi_apiversion':2,'cpanel_jsonapi_module':'SubDomain','cpanel_jsonapi_func':'addsubdomain','domain':t['slug'],'rootdomain':'arquindex.com.br','dir':root,'disallowdot':1}
-    result=api('/json-api/cpanel',params).get('cpanelresult') or {}
-    assert result.get('event',{}).get('result')==1 and any(x.get('result')==1 for x in result.get('data') or []),'CPANEL_CREATE_FAILED: '+fqdn
-    fresh=domains();actual=fresh.get(fqdn,'')
-    assert actual.endswith('/'+root),'DOCUMENT_ROOT_MISMATCH: '+fqdn
-    r['state']='domain_created';save()
-    for f in sorted((OUT/fqdn).rglob('*')):
-     if not f.is_file():continue
-     rel=f.relative_to(OUT/fqdn).as_posix();data=f.read_bytes()
-     if rel.endswith('.html'):data=data.replace(b'content="index,follow,max-image-preview:large"',b'content="noindex,follow,max-image-preview:large"')
-     put(ftp,'/'+root+'/'+rel,data)
-    r['state']='uploaded_noindex';save()
+   if args.mode=='verify':
+    for t in selected:
+     root='public_html/portais-tecnicos/'+t['slug']
+     if not inventory.get(host(t),'').endswith('/'+root):raise PreflightError('DOCUMENT_ROOT_MISMATCH')
+     report['results'].append({'host':host(t),'url':url(t),'root':root,'state':'uploaded_noindex'})
+   else:
+    # Refuse all existing domains, even if their root appears compatible. This job creates new sites only.
+    conflicts=[host(t) for t in selected if host(t) in inventory]
+    assert not conflicts,'EXISTING_DOMAINS_REQUIRE_REVIEW: '+','.join(conflicts)
+    for t in selected:
+     root='/public_html/portais-tecnicos/'+t['slug']
+     try:
+      ftp.cwd(root);assert not ftp.nlst(),'DESTINATION_NOT_EMPTY: '+t['slug']
+     except ftplib.error_perm as ex:
+      if not str(ex).startswith('550'):raise
+    report['status']='provisioning';save()
+    for t in selected:
+     fqdn=host(t);root='public_html/portais-tecnicos/'+t['slug'];r={'host':fqdn,'url':url(t),'root':root,'state':'pending'};report['results'].append(r);save()
+     params={'cpanel_jsonapi_user':user,'cpanel_jsonapi_apiversion':2,'cpanel_jsonapi_module':'SubDomain','cpanel_jsonapi_func':'addsubdomain','domain':t['slug'],'rootdomain':'arquindex.com.br','dir':root,'disallowdot':1}
+     result=api('/json-api/cpanel',params).get('cpanelresult') or {}
+     assert result.get('event',{}).get('result')==1 and any(x.get('result')==1 for x in result.get('data') or []),'CPANEL_CREATE_FAILED: '+fqdn
+     fresh=domains();actual=fresh.get(fqdn,'')
+     assert actual.endswith('/'+root),'DOCUMENT_ROOT_MISMATCH: '+fqdn
+     r['state']='domain_created';save()
+     for f in sorted((OUT/fqdn).rglob('*')):
+      if not f.is_file():continue
+      rel=f.relative_to(OUT/fqdn).as_posix();data=f.read_bytes()
+      if rel.endswith('.html'):data=data.replace(b'content="index,follow,max-image-preview:large"',b'content="noindex,follow,max-image-preview:large"')
+      put(ftp,'/'+root+'/'+rel,data)
+     r['state']='uploaded_noindex';save()
    try:report['autossl_requested']=False # Account-wide AutoSSL requires separate approval.
    except Exception as ex:report['autossl_error']=type(ex).__name__
    save()
