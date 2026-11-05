@@ -7,8 +7,24 @@ on:
       - 'scripts/portais-tecnicos/**'
       - '.github/workflows/portais-tecnicos-20.yml'
   workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [preflight, pilot]
+        default: preflight
+      portal:
+        type: string
+        default: conarq-guias
+      approval:
+        description: 'Somente após aprovação: APPROVED:<slug>'
+        type: string
+      artifact_run:
+        description: 'Execução com conteúdo aprovado'
+        type: string
+        default: '41931224469'
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: homehost-portais-tecnicos-20
   cancel-in-progress: false
@@ -21,22 +37,34 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Preparar renderização de vídeos
+      - name: Testar validação sem acessar hospedagem
+        run: python -m unittest discover -s scripts/portais-tecnicos -p 'test_*.py' -v
+      - name: Recuperar conteúdo já aprovado
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'pilot'
+        uses: actions/download-artifact@v4
+        with:
+          name: portais-tecnicos-20
+          run-id: ${{ inputs.artifact_run }}
+          github-token: ${{ github.token }}
+          path: restored
+      - name: Restaurar e revalidar entrega
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'pilot'
         run: |
+          cp -a restored/portais-tecnicos/dist portais-tecnicos/dist
           sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg fonts-dejavu-core
-          python -m pip install Pillow==11.3.0
-      - name: Gerar os 20 portais, 40 páginas e 20 vídeos
-        run: python scripts/portais-tecnicos/build.py --videos
-      - name: Validar conteúdo, SEO e mídia
-        run: python scripts/portais-tecnicos/qa.py
-      - name: Provisionar somente os novos subdomínios e publicar na HomeHost
+          sudo apt-get install -y ffmpeg
+          python scripts/portais-tecnicos/qa.py
+      - name: Preflight ou piloto explicitamente autorizado
+        if: github.event_name == 'workflow_dispatch'
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
           CPANEL_USER: ${{ secrets.CPANEL_USER }}
           CPANEL_API_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
-        run: python scripts/portais-tecnicos/publish.py
+          MODE: ${{ inputs.mode }}
+          PORTAL: ${{ inputs.portal }}
+          APPROVAL: ${{ inputs.approval }}
+        run: python scripts/portais-tecnicos/publish.py --mode "$MODE" --portal "$PORTAL" --approval "$APPROVAL"
       - name: Preservar entrega e comprovantes
         if: always()
         uses: actions/upload-artifact@v4
@@ -47,3 +75,4 @@ jobs:
             portais-tecnicos/qa-report.json
             publish-report/portais-tecnicos-20.json
           retention-days: 30
+
