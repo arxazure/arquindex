@@ -37,6 +37,7 @@ jobs:
       ADMIN_SETUP_TOKEN: test-bootstrap-token-for-ci-only-2026
       PUBLIC_ORIGIN: http://localhost:3001
       PORT: '3001'
+      LEGALDOC_DISPOSABLE_TEST: 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
