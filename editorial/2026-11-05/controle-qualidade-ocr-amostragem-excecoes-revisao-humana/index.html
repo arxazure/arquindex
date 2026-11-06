@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Controle de qualidade do OCR: amostragem e exceções | Arquindex</title>
+  <meta name="description" content="Guia prático para definir qualidade do OCR, amostragem por risco, revisão humana, tratamento de exceções, métricas e aceite de documentos digitalizados.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/controle-qualidade-ocr-amostragem-excecoes-revisao-humana/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Controle de qualidade do OCR: amostragem, exceções e revisão humana","description":"Manual para validar OCR e documentos digitalizados conforme risco e finalidade.","datePublished":"2026-11-05","dateModified":"2026-11-05","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/controle-qualidade-ocr-amostragem-excecoes-revisao-humana/"}</script>
+  <style>body{font-family:system-ui,sans-serif;line-height:1.65;color:#172033;margin:0}header,footer{background:#102a43;color:#fff;padding:1rem}header a,footer a{color:#fff}main{max-width:980px;margin:auto;padding:2rem}h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1}h2{margin-top:2.2rem;color:#0b4f6c}h3{color:#176b87}.answer,.note{padding:1rem;border-left:5px solid #f59e0b;background:#fff7e6}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd4dd;padding:.65rem;text-align:left;vertical-align:top}th{background:#edf3f8}.cta{background:#0b4f6c;color:#fff;padding:1.4rem;margin-top:2rem}.cta a{color:#fff;font-weight:700}.meta{color:#52606d}.check li{margin:.45rem 0}details{margin:.7rem 0;padding:.7rem;border:1px solid #d7e0e8}</style>
+</head>
+<body>
+<header><a href="https://www.arquindex.com.br/"><strong>ARQUINDEX</strong></a> · <a href="https://www.arquindex.com.br/digitalizacao-com-ocr.html">Digitalização com OCR</a></header>
+<main>
+<article>
+<p class="meta">Autoria institucional: Arquindex · 5 de novembro de 2026 · Conteúdo técnico informativo</p>
+<h1>Controle de qualidade do OCR: amostragem, exceções e revisão humana</h1>
+<p class="answer"><strong>Resposta direta:</strong> a qualidade do OCR não deve ser aprovada por uma porcentagem genérica de “acerto”. Primeiro defina a finalidade: pesquisa em texto livre, indexação de campos, automação ou decisão operacional. Depois separe os documentos por risco e dificuldade, mantenha a imagem original vinculada ao texto reconhecido, meça erros em amostras representativas e envie para revisão humana as páginas e os campos críticos. Identificadores, valores, datas, nomes, diagnósticos, assinaturas, manuscritos, carimbos e tabelas exigem critérios próprios. O lote só deve ser aceito quando completude, legibilidade, pesquisa, metadados, exceções e trilha de correção atenderem ao plano documentado.</p>
+
+<h2>OCR não é a imagem e não é prova automática de fidelidade</h2>
+<p>Reconhecimento óptico de caracteres transforma padrões visuais em texto. O resultado pode ficar invisível atrás da imagem em um PDF pesquisável ou alimentar campos em um sistema. Em ambos os casos, o texto é uma interpretação produzida por software. Ele facilita busca e processamento, mas pode confundir caracteres, omitir trechos, alterar ordem de leitura ou juntar colunas. A imagem capturada continua sendo a referência visual do documento digitalizado.</p>
+<p>Esse limite é essencial em digitalização regulada. O Decreto nº 10.278/2020 exige procedimentos e tecnologias que assegurem integridade, confiabilidade, rastreabilidade, auditabilidade, qualidade da imagem, legibilidade e, quando aplicável, confidencialidade. As Diretrizes do CONARQ para a digitalização nos termos do Decreto tratam o processo de forma mais ampla do que apenas gerar PDF/A. OCR pode apoiar pesquisa e indexação, mas não substitui preparação, captura, metadados, assinatura aplicável, controle de qualidade e preservação.</p>
+<p>A documentação oficial do Tesseract também mostra que qualidade depende da entrada. Resolução, inclinação, ruído, binarização, bordas, transparência, segmentação e tipo de conteúdo influenciam o resultado. Portanto, treinar novamente o motor ou trocar de software não deve ser a primeira resposta para um lote mal capturado. Corrigir iluminação, foco, corte, orientação e configuração pode produzir ganho maior.</p>
+
+<h2>Comece pela finalidade do texto reconhecido</h2>
+<table><thead><tr><th>Uso</th><th>Risco principal</th><th>Controle recomendado</th></tr></thead><tbody>
+<tr><td>Pesquisa em texto livre</td><td>O documento existe, mas não aparece na busca.</td><td>Amostra de termos, nomes e frases; imagem sempre disponível.</td></tr>
+<tr><td>Pré-indexação</td><td>Campo sugerido é gravado no documento errado.</td><td>Validação humana antes de confirmar metadado.</td></tr>
+<tr><td>Extração de valores</td><td>Dígito trocado altera valor, data ou identificação.</td><td>Regra de formato, dupla checagem e comparação com fonte.</td></tr>
+<tr><td>Classificação automática</td><td>Tipo documental incorreto aciona retenção ou fluxo errado.</td><td>Limiar conservador, fila de exceção e revisão por classe.</td></tr>
+<tr><td>Automação de processo</td><td>Texto incorreto dispara pagamento, exclusão ou comunicação.</td><td>Confirmação humana e controles adicionais para ação de alto impacto.</td></tr>
+<tr><td>Acessibilidade e leitura</td><td>Ordem de leitura e estrutura ficam incoerentes.</td><td>Teste com tecnologia assistiva e revisão de layout.</td></tr>
+</tbody></table>
+<p>Uma taxa aceitável para busca exploratória pode ser inadequada para CPF, matrícula, número de contrato ou resultado de exame. A mesma página pode ter texto corrido legível e um código crítico incorreto. Por isso, o aceite deve combinar métricas gerais com verificação de campos prioritários e regras de negócio.</p>
+
+<h2>Construa uma amostra representativa antes da produção</h2>
+<p>A amostra inicial precisa refletir o acervo real. Escolher apenas páginas limpas cria um resultado artificial. Inclua papéis novos e antigos, cópias de fax, impressão matricial, frente e verso, carimbos, anotações, tabelas, documentos coloridos, páginas tortas, baixa densidade, grampos removidos, formatos pequenos e documentos com orientação variável. Registre a proporção aproximada de cada grupo.</p>
+<p>Separe por tipo documental, período, origem, unidade, condição física e risco. Em RH, por exemplo, ficha cadastral impressa, ASO, atestado manuscrito e comprovante podem exigir segmentações diferentes. Em engenharia, desenho, folha de dados, certificado e relatório tabular não devem compartilhar o mesmo critério. Em saúde, dados sensíveis e risco de associação ao paciente exigem controles de segregação e conferência.</p>
+<p>Use a amostra para decidir resolução, cor, compressão, orientação, remoção de fundo, idioma, modo de segmentação e dicionários. Registre a configuração aprovada e mantenha páginas de referência. Uma mudança de scanner, driver, motor ou pré-processamento durante o lote deve gerar nova validação proporcional ao impacto.</p>
+
+<h2>Métricas que ajudam — e suas limitações</h2>
+<h3>Taxa de erro de caracteres</h3>
+<p>A CER compara caracteres inseridos, removidos e substituídos com uma transcrição de referência. É útil para texto corrido, mas pode esconder um erro grave: trocar um dígito em um CPF representa poucos caracteres e alto impacto. A referência precisa ser revisada; se estiver errada, a métrica também estará.</p>
+<h3>Taxa de erro de palavras</h3>
+<p>A WER faz comparação por palavras e tende a refletir melhor legibilidade textual. Ainda assim, pontuação, hifenização e segmentação podem aumentar a taxa sem comprometer a busca. Defina normalizações permitidas e preserve o resultado bruto para auditoria quando necessário.</p>
+<h3>Confiança informada pelo motor</h3>
+<p>O valor de confiança é uma estimativa do motor, não probabilidade universal de correção. Ele pode variar entre versões, idiomas e layouts. Calibre o limiar com documentos reais: compare confiança e erro observado. Use o indicador para priorizar revisão, nunca como única prova de fidelidade.</p>
+<h3>Completude e recuperabilidade</h3>
+<p>Conte páginas, documentos e anexos; verifique frente e verso; teste se a pesquisa encontra termos esperados. Um OCR perfeito em 99 páginas não compensa a página 100 ausente. Completude deve ser reconciliada entre entrada, captura, processamento e entrega.</p>
+
+<h2>Amostragem baseada em risco</h2>
+<p>Amostragem não significa escolher um percentual fixo para todos os lotes. Defina estratos e aumente a inspeção onde há maior impacto ou variabilidade. Lotes homogêneos, estáveis e de baixo risco podem usar amostra estatística documentada. Identificadores críticos, documentos de descarte, dados sensíveis, páginas ilegíveis e exceções podem exigir conferência integral.</p>
+<p>Uma abordagem prática começa com inspeção reforçada no início de cada lote, operador, equipamento e tipo documental. Se o resultado permanece estável, a frequência pode ser reduzida dentro de limites aprovados. Quando ocorre falha relevante, interrompa, delimite desde quando o processo pode estar afetado, corrija a causa e reinspecione o intervalo. Não aprove o restante com base em média acumulada.</p>
+<table><thead><tr><th>Estrato</th><th>Exemplo</th><th>Tratamento</th></tr></thead><tbody>
+<tr><td>Baixo risco e texto simples</td><td>Comunicados impressos, uma coluna, boa qualidade.</td><td>Amostra periódica de imagem, busca e completude.</td></tr>
+<tr><td>Layout variável</td><td>Contratos com tabelas, anexos e carimbos.</td><td>Amostra maior por modelo e revisão de páginas atípicas.</td></tr>
+<tr><td>Campo crítico</td><td>CPF, matrícula, valor, código de equipamento.</td><td>Validação de formato e conferência humana do campo.</td></tr>
+<tr><td>Conteúdo difícil</td><td>Manuscrito, cópia degradada, fax, impressão matricial.</td><td>Fila de exceção; não depender do OCR para decisão.</td></tr>
+<tr><td>Alto impacto</td><td>Documento que aciona pagamento, eliminação ou decisão clínica.</td><td>Revisão integral e segregação de funções conforme o processo.</td></tr>
+</tbody></table>
+
+<h2>Fila de exceções: o centro do processo confiável</h2>
+<p>Todo projeto precisa prever que algumas páginas falharão. A fila de exceção deve registrar lote, documento, página, tipo de falha, operador, data, imagem, texto anterior, correção e decisão. Evite permitir que o revisor altere silenciosamente o resultado. A trilha precisa mostrar o que mudou e por quê.</p>
+<p>Crie categorias objetivas: página ausente; orientação incorreta; corte; baixa legibilidade; mistura de documentos; código não reconhecido; tabela desestruturada; manuscrito; duplicidade; possível dado de outra pessoa; e falha de vínculo entre imagem e texto. A categoria orienta a ação e permite medir recorrência por origem, scanner, operador ou tipo.</p>
+<p>Quando a imagem também está ilegível, o revisor não deve adivinhar. Marque como não legível, retorne à recaptura ou solicite decisão do responsável pelo acervo. Completar informação por contexto sem evidência cria dado fabricado. Em campos de alto risco, a opção segura pode ser manter vazio com justificativa e encaminhar para tratamento especializado.</p>
+
+<h2>Revisão humana sem virar um novo ponto de erro</h2>
+<p>O revisor deve visualizar a imagem e o texto lado a lado, com destaque do campo e atalhos para ampliar, girar e navegar. Permissões precisam ser proporcionais ao conteúdo. Documentos de saúde, folha de pagamento, investigações e contratos confidenciais não devem ser expostos a qualquer operador. Registre acessos e limite cópias locais.</p>
+<p>Use dupla checagem para valores ou identificadores cujo erro tenha impacto relevante. Isso pode significar dois revisores independentes ou validação do segundo somente quando houver divergência ou baixo nível de confiança. Não mostre a resposta do primeiro quando a independência for necessária.</p>
+<p>Defina produtividade depois da qualidade. Metas exclusivamente por quantidade incentivam aprovação apressada. Monitore taxa de exceção, reincidência, tempo de correção e erros encontrados na auditoria posterior. Use os dados para melhorar captura e regras, não apenas para responsabilizar pessoas.</p>
+
+<h2>Fluxo operacional em treze etapas</h2>
+<ol>
+<li><strong>Defina a finalidade.</strong> Separe busca, extração, classificação e automação.</li>
+<li><strong>Mapeie riscos.</strong> Identifique campos, documentos e ações de alto impacto.</li>
+<li><strong>Selecione a amostra.</strong> Represente tipos, períodos, origens e condições físicas.</li>
+<li><strong>Prepare corretamente.</strong> Ordene, remova obstáculos, preserve vínculos e sinalize exceções.</li>
+<li><strong>Capture a imagem.</strong> Valide foco, corte, orientação, cor, frente e verso e legibilidade.</li>
+<li><strong>Processe o OCR.</strong> Registre versão do motor, idioma e parâmetros relevantes.</li>
+<li><strong>Calcule indicadores.</strong> Use confiança, CER/WER quando aplicável e verificações de completude.</li>
+<li><strong>Aplique regras.</strong> Valide formatos, dicionários e coerência sem substituir evidência.</li>
+<li><strong>Encaminhe exceções.</strong> Direcione por tipo e risco para revisão competente.</li>
+<li><strong>Registre correções.</strong> Preserve valor anterior, novo valor, responsável e motivo.</li>
+<li><strong>Audite o lote.</strong> Amostre por estrato e reforce inspeção após qualquer desvio.</li>
+<li><strong>Reconcilie a entrega.</strong> Compare quantidade de entrada, imagens, PDFs, metadados e rejeições.</li>
+<li><strong>Obtenha aceite.</strong> Documente métricas, limitações, pendências e autorização do responsável.</li>
+</ol>
+
+<h2>Exemplo hipotético de aplicação</h2>
+<p>Considere um projeto fictício de digitalização de dossiês de colaboradores em Belo Horizonte. A empresa recebe fichas cadastrais, contratos, comprovantes, ASOs e anotações manuscritas. O objetivo do OCR é pesquisar texto impresso e sugerir matrícula e tipo documental; nenhuma decisão trabalhista ou clínica será tomada automaticamente.</p>
+<p>Na amostra, fichas modernas têm bom resultado, mas documentos matriciais confundem “0” e “O”, e carimbos sobrepostos reduzem a leitura. O projeto cria quatro estratos. Texto simples passa por amostragem; matrículas recebem validação de formato e conferência; ASOs têm acesso restrito e não usam diagnóstico extraído automaticamente; manuscritos permanecem pesquisáveis apenas por metadados confirmados. Quando o motor encontra baixa confiança na matrícula, o documento vai para revisão. Quando há possível mistura de pessoas, o lote é bloqueado até conciliação.</p>
+<p>O aceite registra quantidade recebida e entregue, páginas recapturadas, exceções abertas, indicadores da amostra, versão do motor e limitações. Este é um exemplo didático, não um case real nem promessa de resultado. Percentuais e volumes precisam ser definidos com documentos representativos do contratante.</p>
+
+<h2>Riscos que não podem ser mascarados</h2>
+<ul>
+<li>Um PDF pesquisável pode conter texto invisível errado e ainda parecer visualmente correto.</li>
+<li>Ordenação de leitura inadequada altera tabelas e documentos em colunas.</li>
+<li>Confiança alta não garante correção em códigos e números.</li>
+<li>Correção manual sem trilha elimina auditabilidade.</li>
+<li>Motor em nuvem pode transmitir dados pessoais a terceiro; arquitetura e contrato devem ser avaliados.</li>
+<li>Guardar imagens temporárias e logs sem retenção definida aumenta exposição.</li>
+<li>OCR não autoriza descarte do original; finalidade, avaliação documental e requisitos aplicáveis precisam ser analisados.</li>
+<li>Média de qualidade pode esconder grupos inteiros com falha.</li>
+</ul>
+
+<h2>Checklist de aceite</h2>
+<ul class="check">
+<li>A finalidade do OCR e os usos proibidos estão documentados.</li>
+<li>A amostra representa tipos, condições e riscos do acervo.</li>
+<li>Configuração de captura e versão do motor foram registradas.</li>
+<li>A imagem original permanece vinculada ao texto reconhecido.</li>
+<li>Completude de documentos, páginas e anexos foi reconciliada.</li>
+<li>Campos críticos possuem regra e revisão proporcionais ao risco.</li>
+<li>Manuscritos e conteúdo degradado seguem para exceção, sem adivinhação.</li>
+<li>Correções preservam trilha, responsável, data e motivo.</li>
+<li>Acesso do revisor respeita sigilo e minimização.</li>
+<li>Amostragem está estratificada e prevê escalonamento após falha.</li>
+<li>Pesquisa foi testada com termos reais e variações relevantes.</li>
+<li>Relatório de aceite registra métricas, limites e pendências.</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+<details><summary>Qual porcentagem de acerto é boa?</summary><p>Não existe percentual universal. A meta depende da finalidade, do risco e do tipo documental. Busca em texto livre e extração de identificador crítico exigem critérios diferentes.</p></details>
+<details><summary>300 dpi garante OCR correto?</summary><p>Não. A resolução ajuda e a documentação do Tesseract indica benefício a partir de 300 dpi, mas foco, contraste, inclinação, ruído, fonte, layout e segmentação também influenciam.</p></details>
+<details><summary>Posso corrigir automaticamente palavras?</summary><p>Dicionários e regras ajudam, mas podem trocar termos válidos, nomes e códigos. Mantenha o texto original, registre transformações e exija revisão quando a correção afetar campo crítico.</p></details>
+<details><summary>OCR de manuscrito pode ser usado?</summary><p>Pode apoiar triagem em contexto testado, mas não deve sustentar sozinho decisões de alto impacto. A dificuldade varia muito; mantenha imagem e revisão competente.</p></details>
+<details><summary>OCR torna o documento conforme o Decreto 10.278?</summary><p>Não. OCR é apenas uma etapa possível. Conformidade depende do processo completo, requisitos técnicos, metadados, integridade, rastreabilidade, assinatura quando aplicável e demais critérios legais.</p></details>
+
+<h2>Fontes oficiais e técnicas</h2>
+<ul>
+<li><a href="https://www.gov.br/conarq/pt-br/legislacao-arquivistica/decretos-federais/decreto-no-10-278-de-18-de-marco-de-2020" rel="noopener">CONARQ — Decreto nº 10.278, de 18 de março de 2020</a>, página publicada em 08/09/2020 e atualizada em 18/01/2022; consultada em 05/11/2026.</li>
+<li><a href="https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/Diretrizes_digitalizacao__2021.pdf" rel="noopener">CONARQ — Diretrizes para a Digitalização de Documentos de Arquivo nos termos do Decreto nº 10.278/2020</a>, 2021; consultada em 05/11/2026.</li>
+<li><a href="https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-50-de-06-de-maio-de-2022" rel="noopener">CONARQ — Resolução nº 50, de 6 de maio de 2022</a>, aprovação do e-ARQ Brasil versão 2; consultada em 05/11/2026.</li>
+<li><a href="https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html" rel="noopener">Tesseract OCR — Improving the quality of the output</a>, documentação oficial sobre resolução, binarização, ruído, inclinação, bordas e segmentação; consultada em 05/11/2026.</li>
+<li><a href="https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html" rel="noopener">Tesseract OCR — Command Line Usage</a>, modos e parâmetros de reconhecimento; consultada em 05/11/2026.</li>
+</ul>
+
+<p class="note"><strong>Limite:</strong> este texto propõe um método de controle. A taxa de amostragem, os limiares, a arquitetura, a retenção e a revisão precisam ser homologados com o acervo, a finalidade e os requisitos da organização.</p>
+
+<div class="cta"><h2>Valide o OCR antes do lote completo</h2><p>A Arquindex apoia diagnóstico de acervo, preparação, captura, OCR, PDF/A, indexação, controle de qualidade, revisão e entrega estruturada.</p><p><a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · <a href="https://wa.me/5531973632725">WhatsApp (31) 97363-2725</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></div>
+</article>
+</main>
+<footer>Arquindex Gestão Documental · Belo Horizonte/MG · Atendimento nacional sujeito a avaliação logística e contratual.</footer>
+</body>
+</html>
