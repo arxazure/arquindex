@@ -1,0 +1,38 @@
+name: Auditar ARQ-179 a ARQ-184 - 2026-11-06 tarde
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/auditar-arq179-184-20261106-tarde.yml']
+  workflow_dispatch:
+permissions: { contents: read }
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          npm install playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Auditar DNS TLS HTTP SEO descoberta e responsividade
+        run: |
+          cat > audit.js <<'JS'
+          const {chromium}=require('playwright');
+          const dns=require('node:dns').promises,tls=require('node:tls');
+          const rows=[
+            ['ARQ-179','https://dpo-terceirizado-funciona-brasil.arquindex.com.br/'],
+            ['ARQ-180','https://dpo.arquindex.com.br/'],
+            ['ARQ-181','https://ecm.arquindex.com.br/'],
+            ['ARQ-182','https://empresadedigitalizacaodedocumentos.arquindex.com.br/'],
+            ['ARQ-183','https://empresas-brasil-digitalizacao-documental-garantia-confidenciali.arquindex.com.br/'],
+            ['ARQ-184','https://empresas-brasil-digitalizacao-documental-garantia-confidenciali.arquindex.com.br/comparativo.html']
+          ];
+          const cert=host=>new Promise(resolve=>{const s=tls.connect(443,host,{servername:host,rejectUnauthorized:true,timeout:10000},()=>{const c=s.getPeerCertificate();resolve({authorized:s.authorized,cn:c.subject?.CN||'',validTo:c.valid_to||''});s.end()});s.on('error',e=>resolve({error:e.code||e.message}));s.on('timeout',()=>{s.destroy();resolve({error:'timeout'})})});
+          (async()=>{const b=await chromium.launch({headless:true});for(const [id,url] of rows){const host=new URL(url).hostname;let addresses=[],dnsError='';try{addresses=await dns.resolve4(host)}catch(e){dnsError=e.code||e.message}let out={id,url,host,addresses,dnsError};if(addresses.length){out.tls=await cert(host);const ctx=await b.newContext({viewport:{width:390,height:844}}),p=await ctx.newPage();try{const r=await p.goto(url+'?audit=20261106-tarde',{waitUntil:'domcontentloaded',timeout:45000});const d=await p.evaluate(()=>({title:document.title,description:document.querySelector('meta[name=description]')?.content||'',h1:[...document.querySelectorAll('h1')].map(x=>x.textContent.trim()),canonical:document.querySelector('link[rel=canonical]')?.href||'',robots:document.querySelector('meta[name=robots]')?.content||'',viewport:document.querySelector('meta[name=viewport]')?.content||'',logo:!!document.querySelector('img[src*="arquindex-logo-oficial.webp"],.aq-logo-name'),menu:document.querySelectorAll('header nav,nav[aria-label]').length,floating:!!document.querySelector('#arq-floating,.arq-floating,.aq-brand-wa'),wa:!!document.querySelector('a[href*="5531973632725"]'),forms:document.querySelectorAll('form').length,utm:document.querySelectorAll('a[href*="utm_"]').length,internal:[...document.querySelectorAll('a[href]')].filter(a=>{try{return new URL(a.href).hostname.endsWith('arquindex.com.br')}catch{return false}}).length,jsonld:document.querySelectorAll('script[type="application/ld+json"]').length,words:(document.body.innerText.match(/\S+/g)||[]).length,cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));await p.setViewportSize({width:1440,height:900});const desktop=await p.evaluate(()=>({cw:document.documentElement.clientWidth,sw:document.documentElement.scrollWidth}));out={...out,status:r.status(),finalUrl:p.url(),...d,desktop};for(const path of ['/robots.txt','/sitemap.xml']){const rp=await ctx.newPage();try{const rr=await rp.goto(new URL(url).origin+path,{waitUntil:'domcontentloaded',timeout:30000});const body=(await rp.textContent('body').catch(()=>''))||'';out[path]={status:rr.status(),type:rr.headers()['content-type']||'',mentions:body.includes(url),length:body.length}}catch(e){out[path]={error:e.message}}await rp.close()}}catch(e){out.error=e.message}await ctx.close()}console.log('AUDIT',JSON.stringify(out))}await b.close()})().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node audit.js | tee audit-arq179-184.jsonl
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: auditoria-arq179-184-20261106-tarde
+          path: audit-arq179-184.jsonl
