@@ -109,12 +109,28 @@ def create_wix_draft(data: dict) -> str:
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    required = ["GOOGLE_API_KEY", "GOOGLE_CX_ID", "OPENAI_API_KEY"]
+    if os.getenv("WIX_CREATE_DRAFT", "false").lower() == "true":
+        required.extend(["WIX_API_KEY", "WIX_SITE_ID"])
+    missing = [name for name in required if not os.getenv(name, "").strip()]
+    if missing:
+        message = "Missing GitHub Actions secrets: " + ", ".join(missing)
+        (OUTPUT_DIR / "diagnostic.json").write_text(
+            json.dumps({"status": "configuration_error", "missing_secret_names": missing},
+                       ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        logging.error(message)
+        raise RuntimeError(message)
+    diagnostic = OUTPUT_DIR / "diagnostic.json"
+    if diagnostic.exists():
+        diagnostic.unlink()
     day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     topic = TOPICS[datetime.now(timezone.utc).toordinal() % len(TOPICS)]
     target = OUTPUT_DIR / f"{day}.json"
     if target.exists():
         logging.info("Existing daily research; avoiding duplicate: %s", target)
         return
+    logging.info("Starting semantic research for topic: %s", topic)
     results = search(topic)
     if not results:
         raise RuntimeError("No Google results; no synthetic trend claims")
