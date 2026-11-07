@@ -39,12 +39,17 @@ def field(columns, aliases):
 
 def normalize(url):
     """Only fold scheme/hostname case and fragment; preserve path and trailing slash."""
-    p = urlsplit(str(url).strip())
-    if p.scheme.lower() not in ("http", "https") or not p.hostname:
+    try:
+        p = urlsplit(str(url or "").strip())
+        host = p.hostname
+        port = p.port
+    except ValueError:
         return None
-    host = p.hostname.lower()
-    if p.port and p.port not in (80, 443):
-        host += ":" + str(p.port)
+    if p.scheme.lower() not in ("http", "https") or not host:
+        return None
+    host = host.lower()
+    if port and port not in (80, 443):
+        host += ":" + str(port)
     return urlunsplit((p.scheme.lower(), host, p.path or "/", p.query, ""))
 
 
