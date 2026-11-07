@@ -94,12 +94,18 @@ def schema_has_faq(items):
 
 def audit(root, max_files):
     pages = []
-    for file in root.rglob("*.html"):
+    for file in sorted(root.rglob("*.html")):
         if any(p in SKIP or p.startswith(".") for p in file.relative_to(root).parts[:-1]):
             continue
         if len(pages) >= max_files:
             break
-        if file.stat().st_size > MAX_BYTES:
+        try:
+            size = file.stat().st_size
+        except OSError as error:
+            pages.append({"file": str(file.relative_to(root)), "issues": ["stat_error:" + str(error)]})
+            continue
+        if size > MAX_BYTES:
+            pages.append({"file": str(file.relative_to(root)), "issues": ["oversize_html_not_scanned"]})
             continue
         parser = Markup()
         try:
@@ -146,11 +152,13 @@ def audit(root, max_files):
             page["issues"].append("orphan_within_scanned_files_review")
         page.pop("links", None)
     return {"scope": "local_html_only", "site": SITE, "pages_scanned": len(pages),
+            "max_files": max_files, "scan_limit_reached": len(pages) >= max_files,
             "limitations": [
                 "Repository pages do not necessarily correspond to published HomeHost pages.",
                 "Orphan means no incoming link among HTML files scanned, not an Ahrefs live-crawl finding.",
                 "Performance, backlinks, IndexNow acceptance, and word-count changes require external data.",
                 "Do not add FAQPage automatically: verify the visible FAQ content and current Google eligibility.",
+                "Pages are processed in deterministic path order; max-files truncation is reported.",
                 "No files modified or deployed."
             ], "pages": pages}
 
