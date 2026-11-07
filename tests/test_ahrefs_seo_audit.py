@@ -68,6 +68,19 @@ class SeoAuditTests(unittest.TestCase):
             self.assertTrue(result["scan_limit_reached"])
             self.assertEqual(result["pages_scanned"], 1)
             self.assertEqual(result["pages"][0]["file"], "a.html")
+            self.assertNotIn("orphan_within_scanned_files_review", result["pages"][0]["issues"])
+
+
+    def test_exact_scan_limit_is_complete(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "index.html").write_text("<h1>Home</h1>", encoding="utf-8")
+            (root / "isolated.html").write_text("<h1>Isolated</h1>", encoding="utf-8")
+            result = audit(root, 2)
+            self.assertFalse(result["scan_limit_reached"])
+            self.assertEqual(result["eligible_html_files"], 2)
+            page = next(p for p in result["pages"] if p.get("url", "").endswith("/isolated.html"))
+            self.assertIn("orphan_within_scanned_files_review", page["issues"])
 
 
 if __name__ == "__main__":
