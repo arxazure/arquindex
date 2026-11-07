@@ -19,11 +19,12 @@ def digest(data):
 
 
 def safe_path(path):
-    p = Path(path)
-    if p.is_absolute() or ".." in p.parts or not path or "\\" in path:
+    if not isinstance(path, str) or not path or path.startswith("/") or "\\" in path or ":" in path:
         raise ValueError("UNSAFE_MANIFEST_PATH")
-    return p.as_posix()
-
+    parts = path.split("/")
+    if any(part in ("", ".", "..") for part in parts):
+        raise ValueError("UNSAFE_MANIFEST_PATH")
+    return "/".join(parts)
 
 def inventory():
     rows = json.loads(MANIFEST.read_text(encoding="utf-8"))
@@ -45,7 +46,7 @@ def validate_config(host, user, password, public_root):
         raise ValueError("INVALID_FTPS_HOST")
     if (not public_root.startswith("/") or public_root == "/"
             or any(part in ("", ".", "..") for part in public_root[1:].split("/"))
-            or "\\\\" in public_root):
+            or chr(92) in public_root):
         raise ValueError("INVALID_PUBLIC_ROOT")
     return True
 
