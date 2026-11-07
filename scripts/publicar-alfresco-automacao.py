@@ -30,7 +30,7 @@ def inventory():
     files = {}
     for row in rows:
         path = safe_path(row["path"])
-        if not row["url"].startswith("https://www.arquindex.com.br/"):
+        if not row["url"].startswith("https://www.arquindex.com.br/") or row["url"].split("?", 1)[0].split("#", 1)[0].rstrip("/") != ("https://www.arquindex.com.br/" + path.removesuffix("index.html")).rstrip("/"):
             raise ValueError("NON_CANONICAL_URL")
         files[path] = digest((ROOT / path).read_bytes())
     path = "sitemap-alfresco-automacao.xml"
@@ -41,9 +41,9 @@ def inventory():
 def validate_config(host, user, password, public_root):
     if not all((host, user, password, public_root)):
         raise ValueError("FTPS_CONFIG_MISSING")
-    if any(c in host for c in "/:@ ") or host.startswith("."):
+    if any(c in host for c in "/:@ \\t\\n\\r") or host.startswith(".") or host.endswith("."):
         raise ValueError("INVALID_FTPS_HOST")
-    if not public_root.startswith("/") or ".." in public_root.split("/"):
+    if (not public_root.startswith("/") or public_root == "/"\n            or any(part in ("", ".", "..") for part in public_root[1:].split("/"))\n            or "\\\\" in public_root):
         raise ValueError("INVALID_PUBLIC_ROOT")
     return True
 
