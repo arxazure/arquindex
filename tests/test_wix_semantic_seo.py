@@ -36,7 +36,7 @@ class SemanticSeoTests(unittest.TestCase):
                 search.assert_not_called()
 
     def test_markdown_conversion_produces_heading_and_paragraph(self):
-        nodes = seo.wix_nodes("# Heading\\n\\nBody text")
+        nodes = seo.wix_nodes("# Heading\n\nBody text")
         self.assertEqual([node["type"] for node in nodes],
                          ["HEADING", "PARAGRAPH"])
 
