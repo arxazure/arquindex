@@ -5,6 +5,7 @@ Does NOT publish, rewrite pages, submit IndexNow, or infer live crawl status.
 Usage: python3 scripts/ahrefs_seo_audit.py --root . --out seo-report/ahrefs-audit.json
 """
 import argparse
+import csv
 import json
 import re
 from collections import defaultdict
@@ -158,17 +159,38 @@ def main():
     ap.add_argument("--root", type=Path, default=Path("."))
     ap.add_argument("--out", type=Path, default=Path("seo-report/ahrefs-audit.json"))
     ap.add_argument("--max-files", type=int, default=10000)
+    ap.add_argument("--csv", type=Path, default=Path("seo-report/ahrefs-review.csv"))
     args = ap.parse_args()
     if not args.root.is_dir() or args.max_files < 1:
         ap.error("root must be a directory and max-files must be positive")
     report = audit(args.root.resolve(), args.max_files)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    args.csv.parent.mkdir(parents=True, exist_ok=True)
+    with args.csv.open("w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.DictWriter(handle, fieldnames=[
+            "file", "candidate_url", "issue", "incoming_internal_links",
+            "live_url_verified", "ahrefs_issue_confirmed", "decision", "reviewer", "notes"
+        ])
+        writer.writeheader()
+        for page in report["pages"]:
+            for issue in page["issues"]:
+                writer.writerow({
+                    "file": page.get("file", ""),
+                    "candidate_url": page.get("url", ""),
+                    "issue": issue,
+                    "incoming_internal_links": page.get("incoming_internal_links", ""),
+                    "live_url_verified": "NO",
+                    "ahrefs_issue_confirmed": "NO",
+                    "decision": "REVIEW",
+                    "reviewer": "",
+                    "notes": "Repository-only candidate; inspect live HomeHost and Ahrefs export."
+                })
     counts = defaultdict(int)
     for page in report["pages"]:
         for issue in page["issues"]:
             counts[issue] += 1
-    print(json.dumps({"pages": report["pages_scanned"], "findings": dict(counts), "report": str(args.out)}))
+    print(json.dumps({"pages": report["pages_scanned"], "findings": dict(counts), "report": str(args.out), "review_csv": str(args.csv)}))
 
 if __name__ == "__main__":
     main()
