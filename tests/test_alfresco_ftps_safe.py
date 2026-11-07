@@ -58,6 +58,21 @@ class TestSafePreflight(unittest.TestCase):
         for path in ("../secret", "/etc/passwd", "x/../../y"):
             with self.subTest(path=path), self.assertRaises(ValueError):
                 module.safe_path(path)
+    def test_reject_malformed_paths(self):
+        for path in ("", "a//b", "a/./b", "a/../b", "a\\\\b", "C:/tmp/x"):
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                module.safe_path(path)
+
+    def test_reject_unsafe_roots(self):
+        for root in ("/", "/public_html/../other", "/public_html//nested", "public_html", "/public_html\\\\tmp"):
+            with self.subTest(root=root), self.assertRaises(ValueError):
+                module.validate_config("example.test", "user", "pass", root)
+
+    def test_reject_host_with_control_characters(self):
+        for host in ("ftp.example.test\\n", "ftp.example.test:21", "ftp.example.test/path"):
+            with self.subTest(host=host), self.assertRaises(ValueError):
+                module.validate_config(host, "user", "pass", "/public_html")
+
     def test_no_deploy_commands(self):
         import inspect
         source = inspect.getsource(module.preflight)
