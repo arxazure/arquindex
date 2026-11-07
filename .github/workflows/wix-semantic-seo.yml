@@ -4,7 +4,7 @@ on:
     - cron: "15 10 * * *"
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   research:
     runs-on: ubuntu-latest
@@ -32,6 +32,15 @@ jobs:
           WIX_SITE_ID: ${{ secrets.WIX_SITE_ID }}
           WIX_CREATE_DRAFT: ${{ vars.WIX_CREATE_DRAFT || 'false' }}
         run: python scripts/wix_semantic_seo.py
+      - name: Explain failure and artifact
+        if: failure()
+        run: |
+          echo "### Semantic SEO: diagnostic" >> "$GITHUB_STEP_SUMMARY"
+          if test -f artifacts/semantic-seo/diagnostic.json; then
+            echo "Configuration check failed. Inspect wix-semantic-seo-research artifact for missing secret names." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Execution failed after configuration validation or before Python started. Inspect the failed step logs." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Upload draft evidence
         if: always()
         uses: actions/upload-artifact@v4
