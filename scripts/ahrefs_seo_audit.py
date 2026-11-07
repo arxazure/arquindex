@@ -94,11 +94,13 @@ def schema_has_faq(items):
 
 def audit(root, max_files):
     pages = []
-    for file in sorted(root.rglob("*.html")):
+    eligible = [file for file in sorted(root.rglob("*.html"))
+                if not any(p in SKIP or p.startswith(".")
+                           for p in file.relative_to(root).parts[:-1])]
+    scan_limit_reached = len(eligible) > max_files
+    for file in eligible[:max_files]:
         if any(p in SKIP or p.startswith(".") for p in file.relative_to(root).parts[:-1]):
             continue
-        if len(pages) >= max_files:
-            break
         try:
             size = file.stat().st_size
         except OSError as error:
@@ -150,17 +152,19 @@ def audit(root, max_files):
         if not page.get("url"):
             continue
         page["incoming_internal_links"] = len(incoming[normalized_url(page["url"])])
-        if page["incoming_internal_links"] == 0 and page["url"] != SITE + "/":
+        if not scan_limit_reached and page["incoming_internal_links"] == 0 and page["url"] != SITE + "/":
             page["issues"].append("orphan_within_scanned_files_review")
         page.pop("links", None)
     return {"scope": "local_html_only", "site": SITE, "pages_scanned": len(pages),
-            "max_files": max_files, "scan_limit_reached": len(pages) >= max_files,
+            "max_files": max_files, "eligible_html_files": len(eligible),
+            "scan_limit_reached": scan_limit_reached,
             "limitations": [
                 "Repository pages do not necessarily correspond to published HomeHost pages.",
                 "Orphan means no incoming link among HTML files scanned, not an Ahrefs live-crawl finding.",
                 "Performance, backlinks, IndexNow acceptance, and word-count changes require external data.",
                 "Do not add FAQPage automatically: verify the visible FAQ content and current Google eligibility.",
                 "Pages are processed in deterministic path order; max-files truncation is reported.",
+                "Orphan findings are suppressed for incomplete scans, since missing sources would cause false positives.",
                 "No files modified or deployed."
             ], "pages": pages}
 
