@@ -29,7 +29,8 @@ jobs:
         env: { DESIGN_TARGET: "https://scanners-digitalizacao-grandes-volumes-documentos.arquindex.com.br/" }
         run: |
           python scripts/padronizar-identidade-arquindex.py
-          cp design-report/identity-report.json design-report/arq201.json      - name: Verificar publicacao e descoberta
+          cp design-report/identity-report.json design-report/arq201.json
+      - name: Verificar publicacao e descoberta
         run: |
           cat > verify.js <<'JS'
           const {chromium}=require('playwright');
