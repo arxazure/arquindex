@@ -28,3 +28,12 @@ Próxima etapa autorizada de publicação deve:
 5. Só então solicitar recrawl ou IndexNow das URLs verdadeiramente alteradas, mediante chave válida e controles existentes.
 
 Nenhum deploy, merge, execução de Actions, alteração DNS ou submissão IndexNow foi feito nesta etapa.
+
+## Conferência estática da branch em 07/11/2026
+Os cinco arquivos HTML foram relidos individualmente pelo conector GitHub. Todos apresentam um H1, uma canonical correspondente à URL planejada e links diretos para as quatro outras páginas do conjunto (20 conexões direcionais distintas). O sitemap regional tem 19 URLs sem repetição, com `lastmod` 2026-11-07 para as cinco URLs modificadas.
+
+O workflow existente `.github/workflows/publicar-databooks-homehost.yml` **consulta** o sitemap publicado na etapa de validação HTTP, mas não o inclui na lista de arquivos transferidos por FTPS. A simples ocorrência do caminho do sitemap no workflow não comprova publicação.
+
+A consulta pública ao XML, `robots.txt` e página de Betim não retornou conteúdo pela ferramenta desta sessão. É uma limitação de verificação, não confirmação de HTTP 404.
+
+O novo workflow `.github/workflows/validar-links-regionais-sitemap.yml` foi criado com acionamento **manual exclusivo** (`workflow_dispatch`), permissões `contents: read`, sem acesso a credenciais, deploy ou submissões. **Não foi executado.**
