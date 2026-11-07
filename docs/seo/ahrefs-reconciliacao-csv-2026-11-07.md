@@ -28,3 +28,11 @@ python3 -m unittest discover -s tests -p 'test_ahrefs_seo_audit.py'
 
 ### Pendências
 Exportação detalhada do Ahrefs; cópia verificada do HTML publicado; execução da suíte no ambiente de checkout; correções pontuais em branch; confirmação de backup/rollback e revisão antes de publicar.
+
+
+## Proteção contra falsa classificação de órfãs (etapa 8)
+O auditor local registra `eligible_html_files`, `max_files` e `scan_limit_reached`.
+Se `scan_limit_reached=true`, não declara páginas órfãs: faltam fontes possíveis para análise.
+O limite exato (número de arquivos elegíveis igual ao teto) **não** indica truncamento.
+A constatação de órfã em um espelho completo é apenas um candidato local: a lista real do Ahrefs deve confirmar o problema na página publicada.
+Arquivos com erro de leitura e assets externos também exigem revisão humana.
