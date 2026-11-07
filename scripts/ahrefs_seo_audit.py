@@ -70,7 +70,7 @@ def normalized_url(url):
     path = unquote(p.path or "/")
     path = re.sub(r"/+", "/", path)
     if path.endswith("/index.html"):
-        path = path[:-10]
+        path = path[:-len("/index.html")] + "/"
     return "https://www.arquindex.com.br" + path.rstrip("/") + ("/" if path.endswith("/") or path == "/" else "")
 
 def page_url(path, root):
@@ -78,7 +78,7 @@ def page_url(path, root):
     if relative == "index.html":
         return SITE + "/"
     if relative.endswith("/index.html"):
-        return SITE + "/" + relative[:-10]
+        return SITE + "/" + relative[:-len("index.html")]
     return SITE + "/" + relative
 
 def schema_has_faq(items):
