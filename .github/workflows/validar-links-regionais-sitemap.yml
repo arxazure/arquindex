@@ -1,0 +1,23 @@
+name: Validar links regionais e sitemap (somente leitura)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout da branch selecionada
+        uses: actions/checkout@v4
+      - name: Validar links recíprocos, H1, canonical e sitemap local
+        run: python3 scripts/validate_regional_links.py .
+      - name: Registrar limites da validação
+        run: |
+          echo "## Pré-validação editorial" >> "$GITHUB_STEP_SUMMARY"
+          echo "Validação feita exclusivamente com arquivos versionados." >> "$GITHUB_STEP_SUMMARY"
+          echo "Não verifica HTTP da HomeHost nem garante indexação no Google/Bing." >> "$GITHUB_STEP_SUMMARY"
+          echo "Nenhum FTPS, upload, merge ou IndexNow é executado." >> "$GITHUB_STEP_SUMMARY"
