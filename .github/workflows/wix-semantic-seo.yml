@@ -1,32 +1,30 @@
 name: Wix Arquindex Semantic SEO
-on:
-  schedule:
-    - cron: "15 10 * * *"
+
+'on':
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - ".github/workflows/wix-semantic-seo.yml"
+  schedule:
+    - cron: '15 10 * * *'
+
 jobs:
   research:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
-      - name: Contexto vigente do site institucional - HomeHost
-        shell: bash
-        run: |
-          echo 'ARQUINDEX_WEBSITE_HOSTING=homehost' >> "$GITHUB_ENV"
-          echo 'ARQUINDEX_WEBSITE_HOSTING_CONFIG=config/site-hosting.json' >> "$GITHUB_ENV"
-          echo '::notice title=Site institucional na HomeHost::Marina informou em 01/11/2026 o retorno de arquindex.com.br e www.arquindex.com.br à HomeHost. Confira DNS/HTTP/TLS atuais. Railway não comprova publicação nesses hosts; aplicativos independentes mantêm seus destinos.'
-          printf '%s\n' 'Site institucional: HomeHost, conforme instrução da usuária de 01/11/2026. Consulte AGENTS.md e config/site-hosting.json. Preserve o conteúdo restaurado; confirme FTPS/TLS, backup e leitura pública. Não altere DNS/e-mail nem migre aplicativos independentes. Esta etapa registra contexto; não publica conteúdo.' >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
+
       - name: Install dependencies
         run: python -m pip install requests openai
-      - name: Semantic research and optional Wix draft
+
+      - name: Offline regression tests
+        run: python -m unittest discover -s tests -p 'test_wix_semantic_seo.py' -v
+
+      - name: Research and optional Wix draft
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GOOGLE_CX_ID: ${{ secrets.GOOGLE_CX_ID }}
@@ -35,16 +33,8 @@ jobs:
           WIX_SITE_ID: ${{ secrets.WIX_SITE_ID }}
           WIX_CREATE_DRAFT: ${{ vars.WIX_CREATE_DRAFT || 'false' }}
         run: python scripts/wix_semantic_seo.py
-      - name: Explain failure and artifact
-        if: failure()
-        run: |
-          echo "### Semantic SEO: diagnostic" >> "$GITHUB_STEP_SUMMARY"
-          if test -f artifacts/semantic-seo/diagnostic.json; then
-            echo "Configuration check failed. Inspect wix-semantic-seo-research artifact for missing secret names." >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "Execution failed after configuration validation or before Python started. Inspect the failed step logs." >> "$GITHUB_STEP_SUMMARY"
-          fi
-      - name: Upload draft evidence
+
+      - name: Upload diagnostic and draft evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
