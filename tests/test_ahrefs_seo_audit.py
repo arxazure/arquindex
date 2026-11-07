@@ -47,6 +47,7 @@ class SeoAuditTests(unittest.TestCase):
             self.assertNotIn("orphan_within_scanned_files_review", child["issues"])
             self.assertIn("meta_description_missing", child["issues"])
             self.assertIn("multiple_h1", child["issues"])
+            self.assertEqual(child["og_missing_tags"], ["og:title", "og:description", "og:url", "og:image"])
 
     def test_true_orphan_within_fixture(self):
         with tempfile.TemporaryDirectory() as d:
