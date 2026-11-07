@@ -3,8 +3,6 @@ on:
   schedule:
     - cron: "15 10 * * *"
   workflow_dispatch:
-permissions:
-  contents: read
 jobs:
   research:
     runs-on: ubuntu-latest
