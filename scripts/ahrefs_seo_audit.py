@@ -122,7 +122,8 @@ def audit(root, max_files):
         if not parser.title.strip():
             issues.append("title_missing")
         required_og = ("og:title", "og:description", "og:url", "og:image")
-        if any(not parser.og.get(k) for k in required_og):
+        missing_og = [k for k in required_og if not parser.og.get(k)]
+        if missing_og:
             issues.append("open_graph_incomplete")
         if parser.h1 > 1:
             issues.append("multiple_h1")
@@ -134,6 +135,7 @@ def audit(root, max_files):
             issues.append("canonical_count_review")
         pages.append({"file": str(file.relative_to(root)), "url": url,
                       "title": parser.title.strip(), "h1_count": parser.h1,
+                      "og_missing_tags": missing_og,
                       "links": parser.links, "issues": issues})
     incoming = defaultdict(set)
     known = {normalized_url(p["url"]) for p in pages if p.get("url")}
@@ -177,7 +179,7 @@ def main():
     args.csv.parent.mkdir(parents=True, exist_ok=True)
     with args.csv.open("w", newline="", encoding="utf-8-sig") as handle:
         writer = csv.DictWriter(handle, fieldnames=[
-            "file", "candidate_url", "issue", "incoming_internal_links",
+            "file", "candidate_url", "issue", "missing_og_tags", "incoming_internal_links",
             "live_url_verified", "ahrefs_issue_confirmed", "decision", "reviewer", "notes"
         ])
         writer.writeheader()
@@ -187,6 +189,7 @@ def main():
                     "file": page.get("file", ""),
                     "candidate_url": page.get("url", ""),
                     "issue": issue,
+                    "missing_og_tags": "; ".join(page.get("og_missing_tags", [])) if issue == "open_graph_incomplete" else "",
                     "incoming_internal_links": page.get("incoming_internal_links", ""),
                     "live_url_verified": "NO",
                     "ahrefs_issue_confirmed": "NO",
