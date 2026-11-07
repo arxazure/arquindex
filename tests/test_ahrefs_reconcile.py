@@ -36,7 +36,7 @@ class AhrefsReconcileTests(unittest.TestCase):
     def test_missing_column_fails(self):
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / "in.csv"
-            path.write_text("Affected URL,Other Column\\nhttps://example.com,foo\\n", encoding="utf-8")
+            path.write_text("Affected URL,Other Column\nhttps://example.com,foo\n", encoding="utf-8")
             with self.assertRaises(ValueError):
                 load_csv(path, (URL_HEADERS, ISSUE_HEADERS))
 
