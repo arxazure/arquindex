@@ -43,7 +43,9 @@ def validate_config(host, user, password, public_root):
         raise ValueError("FTPS_CONFIG_MISSING")
     if any(c in host for c in "/:@ \\t\\n\\r") or host.startswith(".") or host.endswith("."):
         raise ValueError("INVALID_FTPS_HOST")
-    if (not public_root.startswith("/") or public_root == "/"\n            or any(part in ("", ".", "..") for part in public_root[1:].split("/"))\n            or "\\\\" in public_root):
+    if (not public_root.startswith("/") or public_root == "/"
+            or any(part in ("", ".", "..") for part in public_root[1:].split("/"))
+            or "\\\\" in public_root):
         raise ValueError("INVALID_PUBLIC_ROOT")
     return True
 
