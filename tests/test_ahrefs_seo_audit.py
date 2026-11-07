@@ -58,5 +58,16 @@ class SeoAuditTests(unittest.TestCase):
             self.assertIn("orphan_within_scanned_files_review", unused["issues"])
 
 
+    def test_file_cap_is_reported(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "a.html").write_text("<html><h1>A</h1></html>", encoding="utf-8")
+            (root / "b.html").write_text("<html><h1>B</h1></html>", encoding="utf-8")
+            result = audit(root, 1)
+            self.assertTrue(result["scan_limit_reached"])
+            self.assertEqual(result["pages_scanned"], 1)
+            self.assertEqual(result["pages"][0]["file"], "a.html")
+
+
 if __name__ == "__main__":
     unittest.main()
