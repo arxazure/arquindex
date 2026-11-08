@@ -22,15 +22,16 @@ for name in targets:
  except UnicodeDecodeError:print('SKIP_ENCODING',name);continue
  if '</body>' not in html.lower():print('SKIP_NO_BODY',name);continue
  original=html
- # Remove the old widget with correctly escaped regex patterns.
- # A previous version used r'<div\\\\b...', which matched a literal backslash,
- # leaving the old widget in place and causing the duplicate-widget exception.
+ # Match the widget through its known closing toggle button, avoiding unrelated scripts.
  style_pattern=r'<style\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating-style["\\\'][^>]*>.*?</style\\s*>'
  script_pattern=r'<script\\b[^>]*\\bid\\s*=\\s*["\\\'](?:arq-floating-script|arq-dedup-floats)["\\\'][^>]*>.*?</script\\s*>'
- widget_pattern=r'<div\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating["\\\'][^>]*>.*?(?=<script\\b[^>]*\\bid\\s*=\\s*["\\\'](?:arq-floating-script|arq-dedup-floats)["\\\']|</body\\s*>)'
+ widget_pattern=r'<div\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating["\\\'][^>]*>.*?<button\\b[^>]*\\bid\\s*=\\s*["\\\']arq-float-toggle["\\\'][^>]*>.*?</button>\\s*</div>'
  html=re.sub(style_pattern,'',html,flags=re.I|re.S)
  html=re.sub(widget_pattern,'',html,flags=re.I|re.S)
  html=re.sub(script_pattern,'',html,flags=re.I|re.S)
+ # Fail safely instead of adding a duplicate when unexpected legacy markup remains.
+ if re.search(r'<div\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating["\\\']',html,re.I):
+  raise RuntimeError('Widget antigo nao removido com seguranca: '+name)
  html=re.sub(r'</body\\s*>',lambda m:widget+'\\n'+m.group(),html,count=1,flags=re.I)
  style_count=len(re.findall(r'<style\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating-style["\\\']',html,re.I))
  widget_count=len(re.findall(r'<div\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating["\\\']',html,re.I))
