@@ -1,0 +1,67 @@
+name: Auditar inventario 56 lote 01 20261108
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/auditar-inventario-56-lote01-20261108.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  auditoria:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests beautifulsoup4
+      - name: Auditar seis origens sem publicar
+        env:
+          AUDIT_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import concurrent.futures as cf
+          import datetime as dt
+          import json
+          import os
+          from pathlib import Path
+          from scripts.audit_56_public import audit
+
+          manifest = json.loads(Path('seo-regional/56-sites/manifest.json').read_text())
+          entries = manifest[:6]
+          assert len(entries) == 6
+          with cf.ThreadPoolExecutor(max_workers=6) as pool:
+              results = list(pool.map(audit, entries))
+          out = Path('audit-inventario-lote01')
+          out.mkdir(exist_ok=True)
+          out.joinpath('results.json').write_text(json.dumps(results, ensure_ascii=False, indent=2))
+          lines = [
+              '# Inventário Arquindex — lote 01/10',
+              '',
+              'Verificação: ' + dt.datetime.now(dt.timezone.utc).isoformat(),
+              'Execução: ' + os.environ['AUDIT_RUN_URL'],
+              '',
+              'Auditoria somente leitura. Nenhum deploy, DNS, sitemap, IndexNow ou divulgação foi executado.',
+              '',
+              '| Host | DNS | TLS | HTTPS | Canonical | Resultado |',
+              '|---|---|---|---|---|---|',
+          ]
+          for a in results:
+              canonical = ', '.join(a.get('html', {}).get('canonical', [])) or 'não verificável'
+              lines.append('| ' + a['host'] + ' | ' + (', '.join(a.get('dns', [])) or 'indisponível') + ' | ' + ('válido' if a.get('tls', {}).get('valid') else 'não validado') + ' | ' + str(a.get('page', {}).get('status', 'não verificável')) + ' | ' + canonical + ' | ' + ('; '.join(a.get('issues', [])) or 'funcional nos testes técnicos') + ' |')
+          lines += ['', 'Cobertura acumulada nesta rotação: 6/56. Não representa inventário integral.']
+          out.joinpath('report.md').write_text('\n'.join(lines) + '\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: auditoria-inventario-56-lote01
+          path: audit-inventario-lote01/
+      - name: Resumo
+        if: always()
+        run: cat audit-inventario-lote01/report.md >> "$GITHUB_STEP_SUMMARY"
