@@ -23,18 +23,18 @@ for name in targets:
  if '</body>' not in html.lower():print('SKIP_NO_BODY',name);continue
  original=html
  # Match the widget through its known closing toggle button, avoiding unrelated scripts.
- style_pattern=r'<style\b[^>]*\bid\s*=\s*["\\']arq-floating-style["\\'][^>]*>.*?</style\s*>'
- script_pattern=r'<script\b[^>]*\bid\s*=\s*["\\'](?:arq-floating-script|arq-dedup-floats)["\\'][^>]*>.*?</script\s*>'
- widget_pattern=r'<div\b[^>]*\bid\s*=\s*["\\']arq-floating["\\'][^>]*>.*?<button\b[^>]*\bid\s*=\s*["\\']arq-float-toggle["\\'][^>]*>.*?</button>\s*</div>'
+ style_pattern=r'<style\b[^>]*\bid\s*=\s*["\x27]arq-floating-style["\x27][^>]*>.*?</style\s*>'
+ script_pattern=r'<script\b[^>]*\bid\s*=\s*["\x27](?:arq-floating-script|arq-dedup-floats)["\x27][^>]*>.*?</script\s*>'
+ widget_pattern=r'<div\b[^>]*\bid\s*=\s*["\x27]arq-floating["\x27][^>]*>.*?<button\b[^>]*\bid\s*=\s*["\x27]arq-float-toggle["\x27][^>]*>.*?</button>\s*</div>'
  html=re.sub(style_pattern,'',html,flags=re.I|re.S)
  html=re.sub(widget_pattern,'',html,flags=re.I|re.S)
  html=re.sub(script_pattern,'',html,flags=re.I|re.S)
  # Fail safely instead of adding a duplicate when unexpected legacy markup remains.
- if re.search(r'<div\b[^>]*\bid\s*=\s*["\\']arq-floating["\\']',html,re.I):
+ if re.search(r'<div\b[^>]*\bid\s*=\s*["\x27]arq-floating["\x27]',html,re.I):
   raise RuntimeError('Widget antigo nao removido com seguranca: '+name)
  html=re.sub(r'</body\s*>',lambda m:widget+'\n'+m.group(),html,count=1,flags=re.I)
- style_count=len(re.findall(r'<style\b[^>]*\bid\s*=\s*["\\']arq-floating-style["\\']',html,re.I))
- widget_count=len(re.findall(r'<div\b[^>]*\bid\s*=\s*["\\']arq-floating["\\']',html,re.I))
+ style_count=len(re.findall(r'<style\b[^>]*\bid\s*=\s*["\x27]arq-floating-style["\x27]',html,re.I))
+ widget_count=len(re.findall(r'<div\b[^>]*\bid\s*=\s*["\x27]arq-floating["\x27]',html,re.I))
  if style_count!=1 or widget_count!=1:
   raise RuntimeError(f'Widget duplicado ou sem CSS: {name} (CSS={style_count}, widgets={widget_count})')
  if html==original:print('UNCHANGED',name);continue
