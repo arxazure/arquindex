@@ -22,14 +22,20 @@ for name in targets:
  except UnicodeDecodeError:print('SKIP_ENCODING',name);continue
  if '</body>' not in html.lower():print('SKIP_NO_BODY',name);continue
  original=html
- # Replace the entire legacy widget, including its missing stylesheet.
- # This prevents old markup from surviving without CSS on the live homepage.
- html=re.sub(r'<style\\b[^>]*id=["\\\']arq-floating-style["\\\'][^>]*>.*?</style>','',html,flags=re.I|re.S)
- html=re.sub(r'<script\\b[^>]*id=["\\\'](?:arq-floating-script|arq-dedup-floats)["\\\'][^>]*>.*?</script>','',html,flags=re.I|re.S)
- html=re.sub(r'<div\\b[^>]*id=["\\\']arq-floating["\\\'][^>]*>.*?(?=<script\\b|</body>)','',html,flags=re.I|re.S)
- html=re.sub(r'</body>',lambda m:widget+'\\n'+m.group(),html,count=1,flags=re.I)
- if html.count('id="arq-floating-style"')!=1 or html.count('id="arq-floating"')!=1:
-  raise RuntimeError('Widget duplicado ou sem CSS: '+name)
+ # Remove the old widget with correctly escaped regex patterns.
+ # A previous version used r'<div\\\\b...', which matched a literal backslash,
+ # leaving the old widget in place and causing the duplicate-widget exception.
+ style_pattern=r'<style\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating-style["\\\'][^>]*>.*?</style\\s*>'
+ script_pattern=r'<script\\b[^>]*\\bid\\s*=\\s*["\\\'](?:arq-floating-script|arq-dedup-floats)["\\\'][^>]*>.*?</script\\s*>'
+ widget_pattern=r'<div\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating["\\\'][^>]*>.*?(?=<script\\b[^>]*\\bid\\s*=\\s*["\\\'](?:arq-floating-script|arq-dedup-floats)["\\\']|</body\\s*>)'
+ html=re.sub(style_pattern,'',html,flags=re.I|re.S)
+ html=re.sub(widget_pattern,'',html,flags=re.I|re.S)
+ html=re.sub(script_pattern,'',html,flags=re.I|re.S)
+ html=re.sub(r'</body\\s*>',lambda m:widget+'\\n'+m.group(),html,count=1,flags=re.I)
+ style_count=len(re.findall(r'<style\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating-style["\\\']',html,re.I))
+ widget_count=len(re.findall(r'<div\\b[^>]*\\bid\\s*=\\s*["\\\']arq-floating["\\\']',html,re.I))
+ if style_count!=1 or widget_count!=1:
+  raise RuntimeError(f'Widget duplicado ou sem CSS: {name} (CSS={style_count}, widgets={widget_count})')
  if html==original:print('UNCHANGED',name);continue
  backup=name+'.backup-arqui-'+str(int(time.time()))
  ftp.storbinary('STOR '+backup,io.BytesIO(data))
