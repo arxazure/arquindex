@@ -1,4 +1,4 @@
-import concurrent.futures, datetime, ftplib, hashlib, html, html.parser, io, json, os, posixpath, re, sys, time, urllib.error, urllib.parse, urllib.request, uuid, zipfile
+import concurrent.futures, datetime, ftplib, hashlib, html, html.parser, io, json, os, posixpath, re, ssl, sys, time, urllib.error, urllib.parse, urllib.request, uuid, zipfile
 import xml.etree.ElementTree as ET
 BASE = "https://www.arquindex.com.br"
 HOSTS = {"arquindex.com.br", "www.arquindex.com.br"}
@@ -18,8 +18,14 @@ class Info(html.parser.HTMLParser):
             self.robots.append(a.get("content", "").lower())
 def fetch(url):
     result = {"url": url}
-    p = urllib.parse.urlsplit(url)
-    if p.hostname not in HOSTS or p.scheme not in ("http", "https"):
+    try:
+        p = urllib.parse.urlsplit(url)
+        hostname, port = p.hostname, p.port
+    except ValueError:
+        return dict(result, skipped="invalid_url")
+    if (hostname not in HOSTS or p.scheme not in ("http", "https")
+            or p.username is not None or p.password is not None
+            or (port is not None and port != (443 if p.scheme == "https" else 80))):
         return dict(result, skipped="other_host")
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "ArquindexSEORecovery/1.0", "Cache-Control": "no-cache"})
@@ -77,13 +83,25 @@ def patch_links(text, page_url, mapping):
             return "href=" + h.group(1) + html.escape(target, quote=True) + h.group(1)
         return re.sub(r'(?<![\w:-])href\s*=\s*(["\x27])(.*?)\1', href, tag, flags=re.I | re.S)
     return re.sub(r"<a\b[^>]*>", anchor, text, flags=re.I | re.S), count
+def safe_remote_path(path):
+    return (isinstance(path, str) and bool(path) and not path.startswith("/")
+            and not any(c in path for c in "\r\n\\\x00")
+            and all(part not in ("", ".", "..") for part in path.split("/")))
 def main():
+    if os.environ.get("APPLY_CHANGES") == "true":
+        sys.exit("Publicacao bloqueada: exige backup integral restauravel, raiz HomeHost verificada, FTPS/TLS validado, lote aprovado e rollback.")
     password = os.environ.get("FTP_PASSWORD", "")
     if not password:
         sys.exit("FTP_PASSWORD ausente")
-    ftp = ftplib.FTP(timeout=30)
-    ftp.connect(os.environ["FTP_HOST"], 21)
+    host = os.environ.get("FTP_TLS_HOST", "").strip()
+    if not host:
+        sys.exit("FTP_TLS_HOST ausente; FTP sem TLS nao e permitido")
+    context = ssl.create_default_context()
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
+    ftp = ftplib.FTP_TLS(timeout=30, context=context)
+    ftp.connect(host, 21)
     ftp.login(os.environ["FTP_USERNAME"], password)
+    ftp.prot_p()
     ftp.cwd("public_html")
     root = ftp.pwd()
     parent = posixpath.dirname(root.rstrip("/")) or "/"
@@ -114,9 +132,13 @@ def main():
     maps = {}
     for loc in index.findall(".//{" + NS + "}loc"):
         p = urllib.parse.urlsplit(loc.text or "")
-        if p.hostname != "www.arquindex.com.br" or not p.path.endswith(".xml"):
+        if (p.hostname != "www.arquindex.com.br" or p.scheme != "https"
+                or p.username is not None or p.password is not None
+                or not p.path.endswith(".xml")):
             sys.exit("Indice contem destino fora do escopo.")
         path = urllib.parse.unquote(p.path).lstrip("/")
+        if not safe_remote_path(path) or not path.endswith(".xml"):
+            sys.exit("Indice contem caminho de mapa inseguro.")
         xml = ET.fromstring(read(path))
         if xml.tag != "{" + NS + "}urlset":
             sys.exit("Mapa filho nao reconhecido.")
@@ -145,7 +167,7 @@ def main():
         source = (path + "index.html") if p.path.endswith("/") else path
         if not source:
             source = "index.html"
-        if not source.endswith(".html") or ".." in source.split("/"):
+        if not source.endswith(".html") or not safe_remote_path(source):
             continue
         try:
             raw = read(source)
