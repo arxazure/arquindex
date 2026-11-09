@@ -1,0 +1,28 @@
+name: ECM Manual Release Package (no deployment)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'deploy/subdominios/ecm-arquindex/**'
+      - 'scripts/validate_ecm_dedicated_site.py'
+      - 'scripts/package_ecm_manual.py'
+      - '.github/workflows/ecm-manual-package.yml'
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate local ECM content
+        run: python3 scripts/validate_ecm_dedicated_site.py
+      - name: Build reviewed manual package and SHA256 manifest
+        run: python3 scripts/package_ecm_manual.py --out ecm-release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ecm-arquindex-manual-package
+          path: ecm-release/
+          retention-days: 30
