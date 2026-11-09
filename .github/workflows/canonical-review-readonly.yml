@@ -1,0 +1,27 @@
+name: Auditar canonicas 4XX (somente leitura)
+on:
+  pull_request:
+    paths:
+      - 'scripts/seo_canonical_review.py'
+      - 'tests/test_seo_canonical_review.py'
+      - '.github/workflows/canonical-review-readonly.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validar parser e guardrails (sem rede ou deploy)
+        run: python -m unittest discover -s tests -p 'test_seo_canonical_review.py' -v
+      - name: Confirmar execucao isolada
+        run: |
+          echo 'Sem segredos, credenciais, FTPS ou deploy neste job.'
+      - name: Contexto de seguranca
+        run: |
+          echo "HomeHost e o unico destino autorizado do site principal. Este workflow nao publica nada." >> "$GITHUB_STEP_SUMMARY"
