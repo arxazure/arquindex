@@ -19,6 +19,9 @@ jobs:
           python-version: '3.12'
       - name: Validar parser e guardrails (sem rede ou deploy)
         run: python -m unittest discover -s tests -p 'test_seo_canonical_review.py' -v
+      - name: Confirmar execucao isolada
+        run: |
+          echo 'Sem segredos, credenciais, FTPS ou deploy neste job.'
       - name: Contexto de seguranca
         run: |
           echo "HomeHost e o unico destino autorizado do site principal. Este workflow nao publica nada." >> "$GITHUB_STEP_SUMMARY"
