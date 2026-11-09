@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-06",
+  "timezone": "America/Sao_Paulo",
+  "repository": "arxazure/arquindex",
+  "base_branch": "master",
+  "editorial_branch": "editorial/2-artigos-20261106",
+  "institutional_target": "HomeHost",
+  "publication_gate": {
+    "homehost_root_confirmed": false,
+    "restorable_backup_verified": false,
+    "ftps_tls_validated": false,
+    "production_write_attempted": false
+  },
+  "articles": [
+    {
+      "title": "Pseudonimização e mascaramento em acervos digitais: guia prático para LGPD",
+      "intent": "orientar redução de exposição de dados pessoais em documentos, homologação, integrações e compartilhamentos",
+      "planned_url": "https://www.arquindex.com.br/blog/pseudonimizacao-mascaramento-acervos-digitais-lgpd/",
+      "file": "editorial/2026-11-06/pseudonimizacao-mascaramento-acervos-digitais-lgpd/index.html",
+      "word_count_estimate": 1925,
+      "status": "prepared_not_published",
+      "robots_before_publication": "noindex,follow",
+      "sources": [
+        "https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709-14-agosto-2018-787077-normaatualizada-pl.html",
+        "https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-sobre-seguranca-da-informacao-para-agentes-de-tratamento-de-pequeno-porte",
+        "https://www.gov.br/funasa/pt-br/acesso-a-informacao/lei-geral-de-protecao-de-dados-pessoais-lgpd/tipos-de-dados-abordados-pela-lgpd",
+        "https://www.nist.gov/privacy-framework/getting-started-0"
+      ]
+    },
+    {
+      "title": "LGPD e backups: como conciliar retenção, eliminação e restauração",
+      "intent": "governar dados pessoais em backups sem reintroduzir dados eliminados após restauração",
+      "planned_url": "https://www.arquindex.com.br/blog/lgpd-backups-retencao-eliminacao-restauracao/",
+      "file": "editorial/2026-11-06/lgpd-backups-retencao-eliminacao-restauracao/index.html",
+      "word_count_estimate": 2107,
+      "status": "prepared_not_published",
+      "robots_before_publication": "noindex,follow",
+      "sources": [
+        "https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709-14-agosto-2018-787077-normaatualizada-pl.html",
+        "https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-sobre-seguranca-da-informacao-para-agentes-de-tratamento-de-pequeno-porte",
+        "https://csrc.nist.gov/Projects/cybersecurity-framework/filters",
+        "https://csrc.nist.gov/pubs/sp/800/88/r2/final",
+        "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-50-de-06-de-maio-de-2022"
+      ]
+    }
+  ],
+  "publication": {
+    "created": 2,
+    "published": 0,
+    "sitemap_submitted": false,
+    "gsc_urls_sent": 0,
+    "indexnow_urls_sent": 0,
+    "indexing_confirmed": 0
+  }
+}
