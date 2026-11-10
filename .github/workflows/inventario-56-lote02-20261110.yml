@@ -1,0 +1,48 @@
+name: Inventario 56 Arquindex lote 02 read-only
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/inventario-56-lote02-20261110.yml']
+permissions: {contents: read}
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - run: pip install requests beautifulsoup4
+      - name: Verificar seis hosts sem alterar producao
+        env:
+          HOSTS: 'consultorialgpd.arquindex.com.br,adequacaolgpd.arquindex.com.br,dpoembh.arquindex.com.br,canaldedenunciaslgpd.arquindex.com.br,ecmembh.arquindex.com.br,escanearprontuariomedicoembh.arquindex.com.br'
+        run: |
+          python - <<'PY'
+          import os,json,socket,ssl,requests
+          from bs4 import BeautifulSoup
+          result=[]
+          for host in os.environ['HOSTS'].split(','):
+            d={'host':host,'url':'https://'+host+'/'}
+            try:d['dns']=sorted({x[4][0] for x in socket.getaddrinfo(host,443,type=socket.SOCK_STREAM)})
+            except Exception as e:d['dns_error']=str(e)
+            if d.get('dns'):
+              try:
+                with socket.create_connection((host,443),timeout=8) as s:
+                  with ssl.create_default_context().wrap_socket(s,server_hostname=host) as t:d['tls_valid']=True;d['tls_version']=t.version()
+              except Exception as e:d['tls_error']=str(e)
+              for key,path in [('page','/'),('robots','/robots.txt'),('sitemap','/sitemap.xml')]:
+                try:
+                  r=requests.get('https://'+host+path,timeout=14)
+                  d[key]={'status':r.status_code,'final_url':r.url}
+                  if key=='page' and r.status_code==200:
+                    s=BeautifulSoup(r.text,'html.parser')
+                    d.update(title=s.title.get_text(' ',strip=True) if s.title else None,h1=[x.get_text(' ',strip=True) for x in s.select('h1')],canonical=[x.get('href') for x in s.select('link[rel~=canonical]')],description=[x.get('content') for x in s.select('meta[name=description]')],viewport=bool(s.select('meta[name=viewport]')),forms=len(s.select('form')),whatsapp=len(s.select('a[href*="wa.me"],a[href*="whatsapp"]')),words=len(s.get_text(' ',strip=True).split()))
+                  if key=='sitemap' and r.status_code==200:d['sitemap_mentions_url']=d['url'] in r.text
+                except Exception as e:d[key]={'error':str(e)}
+            result.append(d);print(json.dumps(d,ensure_ascii=False),flush=True)
+          open('inventario-lote02.json','w').write(json.dumps(result,ensure_ascii=False,indent=2))
+          assert len(result)==6
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inventario-56-lote02
+          path: inventario-lote02.json
