@@ -23,6 +23,7 @@ export function buildProfessionalReport(type,records,companyPayload,now=new Date
   const branches=new Map(get('branch').map(r=>[r.id,r]));
   const risks=get('risk');
   const websites=get('website');
+  const websiteScans=get('website_scan');
   const incidents=get('incident');
   const audits=get('audit');
   const trainings=get('training');
@@ -121,11 +122,28 @@ export function buildProfessionalReport(type,records,companyPayload,now=new Date
   if(type==='audit'){
     add(section('2. Escopo, evidências e critérios'),para('As constatações e recomendações refletem exclusivamente os registros inseridos. Uma auditoria técnica de website exige evidências de varredura, data, escopo e metodologia, não inferidas automaticamente.'));
     for(const [i,r] of audits.entries())add(section('3.'+(i+1)+' — '+value(r.payload?.name,'controle auditado')),...Object.entries(r.payload||{}).map(([k,v])=>row(k,value(v,k))));
+    if(websiteScans.length){
+      add(section('4. Evidências técnicas de varredura passiva'));
+      for(const [i,scan] of websiteScans.entries()){
+        const result=scan.payload||{};
+        const site=websites.find(x=>x.id===scan.parent_id);
+        add(section('4.'+(i+1)+' — '+value(site?.payload?.url||result.finalUrl,'URL auditada')),
+          row('Data da coleta',value(result.scannedAt,'data da coleta')),
+          row('HTTP',value(result.httpStatus,'código HTTP')),
+          row('Interpretação técnica',value(result.interpretation,'interpretação da varredura')),
+          row('Limitações',Array.isArray(result.limitations)?result.limitations.join('; '):missing('limitações')));
+        if(Array.isArray(result.checks))add(table(['Verificação','Observação','Evidência','Ação recomendada'],result.checks.map(c=>[raw(c.label),c.observed?'Sinal observado':'Sinal não observado',raw(c.evidence),raw(c.nextAction)])));
+      }
+    } else add(note('Não há varreduras técnicas anexadas a este relatório. Sem evidências técnicas não é possível atribuir conformidade de website.'));
     if(!audits.length)add(note('Nenhuma auditoria cadastrada. Não é possível atribuir pontuação de conformidade.'));
   }
   if(type==='cookies'){
     add(section('2. Escopo e metodologia'),para('Inventário declaratório de websites, formulários e cookies. Uma varredura passiva não confirma comportamento de scripts nem prova bloqueio de cookies antes do consentimento.'));
     for(const [i,r] of websites.entries())add(section('3.'+(i+1)+' — '+value(r.payload?.name,'website')),...Object.entries(r.payload||{}).map(([k,v])=>row(k,value(v,k))));
+    if(websiteScans.length){
+      add(section('4. Varreduras técnicas e limitações'));
+      for(const scan of websiteScans){const x=scan.payload||{};add(row(value(x.finalUrl,'URL da varredura'),'Coleta: '+value(x.scannedAt,'data')+'; Cookies observados: '+(Array.isArray(x.cookies)?x.cookies.length:missing('inventário de cookies'))+'; Recursos externos: '+(Array.isArray(x.externalResourceHosts)?x.externalResourceHosts.join(', '):missing('recursos externos'))));}
+    }
     if(!websites.length)add(note('Nenhum website cadastrado. A política de cookies deve aguardar inventário e validação.'));
   }
   if(type==='training'){
