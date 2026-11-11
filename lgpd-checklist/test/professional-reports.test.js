@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {professionalDocx} from '../export-files.js';
 import {buildProfessionalReport,reportHtml,reportPdf} from '../professional-reports.js';
 const company={company_name:'Empresa Teste',company_cnpj:'00.000.000/0001-00',company_dpo:'DPO Teste',company_email:'privacidade@example.test'};
 const records=[
@@ -31,4 +32,22 @@ test('Missing data is never invented',()=>{
  const r=buildProfessionalReport('privacy',[],{company_name:'Empresa sem mapa'});
  assert.ok(r.issues.includes('processos de tratamento não cadastrados'));
  assert.ok(reportHtml(r).includes('Não há processos de tratamento mapeados'));
+});
+
+test('All seven report types produce complete structured chapters and editable DOCX',()=>{
+ for(const type of ['privacy','ropa','risk','incident','audit','cookies','training']){
+  const report=buildProfessionalReport(type,records,company,new Date('2026-11-11T12:00:00Z'));
+  assert.ok(report.blocks.some(b=>b.kind==='section'));
+  assert.ok(report.blocks.some(b=>b.kind==='title'));
+  const docx=professionalDocx(report);
+  assert.equal(docx.subarray(0,2).toString(),'PK');
+  assert.ok(docx.length>1500);
+ }
+});
+test('Company phone and sensitive-data classification survive in ROPA',()=>{
+ const companyWithPhone={...company,company_phone:'(31) 3333-4444'};
+ const modified=records.map(x=>x.id==='p1'?{...x,payload:{...x.payload,data_type_classification:'Sensível',process_operators:'Operador Teste'}}:x);
+ const report=buildProfessionalReport('ropa',modified,companyWithPhone);
+ const html=reportHtml(report);
+ for(const word of ['3333-4444','Sensível','Operador Teste']) assert.ok(html.includes(word));
 });

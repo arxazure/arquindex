@@ -1,0 +1,30 @@
+name: LGPD document generation QA
+on:
+  pull_request:
+    paths:
+      - 'lgpd-checklist/**'
+      - '.github/workflows/lgpd-document-qa.yml'
+  push:
+    branches:
+      - 'fix/lgpd-documentos-completos-integracao-html-20261111'
+    paths:
+      - 'lgpd-checklist/**'
+      - '.github/workflows/lgpd-document-qa.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lgpd-checklist
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: lgpd-checklist/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: node --check professional-reports.js
+      - run: node --check export-files.js
+      - run: node --check server.js
