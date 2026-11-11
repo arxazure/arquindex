@@ -1,6 +1,6 @@
 import {runRegulatoryCheck} from './regulatory-runner.js';
 import {regulatoryCatalog,regulatoryTemplates,regulatorySources} from './regulatory-catalog.js';
-import {excelExport,pdfExport,wordExport} from './export-files.js';
+import {excelExport,pdfExport,wordExport,professionalDocx} from './export-files.js';
 import {buildProfessionalReport,reportHtml,reportPdf} from './professional-reports.js';
 import express from 'express';
 import {scanPage} from './web-audit.js';
@@ -128,17 +128,18 @@ app.get('/api/regulatory/checks',auth,wrap(async(req,res)=>{const q=await pool.q
 app.post('/api/regulatory/check',auth,admin,wrap(async(req,res)=>{const result=await runRegulatoryCheck(pool,{userId:req.user.id,trigger:'manual'});res.status(result.status==='busy'?409:200).json(result.status==='busy'?{...result,error:'Verificacao em andamento; aguarde.'}:result);}));
 app.get('/api/regulatory/catalog',auth,(req,res)=>res.json(regulatoryCatalog()));
 app.post('/api/regulatory/import',auth,writer,wrap(async(req,res)=>{const c=await company(pool,req.body.company_id,req.user);if(!c)return res.sendStatus(404);const ids=req.body.template_ids;if(!Array.isArray(ids)||ids.length<1||ids.length>20||new Set(ids).size!==ids.length)return res.status(400).json({error:'Selecione de 1 a 20 modelos sem repeticoes'});const sector=String(req.body.sector||'').trim().slice(0,100);if(!sector)return res.status(400).json({error:'Informe o setor do cliente'});const chosen=ids.map(id=>regulatoryTemplates.find(x=>x.id===id));if(chosen.some(x=>!x))return res.status(400).json({error:'Modelo desconhecido'});const db=await pool.connect(),created=[];try{await db.query('BEGIN');for(const t of chosen){const id=randomUUID(),source=regulatorySources.find(x=>x.id===t.source);const payload={name:t.title+' - '+sector,scope:'Setor: '+sector+' | Categoria: '+t.category+' | Modelo: '+t.id,evidence:'Fonte de referencia: '+source.title+' | '+source.url+' | Verificar vigencia e aplicabilidade antes de aprovar.',finding:t.finding,action:t.action,responsible:'A definir',deadline:'',status:'Rascunho para auditoria'};await db.query("INSERT INTO lgpd_records(id,section,company_id,parent_id,payload) VALUES($1,'audit',$2,NULL,$3)",[id,c.id,JSON.stringify(payload)]);created.push(id);}await audit(db,req.user,c.id,'regulatory_import',created[0]);await db.query('COMMIT');res.status(201).json({created,section:'audit',sector});}catch(e){await db.query('ROLLBACK');throw e;}finally{db.release();}}));
-app.get('/api/reports/professional/:type(privacy|ropa)',auth,wrap(async(req,res)=>{
+app.get('/api/reports/professional/:type(privacy|ropa|risk|incident|audit|cookies|training)',auth,wrap(async(req,res)=>{
   const c=await company(pool,req.query.company_id,req.user);if(!c)return res.sendStatus(404);
-  const format=String(req.query.format||'html');if(!['html','pdf'].includes(format))return res.status(400).json({error:'Formato inválido'});
+  const format=String(req.query.format||'html');if(!['html','pdf','docx'].includes(format))return res.status(400).json({error:'Formato inválido'});
   const q=await pool.query('SELECT id,section,parent_id,payload,created_at,updated_at FROM lgpd_records WHERE company_id=$1 ORDER BY section,created_at',[c.id]);
   if(q.rows.length>5000)return res.status(413).json({error:'Muitos registros para um relatório único'});
   const report=buildProfessionalReport(req.params.type,q.rows,c.payload);
-  const output=format==='pdf'?reportPdf(report):reportHtml(report);
+  const output=format==='pdf'?reportPdf(report):format==='docx'?professionalDocx(report):reportHtml(report);
   await audit(pool,req.user,c.id,'professional_report_'+req.params.type,null);
   res.set('Cache-Control','no-store');
   res.set('X-Content-Type-Options','nosniff');
   if(format==='pdf'){res.attachment('lgpd-'+req.params.type+'-'+c.id.slice(0,8)+'.pdf');res.type('application/pdf');return res.send(output);}
+  if(format==='docx'){res.attachment('lgpd-'+req.params.type+'-'+c.id.slice(0,8)+'.docx');res.type('application/vnd.openxmlformats-officedocument.wordprocessingml.document');return res.send(output);}
   res.type('html').send(output);
 }));
 app.get('/api/export-file',auth,wrap(async(req,res)=>{const c=await company(pool,req.query.company_id,req.user);if(!c)return res.sendStatus(404);const {format,section='all'}=req.query;if(!['pdf','xlsx','docx'].includes(format)||(section!=='all'&&!definitions[section])||(format==='docx'&&section!=='policy'))return res.status(400).json({error:'Formato ou secao invalida'});const q=await pool.query('SELECT id,section,parent_id,payload,created_at,updated_at FROM lgpd_records WHERE company_id=$1 AND ($2::text=\'all\' OR section=$2) ORDER BY section,created_at',[c.id,section]);const name='lgpd-'+c.id.slice(0,8)+'-'+section;const buffer=format==='pdf'?pdfExport(q.rows,c.payload.company_name):format==='xlsx'?excelExport(q.rows):wordExport(q.rows,c.payload.company_name);res.set('Cache-Control','no-store');res.attachment(name+'.'+format);res.type(format==='pdf'?'application/pdf':format==='xlsx'?'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'application/vnd.openxmlformats-officedocument.wordprocessingml.document');await audit(pool,req.user,c.id,'export_'+format,null);res.end(buffer);}));
