@@ -133,7 +133,9 @@ app.get('/api/reports/professional/:type(privacy|ropa|risk|incident|audit|cookie
   const format=String(req.query.format||'html');if(!['html','pdf','docx'].includes(format))return res.status(400).json({error:'Formato inválido'});
   const q=await pool.query('SELECT id,section,parent_id,payload,created_at,updated_at FROM lgpd_records WHERE company_id=$1 ORDER BY section,created_at',[c.id]);
   if(q.rows.length>5000)return res.status(413).json({error:'Muitos registros para um relatório único'});
-  const report=buildProfessionalReport(req.params.type,q.rows,c.payload);
+  const scans=(req.params.type==='audit'||req.params.type==='cookies')?(await pool.query('SELECT id,website_id,result,created_at FROM lgpd_web_audits WHERE company_id=$1 ORDER BY created_at DESC LIMIT 100',[c.id])).rows:[];
+  const evidence=scans.map(x=>({id:x.id,section:'website_scan',parent_id:x.website_id,payload:x.result,created_at:x.created_at}));
+  const report=buildProfessionalReport(req.params.type,[...q.rows,...evidence],c.payload);
   const output=format==='pdf'?reportPdf(report):format==='docx'?professionalDocx(report):reportHtml(report);
   await audit(pool,req.user,c.id,'professional_report_'+req.params.type,null);
   res.set('Cache-Control','no-store');
