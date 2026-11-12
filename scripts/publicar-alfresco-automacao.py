@@ -1,83 +1,102 @@
-"""Scoped campaign publication with FTPS readback, private backups and guarded updates."""
+"""Read-only FTPS preflight for Arquindex. No deployment capability in Phase A."""
+import argparse
+import ftplib
+import hashlib
+import json
+import os
 from pathlib import Path
-import os,io,ftplib,ssl,socket,json,hashlib,datetime,secrets,re,xml.etree.ElementTree as ET
-BASE='https://www.arquindex.com.br/'
-ROOT=Path(__file__).resolve().parents[1]
-MAN=ROOT/'seo/alfresco-automacao-manifest.json'
-ROWS=json.loads(MAN.read_text());REPORT=ROOT/'publish-report/alfresco-automacao';REPORT.mkdir(parents=True,exist_ok=True)
-result={'ftps_verified':False,'http_verified':False,'indexed':False,'pages':[r['url'] for r in ROWS]}
-def sha(b):return hashlib.sha256(b).hexdigest()
-def get(f,p):
- b=bytearray()
- try:f.retrbinary('RETR '+p,b.extend)
- except ftplib.error_perm as e:
-  if str(e).startswith('550'):return None
-  raise
- return bytes(b)
-def mkdir(f,p):
- cur=''
- for bit in p.strip('/').split('/'):
-  cur+='/'+bit
-  try:f.mkd(cur)
-  except ftplib.error_perm as e:
-   if not str(e).startswith('550'):raise
+import ssl
+import sys
+from datetime import datetime, timezone
 
-def put(f,p,b):
- mkdir(f,p.rsplit('/',1)[0]);f.storbinary('STOR '+p,io.BytesIO(b));assert get(f,p)==b,'FTPS_READBACK_MISMATCH'
-def save():(REPORT/'publication.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
-planned={'/public_html/'+r['path']:(ROOT/r['path']).read_bytes() for r in ROWS}
-planned['/public_html/sitemap-alfresco-automacao.xml']=(ROOT/'sitemap-alfresco-automacao.xml').read_bytes()
-# IndexNow verification keys are deliberately public and separate from account credentials.
-key=secrets.token_hex(16);planned['/public_html/'+key+'.txt']=key.encode()
-previous={};applied=[]
-host=os.environ.get('FTP_TLS_HOST','h59.servidorhh.com')
-assert host in ('h59.servidorhh.com','ftp.arquindex.com.br')
-with ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=55) as f:
- f.connect(host,21);f.login(os.environ.get('FTP_USER','arquind2'),os.environ['FTP_PASSWORD']);f.prot_p()
- marker=b'ARQ-ALFRESCO-AUTOMACAO-20261029'
- for row in ROWS:
-  old=get(f,'/public_html/'+row['path'])
-  assert old is None or marker in old,'EXISTING_PAGE_REQUIRES_REVIEW'
- block=b'<section id="arq-alfresco-automacao-20261029"><h2>Automacao documental com Alfresco</h2><p><a href="/alfresco-automacao-documental/">Custos, RPA, conectores com IA e fluxos de recebimento, aprovacao e compartilhamento</a></p></section>'
- for p in ['alfresco-cloud-ocr-ia/index.html','blog/alfresco-community-gestao-documental-sem-amps/index.html','manuais/alfresco-community-aspectos-temporalidade/index.html']:
-  target='/public_html/'+p;old=get(f,target)
-  if old is not None:
-   assert b'</main>' in old,'NAV_STRUCTURE_CHANGED'
-   if b'id="arq-alfresco-automacao-20261029"' not in old:planned[target]=old.replace(b'</main>',block+b'</main>',1)
- NS='http://www.sitemaps.org/schemas/sitemap/0.9';ET.register_namespace('',NS)
- sitemap='/public_html/sitemap.xml';raw=get(f,sitemap)
- if raw:
-  tree=ET.fromstring(raw);locs={n.text for n in tree.iter('{'+NS+'}loc')}
-  if tree.tag=='{'+NS+'}sitemapindex':
-   u=BASE+'sitemap-alfresco-automacao.xml'
-   if u not in locs:n=ET.SubElement(tree,'{'+NS+'}sitemap');ET.SubElement(n,'{'+NS+'}loc').text=u
-  elif tree.tag=='{'+NS+'}urlset':
-   for row in ROWS:
-    if row['url'] not in locs:
-     n=ET.SubElement(tree,'{'+NS+'}url');ET.SubElement(n,'{'+NS+'}loc').text=row['url'];ET.SubElement(n,'{'+NS+'}lastmod').text='2026-10-29'
-  else:raise RuntimeError('UNEXPECTED_SITEMAP_FORMAT')
-  planned[sitemap]=ET.tostring(tree,encoding='utf-8',xml_declaration=True)
- robots='/public_html/robots.txt';oldrobots=get(f,robots)
- if oldrobots is not None and b'sitemap-alfresco-automacao.xml' not in oldrobots:
-  planned[robots]=oldrobots.rstrip()+b'\nSitemap: https://www.arquindex.com.br/sitemap-alfresco-automacao.xml\n'
- backup='/seo-backups/alfresco-automacao-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
- mkdir(f,backup);put(f,backup+'/.htaccess',b'Require all denied\n')
- for p in planned:
-  previous[p]=get(f,p)
-  if previous[p] is not None:put(f,backup+'/'+sha(p.encode())+'.bak',previous[p])
- put(f,backup+'/manifest.json',json.dumps({p:{'file':sha(p.encode())+'.bak','sha256':sha(b)} for p,b in previous.items() if b is not None}).encode())
- try:
-  for p,b in planned.items():
-   if previous[p]==b:continue
-   assert get(f,p)==previous[p],'CONCURRENT_REMOTE_CHANGE'
-   applied.append(p);put(f,p,b)
-  result['ftps_verified']=True;result['backup_created']=True
-  result['hashes']={p.removeprefix('/public_html/'):sha(b) for p,b in planned.items()};save()
- except Exception:
-  for p in reversed(applied):
-   if get(f,p)!=planned[p]:continue
-   if previous[p] is None:f.delete(p)
-   else:put(f,p,previous[p])
-  result['rolled_back']=True;save();raise
-(ROOT/'publish-report/alfresco-automacao/indexnow-public-key.json').write_text(json.dumps({'key':key,'url':BASE+key+'.txt'}))
-print('FTPS_VERIFIED',len(planned),'FILES; PRIVATE_BACKUP_CREATED',flush=True)
+ROOT = Path(__file__).resolve().parents[1]
+REPORT = ROOT / "publish-report/alfresco-automacao/diagnostic.json"
+MANIFEST = ROOT / "seo/alfresco-automacao-manifest.json"
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def safe_path(path):
+    if not isinstance(path, str) or not path or path.startswith("/") or "\\" in path or ":" in path:
+        raise ValueError("UNSAFE_MANIFEST_PATH")
+    parts = path.split("/")
+    if any(part in ("", ".", "..") for part in parts):
+        raise ValueError("UNSAFE_MANIFEST_PATH")
+    return "/".join(parts)
+
+def inventory():
+    rows = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    files = {}
+    for row in rows:
+        path = safe_path(row["path"])
+        if not row["url"].startswith("https://www.arquindex.com.br/") or row["url"].split("?", 1)[0].split("#", 1)[0].rstrip("/") != ("https://www.arquindex.com.br/" + path.removesuffix("index.html")).rstrip("/"):
+            raise ValueError("NON_CANONICAL_URL")
+        files[path] = digest((ROOT / path).read_bytes())
+    path = "sitemap-alfresco-automacao.xml"
+    files[path] = digest((ROOT / path).read_bytes())
+    return files
+
+
+def validate_config(host, user, password, public_root):
+    if not all((host, user, password, public_root)):
+        raise ValueError("FTPS_CONFIG_MISSING")
+    if any(ch in host for ch in ("/", ":", "@", " ", chr(9), chr(10), chr(13))) or host.startswith(".") or host.endswith("."):
+        raise ValueError("INVALID_FTPS_HOST")
+    if (not public_root.startswith("/") or public_root == "/"
+            or any(part in ("", ".", "..") for part in public_root[1:].split("/"))
+            or chr(92) in public_root):
+        raise ValueError("INVALID_PUBLIC_ROOT")
+    return True
+
+
+def preflight(host, user, password, public_root, factory=ftplib.FTP_TLS):
+    validate_config(host, user, password, public_root)
+    # Explicit FTPS, verified server certificate, encrypted data channel.
+    with factory(context=ssl.create_default_context(), timeout=25) as ftp:
+        ftp.connect(host, 21)
+        ftp.login(user, password)
+        ftp.prot_p()
+        original = ftp.pwd()
+        ftp.cwd(public_root)
+        confirmed = ftp.pwd()
+        ftp.cwd(original)
+        # No STOR, MKD, DELE, RNFR/RNTO or site-changing commands.
+        return {"tls_verified": True, "login_verified": True,
+                "remote_root_readable": True, "remote_pwd": confirmed,
+                "public_http_mapping_verified": False,
+                "backup_restoration_verified": False}
+
+
+def diagnose():
+    result = {"mode": "read_only", "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+              "ftps_verified": False, "public_http_verified": False,
+              "sitemap_submitted": False, "indexed": False}
+    try:
+        result["local_sha256"] = inventory()
+        result.update(preflight(os.getenv("FTP_TLS_HOST", ""),
+                                os.getenv("FTP_USER", ""),
+                                os.getenv("FTP_PASSWORD", ""),
+                                os.getenv("FTP_PUBLIC_ROOT", "")))
+        result["ftps_verified"] = True
+    except (ValueError, OSError, ftplib.Error, ssl.SSLError) as exc:
+        result["error_type"] = type(exc).__name__
+        # Do not expose server response strings, usernames, passwords or paths.
+        result["error_code"] = (
+            "TLS_CERTIFICATE_INVALID" if isinstance(exc, ssl.SSLCertVerificationError)
+            else "FTPS_PREFLIGHT_FAILED" if isinstance(exc, (OSError, ftplib.Error, ssl.SSLError))
+            else str(exc))
+    REPORT.parent.mkdir(parents=True, exist_ok=True)
+    REPORT.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
+    print("FTPS_DIAGNOSTIC:", result.get("error_code", "READ_ONLY_OK"))
+    return 0 if result["ftps_verified"] else 1
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--diagnose", action="store_true")
+    args = parser.parse_args()
+    if not args.diagnose:
+        parser.error("Deployment disabled in Phase A. Use --diagnose only.")
+    sys.exit(diagnose())
