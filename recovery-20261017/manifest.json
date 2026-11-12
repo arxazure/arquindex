@@ -1,0 +1,1640 @@
+[
+  {
+    "slug": "7-motivos-contar-dpo-terceirizado",
+    "host": "7-motivos-contar-dpo-terceirizado.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://7-motivos-contar-dpo-terceirizado.arquindex.com.br/",
+    "target": "7-motivos-contar-dpo-terceirizado.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "acervo",
+    "host": "acervo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "acervonet",
+    "host": "acervonet.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "acervos-educacao",
+    "host": "acervos-educacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-financeiro-ibirite",
+    "host": "acervos-financeiro-ibirite.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-fiscal-sao-goncalo",
+    "host": "acervos-fiscal-sao-goncalo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-medico-baixada-fluminense",
+    "host": "acervos-medico-baixada-fluminense.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-medico-guarulhos",
+    "host": "acervos-medico-guarulhos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-medico-sao-caetano-do-sul",
+    "host": "acervos-medico-sao-caetano-do-sul.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-nova-lima",
+    "host": "acervos-nova-lima.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-rh-santa-luzia",
+    "host": "acervos-rh-santa-luzia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos-sao-bernardo-do-campo",
+    "host": "acervos-sao-bernardo-do-campo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "acervos",
+    "host": "acervos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://acervo.arquindex.com.br/",
+    "target": "acervo.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-alfresco-bh",
+    "host": "adequacao-alfresco-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-arquivos-preco",
+    "host": "adequacao-arquivos-preco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-decreto10278-corporativo",
+    "host": "adequacao-decreto10278-corporativo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-decreto10278-custo",
+    "host": "adequacao-decreto10278-custo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-decreto10278-vantagens",
+    "host": "adequacao-decreto10278-vantagens.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-exin-sp",
+    "host": "adequacao-exin-sp.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-lgpd-documental",
+    "host": "adequacao-lgpd-documental.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-lgpd-dpo",
+    "host": "adequacao-lgpd-dpo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://7-motivos-contar-dpo-terceirizado.arquindex.com.br/",
+    "target": "7-motivos-contar-dpo-terceirizado.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacao-lgpd-especializada",
+    "host": "adequacao-lgpd-especializada.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "adequacaolgpd",
+    "host": "adequacaolgpd.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "alf",
+    "host": "alf.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "alfresco-compras-sete-lagoas",
+    "host": "alfresco-compras-sete-lagoas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-contratos-bh",
+    "host": "alfresco-contratos-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-educacao-sao-bernardo-do-campo",
+    "host": "alfresco-educacao-sao-bernardo-do-campo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-engenharia-rio-de-janeiro",
+    "host": "alfresco-engenharia-rio-de-janeiro.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-financeiro-sao-paulo",
+    "host": "alfresco-financeiro-sao-paulo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-financeiro-sete-lagoas",
+    "host": "alfresco-financeiro-sete-lagoas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-juridico-sao-bernardo-do-campo",
+    "host": "alfresco-juridico-sao-bernardo-do-campo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-juridico-sao-vicente",
+    "host": "alfresco-juridico-sao-vicente.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco-rh-bh",
+    "host": "alfresco-rh-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "alfresco",
+    "host": "alfresco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://alfresco.arquindex.com.br/",
+    "target": "alfresco.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "aplicativos-facilitam-digitalizacao-documentos-pelo-celular",
+    "host": "aplicativos-facilitam-digitalizacao-documentos-pelo-celular.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://aplicativos-facilitam-digitalizacao-documentos-pelo-celular.arquindex.com.br/",
+    "target": "aplicativos-facilitam-digitalizacao-documentos-pelo-celular.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "arcadiagp",
+    "host": "arcadiagp.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "armazenamento",
+    "host": "armazenamento.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://armazenamento.arquindex.com.br/",
+    "target": "armazenamento.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "arquivamento",
+    "host": "arquivamento.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivar-documentos-fisicos-e-digitais",
+    "host": "arquivar-documentos-fisicos-e-digitais.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivar-documentos",
+    "host": "arquivar-documentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivar-e-digitalizar-documentos",
+    "host": "arquivar-e-digitalizar-documentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivar",
+    "host": "arquivar.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivardocumento",
+    "host": "arquivardocumento.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivo",
+    "host": "arquivo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivos-compras-cotia",
+    "host": "arquivos-compras-cotia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivos-educacao",
+    "host": "arquivos-educacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivos-financeiro-rio-de-janeiro",
+    "host": "arquivos-financeiro-rio-de-janeiro.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "arquivos",
+    "host": "arquivos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "artigos",
+    "host": "artigos.arquindex.com.br",
+    "kind": "technical",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "arxbox",
+    "host": "arxbox.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "assets",
+    "host": "assets.arquindex.com.br",
+    "kind": "technical",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "auditoria-anpd",
+    "host": "auditoria-anpd.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://auditoria-lgpd.arquindex.com.br/",
+    "target": "auditoria-lgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "auditoria-dpo",
+    "host": "auditoria-dpo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://7-motivos-contar-dpo-terceirizado.arquindex.com.br/",
+    "target": "7-motivos-contar-dpo-terceirizado.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "auditoria-governanca-dados",
+    "host": "auditoria-governanca-dados.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://auditoria-lgpd.arquindex.com.br/",
+    "target": "auditoria-lgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "auditoria-lgpd",
+    "host": "auditoria-lgpd.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://auditoria-lgpd.arquindex.com.br/",
+    "target": "auditoria-lgpd.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "automacao-de-documentos",
+    "host": "automacao-de-documentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://automacao.arquindex.com.br/",
+    "target": "automacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "automacao",
+    "host": "automacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://automacao.arquindex.com.br/",
+    "target": "automacao.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "bhdigitalizacao",
+    "host": "bhdigitalizacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "bhdigitalizardocumentos",
+    "host": "bhdigitalizardocumentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "bin",
+    "host": "bin.arquindex.com.br",
+    "kind": "technical",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "blog-digitalizacao-de-documentos",
+    "host": "blog-digitalizacao-de-documentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "bpm-da-informacao",
+    "host": "bpm-da-informacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://bpm.arquindex.com.br/",
+    "target": "bpm.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "bpm-documental",
+    "host": "bpm-documental.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://bpm.arquindex.com.br/",
+    "target": "bpm.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "bpm",
+    "host": "bpm.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://bpm.arquindex.com.br/",
+    "target": "bpm.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "cache",
+    "host": "cache.arquindex.com.br",
+    "kind": "technical",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "cast",
+    "host": "cast.arquindex.com.br",
+    "kind": "technical",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "cedoc-compras-maua",
+    "host": "cedoc-compras-maua.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "cedoc-educacao-duque-de-caxias",
+    "host": "cedoc-educacao-duque-de-caxias.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "cedoc-fiscal-sao-bernardo-do-campo",
+    "host": "cedoc-fiscal-sao-bernardo-do-campo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "cedoc-niteroi",
+    "host": "cedoc-niteroi.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "cedoc",
+    "host": "cedoc.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "celulagestaodedocumentos",
+    "host": "celulagestaodedocumentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "centralinf",
+    "host": "centralinf.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "cidades",
+    "host": "cidades.arquindex.com.br",
+    "kind": "technical",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "comoadequaralgpd",
+    "host": "comoadequaralgpd.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-arquivos-corporativo",
+    "host": "compliance-arquivos-corporativo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-cedo-solucao",
+    "host": "compliance-cedo-solucao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-cedoc-solucao",
+    "host": "compliance-cedoc-solucao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-conarq-rj",
+    "host": "compliance-conarq-rj.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-conarq-solucao",
+    "host": "compliance-conarq-solucao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-digitalizacao-preco",
+    "host": "compliance-digitalizacao-preco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-lgpd-corporativo",
+    "host": "compliance-lgpd-corporativo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-lgpd-empresas",
+    "host": "compliance-lgpd-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance-mapeamento-preco",
+    "host": "compliance-mapeamento-preco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "compliance",
+    "host": "compliance.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-compras-santa-luzia",
+    "host": "conarq-compras-santa-luzia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-compras-sao-bernardo-do-campo",
+    "host": "conarq-compras-sao-bernardo-do-campo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-contratos-osasco",
+    "host": "conarq-contratos-osasco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-financeiro-sete-lagoas",
+    "host": "conarq-financeiro-sete-lagoas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-fiscal-sao-caetano-do-sul",
+    "host": "conarq-fiscal-sao-caetano-do-sul.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-juridico-nova-lima",
+    "host": "conarq-juridico-nova-lima.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-juridico-taboao-da-serra",
+    "host": "conarq-juridico-taboao-da-serra.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-medico-santa-luzia",
+    "host": "conarq-medico-santa-luzia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq-taboao-da-serra",
+    "host": "conarq-taboao-da-serra.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "conarq",
+    "host": "conarq.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "concorrentes-arquindex-brasil-solucoes-completas-digitalizacao",
+    "host": "concorrentes-arquindex-brasil-solucoes-completas-digitalizacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "concorrentes-arquindex-digitalizacao-documental-atendimento-per",
+    "host": "concorrentes-arquindex-digitalizacao-documental-atendimento-per.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-adequacao-lgpd-pequenas-empresas",
+    "host": "consultoria-adequacao-lgpd-pequenas-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-conarq-mg",
+    "host": "consultoria-conarq-mg.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-decreto10278-solucao",
+    "host": "consultoria-decreto10278-solucao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-decreto10278-sp",
+    "host": "consultoria-decreto10278-sp.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-exin-bh",
+    "host": "consultoria-exin-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-lgpd-empresas",
+    "host": "consultoria-lgpd-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-mapeamento-mg",
+    "host": "consultoria-mapeamento-mg.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-mapeamento-solucao",
+    "host": "consultoria-mapeamento-solucao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultoria-ocr-vantagens",
+    "host": "consultoria-ocr-vantagens.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultorias-adequacao-lgpd-brasil",
+    "host": "consultorias-adequacao-lgpd-brasil.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultorias-adequacao-lgpd-diagnostico-completo-privacidade",
+    "host": "consultorias-adequacao-lgpd-diagnostico-completo-privacidade.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "consultorias-adequacao-lgpd-oferecem-diagnostico-completo",
+    "host": "consultorias-adequacao-lgpd-oferecem-diagnostico-completo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "contratar-digitalizacao-documental-brasilia-servico-rapido-segu",
+    "host": "contratar-digitalizacao-documental-brasilia-servico-rapido-segu.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "contratar-digitalizacao-documentos-armazenamento-nuvem",
+    "host": "contratar-digitalizacao-documentos-armazenamento-nuvem.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "contratar-servicos-digitalizacao-documentos-com-armazenamento",
+    "host": "contratar-servicos-digitalizacao-documentos-com-armazenamento.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "corporativo",
+    "host": "corporativo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://arquivos.arquindex.com.br/",
+    "target": "arquivos.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "css",
+    "host": "css.arquindex.com.br",
+    "kind": "technical",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "dados",
+    "host": "dados.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "dashboard",
+    "host": "dashboard.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "data-protection-exin",
+    "host": "data-protection-exin.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "databook-de-engenharia",
+    "host": "databook-de-engenharia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://databook.arquindex.com.br/",
+    "target": "databook.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "databook-de-manutencao-elaboracao",
+    "host": "databook-de-manutencao-elaboracao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://databook.arquindex.com.br/",
+    "target": "databook.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "databook-petrobras-elaboracao",
+    "host": "databook-petrobras-elaboracao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://databook.arquindex.com.br/",
+    "target": "databook.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "databook-samarco-elaboracao",
+    "host": "databook-samarco-elaboracao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://databook.arquindex.com.br/",
+    "target": "databook.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "databook-vale-elaboracao",
+    "host": "databook-vale-elaboracao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://databook.arquindex.com.br/",
+    "target": "databook.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "databook",
+    "host": "databook.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://databook.arquindex.com.br/",
+    "target": "databook.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "datagestao",
+    "host": "datagestao.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "decreto10278-contratos-betim",
+    "host": "decreto10278-contratos-betim.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-contratos-sao-paulo",
+    "host": "decreto10278-contratos-sao-paulo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-educacao-cotia",
+    "host": "decreto10278-educacao-cotia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-educacao",
+    "host": "decreto10278-educacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-engenharia-belford-roxo",
+    "host": "decreto10278-engenharia-belford-roxo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-engenharia",
+    "host": "decreto10278-engenharia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-medico-sao-vicente",
+    "host": "decreto10278-medico-sao-vicente.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-nova-lima",
+    "host": "decreto10278-nova-lima.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-prontuarios",
+    "host": "decreto10278-prontuarios.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-rh-baixada-fluminense",
+    "host": "decreto10278-rh-baixada-fluminense.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278-rh-niteroi",
+    "host": "decreto10278-rh-niteroi.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "decreto10278",
+    "host": "decreto10278.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://decreto10278.arquindex.com.br/",
+    "target": "decreto10278.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "digiout",
+    "host": "digiout.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "digitacao-de-dados-da-qualidade",
+    "host": "digitacao-de-dados-da-qualidade.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitacao.arquindex.com.br/",
+    "target": "digitacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitacao-de-documentos-de-producao",
+    "host": "digitacao-de-documentos-de-producao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitacao.arquindex.com.br/",
+    "target": "digitacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitacao-de-documentos",
+    "host": "digitacao-de-documentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitacao.arquindex.com.br/",
+    "target": "digitacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitacao",
+    "host": "digitacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitacao.arquindex.com.br/",
+    "target": "digitacao.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "digitaldoc",
+    "host": "digitaldoc.arquindex.com.br",
+    "kind": "application",
+    "action": "preserve-and-review"
+  },
+  {
+    "slug": "digitalizacao-belford-roxo",
+    "host": "digitalizacao-belford-roxo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-cedo-bh",
+    "host": "digitalizacao-cedo-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-cedoc-bh",
+    "host": "digitalizacao-cedoc-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-compras-osasco",
+    "host": "digitalizacao-compras-osasco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-contratos-cotia",
+    "host": "digitalizacao-contratos-cotia.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-de-documentos-lgpd-bh-blog-saiba-tudo",
+    "host": "digitalizacao-de-documentos-lgpd-bh-blog-saiba-tudo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-digitalizacao-sp",
+    "host": "digitalizacao-digitalizacao-sp.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-documental-curitiba-empresas-recomendadas-contrat",
+    "host": "digitalizacao-documental-curitiba-empresas-recomendadas-contrat.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-documental-nordeste-brasil-principais-concorrente",
+    "host": "digitalizacao-documental-nordeste-brasil-principais-concorrente.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-documental-paulo-empresas-melhor-custo-beneficio",
+    "host": "digitalizacao-documental-paulo-empresas-melhor-custo-beneficio.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-documental-rio-janeiro-documentos-historicos",
+    "host": "digitalizacao-documental-rio-janeiro-documentos-historicos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-documentos-beneficios",
+    "host": "digitalizacao-documentos-beneficios.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-documentos-bh",
+    "host": "digitalizacao-documentos-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-engenharia-santos",
+    "host": "digitalizacao-engenharia-santos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-engenharia-sao-goncalo",
+    "host": "digitalizacao-engenharia-sao-goncalo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-exin-bh",
+    "host": "digitalizacao-exin-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-juridico-ribeirao-das-neves",
+    "host": "digitalizacao-juridico-ribeirao-das-neves.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-ocr-empresas",
+    "host": "digitalizacao-ocr-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao-ocr-empresas.arquindex.com.br/",
+    "target": "digitalizacao-ocr-empresas.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "digitalizacao-prontuarios-nova-iguacu",
+    "host": "digitalizacao-prontuarios-nova-iguacu.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-rh-sao-bernardo-do-campo",
+    "host": "digitalizacao-rh-sao-bernardo-do-campo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-ribeirao-das-neves",
+    "host": "digitalizacao-ribeirao-das-neves.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-rio-de-janeiro",
+    "host": "digitalizacao-rio-de-janeiro.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao-santo-andre",
+    "host": "digitalizacao-santo-andre.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacao",
+    "host": "digitalizacao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "hub"
+  },
+  {
+    "slug": "digitalizacaobh",
+    "host": "digitalizacaobh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacaodedocumentosbh",
+    "host": "digitalizacaodedocumentosbh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacaodedocumentosem",
+    "host": "digitalizacaodedocumentosem.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacaodedocumentosembh.arquindex",
+    "host": "digitalizacaodedocumentosembh.arquindex.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacaodedocumentosembh",
+    "host": "digitalizacaodedocumentosembh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizacaoprocessospje",
+    "host": "digitalizacaoprocessospje.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-acervos-empresas",
+    "host": "digitalizar-acervos-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-bh",
+    "host": "digitalizar-arquivos-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-corporativo",
+    "host": "digitalizar-arquivos-corporativo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-custo",
+    "host": "digitalizar-arquivos-custo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-empresas",
+    "host": "digitalizar-arquivos-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-especializada",
+    "host": "digitalizar-arquivos-especializada.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-mg",
+    "host": "digitalizar-arquivos-mg.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-preco",
+    "host": "digitalizar-arquivos-preco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-rj",
+    "host": "digitalizar-arquivos-rj.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-solucao",
+    "host": "digitalizar-arquivos-solucao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-sp",
+    "host": "digitalizar-arquivos-sp.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-arquivos-vantagens",
+    "host": "digitalizar-arquivos-vantagens.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-cedo-vantagens",
+    "host": "digitalizar-cedo-vantagens.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-cedoc-vantagens",
+    "host": "digitalizar-cedoc-vantagens.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://cedoc.arquindex.com.br/",
+    "target": "cedoc.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-conarq-empresas",
+    "host": "digitalizar-conarq-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-conarq-especializada",
+    "host": "digitalizar-conarq-especializada.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://conarq.arquindex.com.br/",
+    "target": "conarq.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-bh",
+    "host": "digitalizar-digitalizacao-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-corporativo",
+    "host": "digitalizar-digitalizacao-corporativo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-custo",
+    "host": "digitalizar-digitalizacao-custo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-empresas",
+    "host": "digitalizar-digitalizacao-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-especializada",
+    "host": "digitalizar-digitalizacao-especializada.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-mg",
+    "host": "digitalizar-digitalizacao-mg.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-preco",
+    "host": "digitalizar-digitalizacao-preco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-rj",
+    "host": "digitalizar-digitalizacao-rj.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-solucao",
+    "host": "digitalizar-digitalizacao-solucao.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-sp",
+    "host": "digitalizar-digitalizacao-sp.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-digitalizacao-vantagens",
+    "host": "digitalizar-digitalizacao-vantagens.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-documentos",
+    "host": "digitalizar-documentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-e-organizar-documentos",
+    "host": "digitalizar-e-organizar-documentos.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://digitalizacao.arquindex.com.br/",
+    "target": "digitalizacao.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-exin-bh",
+    "host": "digitalizar-exin-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-lgpd-bh",
+    "host": "digitalizar-lgpd-bh.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-lgpd-corporativo",
+    "host": "digitalizar-lgpd-corporativo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-lgpd-custo",
+    "host": "digitalizar-lgpd-custo.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-lgpd-empresas",
+    "host": "digitalizar-lgpd-empresas.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-lgpd-especializada",
+    "host": "digitalizar-lgpd-especializada.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-lgpd-mg",
+    "host": "digitalizar-lgpd-mg.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  },
+  {
+    "slug": "digitalizar-lgpd-preco",
+    "host": "digitalizar-lgpd-preco.arquindex.com.br",
+    "kind": "content",
+    "canonical": "https://adequacaolgpd.arquindex.com.br/",
+    "target": "adequacaolgpd.arquindex.com.br",
+    "action": "alias"
+  }
+]
