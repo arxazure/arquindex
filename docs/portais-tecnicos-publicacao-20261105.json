@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-05",
+  "generated": 20,
+  "html_pages": 40,
+  "mp4_videos": 20,
+  "published_verified": 20,
+  "indexed_confirmed": null,
+  "indexing_submission_performed": false,
+  "verification": "HTTPS exact file readback; noindex removed only after verification; institutional homepage byte equality checked before promotion and at completion",
+  "runs": [
+    41958456978,
+    41959730131,
+    41960333905,
+    41961007394
+  ],
+  "results": [
+    {
+      "host": "alfresco-implantacao.arquindex.com.br",
+      "url": "https://alfresco-implantacao.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/alfresco-implantacao",
+      "state": "published_verified",
+      "sha256": "812f5d623d1bc7dbbf17a868cf4c5c63b36c83d362c1562c0e7dfe8685a50a75"
+    },
+    {
+      "host": "alfresco-manuais.arquindex.com.br",
+      "url": "https://alfresco-manuais.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/alfresco-manuais",
+      "state": "published_verified",
+      "sha256": "88da03e350f5565741fe3bb2017b19c67bc115dcd90be8b6178c41dc8513e3bb"
+    },
+    {
+      "host": "anpd-orientacoes.arquindex.com.br",
+      "url": "https://anpd-orientacoes.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/anpd-orientacoes",
+      "state": "published_verified",
+      "sha256": "18eb5844ba09bf86108f8aee3273a561d5f8c64c2f1949aa57c6b0e47349a1d7"
+    },
+    {
+      "host": "arquivo-morto-seguro.arquindex.com.br",
+      "url": "https://arquivo-morto-seguro.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/arquivo-morto-seguro",
+      "state": "published_verified",
+      "sha256": "b3b1de30d19b931019de7e13686444903464d76e6c2661b8cfb37c4fe1b719be"
+    },
+    {
+      "host": "auditoria-documental.arquindex.com.br",
+      "url": "https://auditoria-documental.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/auditoria-documental",
+      "state": "published_verified",
+      "sha256": "9e3be222d2f8380872c226c96e3cb830d09f1de5699af571137ed3a1b3ce44fb"
+    },
+    {
+      "host": "conarq-guias.arquindex.com.br",
+      "url": "https://conarq-guias.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/conarq-guias",
+      "state": "published_verified",
+      "sha256": "a459c0fdab7cab08b0d95d251947bee9a1f98b3f849d53a13efaaa4860e84cd2"
+    },
+    {
+      "host": "databooks-tecnicos.arquindex.com.br",
+      "url": "https://databooks-tecnicos.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/databooks-tecnicos",
+      "state": "published_verified",
+      "sha256": "73b4168ba1659e3338f3b410984b7250aa4d54ed4dc8f7bafe80c10df25f2286"
+    },
+    {
+      "host": "descarte-documental.arquindex.com.br",
+      "url": "https://descarte-documental.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/descarte-documental",
+      "state": "published_verified",
+      "sha256": "c8b19c4f64e9dbc8bcd9319c9efa0fdd2567438e7a0f00091d298cc538a47cb8"
+    },
+    {
+      "host": "digitalizacao-tecnica.arquindex.com.br",
+      "url": "https://digitalizacao-tecnica.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/digitalizacao-tecnica",
+      "state": "published_verified",
+      "sha256": "3c91ec256537126535dc11a2d5b1490876a15401414c6e070205fbd548cf85ba"
+    },
+    {
+      "host": "documentos-rh.arquindex.com.br",
+      "url": "https://documentos-rh.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/documentos-rh",
+      "state": "published_verified",
+      "sha256": "bcb68573301bd1f8a1d6e6aa1ff8504f7bd7289add7a597a86799755af7a0387"
+    },
+    {
+      "host": "dpo-operacional.arquindex.com.br",
+      "url": "https://dpo-operacional.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/dpo-operacional",
+      "state": "published_verified",
+      "sha256": "44a43fe93c044d0b637129f2f8d0a21f9ad5810b8da061189a0bfb06f84aedeb"
+    },
+    {
+      "host": "ecm-custos.arquindex.com.br",
+      "url": "https://ecm-custos.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/ecm-custos",
+      "state": "published_verified",
+      "sha256": "38a052df9807707602b5767397e1ac862060d270ae666dc70f6ac69d34c4f01a"
+    },
+    {
+      "host": "governanca-documental.arquindex.com.br",
+      "url": "https://governanca-documental.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/governanca-documental",
+      "state": "published_verified",
+      "sha256": "949faa603f3903a70f3fa116db3051a104d7e0ff44efb209cb279bb389e0a4ca"
+    },
+    {
+      "host": "guarda-rastreavel.arquindex.com.br",
+      "url": "https://guarda-rastreavel.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/guarda-rastreavel",
+      "state": "published_verified",
+      "sha256": "a051f22e9fc82bacc490d328a2e8913580329f105b88811a50e1aac29d8a130d"
+    },
+    {
+      "host": "ia-documental-local.arquindex.com.br",
+      "url": "https://ia-documental-local.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/ia-documental-local",
+      "state": "published_verified",
+      "sha256": "7b2334a6ef7fac1d5885803636b39fa4458bf89de8ee59db3382d923b749c99c"
+    },
+    {
+      "host": "lgpd-registros.arquindex.com.br",
+      "url": "https://lgpd-registros.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/lgpd-registros",
+      "state": "published_verified",
+      "sha256": "27df9b8120a0ef05ab39086c9c0a56ca83b68dde328d28abb75d6b7622fa712f"
+    },
+    {
+      "host": "metadados-documentais.arquindex.com.br",
+      "url": "https://metadados-documentais.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/metadados-documentais",
+      "state": "published_verified",
+      "sha256": "b2c71c3de8e558278d41869be743f0f13a4a81a55e2bd3d9926a42d7d421c042"
+    },
+    {
+      "host": "ocr-pdfa.arquindex.com.br",
+      "url": "https://ocr-pdfa.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/ocr-pdfa",
+      "state": "published_verified",
+      "sha256": "4d59fe369fa6d2e0a5b163d9349ca64bd6332ace008bcc7d55de119655a58fda"
+    },
+    {
+      "host": "preservacao-digital.arquindex.com.br",
+      "url": "https://preservacao-digital.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/preservacao-digital",
+      "state": "published_verified",
+      "sha256": "9793b97a7e3c81f18c35ac960b8bf16625db036fb84adc1bf0ab66a81e90033f"
+    },
+    {
+      "host": "temporalidade-documental.arquindex.com.br",
+      "url": "https://temporalidade-documental.arquindex.com.br/",
+      "root": "public_html/portais-tecnicos/temporalidade-documental",
+      "state": "published_verified",
+      "sha256": "447a4bc741bc1e38d5973fdb90f2fe7fb03e72ae9fa295a314ec3a3ba9727928"
+    }
+  ]
+}
