@@ -33,7 +33,13 @@
      No email, name, phone, document contents, or other PII may be passed. */
   document.addEventListener('arquindex:lead-confirmed', function (e) {
     var detail = e.detail || {};
-    var safe = function(v) { return /^[a-z0-9_-]{1,60}$/i.test(String(v||'')) ? String(v) : 'unknown'; };
-    send('generate_lead', {lead_service:safe(detail.service), form_id:safe(detail.form_id)});
+    // Static categories only. A character regex also accepts names and CPF-like
+    // numbers; it is not a privacy boundary. Never derive these from form values.
+    var services = ['digitalizacao', 'ocr', 'gestao_documental', 'guarda_documental', 'lgpd', 'dpo', 'alfresco', 'databooks'];
+    var forms = ['orcamento', 'commercial-form', 'lead'];
+    var category = function(value, allowed) {
+      return typeof value === 'string' && allowed.indexOf(value) !== -1 ? value : 'unknown';
+    };
+    send('generate_lead', {lead_service:category(detail.service, services), form_id:category(detail.form_id, forms)});
   });
 })();
