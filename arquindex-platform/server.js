@@ -105,7 +105,7 @@ const serviceFaqs = {
   ["OCR vem incluído?","O OCR pode fazer parte do escopo para tornar PDFs pesquisáveis e apoiar extração de dados. A configuração depende do acervo e do nível de precisão exigido."],
   ["Como é calculado o prazo?","Prazo depende de volume, formatos, preparação, indexação, qualidade dos originais, logística e capacidade de produção dedicada."],
   ["É possível executar no cliente?","Sim, quando o escopo e a infraestrutura permitem. Projetos também podem prever coleta controlada e devolução."],
-  ["Como pedir orçamento comparável?","Informe volume aproximado, formatos, estado físico, necessidade de OCR/indexação, cidade, prazo, coleta e forma de entrega."]
+  ["Como pedir orçamento comparável?","Compare a mesma unidade de cobrança: folha, face digitalizada ou página entregue. Confira se cada proposta inclui preparação do acervo, OCR, indexação, conferência e entrega. Para pedir orçamento, informe o volume aproximado, os tipos e o estado dos documentos, a cidade, o prazo e a finalidade da entrega. Se precisar de digitalização certificada, informe essa finalidade no pedido."]
  ],
  "digitalizacao-certificada":[
   ["O Decreto 10.278/2020 vale para qualquer documento?","Não. A aplicação depende da natureza documental e das hipóteses previstas na legislação. O projeto deve avaliar requisitos técnicos e exceções."],
