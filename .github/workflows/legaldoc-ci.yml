@@ -1,0 +1,53 @@
+name: LegalDoc AI CI
+on:
+  push:
+    branches:
+      - feature/legaldoc-ai-mvp-20261027
+    paths:
+      - 'legaldoc-ai/**'
+      - '.github/workflows/legaldoc-ci.yml'
+  pull_request:
+    paths:
+      - 'legaldoc-ai/**'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: legaldoc-ai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check public-server.js
+          node --check builder.js
+          node --check legal-catalog.js
+          node --check governance.js
+          node --check intake.js
+          node --check intake-flow.js
+          node --check decision-policy.js
+          node --check intake-api.js
+          node --check invite-security.js
+          node --check intake.js
+          node --check governance-templates.js
+          node --check demo-review.js
+          node --check workflow.js
+          node --check analysis.js
+          node --check router.js
+      - name: Run unit tests
+        run: node --test workflow.test.js analysis.test.js legal-catalog.test.js intake-flow.test.js decision-policy.test.js invite-security.test.js
+      - name: Check document builder assets
+        run: |
+          test -s builder.html
+          test -s builder.css
+          test -s builder.js
+          test -s governance.html
+          test -s governance.js
+          test -s intake.js
+          test -s intake.js
+          test -s Dockerfile
+          grep -q 'builder.js' builder.html
+          grep -q 'builder.html' public-server.js

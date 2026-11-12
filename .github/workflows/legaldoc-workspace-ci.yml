@@ -1,0 +1,66 @@
+name: LegalDoc Workspace CI
+on:
+  push:
+    branches:
+      - feature/legaldoc-ai-mvp-20261027
+    paths:
+      - 'legaldoc-workspace/**'
+      - '.github/workflows/legaldoc-workspace-ci.yml'
+  pull_request:
+    paths:
+      - 'legaldoc-workspace/**'
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: legaldoc_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: legaldoc-workspace
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/legaldoc_test
+      ADMIN_SETUP_TOKEN: test-bootstrap-token-for-ci-only-2026
+      PUBLIC_ORIGIN: http://localhost:3001
+      PORT: '3001'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: JavaScript syntax checks
+        run: |
+          node --check server.js
+          node --check workspace.js
+          node --check integration.test.mjs
+      - name: Start private API
+        run: |
+          node server.js > /tmp/legaldoc-api.log 2>&1 &
+          echo $! > /tmp/legaldoc-api.pid
+          for i in $(seq 1 25); do
+            if curl --fail --silent http://localhost:3001/health > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/legaldoc-api.log
+          exit 1
+      - name: Test actual PostgreSQL workflow
+        run: node integration.test.mjs
+      - name: API server diagnostics on error
+        if: failure()
+        run: cat /tmp/legaldoc-api.log
