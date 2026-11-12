@@ -1,0 +1,36 @@
+name: Arquindex - Exportar artigos HTML para HomeHost ou Hostinger
+on:
+  workflow_dispatch:
+  push:
+    branches: [railway-production-2026]
+    paths:
+      - 'arquindex-platform/arquindex-seo-nov2026.js'
+      - 'arquindex-platform/export-homehost-artigos.mjs'
+      - '.github/workflows/exportar-artigos-homehost.yml'
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar sintaxe
+        run: |
+          node --check arquindex-platform/export-homehost-artigos.mjs
+          node --check arquindex-platform/arquindex-seo-nov2026.js
+      - name: Gerar HTML estatico
+        run: node arquindex-platform/export-homehost-artigos.mjs arquindex-platform/dist-homehost
+      - name: Preparar chave IndexNow na raiz do pacote
+        run: |
+          cp homehost-hardening/f406ec601406a56dcf9b6d934a481f80.txt arquindex-platform/dist-homehost/
+          test "$(cat arquindex-platform/dist-homehost/f406ec601406a56dcf9b6d934a481f80.txt)" = "f406ec601406a56dcf9b6d934a481f80"
+      - name: Validar cinco paginas e manifest
+        run: |
+          test "$(find arquindex-platform/dist-homehost/conteudo -name index.html | wc -l)" -eq 5
+          test -f arquindex-platform/dist-homehost/MANIFEST.json
+      - name: Arquivos para revisao antes da publicacao
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-homehost-html-revisao
+          path: arquindex-platform/dist-homehost/
+          retention-days: 14

@@ -1,0 +1,30 @@
+name: Arquindex - Validacao de URLs em producao
+on:
+  workflow_dispatch:
+  push:
+    branches: [railway-production-2026]
+    paths:
+      - 'arquindex-platform/arquindex-seo-nov2026.js'
+      - 'arquindex-platform/server.js'
+      - 'arquindex-platform/scripts/check-publication.mjs'
+      - '.github/workflows/validar-artigos-publicados.yml'
+  schedule:
+    - cron: '17 11 * * 1'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar sintaxe
+        run: node --check arquindex-platform/scripts/check-publication.mjs
+      - name: Conferir URLs reais, canonicas, sitemap, robos e IA
+        run: node arquindex-platform/scripts/check-publication.mjs
+      - name: Publicar evidencias, mesmo em caso de falha
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arquindex-url-audit
+          path: seo-evidence/
+          retention-days: 21

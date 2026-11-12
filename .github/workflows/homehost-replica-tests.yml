@@ -1,0 +1,33 @@
+name: Homehost replica security tests
+
+on:
+  pull_request:
+    paths:
+      - "arquindex-platform/homehost-replica/**"
+      - "arquindex-platform/test/**"
+      - "arquindex-platform/replica-proxy.js"
+      - ".github/workflows/homehost-replica-tests.yml"
+  push:
+    paths:
+      - "arquindex-platform/homehost-replica/**"
+      - "arquindex-platform/test/**"
+      - "arquindex-platform/replica-proxy.js"
+      - ".github/workflows/homehost-replica-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Lint PHP entrypoint
+        run: php -n -l arquindex-platform/homehost-replica/index.php
+      - name: Test PHP replica without network calls
+        run: python3 -m unittest discover -s arquindex-platform/test -p '*_test.py' -v
+      - name: Test existing Node replica behavior
+        run: node --test arquindex-platform/test/*.test.js
