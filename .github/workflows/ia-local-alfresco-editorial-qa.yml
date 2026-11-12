@@ -1,0 +1,53 @@
+name: Arquindex IA local Alfresco editorial QA
+on:
+  pull_request:
+    paths:
+      - 'blog/alfresco-ia-local-codigo-aberto-ocr-documentos/**'
+      - 'blog/ia-manuais-engenharia-perguntas-respostas-alfresco/**'
+      - 'blog/ocr-prontuarios-ia-local-separacao-paciente/**'
+      - '.github/workflows/ia-local-alfresco-editorial-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  editorial-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check canonical, schema, structure and safety
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import json
+          class Parser(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.h1=0; self.canonical=[]; self.jsonld=[]; self.active=False; self.buf=[]
+              def handle_starttag(self,tag,attrs):
+                  d=dict(attrs)
+                  if tag=='h1': self.h1+=1
+                  if tag=='link' and d.get('rel')=='canonical': self.canonical.append(d.get('href'))
+                  if tag=='script' and d.get('type')=='application/ld+json': self.active=True; self.buf=[]
+              def handle_data(self,data):
+                  if self.active: self.buf.append(data)
+              def handle_endtag(self,tag):
+                  if tag=='script' and self.active: self.jsonld.append(''.join(self.buf)); self.active=False
+          paths=[
+          'alfresco-ia-local-codigo-aberto-ocr-documentos',
+          'ia-manuais-engenharia-perguntas-respostas-alfresco',
+          'ocr-prontuarios-ia-local-separacao-paciente']
+          for slug in paths:
+              path=Path('blog')/slug/'index.html'
+              content=path.read_text(encoding='utf-8')
+              parser=Parser();parser.feed(content)
+              url='https://www.arquindex.com.br/blog/'+slug+'/'
+              assert parser.h1==1,(slug,'H1')
+              assert parser.canonical==[url],(slug,'canonical')
+              assert parser.jsonld,(slug,'schema missing')
+              for block in parser.jsonld: json.loads(block)
+              assert '<meta name="description"' in content,(slug,'description')
+              assert 'comercial@arquindex.com.br' in content,(slug,'contact')
+              assert 'revisão humana' in content.lower() or 'validação humana' in content.lower(),(slug,'human validation')
+              assert 'sem licença' in content.lower() or 'licença saas' in content.lower(),(slug,'licensing comparison')
+              print('PASS',slug)
+          PY
