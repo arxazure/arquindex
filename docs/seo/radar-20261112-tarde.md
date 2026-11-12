@@ -1,0 +1,8 @@
+# Radar 12/11/2026 tarde Brasília
+Lidos radar manhã blob193ff09fba21ca62ada59b220c774184c87d5e90 e trecho relatório08h07 libfile_a142483b43288191ab67dfedab95ae2b. Deduplicação parcial. Notícias09–12/11; menções05–12/11.
+OpenArch/ARQ006: reaberto anúncio10/11 https://www.hyland.com/en/company/newsroom/introducing-hyland-openarch. Busca por repositório não resolveu URL oficial; licença Apache2 apenas atribuída ao anúncio, conectores/versões não homologados. Preservar pauta da manhã sem outra peça.
+Destino candidato https://www.arquindex.com.br/gestao_documental_documentos.html reaberto; title Gestão Documental para Empresas em BH | Arquindex, H1 Gestão documental para empresas. Não editar title/descrição/H1 nesta pesquisa. Relatório outra rotina alerta repetição editorial: auditar origem e sobreposição antes de acrescentar bloco.
+ANPD/CONARQ/Arquivo Nacional/Microsoft/OCR/SharePoint/RAG/Alfresco/databooks pesquisados. Sem outra pauta nova selecionada. Fórum Inmetro11–12/11 não tratado como nova norma nem certificação.
+Menções: busca de marca, LinkedIn próprio aberto e identidade BH confirmada; nenhuma nova cobertura substantiva confirmada na amostra. Sem alerta.
+0 pautas novas, 0 peças novas, 0 publicações site/LinkedIn/Instagram/GBP/Bing e nenhum ID de post; briefings anteriores preparados, implantação não verificada.
+Próximas: resolver repositório oficial/licença/conectores OpenArch; auditar sobreposição da página de gestão antes de executar briefing; validar casos sintéticos e destino antes de divulgar.
