@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-05",
+  "timezone": "America/Sao_Paulo",
+  "production_origin": "HomeHost",
+  "publication_status": "prepared_not_published",
+  "publication_blocker": "HomeHost write validation is incomplete: no current isolated restore proof; cPanel publication returned HTTP 401 and the previous FTPS write test returned 530. Production writes are therefore withheld.",
+  "items": [
+    {
+      "title": "Backup e restauração no Alfresco Community: como testar RPO, RTO e integridade",
+      "intent": "Orientação técnica para planejar backup, restauração isolada, RPO, RTO e validação de integridade em Alfresco Community",
+      "planned_url": "https://www.arquindex.com.br/blog/backup-restauracao-alfresco-community-rpo-rto-teste/",
+      "file": "alfresco-backup-restauracao/index.html",
+      "main_content_words": 1913,
+      "sources": [
+        "https://docs.alfresco.com/content-services/community/admin/backup-restore/",
+        "https://docs.alfresco.com/content-services/7.2/admin/backup-restore/",
+        "https://www.postgresql.org/docs/current/backup.html",
+        "https://www.postgresql.org/docs/current/app-pgdump.html",
+        "https://csrc.nist.gov/pubs/sp/800/34/r1/final",
+        "https://docs.docker.com/engine/storage/volumes/"
+      ],
+      "state": "prepared_on_editorial_branch",
+      "production_verification": null
+    },
+    {
+      "title": "Controle de qualidade do OCR: amostragem, exceções e revisão humana",
+      "intent": "Orientação técnica para controlar qualidade de OCR com amostragem baseada em risco, fila de exceções e revisão humana",
+      "planned_url": "https://www.arquindex.com.br/blog/controle-qualidade-ocr-amostragem-excecoes-revisao-humana/",
+      "file": "ocr-qualidade-amostragem-excecoes/index.html",
+      "main_content_words": 2204,
+      "sources": [
+        "https://www.gov.br/conarq/pt-br/assuntos/noticias/decreto-no-10-278-2020-regulamenta-a-digitalizacao-de-documentos-publicos-ou-privados",
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/Diretrizes_digitalizacao_documentos_arquivisticos_2021.pdf",
+        "https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-50-de-06-de-maio-de-2022",
+        "https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html",
+        "https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html"
+      ],
+      "state": "prepared_on_editorial_branch",
+      "production_verification": null
+    }
+  ],
+  "blogger": {
+    "blog_id": "2545952967912533152",
+    "public_posts_observed": 36,
+    "historical_queue_public_matches": 0,
+    "state": "write_blocked_no_authorized_blogger_api_or_oauth_scope"
+  }
+}
