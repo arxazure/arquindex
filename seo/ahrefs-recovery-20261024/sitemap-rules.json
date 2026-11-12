@@ -1,0 +1,82 @@
+[
+  {
+    "url": "https://consultoria-ocr-vantagens.arquindex.com.br/sitemap.xml",
+    "original_sha256": "db4230fd6dbfd4951eed5874f2fb2ed0886958060298e3937dad260d3ec018e2",
+    "relative_locs": [
+      "/cidade.html",
+      "/custo.html",
+      "/empresas.html",
+      "/googleb9fa38c37f423597.html",
+      "/index.html",
+      "/o-que-e.html",
+      "/vantagens.html"
+    ],
+    "fix": "Resolve root-relative locs against this sitemap host; preserve remaining fields; verify all resulting targets before deploy",
+    "publication": "held_full_verified_backup_required"
+  },
+  {
+    "url": "https://empresas-adequacao-lgpd-paulo.arquindex.com.br/sitemap.xml",
+    "original_sha256": "1516da9ba3224a18f81979daa4d7b436748ac1794a52fce235fc9cd25f5afee4",
+    "relative_locs": [
+      "/artigo-principal.html",
+      "/auditoria.html",
+      "/como-escolher.html",
+      "/comparativo.html",
+      "/custo-beneficio.html",
+      "/diagnostico.html",
+      "/dpo-terceirizado.html",
+      "/faq.html",
+      "/googleb9fa38c37f423597.html",
+      "/guia-completo.html",
+      "/index.html",
+      "/vantagens.html"
+    ],
+    "fix": "Resolve root-relative locs against this sitemap host; preserve remaining fields; verify all resulting targets before deploy",
+    "publication": "held_full_verified_backup_required"
+  },
+  {
+    "url": "https://digitalizar-arquivos-corporativo.arquindex.com.br/sitemap.xml",
+    "original_sha256": "d6ab5a68ed2b06b26132ae0d4c816d2d3f1bbfb229dbb1c038bafb33bbbce83b",
+    "relative_locs": [
+      "/cidade.html",
+      "/custo.html",
+      "/empresas.html",
+      "/googleb9fa38c37f423597.html",
+      "/index.html",
+      "/o-que-e.html",
+      "/vantagens.html"
+    ],
+    "fix": "Resolve root-relative locs against this sitemap host; preserve remaining fields; verify all resulting targets before deploy",
+    "publication": "held_full_verified_backup_required"
+  },
+  {
+    "url": "https://digitalizar-arquivos-custo.arquindex.com.br/sitemap.xml",
+    "original_sha256": "d6ab5a68ed2b06b26132ae0d4c816d2d3f1bbfb229dbb1c038bafb33bbbce83b",
+    "relative_locs": [
+      "/cidade.html",
+      "/custo.html",
+      "/empresas.html",
+      "/googleb9fa38c37f423597.html",
+      "/index.html",
+      "/o-que-e.html",
+      "/vantagens.html"
+    ],
+    "fix": "Resolve root-relative locs against this sitemap host; preserve remaining fields; verify all resulting targets before deploy",
+    "publication": "held_full_verified_backup_required"
+  },
+  {
+    "url": "https://gestao-digitalizacao-preco.arquindex.com.br/sitemap.xml",
+    "original_sha256": "d6ab5a68ed2b06b26132ae0d4c816d2d3f1bbfb229dbb1c038bafb33bbbce83b",
+    "relative_locs": [
+      "/cidade.html",
+      "/custo.html",
+      "/empresas.html",
+      "/googleb9fa38c37f423597.html",
+      "/index.html",
+      "/o-que-e.html",
+      "/vantagens.html"
+    ],
+    "fix": "Resolve root-relative locs against this sitemap host; preserve remaining fields; verify all resulting targets before deploy",
+    "publication": "held_full_verified_backup_required"
+  }
+]
