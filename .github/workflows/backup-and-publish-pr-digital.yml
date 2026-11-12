@@ -1,0 +1,45 @@
+name: PR Digital - backup retomavel e publicacao
+on:
+  push:
+    branches: [feat/pr-digital-tres-campanhas-20261024]
+    paths:
+      - 'scripts/*pr-digital*'
+      - 'scripts/backup-homehost-resumable.py'
+      - 'tests/*pr-digital*'
+      - 'pr-digital/**'
+      - '.github/workflows/backup-and-publish-pr-digital.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-homehost-weekly-maintenance
+  cancel-in-progress: false
+jobs:
+  backup-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar pacote e testes antes do FTPS
+        run: |
+          python scripts/validate-pr-digital.py
+          python tests/test-pr-digital-validator.py
+          python tests/test-pr-digital-publish.py
+          python tests/test-pr-digital-backup.py
+          node tests/pr-digital-calculator.mjs
+          python -m py_compile scripts/backup-homehost-resumable.py scripts/publish-pr-digital.py
+      - name: Backup integral em partes verificadas com retomada
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          BACKUP_BUDGET_SECONDS: '18000'
+        run: python -u scripts/backup-homehost-resumable.py
+      - name: Publicar somente apos backup integral validado
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python -u scripts/publish-pr-digital.py
