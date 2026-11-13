@@ -1,0 +1,7 @@
+# Radar13/11/2026 manhã Brasília
+Lido radar12/11 noite blob3049d9c215d219de22a2471f63fe3e687990b9be; consultado trecho relatório12/11 20h09 libfile_0ea062cca75881919cc53bac5f5627f4. Notícias10–13/11, menções06–13/11. Deduplicação parcial.
+ARQ006/OpenArch: https://github.com/Hyland/OpenArch reconsultado; diretório https://github.com/Hyland/OpenArch/tree/main/license continua bloqueado. Licença não lida, anúncio10/11 apenas atribuído ao fornecedor. Pauta e peças12/11 preservadas; zero novas.
+https://www.arquindex.com.br/gestao_documental_documentos.html reaberta, permanece candidata a link/destino após auditoria de sobreposição; não editar title/description/H1. Relatório outra rotina indica repetição editorial e métricas bloqueadas; sem inferir resultados.
+ANPD/CONARQ/Arquivo Nacional/Microsoft/OCR/SharePoint/Hyland/Alfresco/RAG/databooks pesquisados. Retornos antigos ou sem mudança material confirmada; sem nova pauta selecionada. Data de crawl não é publicação. Menções: busca marca com janela sobreposta, perfil LinkedIn próprio reconsultado; nenhuma cobertura substantiva nova confirmada na amostra, sem alerta.
+0 novas pautas,0 novas peças,0 alterações site,0 publicações LinkedIn/Instagram/GBP/Bing; sem post IDs. Briefings preparados anteriormente, implantação/divulgação não confirmadas.
+Próximas: obter leitura da licença/conectores na origem; eliminar sobreposição na página candidata; validar testes sintéticos e URL final antes de encaminhar à rotina executora.
