@@ -1,0 +1,8 @@
+# Radar13/11/2026 noite Brasília
+Lido radar tarde blobfd1918d030d12241661d35ce14762ad107b6e706 e trecho relatório14h15 libfile_47b080afe9b881918a5a6c5ba03b129d. Notícias10–13/11; menções06–13/11. Deduplicação parcial.
+ANPD/CONARQ/Arquivo Nacional/Hyland/Alfresco/Microsoft/OCR/SharePoint/RAG/databooks pesquisados. Sem nova pauta útil selecionada.
+Histórico oficial https://community.hyland.com/kb/articles/1776-history-of-alfresco-versions aberto para verificar versão, não como notícia: versão26.2 datada31/07/2026. Documentação em /latest redirecionar23.2 não estabelece versão atual. Sem recomendação de migração não testada.
+https://www.arquindex.com.br/gestao_documental_documentos.html aberta; preservar briefingARQ006 preparado e aguardar auditoria sobreposição, sem novo artigo/peças. Licença/conectores OpenArch não homologados; não repetir tentativa idêntica bloqueada nesta rodada.
+Menções: busca marca, perfil próprio LinkedIn reconsultado; nenhuma nova cobertura substantiva confirmada na amostra, sem alerta.
+0 pautas novas,0 peças novas,0 alterações site,0 publicações site/LinkedIn/Instagram/GBP/Bing, sem IDs. Relatório outra rotina ainda prioriza remoção blocos repetitivos e validação hosts, sem assumir execução.
+Próximas: auditar sobreposição da pilar antes de executar briefing; conferir licença/conectores OpenArch por origem alternativa; validar testes sintéticos e destino final antes de divulgar.
