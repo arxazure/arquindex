@@ -1,0 +1,101 @@
+name: Auditoria pendencias prioritarias SEO 2026-11-13 noite
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/auditoria-pendencias-prioritarias-20261113-noite.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Instalar dependencias
+        run: pip install requests beautifulsoup4
+      - name: Auditar seis URLs prioritarias sem escrita
+        env:
+          URLS: 'https://indexacao.arquindex.com.br/|https://tabela-de-temporalidade-arquivos.arquindex.com.br/|https://www.arquindex.com.br/digitalizacao-com-ocr.html|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/vespasiano/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/ibirite/'
+        run: |
+          python - <<'PY'
+          import os, json, socket, ssl, requests
+          from urllib.parse import urlparse, urljoin
+          from bs4 import BeautifulSoup
+
+          out = []
+          for url in os.environ['URLS'].split('|'):
+              host = urlparse(url).hostname
+              d = {'url': url, 'host': host}
+              try:
+                  d['dns'] = sorted({x[4][0] for x in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)})
+              except Exception as e:
+                  d['dns_error'] = str(e)
+              try:
+                  with socket.create_connection((host, 443), timeout=8) as s:
+                      with ssl.create_default_context().wrap_socket(s, server_hostname=host) as t:
+                          d['tls_valid'] = True
+                          d['tls_version'] = t.version()
+                          d['tls_not_after'] = t.getpeercert().get('notAfter')
+              except Exception as e:
+                  d['tls_error'] = str(e)
+              try:
+                  r = requests.get(url, timeout=18, allow_redirects=True, headers={'User-Agent':'Arquindex-Audit/1.0'})
+                  d['page'] = {
+                      'status': r.status_code,
+                      'final_url': r.url,
+                      'redirects': [
+                          {'status': h.status_code, 'url': h.url, 'location': h.headers.get('location')}
+                          for h in r.history
+                      ],
+                      'content_type': r.headers.get('content-type'),
+                  }
+                  soup = BeautifulSoup(r.text, 'html.parser')
+                  canonical = soup.find('link', rel=lambda v: v and 'canonical' in v)
+                  desc = soup.find('meta', attrs={'name': lambda v: v and v.lower() == 'description'})
+                  viewport = soup.find('meta', attrs={'name': lambda v: v and v.lower() == 'viewport'})
+                  robots = soup.find('meta', attrs={'name': lambda v: v and v.lower() == 'robots'})
+                  text = soup.get_text(' ', strip=True)
+                  links = [urljoin(r.url, a.get('href')) for a in soup.find_all('a', href=True)]
+                  d['page'].update({
+                      'title': soup.title.get_text(' ', strip=True) if soup.title else None,
+                      'h1': [x.get_text(' ', strip=True) for x in soup.find_all('h1')],
+                      'canonical': canonical.get('href') if canonical else None,
+                      'description': desc.get('content') if desc else None,
+                      'viewport': viewport.get('content') if viewport else None,
+                      'meta_robots': robots.get('content') if robots else None,
+                      'words': len(text.split()),
+                      'forms': len(soup.find_all('form')),
+                      'whatsapp': any(('wa.me' in x or 'whatsapp' in x.lower()) for x in links),
+                      'logo': bool(soup.find('img', alt=lambda v: v and 'arquindex' in v.lower())),
+                      'nav': bool(soup.find('nav')),
+                      'internal_links': sum(1 for x in links if urlparse(x).hostname in {host, 'arquindex.com.br', 'www.arquindex.com.br'}),
+                      'index_of': text.lower().startswith('index of /'),
+                  })
+                  for key,path in [('robots','/robots.txt'),('sitemap','/sitemap.xml')]:
+                      check_url = urljoin(f'https://{host}/', path)
+                      try:
+                          q = requests.get(check_url, timeout=15, allow_redirects=True, headers={'User-Agent':'Arquindex-Audit/1.0'})
+                          d[key] = {'status':q.status_code,'final_url':q.url}
+                          if key == 'sitemap' and q.status_code == 200:
+                              d[key]['mentions_url'] = url in q.text or r.url in q.text
+                      except Exception as e:
+                          d[key] = {'error':str(e)}
+              except Exception as e:
+                  d['page_error'] = str(e)
+              out.append(d)
+              print(json.dumps(d, ensure_ascii=False))
+
+          with open('auditoria-pendencias-20261113-noite.json','w',encoding='utf-8') as f:
+              json.dump(out,f,ensure_ascii=False,indent=2)
+          assert len(out) == 6
+          PY
+      - name: Guardar evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-pendencias-20261113-noite
+          path: auditoria-pendencias-20261113-noite.json
