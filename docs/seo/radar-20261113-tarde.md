@@ -1,0 +1,7 @@
+# Radar13/11/2026 tarde Brasília
+Lido radar manhã blob5ad198c75dd6115b6b99516234c35c1c01202f41 e trecho relatório08h16 libfile_96e406cf1ee8819183aff91736ddc186. Notícias10–13/11; menções06–13/11. Deduplicação parcial.
+ANPD balanço https://www.gov.br/anpd/pt-br/assuntos/noticias/solenidade-de-balanco-de-seis-anos-da-anpd-e-marcada-por-encerramento-do-mandato-do-1o-diretor-presidente-da-instituicao aberto; publicação06/11, atualização12/11 não demonstra fato operacional novo; não republicar como notícia nova. CONARQ/Arquivo Nacional, Microsoft/SharePoint/OCR/RAG, Hyland/Alfresco e databooks pesquisados, sem pauta adicional selecionada.
+ARQ006/OpenArch: https://github.com/Hyland/OpenArch/tree/main/license revalidado, DisabledError. Resultado de busca do README menciona Apache2, mas arquivo licença não lido. Não repetir indefinidamente nem declarar homologação.
+https://www.arquindex.com.br/gestao_documental_documentos.html aberta; pilar candidata, sobreposição pendente, preservar title/description/H1. Briefings existentes preparados, implantação/divulgação não verificadas.
+Menções: https://www.cylex.com.br/belo-horizonte/digitaliza%C3%A7%C3%A3o.html aberto, diretório excluído. Nenhuma nova menção substantiva confirmada na amostra; sem alerta.
+0 novas pautas,0 novas peças,0 alterações site,0 publicações site/LinkedIn/Instagram/GBP/Bing; sem post IDs. Próximas: verificar licença/conectores por origem alternativa disponível; auditar sobreposição da pilar; validar testes sintéticos e URL final antes da rotina executora.
