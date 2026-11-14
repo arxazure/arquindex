@@ -1,0 +1,66 @@
+name: Validar mobile seis prioridades 2026-11-14 tarde
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/validar-mobile-prioridades-20261114-tarde.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Instalar Playwright
+        run: |
+          pip install playwright
+          python -m playwright install chromium
+      - name: Validar mobile e desktop
+        env:
+          URLS: 'https://decreto10278-educacao.arquindex.com.br/|https://digitalizar-lgpd-sp.arquindex.com.br/|https://gestao-arquivos-custo.arquindex.com.br/|https://ia.arquindex.com.br/custo.html|https://implantacao-arquivos-mg.arquindex.com.br/|https://incineracaodocumentos.arquindex.com.br/'
+        run: |
+          python - <<'PY'
+          import os,json
+          from playwright.sync_api import sync_playwright
+          out=[]
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True)
+              for url in os.environ['URLS'].split('|'):
+                  item={'url':url,'viewports':{}}
+                  for label,width,height in [('mobile',390,844),('desktop',1440,1000)]:
+                      page=browser.new_page(viewport={'width':width,'height':height})
+                      response=page.goto(url,wait_until='networkidle',timeout=45000)
+                      metrics=page.evaluate("""() => {
+                        const body=document.body, html=document.documentElement, text=body?body.innerText:'';
+                        return {
+                          title:document.title,
+                          h1:[...document.querySelectorAll('h1')].map(x=>x.innerText.trim()),
+                          charset:document.characterSet,
+                          scrollWidth:Math.max(body?.scrollWidth||0,html?.scrollWidth||0),
+                          clientWidth:html?.clientWidth||0,
+                          overflow:Math.max(body?.scrollWidth||0,html?.scrollWidth||0)>(html?.clientWidth||0)+1,
+                          mojibake:/Ã[§£¡©]|â[€“€™]/.test(text),
+                          whatsapp:!!document.querySelector('a[href*="wa.me"],a[href*="whatsapp"]'),
+                          forms:document.querySelectorAll('form').length,
+                          logo:!![...document.images].find(x=>/arquindex/i.test(x.alt||x.src)),
+                          nav:!!document.querySelector('nav')
+                        };
+                      }""")
+                      metrics['http_status']=response.status if response else None
+                      item['viewports'][label]=metrics; page.close()
+                  out.append(item); print(json.dumps(item,ensure_ascii=False))
+              browser.close()
+          with open('validacao-mobile-prioridades-20261114-tarde.json','w',encoding='utf-8') as f: json.dump(out,f,ensure_ascii=False,indent=2)
+          assert len(out)==6
+          assert all(v['http_status']==200 for x in out for v in x['viewports'].values())
+          PY
+      - name: Guardar evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validacao-mobile-prioridades-20261114-tarde
+          path: validacao-mobile-prioridades-20261114-tarde.json
