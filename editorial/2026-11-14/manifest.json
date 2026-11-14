@@ -1,0 +1,888 @@
+{
+  "date": "2026-11-14",
+  "timezone": "America/Sao_Paulo",
+  "production": {
+    "declared_origin": "HomeHost",
+    "repository_notice": "config/site-hosting.json e AGENTS.md em master",
+    "public_dns": {
+      "nameservers": [
+        "ns31.servidorwebsite.com",
+        "ns32.servidorwebsite.com"
+      ],
+      "a": [
+        "177.234.150.42"
+      ]
+    },
+    "public_tls": "HTTPS validado por curl sem ignorar certificado",
+    "write_authorized": false,
+    "block": "Raiz pública HomeHost e backup completo restaurável fora de public_html não comprovados nesta execução."
+  },
+  "source_control": {
+    "repository": "arxazure/arquindex",
+    "base_branch": "master",
+    "base_sha": "9c683bf8370b31730f11474267a70df0b42f2a4c",
+    "work_branch": "editorial/2-artigos-20261114",
+    "prior_pr_146": {
+      "state": "open",
+      "draft": true,
+      "mergeable": false,
+      "head_sha": "99c401132b793456f2b11e6c16d8007301c1de98"
+    }
+  },
+  "public_audit": {
+    "redirects": [
+      {
+        "url": "http://arquindex.com.br/",
+        "status": 301,
+        "location": "https://arquindex.com.br/"
+      },
+      {
+        "url": "https://arquindex.com.br/",
+        "status": 200,
+        "canonical": "https://www.arquindex.com.br/"
+      },
+      {
+        "url": "http://www.arquindex.com.br/",
+        "status": 301,
+        "location": "https://www.arquindex.com.br/"
+      },
+      {
+        "url": "https://www.arquindex.com.br/",
+        "status": 200,
+        "canonical": "https://www.arquindex.com.br/"
+      }
+    ],
+    "priority_pages": [
+      {
+        "url": "https://www.arquindex.com.br/",
+        "status": 200,
+        "ttfb_seconds": 5.7866,
+        "h1": 1,
+        "main": 1,
+        "jsonld": 2,
+        "noindex": false,
+        "tracking": [
+          "AW-17020939105",
+          "AW-17029507720"
+        ]
+      },
+      {
+        "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+        "status": 200,
+        "ttfb_seconds": 6.2281,
+        "h1": 1,
+        "main": 0,
+        "jsonld": 1,
+        "noindex": false,
+        "tracking": []
+      },
+      {
+        "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+        "status": 200,
+        "ttfb_seconds": 6.3681,
+        "h1": 1,
+        "main": 0,
+        "jsonld": 0,
+        "noindex": false,
+        "tracking": [],
+        "issue": "Título repete | Arquindex; schema ausente."
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao.html",
+        "status": 200,
+        "ttfb_seconds": 3.2662,
+        "h1": 1,
+        "main": 1,
+        "jsonld": 4,
+        "noindex": false,
+        "tracking": [
+          "AW-17020939105",
+          "AW-17029507720"
+        ]
+      },
+      {
+        "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+        "status": 200,
+        "ttfb_seconds": 3.0953,
+        "h1": 1,
+        "main": 1,
+        "jsonld": 3,
+        "noindex": false,
+        "tracking": [
+          "AW-17020939105",
+          "AW-17029507720"
+        ]
+      }
+    ],
+    "robots": {
+      "url": "https://www.arquindex.com.br/robots.txt",
+      "status": 200
+    },
+    "sitemap": {
+      "url": "https://www.arquindex.com.br/sitemap.xml",
+      "status": 200,
+      "children": 16,
+      "total_entries": 579
+    },
+    "sitemap_index": {
+      "url": "https://www.arquindex.com.br/sitemap-index.xml",
+      "status": 404,
+      "note": "Não é erro se robots e propriedades apontam para sitemap.xml."
+    },
+    "broken_assets": [
+      {
+        "url": "https://www.arquindex.com.br/arquindex-favicon.png",
+        "status": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/img/about.webp",
+        "status": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/assets/img/about.webp",
+        "status": 404
+      },
+      {
+        "url": "https://www.arquindex.com.br/css/IE-fix.css",
+        "status": 404
+      }
+    ]
+  },
+  "regional_campaign": {
+    "expected_intents": 72,
+    "http_200": 0,
+    "http_404": 72,
+    "intents": [
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/belo-horizonte/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "belo-horizonte",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/contagem/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "contagem",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/betim/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "betim",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/nova-lima/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "nova-lima",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/ribeirao-das-neves/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "ribeirao-das-neves",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/santa-luzia/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "santa-luzia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/sabara/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "sabara",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/venda-nova/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "venda-nova",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/brasilia/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "brasilia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/sao-paulo/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "sao-paulo",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/rio-de-janeiro/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "rio-de-janeiro",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/salvador/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "salvador",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/fortaleza/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "fortaleza",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/recife/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "recife",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/porto-alegre/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "porto-alegre",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/curitiba/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "curitiba",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/goiania/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "goiania",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/manaus/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "manaus",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/belem/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "belem",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/vitoria/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "vitoria",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/uberlandia/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "uberlandia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/juiz-de-fora/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "juiz-de-fora",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/montes-claros/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "montes-claros",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/ipatinga/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "ipatinga",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/belo-horizonte/empresa",
+        "service": "guarda-documental",
+        "city": "belo-horizonte",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/contagem/empresa",
+        "service": "guarda-documental",
+        "city": "contagem",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/betim/empresa",
+        "service": "guarda-documental",
+        "city": "betim",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/nova-lima/empresa",
+        "service": "guarda-documental",
+        "city": "nova-lima",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/ribeirao-das-neves/empresa",
+        "service": "guarda-documental",
+        "city": "ribeirao-das-neves",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/santa-luzia/empresa",
+        "service": "guarda-documental",
+        "city": "santa-luzia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/sabara/empresa",
+        "service": "guarda-documental",
+        "city": "sabara",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/venda-nova/empresa",
+        "service": "guarda-documental",
+        "city": "venda-nova",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/brasilia/empresa",
+        "service": "guarda-documental",
+        "city": "brasilia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/sao-paulo/empresa",
+        "service": "guarda-documental",
+        "city": "sao-paulo",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/rio-de-janeiro/empresa",
+        "service": "guarda-documental",
+        "city": "rio-de-janeiro",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/salvador/empresa",
+        "service": "guarda-documental",
+        "city": "salvador",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/fortaleza/empresa",
+        "service": "guarda-documental",
+        "city": "fortaleza",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/recife/empresa",
+        "service": "guarda-documental",
+        "city": "recife",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/porto-alegre/empresa",
+        "service": "guarda-documental",
+        "city": "porto-alegre",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/curitiba/empresa",
+        "service": "guarda-documental",
+        "city": "curitiba",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/goiania/empresa",
+        "service": "guarda-documental",
+        "city": "goiania",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/manaus/empresa",
+        "service": "guarda-documental",
+        "city": "manaus",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/belem/empresa",
+        "service": "guarda-documental",
+        "city": "belem",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/vitoria/empresa",
+        "service": "guarda-documental",
+        "city": "vitoria",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/uberlandia/empresa",
+        "service": "guarda-documental",
+        "city": "uberlandia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/juiz-de-fora/empresa",
+        "service": "guarda-documental",
+        "city": "juiz-de-fora",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/montes-claros/empresa",
+        "service": "guarda-documental",
+        "city": "montes-claros",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/ipatinga/empresa",
+        "service": "guarda-documental",
+        "city": "ipatinga",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/belo-horizonte/empresa",
+        "service": "consultoria-lgpd",
+        "city": "belo-horizonte",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/contagem/empresa",
+        "service": "consultoria-lgpd",
+        "city": "contagem",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/betim/empresa",
+        "service": "consultoria-lgpd",
+        "city": "betim",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/nova-lima/empresa",
+        "service": "consultoria-lgpd",
+        "city": "nova-lima",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/ribeirao-das-neves/empresa",
+        "service": "consultoria-lgpd",
+        "city": "ribeirao-das-neves",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/santa-luzia/empresa",
+        "service": "consultoria-lgpd",
+        "city": "santa-luzia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/sabara/empresa",
+        "service": "consultoria-lgpd",
+        "city": "sabara",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/venda-nova/empresa",
+        "service": "consultoria-lgpd",
+        "city": "venda-nova",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/brasilia/empresa",
+        "service": "consultoria-lgpd",
+        "city": "brasilia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/sao-paulo/empresa",
+        "service": "consultoria-lgpd",
+        "city": "sao-paulo",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/rio-de-janeiro/empresa",
+        "service": "consultoria-lgpd",
+        "city": "rio-de-janeiro",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/salvador/empresa",
+        "service": "consultoria-lgpd",
+        "city": "salvador",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/fortaleza/empresa",
+        "service": "consultoria-lgpd",
+        "city": "fortaleza",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/recife/empresa",
+        "service": "consultoria-lgpd",
+        "city": "recife",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/porto-alegre/empresa",
+        "service": "consultoria-lgpd",
+        "city": "porto-alegre",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/curitiba/empresa",
+        "service": "consultoria-lgpd",
+        "city": "curitiba",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/goiania/empresa",
+        "service": "consultoria-lgpd",
+        "city": "goiania",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/manaus/empresa",
+        "service": "consultoria-lgpd",
+        "city": "manaus",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/belem/empresa",
+        "service": "consultoria-lgpd",
+        "city": "belem",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/vitoria/empresa",
+        "service": "consultoria-lgpd",
+        "city": "vitoria",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/uberlandia/empresa",
+        "service": "consultoria-lgpd",
+        "city": "uberlandia",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/juiz-de-fora/empresa",
+        "service": "consultoria-lgpd",
+        "city": "juiz-de-fora",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/montes-claros/empresa",
+        "service": "consultoria-lgpd",
+        "city": "montes-claros",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/ipatinga/empresa",
+        "service": "consultoria-lgpd",
+        "city": "ipatinga",
+        "http_status": 404,
+        "state": "PLANEJADA",
+        "eligible_for_publication": false,
+        "note": "Não criada: evidência de demanda/GSC indisponível e risco de doorway/canibalização."
+      }
+    ]
+  },
+  "seo_pages": {
+    "daily_limit": 10,
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed": 0,
+    "reason": "EXISTING-FIRST: GSC sem propriedade ativada e as 72 rotas regionais retornam 404; não gerar doorway pages."
+  },
+  "articles": [
+    {
+      "title": "Plano de emergência para acervos físicos: água, fogo, pragas e cadeia de custódia",
+      "path": "editorial/2026-11-14/plano-emergencia-acervos-fisicos-agua-fogo-pragas-cadeia-custodia/index.html",
+      "main_words": 1935,
+      "state": "CRIADA_E_TESTADA_LOCALMENTE",
+      "public_url": "https://www.arquindex.com.br/blog/plano-emergencia-acervos-fisicos-agua-fogo-pragas-cadeia-custodia/",
+      "published": false
+    },
+    {
+      "title": "Alfresco WebDAV no Windows: limites, segurança e sincronização controlada",
+      "path": "editorial/2026-11-14/alfresco-webdav-windows-limites-seguranca-sincronizacao/index.html",
+      "main_words": 2024,
+      "state": "CRIADA_E_TESTADA_LOCALMENTE",
+      "public_url": "https://www.arquindex.com.br/blog/alfresco-webdav-windows-limites-seguranca-sincronizacao/",
+      "published": false
+    }
+  ],
+  "gsc": {
+    "read_site_list": true,
+    "property": "sc-domain:arquindex.com.br",
+    "permission": "siteOwner",
+    "activated": false,
+    "audits_attempted": 8,
+    "error_code": "INVALID_ARGUMENT",
+    "submissions": 0,
+    "action": "Selecionar/ativar a propriedade no GSC Wizard; a conexão não está expirada."
+  },
+  "indexnow": {
+    "submissions": 0,
+    "reason": "Nenhuma URL nova foi publicada e validada."
+  },
+  "cloudflare": {
+    "identity_read": true,
+    "zones_visible": 0,
+    "previous_zone_id_test": "HTTP 400 / code 1001 Invalid zone identifier",
+    "change_made": false,
+    "note": "Registro histórico não foi tratado como estado atual; DNS público aponta para nameservers HomeHost."
+  },
+  "railway": {
+    "project": "Arquindex Plataforma",
+    "environment": "production",
+    "staged_changes": null,
+    "web_latest_status": "REMOVED",
+    "last_failed_deployment": "84f59841",
+    "institutional_proof": false,
+    "change_made": false
+  },
+  "homehost": {
+    "ftps_write_attempted": false,
+    "cleanup_due": false,
+    "cleanup_note": "Sábado; módulo semanal é executado aos domingos.",
+    "backup_proven": false
+  },
+  "blogger": {
+    "public_feed_read": true,
+    "posts": 36,
+    "pending_titles_found": 0,
+    "write_connector": false,
+    "published": 0
+  },
+  "merchant_center": {
+    "status": "SEPARADO_NAO_EXECUTADO"
+  },
+  "changes": {
+    "github_files_prepared": 4,
+    "homehost": 0,
+    "dns": 0,
+    "railway": 0,
+    "gsc": 0,
+    "indexnow": 0,
+    "blogger": 0
+  }
+}
