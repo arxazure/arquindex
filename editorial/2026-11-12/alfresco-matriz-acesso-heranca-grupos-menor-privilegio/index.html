@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Matriz de acesso no Alfresco: grupos e herança | Arquindex</title>
+  <meta name="description" content="Manual para desenhar e testar permissões no Alfresco com grupos, papéis, herança, sites privados, menor privilégio, trilha de auditoria e revisão periódica.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/alfresco-matriz-acesso-heranca-grupos-menor-privilegio/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Matriz de acesso no Alfresco: grupos, herança e menor privilégio">
+  <meta property="og:description" content="Como transformar regras de negócio em permissões testáveis no ECM sem depender de concessões individuais e exceções invisíveis.">
+  <meta property="og:url" content="https://www.arquindex.com.br/blog/alfresco-matriz-acesso-heranca-grupos-menor-privilegio/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Matriz de acesso no Alfresco: grupos, herança e menor privilégio","description":"Manual técnico para modelar, testar e revisar permissões no Alfresco Content Services.","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/alfresco-matriz-acesso-heranca-grupos-menor-privilegio/"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"É melhor conceder acesso a usuários ou a grupos no Alfresco?","acceptedAnswer":{"@type":"Answer","text":"Grupos normalmente oferecem governança mais consistente, porque representam funções e permitem revisar membros sem editar documento por documento. Exceções individuais devem ser raras, justificadas e temporárias."}},{"@type":"Question","name":"Um site privado impede qualquer vazamento de conteúdo?","acceptedAnswer":{"@type":"Answer","text":"Não sozinho. É preciso revisar membros, permissões locais, compartilhamentos, integrações, sincronização, links e cópias exportadas. Privacidade do site é uma camada da arquitetura."}},{"@type":"Question","name":"Desabilitar herança sempre aumenta a segurança?","acceptedAnswer":{"@type":"Answer","text":"Não. A quebra de herança pode ser necessária para uma área restrita, mas aumenta a complexidade e o risco de permissões órfãs. Deve ser documentada e testada."}},{"@type":"Question","name":"Como provar que o menor privilégio funciona?","acceptedAnswer":{"@type":"Answer","text":"Use contas de teste por perfil, cenários positivos e negativos, consulta da matriz efetiva, registro de alterações, amostragem periódica e reconciliação entre grupos e responsáveis de negócio."}}]}</script>
+  <style>body{font-family:system-ui,sans-serif;line-height:1.7;color:#172033;margin:0}header,footer{background:#0b2545;color:#fff;padding:1rem}header a,footer a{color:#fff}main{max-width:980px;margin:auto;padding:2rem}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.12}h2{margin-top:2.2rem;color:#0b4f6c}h3{color:#176b87}.answer,.note{padding:1rem;border-left:5px solid #18a999;background:#eefaf8}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd4dd;padding:.65rem;text-align:left;vertical-align:top}th{background:#edf3f8}.cta{background:#0b4f6c;color:#fff;padding:1.4rem;margin-top:2rem}.cta a{color:#fff;font-weight:700}.meta{color:#52606d}.check li{margin:.45rem 0}details{margin:.7rem 0;padding:.7rem;border:1px solid #d7e0e8}</style>
+</head>
+<body>
+<header><a href="https://www.arquindex.com.br/"><strong>ARQUINDEX</strong></a> · <a href="https://www.arquindex.com.br/blog/">Artigos técnicos</a></header>
+<main><article>
+<p class="meta">Autoria institucional: Arquindex · Atualizado em 12 de novembro de 2026 · Conteúdo técnico informativo</p>
+<h1>Matriz de acesso no Alfresco: grupos, herança e menor privilégio</h1>
+<p class="answer"><strong>Resposta direta:</strong> uma matriz de acesso no Alfresco deve ligar funções de negócio a grupos, áreas do repositório, papéis, ações permitidas, responsáveis pela aprovação e prazo de revisão. O desenho começa com sites e bibliotecas coerentes, usa grupos no lugar de concessões individuais sempre que possível, aproveita herança para manter regras previsíveis e quebra essa herança somente em pontos documentados. A implantação termina com testes positivos e negativos: não basta provar que um usuário autorizado abre o arquivo; é preciso demonstrar que perfis não autorizados não localizam, visualizam, editam, compartilham, sincronizam ou exportam o conteúdo.</p>
+
+<h2>O problema que a matriz resolve</h2>
+<p>Em muitos repositórios, permissões crescem por urgência. Um colaborador pede acesso a uma pasta, um gestor compartilha um documento, uma integração cria uma conta técnica e uma equipe copia conteúdo para outro site. Meses depois, ninguém consegue explicar por que determinada pessoa enxerga um dossiê ou quem deveria remover a autorização. O sistema continua funcionando, mas a governança deixa de ser auditável.</p>
+<p>O Alfresco combina usuários, grupos, papéis de site, permissões sobre nós e herança. Essa flexibilidade é útil, porém pode produzir efeitos difíceis de prever quando regras locais, grupos aninhados e exceções individuais se acumulam. A matriz transforma a configuração em um modelo compreensível: quem precisa fazer o quê, em qual área, durante quanto tempo e sob responsabilidade de quem.</p>
+<p>Menor privilégio não significa impedir o trabalho. Significa conceder apenas as ações necessárias ao processo e retirar o acesso quando o vínculo termina. Um analista pode precisar criar e editar rascunhos, mas não excluir documentos aprovados. Um auditor pode consultar e exportar evidências, mas não alterar metadados. Um fornecedor pode colaborar em uma área temporária, sem navegar por contratos de outros projetos. Essas diferenças devem aparecer como cenários verificáveis, não como intenção abstrata.</p>
+
+<h2>Conceitos que precisam ser separados</h2>
+<table><thead><tr><th>Elemento</th><th>Função</th><th>Decisão de governança</th><th>Risco comum</th></tr></thead><tbody>
+<tr><td>Usuário</td><td>Identidade de uma pessoa ou conta técnica.</td><td>Origem, vínculo, autenticação, proprietário e desativação.</td><td>Conta compartilhada ou ativa após desligamento.</td></tr>
+<tr><td>Grupo</td><td>Conjunto de identidades que representa função, equipe ou responsabilidade.</td><td>Regra de entrada, aprovador, grupo aninhado e revisão.</td><td>Grupo “temporário” que vira permanente.</td></tr>
+<tr><td>Papel de site</td><td>Nível de participação em um site colaborativo, como consumidor, colaborador ou gerente, conforme a interface e versão.</td><td>Qual papel atende ao processo sem conceder administração excessiva.</td><td>Usar gerente para resolver qualquer bloqueio.</td></tr>
+<tr><td>Permissão local</td><td>Regra aplicada a pasta ou documento específico.</td><td>Justificativa, escopo, prazo e impacto sobre herança.</td><td>Exceção invisível que sobrevive à reorganização.</td></tr>
+<tr><td>Herança</td><td>Propagação de permissões da pasta pai para seus descendentes.</td><td>Onde manter padrão e onde isolar uma área.</td><td>Quebrar sem registrar a matriz efetiva resultante.</td></tr>
+<tr><td>Visibilidade do site</td><td>Define como o espaço é descoberto e como pessoas ingressam, conforme o tipo público, moderado ou privado disponível.</td><td>Descoberta, adesão, aprovação e público autorizado.</td><td>Confundir site privado com proteção de todas as cópias e integrações.</td></tr>
+</tbody></table>
+
+<h2>Princípios para um desenho sustentável</h2>
+<h3>Função antes da pessoa</h3>
+<p>Nomeie grupos pela responsabilidade, não pelo colaborador atual. “RH_Folha_Consulta” é revisável; “acesso_maria” depende de memória. O grupo deve ter descrição, dono de negócio, dono técnico e regra de pertencimento. Quando a função muda, a equipe ajusta membros sem editar centenas de objetos.</p>
+<h3>Herança como padrão</h3>
+<p>Herança reduz variações e facilita explicar o acesso. Organize a árvore para que documentos com regras semelhantes compartilhem um ancestral. Se várias pastas exigem exceções diferentes, o problema pode estar na arquitetura da informação, não na ausência de permissões suficientes.</p>
+<h3>Exceção pequena, temporária e rastreável</h3>
+<p>Quebrar herança pode ser apropriado para investigação, dados sensíveis, proposta restrita ou segregação contratual. A decisão deve identificar responsável, motivo, conteúdo abrangido, grupos resultantes e data de revisão. Uma regra local sem prazo tende a sobreviver ao contexto que a justificou.</p>
+<h3>Separação de funções</h3>
+<p>Evite que a mesma pessoa solicite, aprove e aplique acesso crítico sem revisão independente. Administração técnica não deve significar autorização irrestrita de negócio. Contas de serviço precisam de escopo próprio, credencial protegida, logs e proprietário responsável.</p>
+<h3>Negação testada, não presumida</h3>
+<p>A matriz precisa incluir o que cada perfil não pode fazer. Pesquisa, pré-visualização, download, edição, mudança de permissão, compartilhamento, exclusão, sincronização e API são caminhos distintos. Testar somente a interface principal deixa lacunas.</p>
+
+<h2>Como construir a matriz em nove etapas</h2>
+<h3>1. Delimite processos e conteúdo</h3>
+<p>Escolha um domínio, como contratos, dossiês de colaboradores, documentação técnica ou qualidade. Liste tipos documentais, estados do ciclo de vida, áreas responsáveis e eventos que mudam o acesso. Não comece pelo repositório inteiro se as regras ainda não estão maduras.</p>
+<h3>2. Identifique atores e funções</h3>
+<p>Mapeie criadores, revisores, aprovadores, consumidores, auditores, administradores e integrações. Registre unidade, localidade e relação externa quando isso alterar o acesso. Separe a pessoa da função que ela desempenha.</p>
+<h3>3. Modele sites e pastas</h3>
+<p>A estrutura deve refletir fronteiras de autorização compreensíveis. Um site por projeto pode funcionar quando equipes e ciclo de vida são independentes; uma biblioteca comum pode ser melhor quando a governança é central. Evite duplicar conteúdo apenas para contornar permissões.</p>
+<h3>4. Defina grupos e papéis</h3>
+<p>Crie grupos por função e associe-os aos papéis necessários. Documente grupos aninhados e fontes de sincronização, como diretório corporativo. Não use o grupo amplo “todos” para conteúdo restrito sem análise explícita.</p>
+<h3>5. Especifique ações</h3>
+<p>Para cada combinação, marque consultar, criar, editar, versionar, alterar metadados, excluir, mover, compartilhar, administrar e exportar. A palavra “acesso” é vaga demais. Considere estados: rascunho, em revisão, aprovado, obsoleto e bloqueado.</p>
+<h3>6. Planeje herança e exceções</h3>
+<p>Registre a permissão do ancestral e o efeito esperado nos descendentes. Para cada quebra, mantenha motivo, dono, grupos adicionados ou removidos e data de expiração. Gere uma lista de pontos sem herança para revisão periódica.</p>
+<h3>7. Implemente primeiro em homologação</h3>
+<p>Use dados sintéticos ou cópias minimizadas. Configure grupos, papéis e pastas de teste. Se houver sincronização de diretório, confirme o comportamento de entrada, remoção e grupos aninhados. Uma alteração global em produção sem ensaio pode bloquear operação ou expor conteúdo.</p>
+<h3>8. Execute testes positivos e negativos</h3>
+<p>Crie contas representativas para cada perfil. Confirme ações permitidas e negadas na interface, pesquisa, visualização, download, API e sincronização quando aplicável. Teste o usuário que pertence a mais de um grupo, porque permissões cumulativas podem ampliar o resultado.</p>
+<h3>9. Aprove, publique e revise</h3>
+<p>O dono do processo aprova a matriz, a equipe técnica registra a configuração e o controle interno agenda recertificação. Alterações posteriores devem ter solicitação, aprovação, execução e evidência. Métricas de revisão incluem grupos sem dono, usuários inativos, exceções expiradas e permissões individuais.</p>
+
+<h2>Modelo de matriz de requisitos</h2>
+<table><thead><tr><th>Área</th><th>Grupo</th><th>Papel/ações</th><th>Herança</th><th>Aprovador</th><th>Revisão</th></tr></thead><tbody>
+<tr><td>Contratos / Rascunhos</td><td>JUR_CONTRATOS_EDICAO</td><td>Criar, editar, versionar e alterar metadados; sem administrar permissões.</td><td>Herdada do projeto.</td><td>Gestor jurídico.</td><td>Trimestral.</td></tr>
+<tr><td>Contratos / Aprovados</td><td>JUR_CONTRATOS_CONSULTA</td><td>Consultar e baixar; sem edição ou exclusão.</td><td>Herdada da área aprovada.</td><td>Gestor jurídico.</td><td>Trimestral.</td></tr>
+<tr><td>Dossiês / Saúde ocupacional</td><td>RH_SAUDE_RESTRITO</td><td>Consultar e incluir documento; exportação sob procedimento.</td><td>Quebra documentada.</td><td>Responsável de saúde e privacidade.</td><td>Mensal.</td></tr>
+<tr><td>Auditoria</td><td>AUD_CONSULTA_TEMP</td><td>Consulta por período definido; sem alterar.</td><td>Herdada onde autorizado.</td><td>Controle interno.</td><td>Expiração automática.</td></tr>
+<tr><td>Integração</td><td>SVC_IMPORTACAO</td><td>Criar em pasta de entrada e ler retorno técnico.</td><td>Escopo dedicado.</td><td>Dono do sistema.</td><td>Semestral e após mudança.</td></tr>
+</tbody></table>
+
+<h2>Entradas e entregáveis do projeto</h2>
+<table><thead><tr><th>Entrada</th><th>Qualidade mínima</th><th>Entregável verificável</th></tr></thead><tbody>
+<tr><td>Organograma e funções</td><td>Responsabilidades reais, terceiros e contas técnicas.</td><td>Catálogo de atores e donos de grupos.</td></tr>
+<tr><td>Inventário documental</td><td>Tipos, sensibilidade, fase, local e processo.</td><td>Mapa de conteúdo para sites e pastas.</td></tr>
+<tr><td>Regras de negócio</td><td>Ações permitidas, proibidas, aprovação e prazo.</td><td>Matriz de acesso aprovada.</td></tr>
+<tr><td>Configuração Alfresco</td><td>Grupos, papéis, herança e exceções documentados.</td><td>Registro de implementação e versão.</td></tr>
+<tr><td>Contas de teste</td><td>Perfis simples e cumulativos, inclusive não autorizados.</td><td>Roteiro e evidências de testes positivos e negativos.</td></tr>
+<tr><td>Operação</td><td>Entrada, movimentação, desligamento e recertificação.</td><td>Procedimento, indicadores e calendário de revisão.</td></tr>
+</tbody></table>
+
+<h2>Testes que costumam revelar falhas</h2>
+<p><strong>Pesquisa global:</strong> um usuário pode não navegar até a pasta, mas encontrar o documento em resultados ou sugestões. <strong>Pré-visualização:</strong> a interface pode negar download e ainda renderizar conteúdo sensível. <strong>Versões:</strong> a versão atual está restrita, mas uma anterior permanece acessível. <strong>Movimentação:</strong> mover arquivo para pasta com regra diferente pode alterar a permissão efetiva. <strong>Grupo aninhado:</strong> o usuário recebe acesso por cadeia que o aprovador desconhece. <strong>Site público ou moderado:</strong> a descoberta e a adesão são mais amplas que o processo admite. <strong>Sincronização:</strong> cópias locais permanecem após remoção do acesso.</p>
+<p>Também teste administradores e contas técnicas. Privilégios administrativos podem ser necessários para operar a plataforma, mas o uso deve ser controlado, monitorado e separado da consulta cotidiana. Uma conta de integração não deve usar credenciais pessoais. Se a aplicação externa mantém cache ou cópia, a revogação no Alfresco não apaga automaticamente o que já foi transferido.</p>
+
+<h2>Riscos operacionais e controles</h2>
+<p><strong>Concessão individual em massa:</strong> substitua por grupos e migre exceções com aprovação. <strong>Gerentes demais:</strong> diferencie administração do site de colaboração. <strong>Herança quebrada sem inventário:</strong> gere relatório e recertifique cada ponto. <strong>Grupo sem proprietário:</strong> designe dono de negócio e técnico. <strong>Desligamento tardio:</strong> integre o processo de identidade e valide a desativação. <strong>Compartilhamento externo:</strong> estabeleça canal, prazo e restrição. <strong>Backup exposto:</strong> a matriz do ECM não protege automaticamente cópias de segurança e exportações. <strong>Auditoria incompleta:</strong> defina eventos, retenção e responsáveis por revisar alertas.</p>
+<p>A configuração deve coexistir com classificação, temporalidade e proteção de dados. Documentos sensíveis não ficam seguros apenas porque estão em uma pasta chamada “restrita”. A restrição precisa estar no sistema, nas integrações, nos procedimentos e na conduta dos usuários. Controles de autenticação, criptografia, backup e gestão de incidentes completam a arquitetura.</p>
+
+<h2>Exemplo hipotético de aplicação</h2>
+<p><strong>Exemplo hipotético, não case de cliente:</strong> uma indústria organiza documentação de fornecedores em Alfresco. Compras precisa criar pastas e consultar propostas; engenharia revisa desenhos; qualidade aprova certificados; o fornecedor envia arquivos apenas ao próprio contrato; auditoria recebe consulta temporária. A equipe cria grupos por função e um site privado por programa, com áreas de projeto. O fornecedor acessa uma zona de colaboração separada, e documentos aprovados são movidos para uma área somente leitura.</p>
+<p>Durante o teste, uma conta de fornecedor entra em dois projetos e consegue pesquisar um título do projeto vizinho por causa de um grupo amplo herdado. A configuração é corrigida antes da produção. A quebra de herança da pasta de não conformidades é registrada com dono e revisão mensal. A auditoria temporária expira automaticamente. O aceite inclui capturas de cenários permitidos e negados, lista de grupos, versão da matriz e aprovação dos responsáveis.</p>
+
+<h2>Checklist de implantação e revisão</h2>
+<ul class="check">
+<li>Cada grupo possui função clara, proprietário e regra de entrada e saída.</li>
+<li>Contas compartilhadas foram eliminadas ou formalmente justificadas.</li>
+<li>Papéis de gerente estão limitados a quem administra o espaço.</li>
+<li>Permissões individuais são raras, temporárias e visíveis no inventário.</li>
+<li>Pontos com herança desabilitada têm justificativa e data de revisão.</li>
+<li>Sites privados, moderados e públicos foram escolhidos conforme o caso de uso.</li>
+<li>Pesquisa, visualização, download, edição, exclusão, compartilhamento e API foram testados.</li>
+<li>Usuários com vários grupos foram incluídos nos cenários.</li>
+<li>Integrações, sincronização e cópias exportadas estão no escopo.</li>
+<li>Desligamento e mudança de função removem acessos dentro do prazo definido.</li>
+<li>Logs de alteração e revisão possuem retenção e responsável.</li>
+<li>A recertificação periódica gera pendências, responsáveis e evidência de conclusão.</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+<details><summary>É melhor conceder acesso a usuários ou a grupos?</summary><p>Grupos normalmente são preferíveis porque representam funções e reduzem manutenção. A concessão individual pode atender a uma exceção, mas deve ter motivo, aprovação, prazo e revisão.</p></details>
+<details><summary>Um site privado impede qualquer vazamento?</summary><p>Não. Ele controla descoberta e participação no espaço, mas é preciso revisar permissões locais, integrações, compartilhamentos, sincronização e cópias que saíram do repositório.</p></details>
+<details><summary>Desabilitar herança sempre aumenta a segurança?</summary><p>Não. A quebra pode isolar uma área, mas aumenta complexidade e risco de regra órfã. O melhor desenho usa herança onde as regras são comuns e exceções apenas onde a fronteira é real.</p></details>
+<details><summary>Como provar o menor privilégio?</summary><p>Combine matriz aprovada, contas de teste, cenários permitidos e negados, registro da configuração, trilha de alterações e recertificação periódica por responsáveis de negócio.</p></details>
+<details><summary>O administrador técnico deve ver todo o conteúdo?</summary><p>Privilégios administrativos podem permitir acesso amplo, mas o uso deve ser restrito, monitorado e separado das atividades comuns. A organização precisa definir controles compensatórios e responsabilidades.</p></details>
+
+<h2>Fontes oficiais consultadas</h2>
+<ul>
+<li>Hyland/Alfresco, <a href="https://docs.alfresco.com/content-services/7.2/">Alfresco Content Services 7.2 — documentação oficial</a>, seções de segurança, usuários e grupos, autorização, auditoria, sites, papéis e permissões; consultada em 12 de novembro de 2026.</li>
+<li>Hyland/Alfresco, <a href="https://docs.alfresco.com/digital-workspace/3.1/">Alfresco Digital Workspace 3.1</a>, documentação sobre bibliotecas públicas, moderadas e privadas e permissões por usuário ou grupo; consultada em 12 de novembro de 2026.</li>
+<li>Hyland/Alfresco, <a href="https://docs.alfresco.com/governance-services/latest/">Alfresco Governance Services</a>, documentação oficial sobre controle, classificação, permissões e ciclo de vida de registros; consultada em 12 de novembro de 2026.</li>
+<li>ANPD, <a href="https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-sobre-seguranca-da-informacao-para-agentes-de-tratamento-de-pequeno-porte">Guia orientativo sobre segurança da informação para agentes de tratamento de pequeno porte</a>, publicado em outubro de 2021 e com página atualizada em 23 de janeiro de 2025, consultado em 12 de novembro de 2026.</li>
+</ul>
+
+<h2>Conteúdos e serviços relacionados</h2>
+<p>Consulte os <a href="https://www.arquindex.com.br/blog/">artigos técnicos</a>, a página de <a href="https://www.arquindex.com.br/gestao-documental.html">gestão documental</a> e as orientações de <a href="https://www.arquindex.com.br/lgpd-consultoria.html">LGPD e governança de dados</a>.</p>
+
+<div class="cta"><h2>Precisa revisar permissões e estrutura documental no Alfresco?</h2><p>A Arquindex apoia diagnóstico, arquitetura de informação, matriz de acesso, grupos, metadados, testes de permissão e governança operacional. O escopo é definido após avaliar processos, perfis, integrações e requisitos de segurança.</p><p><a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · WhatsApp <a href="https://wa.me/5531973632725">(31) 97363-2725</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></div>
+</article></main>
+<footer>Arquindex · Gestão documental, digitalização, ECM, LGPD e Databooks</footer>
+</body>
+</html>
