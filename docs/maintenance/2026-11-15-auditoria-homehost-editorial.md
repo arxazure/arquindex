@@ -63,8 +63,8 @@ Não houve URL nova publicada. Portanto: GSC submetidas 0; IndexNow enviadas 0; 
 
 | Artigo | Palavras úteis | Estado | URL proposta |
 |---|---:|---|---|
-| Preservação digital com OAIS: como montar pacotes SIP, AIP e DIP com integridade verificável | 2.258 | CRIADA, não publicada | `/blog/preservacao-digital-oais-sip-aip-dip-integridade/` |
-| Backup e restauração do Alfresco: banco, contentstore e índice sem perder consistência | 2.326 | CRIADA, não publicada | `/blog/backup-restauracao-alfresco-banco-contentstore-indice/` |
+| Preservação digital com OAIS: como montar pacotes SIP, AIP e DIP com integridade verificável | 2.250 | CRIADA, não publicada | `/blog/preservacao-digital-oais-sip-aip-dip-integridade/` |
+| Backup e restauração do Alfresco: banco, contentstore e índice sem perder consistência | 2.314 | CRIADA, não publicada | `/blog/backup-restauracao-alfresco-banco-contentstore-indice/` |
 
 Os dois HTMLs incluem resposta direta, etapas, requisitos, segurança, qualidade, rastreabilidade, limites, exemplo hipotético, checklist, FAQ, fontes oficiais, autoria, data, links internos, CTA, canonical, Open Graph e schema coerente. Permanecem `noindex,follow` na fila editorial. Não foram adicionados ao sitemap nem chamados de publicados.
 
