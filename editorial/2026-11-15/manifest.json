@@ -1,0 +1,789 @@
+{
+  "date": "2026-11-15",
+  "timezone": "America/Sao_Paulo",
+  "production_decision": "HomeHost para arquindex.com.br; nenhuma escrita sem raiz pública, backup restaurável e FTPS TLS comprovados.",
+  "technical": {
+    "master_sha": "7383179a2806be15250e55906e97a1596c9d3ea1",
+    "homehost_write": false,
+    "cleanup": {
+      "inventoried_publicly": true,
+      "bytes_freed": 0,
+      "moved": 0,
+      "deleted": 0
+    },
+    "directory_listing": [
+      {
+        "url": "https://www.arquindex.com.br/assets/",
+        "http": 200,
+        "index_of": true
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/",
+        "http": 200,
+        "index_of": true
+      }
+    ]
+  },
+  "articles": [
+    {
+      "title": "Preservação digital com OAIS: como montar pacotes SIP, AIP e DIP com integridade verificável",
+      "path": "editorial/2026-11-15/preservacao-digital-oais-sip-aip-dip-integridade/index.html",
+      "proposed_url": "https://www.arquindex.com.br/blog/preservacao-digital-oais-sip-aip-dip-integridade/",
+      "main_words": 2258,
+      "state": "CRIADA",
+      "robots": "noindex,follow",
+      "publication_evidence": false
+    },
+    {
+      "title": "Backup e restauração do Alfresco: banco, contentstore e índice sem perder consistência",
+      "path": "editorial/2026-11-15/backup-restauracao-alfresco-banco-contentstore-indice/index.html",
+      "proposed_url": "https://www.arquindex.com.br/blog/backup-restauracao-alfresco-banco-contentstore-indice/",
+      "main_words": 2326,
+      "state": "CRIADA",
+      "robots": "noindex,follow",
+      "publication_evidence": false
+    }
+  ],
+  "seo_pages": {
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed_confirmed": 0,
+    "deficit_vs_limit": 10,
+    "regional_intents": [
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/belo-horizonte/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "belo-horizonte",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/betim/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "betim",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/brasilia/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "brasilia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/campinas/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "campinas",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/contagem/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "contagem",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/curitiba/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "curitiba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/fortaleza/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "fortaleza",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/goiania/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "goiania",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/juiz-de-fora/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "juiz-de-fora",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/nova-lima/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "nova-lima",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/porto-alegre/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "porto-alegre",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/recife/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "recife",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/ribeirao-das-neves/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "ribeirao-das-neves",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/rio-de-janeiro/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "rio-de-janeiro",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/salvador/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "salvador",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/santa-luzia/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "santa-luzia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/santo-andre/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "santo-andre",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/sao-paulo/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "sao-paulo",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/set-lagoas/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "set-lagoas",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/sorocaba/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "sorocaba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/uberaba/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "uberaba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/uberlandia/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "uberlandia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/vitoria/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "vitoria",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/volta-redonda/empresa",
+        "service": "digitalizacao-documentos",
+        "city": "volta-redonda",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/belo-horizonte/empresa",
+        "service": "guarda-documental",
+        "city": "belo-horizonte",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/betim/empresa",
+        "service": "guarda-documental",
+        "city": "betim",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/brasilia/empresa",
+        "service": "guarda-documental",
+        "city": "brasilia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/campinas/empresa",
+        "service": "guarda-documental",
+        "city": "campinas",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/contagem/empresa",
+        "service": "guarda-documental",
+        "city": "contagem",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/curitiba/empresa",
+        "service": "guarda-documental",
+        "city": "curitiba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/fortaleza/empresa",
+        "service": "guarda-documental",
+        "city": "fortaleza",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/goiania/empresa",
+        "service": "guarda-documental",
+        "city": "goiania",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/juiz-de-fora/empresa",
+        "service": "guarda-documental",
+        "city": "juiz-de-fora",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/nova-lima/empresa",
+        "service": "guarda-documental",
+        "city": "nova-lima",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/porto-alegre/empresa",
+        "service": "guarda-documental",
+        "city": "porto-alegre",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/recife/empresa",
+        "service": "guarda-documental",
+        "city": "recife",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/ribeirao-das-neves/empresa",
+        "service": "guarda-documental",
+        "city": "ribeirao-das-neves",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/rio-de-janeiro/empresa",
+        "service": "guarda-documental",
+        "city": "rio-de-janeiro",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/salvador/empresa",
+        "service": "guarda-documental",
+        "city": "salvador",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/santa-luzia/empresa",
+        "service": "guarda-documental",
+        "city": "santa-luzia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/santo-andre/empresa",
+        "service": "guarda-documental",
+        "city": "santo-andre",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/sao-paulo/empresa",
+        "service": "guarda-documental",
+        "city": "sao-paulo",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/set-lagoas/empresa",
+        "service": "guarda-documental",
+        "city": "set-lagoas",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/sorocaba/empresa",
+        "service": "guarda-documental",
+        "city": "sorocaba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/uberaba/empresa",
+        "service": "guarda-documental",
+        "city": "uberaba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/uberlandia/empresa",
+        "service": "guarda-documental",
+        "city": "uberlandia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/vitoria/empresa",
+        "service": "guarda-documental",
+        "city": "vitoria",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/guarda-documental/volta-redonda/empresa",
+        "service": "guarda-documental",
+        "city": "volta-redonda",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/belo-horizonte/empresa",
+        "service": "consultoria-lgpd",
+        "city": "belo-horizonte",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/betim/empresa",
+        "service": "consultoria-lgpd",
+        "city": "betim",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/brasilia/empresa",
+        "service": "consultoria-lgpd",
+        "city": "brasilia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/campinas/empresa",
+        "service": "consultoria-lgpd",
+        "city": "campinas",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/contagem/empresa",
+        "service": "consultoria-lgpd",
+        "city": "contagem",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/curitiba/empresa",
+        "service": "consultoria-lgpd",
+        "city": "curitiba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/fortaleza/empresa",
+        "service": "consultoria-lgpd",
+        "city": "fortaleza",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/goiania/empresa",
+        "service": "consultoria-lgpd",
+        "city": "goiania",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/juiz-de-fora/empresa",
+        "service": "consultoria-lgpd",
+        "city": "juiz-de-fora",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/nova-lima/empresa",
+        "service": "consultoria-lgpd",
+        "city": "nova-lima",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/porto-alegre/empresa",
+        "service": "consultoria-lgpd",
+        "city": "porto-alegre",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/recife/empresa",
+        "service": "consultoria-lgpd",
+        "city": "recife",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/ribeirao-das-neves/empresa",
+        "service": "consultoria-lgpd",
+        "city": "ribeirao-das-neves",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/rio-de-janeiro/empresa",
+        "service": "consultoria-lgpd",
+        "city": "rio-de-janeiro",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/salvador/empresa",
+        "service": "consultoria-lgpd",
+        "city": "salvador",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/santa-luzia/empresa",
+        "service": "consultoria-lgpd",
+        "city": "santa-luzia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/santo-andre/empresa",
+        "service": "consultoria-lgpd",
+        "city": "santo-andre",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/sao-paulo/empresa",
+        "service": "consultoria-lgpd",
+        "city": "sao-paulo",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/set-lagoas/empresa",
+        "service": "consultoria-lgpd",
+        "city": "set-lagoas",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/sorocaba/empresa",
+        "service": "consultoria-lgpd",
+        "city": "sorocaba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/uberaba/empresa",
+        "service": "consultoria-lgpd",
+        "city": "uberaba",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/uberlandia/empresa",
+        "service": "consultoria-lgpd",
+        "city": "uberlandia",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/vitoria/empresa",
+        "service": "consultoria-lgpd",
+        "city": "vitoria",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/volta-redonda/empresa",
+        "service": "consultoria-lgpd",
+        "city": "volta-redonda",
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "note": "Intenção reservada para pesquisa e diferenciação; não criada para evitar doorway/canibalização."
+      }
+    ],
+    "existing_regional_pages": [
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-belo-horizonte/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-betim/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-brasilia/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-contagem/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-curitiba/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-nova-lima/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-recife/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-rio-de-janeiro/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-santa-luzia/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/alfresco-cloud-ocr-ia-sao-paulo/",
+        "state": "PUBLICADA_EXISTENTE",
+        "public_http": 200,
+        "action": "PRESERVAR_E_REVISAR",
+        "note": "Página existente fora da meta de novas; revisar utilidade, intenção e links antes de expansão."
+      }
+    ]
+  },
+  "indexing": {
+    "gsc_submitted": [],
+    "indexnow_submitted": [],
+    "note": "Nenhum envio: não houve URL nova publicada e comprovada."
+  },
+  "blogger": {
+    "public_posts": 36,
+    "historic_queue_exact_title_matches": 0,
+    "published_today": 0,
+    "note": "Sem conector Blogger com OAuth de escrita; nenhum POST executado."
+  }
+}
+
