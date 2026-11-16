@@ -38,6 +38,25 @@
       "state": "READABLE_SITEMAP_INDEX",
       "child_sitemaps_observed": 16
     },
+    "priority_http": [
+      {"url": "https://www.arquindex.com.br/", "http": 200, "total_seconds": 4.902, "canonical": "https://www.arquindex.com.br/", "robots": "index,follow,max-image-preview:large", "h1_count": 2},
+      {"url": "https://www.arquindex.com.br/robots.txt", "http": 200, "total_seconds": 4.347},
+      {"url": "https://www.arquindex.com.br/sitemap.xml", "http": 200, "total_seconds": 3.401},
+      {"url": "https://www.arquindex.com.br/assets/", "http": 200, "total_seconds": 4.564},
+      {"url": "https://www.arquindex.com.br/seo/", "http": 200, "total_seconds": 3.417},
+      {"url": "https://www.arquindex.com.br/guarda_de_documentos.html", "http": 200, "total_seconds": 3.862, "canonical": "https://www.arquindex.com.br/guarda_de_documentos.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1},
+      {"url": "https://www.arquindex.com.br/digitalizacao.html", "http": 200, "total_seconds": 3.765, "canonical": "https://www.arquindex.com.br/digitalizacao.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1},
+      {"url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html", "http": 200, "total_seconds": 4.056, "canonical": "https://www.arquindex.com.br/digitalizacao-com-ocr.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1},
+      {"url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html", "http": 200, "total_seconds": 4.225, "canonical": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1}
+    ],
+    "homepage_resources": {
+      "declared": 19,
+      "checked_unique": 18,
+      "http_200": 18,
+      "slowest": "external LGPD widget",
+      "slowest_total_seconds": 10.164,
+      "note": "Tempo total observado pelo ambiente de auditoria, nao Core Web Vital. Nenhum recurso testado retornou 4xx/5xx."
+    },
     "railway": {
       "project": "Arquindex Plataforma",
       "service": "arquindex-web",
