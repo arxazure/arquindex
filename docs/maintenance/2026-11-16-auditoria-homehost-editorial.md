@@ -23,7 +23,13 @@ Foram preparados dois artigos técnicos originais com 2.262 e 2.252 palavras vis
 
 ### Leitura pública
 
-As páginas inicial, de guarda documental, de digitalização e de digitalização com OCR foram acessíveis pelo leitor público. `robots.txt` foi lido e permite o rastreamento geral, com bloqueios explícitos para áreas administrativas, APIs e diretórios internos. O `sitemap.xml` foi lido como índice com 16 sitemaps filhos.
+Todas as nove URLs prioritárias testadas retornaram HTTP 200, sem 3xx, 4xx ou 5xx no conjunto: homepage, `robots.txt`, `sitemap.xml`, `/assets/`, `/seo/`, guarda documental, digitalização, digitalização com OCR e gestão de colaboradores. Os tempos totais observados no ambiente da auditoria ficaram entre 3,40 s e 4,90 s; são tempos ponta a ponta do teste, não Core Web Vitals nem medição de usuário real.
+
+As cinco páginas HTML inspecionadas têm viewport responsivo, canonical autorreferente e `robots` com `index,follow,max-image-preview:large`. As quatro páginas internas têm um H1. A homepage tem dois elementos H1 — “Líder no Brasil em Digitalização de Documentos” e “Gestão de Arquivos Físicos e Digitais.” —, ponto de semântica a revisar sem alterar o layout por esta rotina.
+
+Foram verificados 18 recursos únicos da homepage entre CSS, JavaScript e imagens; todos retornaram 200. O widget externo de LGPD foi o mais lento, com aproximadamente 10,16 s no mesmo ambiente, acima dos demais recursos testados. Recomenda-se avaliar carregamento assíncrono/deferido e efeito de consentimento em ambiente controlado, sem remover o componente nem expor sua configuração pública.
+
+`robots.txt` permite o rastreamento geral, com bloqueios explícitos para áreas administrativas, APIs e diretórios internos. O `sitemap.xml` foi lido como índice com 16 sitemaps filhos.
 
 Duas listagens públicas permanecem expostas:
 
