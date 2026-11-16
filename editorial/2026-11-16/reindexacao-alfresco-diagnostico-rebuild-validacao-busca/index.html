@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reindexação no Alfresco: diagnóstico e rebuild seguro | Arquindex</title>
+<meta name="description" content="Guia para diagnosticar busca incompleta no Alfresco, planejar reindexação, proteger o repositório, executar rebuild controlado e validar resultados.">
+<meta name="robots" content="noindex,follow"><link rel="canonical" href="https://www.arquindex.com.br/blog/reindexacao-alfresco-diagnostico-rebuild-validacao-busca/">
+<meta property="og:type" content="article"><meta property="og:title" content="Reindexação no Alfresco: diagnóstico, rebuild seguro e validação da busca"><meta property="og:description" content="Como separar falha de consulta, permissão, transformação e índice antes de reconstruir a pesquisa."><meta property="og:url" content="https://www.arquindex.com.br/blog/reindexacao-alfresco-diagnostico-rebuild-validacao-busca/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Reindexação no Alfresco: diagnóstico, rebuild seguro e validação da busca","datePublished":"2026-11-16","dateModified":"2026-11-16","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/reindexacao-alfresco-diagnostico-rebuild-validacao-busca/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Reindexar o Alfresco apaga documentos?","acceptedAnswer":{"@type":"Answer","text":"A reconstrução suportada do índice atua sobre a camada de pesquisa derivada do repositório, mas uma execução incorreta pode causar indisponibilidade ou resultados incompletos. Backup restaurável, compatibilidade de versão e procedimento oficial são obrigatórios."}},{"@type":"Question","name":"Todo resultado ausente exige rebuild completo?","acceptedAnswer":{"@type":"Answer","text":"Não. O problema pode estar na consulta, permissão, metadado, transformação de conteúdo, fila de indexação, configuração ou sincronização. O rebuild completo deve ser a última opção após diagnóstico e teste."}},{"@type":"Question","name":"É possível manter o Alfresco disponível durante a reindexação?","acceptedAnswer":{"@type":"Answer","text":"Depende do produto de busca, versão, topologia, capacidade e procedimento adotado. Algumas arquiteturas permitem índice paralelo e troca controlada; outras exigem janela ou convivem com busca degradada."}},{"@type":"Question","name":"Como provar que a reindexação terminou corretamente?","acceptedAnswer":{"@type":"Answer","text":"Compare contagens e amostras definidas antes da mudança, execute consultas por metadado e texto completo com usuários de perfis diferentes, valide permissões, versões e conteúdos recentes e monitore filas, erros e latência."}}]}</script>
+<style>body{font-family:system-ui,sans-serif;line-height:1.7;color:#172033;margin:0}header,footer{background:#0b2545;color:#fff;padding:1rem}header a,footer a{color:#fff}main{max-width:980px;margin:auto;padding:2rem}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.12}h2{margin-top:2.2rem;color:#0b4f6c}h3{color:#176b87}.answer,.note{padding:1rem;border-left:5px solid #18a999;background:#eefaf8}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd4dd;padding:.65rem;text-align:left;vertical-align:top}th{background:#edf3f8}.cta{background:#0b4f6c;color:#fff;padding:1.4rem;margin-top:2rem}.cta a{color:#fff;font-weight:700}.meta{color:#52606d}.check li{margin:.45rem 0}details{margin:.7rem 0;padding:.7rem;border:1px solid #d7e0e8}code{background:#f2f5f7;padding:.1rem .25rem}</style>
+</head><body><header><a href="https://www.arquindex.com.br/"><strong>ARQUINDEX</strong></a> · <a href="https://www.arquindex.com.br/blog/">Artigos técnicos</a></header><main><article>
+<p class="meta">Autoria institucional: Arquindex · Atualizado em 16 de novembro de 2026 · Conteúdo técnico informativo</p>
+<h1>Reindexação no Alfresco: diagnóstico, rebuild seguro e validação da busca</h1>
+<p class="answer"><strong>Resposta direta:</strong> reindexar o Alfresco significa reconstruir ou reconciliar a camada de pesquisa a partir do repositório e de seus eventos, conforme o mecanismo de busca e a versão instalados. Isso não deve ser a primeira resposta para qualquer documento ausente. Antes, confirme se o conteúdo existe, se o usuário tem permissão, se a consulta está correta, se os metadados foram gravados, se a transformação de texto terminou e se filas e rastreadores estão atualizados. Se o rebuild for realmente necessário, documente o escopo, garanta backup restaurável de banco e contentstore, preserve configurações, valide compatibilidade, estime capacidade e tempo, escolha estratégia com rollback e execute primeiro fora da produção. A conclusão exige testes de busca, segurança e completude; “serviço iniciado” não é evidência suficiente.</p>
+
+<h2>Qual problema a reindexação resolve</h2>
+<p>O índice de pesquisa é uma representação derivada do conteúdo e dos metadados do repositório. Ele permite localizar documentos sem consultar diretamente cada registro e cada binário a cada busca. Se o índice perde eventos, fica incompatível, é corrompido ou não acompanha uma migração, o documento pode existir e ainda assim não aparecer em consultas esperadas.</p>
+<p>Rebuild pode ser adequado depois de corrupção confirmada, perda do armazenamento de busca, mudança de topologia suportada, migração planejada, atualização que exige reconstrução ou diferença comprovada entre repositório e índice. Também pode ser parte de um plano de recuperação em que o índice é tratado como reconstruível.</p>
+<p>Ele não corrige um modelo de metadados mal desenhado, uma propriedade nunca preenchida, permissão restritiva, consulta inválida, binário ilegível ou transformação que não extraiu texto. Reconstruir sem identificar a causa pode consumir horas ou dias e reproduzir o mesmo defeito.</p>
+
+<h2>Primeiro identifique produto, versão e topologia</h2>
+<p>“Solr do Alfresco” é uma descrição insuficiente para um runbook. Registre a versão do Alfresco Content Services, o componente de busca — por exemplo, Alfresco Search Services ou Search Enterprise —, a versão dele, Java, banco, contêineres, número de nós, armazenamento, balanceamento e personalizações. Os procedimentos e capacidades variam.</p>
+<p>A documentação oficial de Search Enterprise descreve uma arquitetura de indexação ao vivo e um fluxo separado de reindexação, com componentes próprios. Search Services tem administração, rastreamento e configuração diferentes. Comandos de uma geração não devem ser copiados para outra. Extensões, modelos customizados e comportamento multitenant também podem alterar a análise.</p>
+<p>Mapeie ainda onde ficam dados do índice, quem pode apagá-los, como o serviço recebe eventos e quais portas, certificados e credenciais usa. Um rebuild pode falhar não pela informação documental, mas por rede, volume, permissão de sistema ou falta de espaço.</p>
+
+<h2>Sintoma não é diagnóstico</h2>
+<table><thead><tr><th>Sintoma</th><th>Hipóteses</th><th>Verificação inicial</th></tr></thead><tbody>
+<tr><td>Documento não aparece por nome</td><td>Consulta, tokenização, metadado, atraso ou permissão.</td><td>Abrir por URL/ID, conferir propriedade e testar com usuário autorizado.</td></tr>
+<tr><td>Metadado funciona, texto completo não</td><td>Transformação ausente, tipo não suportado, senha, OCR ou fila.</td><td>Verificar extração de texto, logs e binário amostral.</td></tr>
+<tr><td>Usuário administrador encontra, usuário comum não</td><td>Permissões, autoridade, ACL ou cache.</td><td>Comparar permissões efetivas; não relaxar segurança para “corrigir”.</td></tr>
+<tr><td>Conteúdo recente demora</td><td>Fila, rastreador, indisponibilidade do serviço ou capacidade.</td><td>Medir atraso, backlog, erros e consumo de recursos.</td></tr>
+<tr><td>Grande período desapareceu</td><td>Interrupção de rastreamento, migração incompleta ou corrupção.</td><td>Comparar marcos temporais, contagens e logs no intervalo.</td></tr>
+<tr><td>Resultado duplicado ou obsoleto</td><td>Versão, alias, índice antigo, modelo ou consulta.</td><td>Inspecionar IDs, versões e índice consultado.</td></tr>
+</tbody></table>
+
+<h2>Triagem antes de qualquer rebuild</h2>
+<ol>
+<li><strong>Fixe um caso reproduzível.</strong> Registre usuário, consulta, horário, documento esperado e resultado observado.</li>
+<li><strong>Confirme o objeto no repositório.</strong> Verifique ID, caminho, versão, estado e binário sem depender da busca.</li>
+<li><strong>Confirme a autorização.</strong> Teste com perfis controlados e preserve a política de acesso.</li>
+<li><strong>Inspecione os metadados.</strong> Valide nome da propriedade, namespace, valor e tipo.</li>
+<li><strong>Teste consultas simples.</strong> Separe busca por ID, metadado exato, intervalo e texto completo.</li>
+<li><strong>Verifique transformação.</strong> Confirme se o conteúdo produziu texto pesquisável.</li>
+<li><strong>Leia métricas e logs.</strong> Procure falhas de comunicação, rastreamento, análise e armazenamento.</li>
+<li><strong>Compare amostras.</strong> Use documentos antigos, recentes, grandes, pequenos e com permissões distintas.</li>
+</ol>
+<p>Não use a conta administrativa como único teste. Uma busca que funciona apenas para administrador pode esconder falha de segurança ou de ACL. Da mesma forma, não desative controle de acesso para aumentar a contagem de resultados.</p>
+
+<h2>Entradas e critérios de decisão</h2>
+<table><thead><tr><th>Entrada</th><th>Conteúdo mínimo</th><th>Decisão que apoia</th></tr></thead><tbody>
+<tr><td>Inventário técnico</td><td>Versões, topologia, volumes, integrações, modelos e capacidade.</td><td>Escolher procedimento compatível.</td></tr>
+<tr><td>Linha de base</td><td>Contagens, consultas, latência, backlog, erros e amostras.</td><td>Provar melhora ou regressão.</td></tr>
+<tr><td>Análise de causa</td><td>Sintoma reproduzido e hipóteses testadas.</td><td>Evitar rebuild desnecessário.</td></tr>
+<tr><td>Plano de mudança</td><td>Passos, responsáveis, janela, comunicação e rollback.</td><td>Autorizar execução.</td></tr>
+<tr><td>Backup e recuperação</td><td>Banco, contentstore, configuração, segredos e estratégia do índice.</td><td>Proteger o repositório e recuperar o serviço.</td></tr>
+<tr><td>Plano de validação</td><td>Consultas esperadas, usuários, amostras, limites e aceite.</td><td>Declarar sucesso com evidência.</td></tr>
+</tbody></table>
+
+<h2>Backup e rollback antes de reindexar</h2>
+<p>O índice é derivado, mas o ambiente inteiro deve estar protegido. Confirme backup coordenado e restaurável do banco e do contentstore, além de configurações, modelos, certificados, extensões e segredos necessários. Registre o ponto de recuperação e faça teste de restauração em ambiente isolado conforme o risco.</p>
+<p>Rollback não significa apenas recolocar a pasta de índice. Pode envolver restaurar a configuração anterior, voltar um alias, reativar a instância de busca anterior ou reconstruir novamente. O plano deve indicar o gatilho: estouro da janela, taxa de erro, divergência de contagem, falha de permissão ou degradação de latência.</p>
+<p>Não apague o índice ativo como primeira etapa se a arquitetura permite manter uma cópia ou construir em paralelo. Quando a remoção é exigida pelo procedimento oficial, confirme alvo, ambiente e backup antes do comando. Um caminho incorreto ou variável vazia pode transformar uma manutenção em perda ampla.</p>
+
+<h2>Estratégias de reindexação</h2>
+<h3>Reconciliação seletiva</h3>
+<p>Quando poucos objetos ou um intervalo definido estão divergentes, um mecanismo suportado de reprocessamento seletivo tende a reduzir risco e duração. A seleção deve usar IDs ou critérios auditáveis. Listas improvisadas podem omitir dependências, versões ou ACLs.</p>
+<h3>Reconstrução paralela</h3>
+<p>Uma nova instância ou coleção pode ser alimentada enquanto a busca atual continua servindo usuários. Depois da validação, a troca ocorre de modo controlado. Essa estratégia reduz indisponibilidade, mas exige capacidade duplicada, sincronização dos eventos que chegam durante a carga e mecanismo seguro de corte.</p>
+<h3>Rebuild no índice existente</h3>
+<p>Algumas versões e ambientes usam reconstrução direta. Pode haver janela sem busca ou com resultados parciais. Comunique a degradação e impeça que usuários interpretem ausência temporária como inexistência do documento.</p>
+<h3>Restauração do índice</h3>
+<p>Restaurar uma cópia pode ser mais rápido, mas o ponto precisa ser compatível com o repositório e o método suportado. Um índice de outro momento pode apresentar resultados obsoletos. Planeje a atualização posterior e valide a convergência.</p>
+
+<h2>Execução controlada, sem receita universal</h2>
+<p>Os comandos exatos dependem do produto e da versão; por segurança, não existe uma sequência genérica apropriada a todos os ambientes. O runbook deve referenciar a documentação oficial da instalação real e ser ensaiado em cópia representativa. Ainda assim, o fluxo de governança é comum:</p>
+<ol>
+<li>aprovar mudança, janela, responsáveis e canal de comunicação;</li>
+<li>congelar a linha de base e guardar logs e métricas anteriores;</li>
+<li>validar backups, espaço, CPU, memória, I/O e conectividade;</li>
+<li>reduzir ou coordenar cargas concorrentes conforme o plano;</li>
+<li>criar o alvo de índice e iniciar o processo suportado;</li>
+<li>monitorar progresso, erros, filas, recursos e eventos novos;</li>
+<li>executar validações intermediárias sem declarar conclusão antecipada;</li>
+<li>fazer o corte ou reativar a busca somente após critérios mínimos;</li>
+<li>acompanhar estabilização, registrar evidências e encerrar a mudança.</li>
+</ol>
+
+<h2>Capacidade e tempo de execução</h2>
+<p>O prazo não deve ser estimado apenas pela quantidade de documentos. Tamanho dos binários, volume de versões, complexidade dos metadados, ACLs, extração de texto, OCR, limites de rede, desempenho do banco e armazenamento influenciam. Uma amostra pequena pode não representar documentos extensos ou formatos difíceis.</p>
+<p>Meça taxa inicial e projete com margem, mas observe que a velocidade pode variar ao longo da carga. Monitore espaço livre: índices temporários, segmentos e logs podem usar mais capacidade que o estado final. Defina alertas antes de atingir o limite e critérios para pausar com segurança.</p>
+<p>Em produção, o rebuild compete com uso normal. Aumentar paralelismo sem teste pode sobrecarregar banco, storage ou transformadores e prejudicar usuários. Ajustes precisam seguir documentação e limites medidos, não a busca de velocidade isolada.</p>
+
+<h2>Validação funcional e de segurança</h2>
+<p>Crie a matriz de testes antes da mudança. Inclua busca por identificador, nome, metadado exato, intervalo de data, tipo, caminho e texto completo. Use termos presentes no começo e no fim de documentos, conteúdos com e sem OCR, versões, pastas e objetos recentes. Registre o resultado esperado.</p>
+<p>Repita com usuários de perfis diferentes. O resultado correto não é o maior número possível, mas o conjunto autorizado. Confirme que documentos restritos não vazaram e que permissões herdadas e locais continuam aplicadas.</p>
+<p>Compare contagens por período, tipo e site, sabendo que contagens podem variar por escopo da consulta e estados do conteúdo. Investigue diferenças, não force igualdade sem compreender. A validação deve incluir criação, atualização, mudança de permissão e exclusão controladas após o corte para provar que a indexação ao vivo continua funcionando.</p>
+
+<h2>Observabilidade depois do rebuild</h2>
+<ul>
+<li>backlog e atraso entre transação e disponibilidade na busca;</li>
+<li>erros de rastreamento, análise, transformação e comunicação;</li>
+<li>CPU, memória, I/O, espaço e tempo de resposta;</li>
+<li>consultas sem resultado que antes tinham correspondência;</li>
+<li>taxa de documentos recentes indexados dentro do prazo esperado;</li>
+<li>falhas de autorização ou diferenças entre perfis;</li>
+<li>crescimento inesperado de segmentos, logs ou armazenamento.</li>
+</ul>
+<p>Guarde a linha de base e o período de estabilização. Um teste logo após o corte pode passar e o backlog reaparecer horas depois. Defina responsáveis e janela de observação antes de encerrar a mudança.</p>
+
+<h2>Rastreabilidade da manutenção</h2>
+<p>O registro deve conter motivo, incidentes relacionados, diagnóstico, versão dos componentes, aprovações, início e fim, comandos ou automações utilizadas, alterações de configuração, resultados, exceções e rollback. Não inclua segredos. Anexe logs relevantes com proteção adequada e hashes quando necessário.</p>
+<p>Se a causa raiz foi falta de capacidade, erro de configuração ou incompatibilidade, registre a correção permanente. Se permaneceu indeterminada, declare isso. Marcar “resolvido por reindexação” sem causa pode incentivar rebuilds repetidos e mascarar um problema operacional.</p>
+
+<h2>Exemplo hipotético de aplicação</h2>
+<p class="note"><strong>Exemplo hipotético — não é case nem cliente confirmado:</strong> uma equipe percebe que documentos importados durante duas noites aparecem por caminho direto, mas não por texto completo. O diagnóstico confirma permissões corretas e metadados disponíveis. Logs mostram falhas de transformação para um conjunto de PDFs protegidos e atraso de rastreamento no mesmo período.</p>
+<p>Em vez de apagar todo o índice, a equipe separa os documentos afetados, corrige a entrada incompatível segundo a política, reprocessa uma amostra e valida a extração. Depois, executa uma reconciliação suportada do intervalo, monitora o backlog e compara consultas com a linha de base. O rebuild completo fica reservado para o caso de a divergência persistir.</p>
+<p>O exemplo mostra por que “não encontrei” não significa automaticamente “índice corrompido”. A menor intervenção capaz de corrigir a causa tende a reduzir risco.</p>
+
+<h2>Riscos e limites</h2>
+<ul>
+<li>Procedimento de versão errada pode deixar o serviço indisponível ou incompatível.</li>
+<li>Falta de espaço pode interromper o rebuild e afetar outros componentes.</li>
+<li>Busca parcial durante a carga pode induzir decisões operacionais erradas.</li>
+<li>Validação apenas como administrador não prova segurança.</li>
+<li>Contagem de índice não substitui reconciliação do banco e do contentstore.</li>
+<li>Reindexação não recupera binário ausente nem metadado que nunca foi gravado.</li>
+<li>Customizações exigem testes próprios e podem não estar cobertas por documentação padrão.</li>
+</ul>
+
+<h2>Checklist de mudança</h2>
+<ul class="check">
+<li>Produto, versão, topologia e root cause foram documentados?</li>
+<li>O caso foi reproduzido e alternativas menores foram testadas?</li>
+<li>Banco, contentstore, configurações e segredos têm backup restaurável?</li>
+<li>Há capacidade, janela, comunicação e rollback definidos?</li>
+<li>O procedimento oficial corresponde à versão instalada?</li>
+<li>A matriz de busca e permissões foi registrada antes da mudança?</li>
+<li>Eventos criados durante a carga serão capturados?</li>
+<li>Há monitoramento e período de estabilização após o corte?</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+<details><summary><strong>Reindexar o Alfresco apaga documentos?</strong></summary><p>A reconstrução suportada do índice atua sobre a camada de pesquisa derivada do repositório, mas uma execução incorreta pode causar indisponibilidade ou resultados incompletos. Backup restaurável, compatibilidade de versão e procedimento oficial são obrigatórios.</p></details>
+<details><summary><strong>Todo resultado ausente exige rebuild completo?</strong></summary><p>Não. O problema pode estar na consulta, permissão, metadado, transformação de conteúdo, fila de indexação, configuração ou sincronização. O rebuild completo deve ser a última opção após diagnóstico e teste.</p></details>
+<details><summary><strong>É possível manter o Alfresco disponível durante a reindexação?</strong></summary><p>Depende do produto de busca, versão, topologia, capacidade e procedimento adotado. Algumas arquiteturas permitem índice paralelo e troca controlada; outras exigem janela ou convivem com busca degradada.</p></details>
+<details><summary><strong>Como provar que a reindexação terminou corretamente?</strong></summary><p>Compare contagens e amostras definidas antes da mudança, execute consultas por metadado e texto completo com usuários de perfis diferentes, valide permissões, versões e conteúdos recentes e monitore filas, erros e latência.</p></details>
+
+<h2>Fontes oficiais consultadas</h2>
+<ul>
+<li>Hyland / Alfresco Documentation. <a href="https://docs.alfresco.com/search-enterprise/4.0/">Alfresco Search Enterprise 4.0</a>. Documentação de arquitetura, indexação ao vivo e reindexação; consultada em 16/11/2026.</li>
+<li>Hyland / Alfresco Documentation. <a href="https://docs.alfresco.com/search-services/1.3/">Alfresco Search Services 1.3</a>. Documentação de instalação, configuração e administração; consultada em 16/11/2026.</li>
+<li>ISO. <a href="https://www.iso.org/standard/62542.html">ISO 15489-1:2016 — Records management — Concepts and principles</a>. Página consultada em 16/11/2026; norma confirmada em 2021.</li>
+<li>CONARQ. <a href="https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-50-de-06-de-maio-de-2022">Resolução nº 50, de 6 de maio de 2022 — e-ARQ Brasil</a>. Consultada em 16/11/2026.</li>
+</ul>
+
+<section class="cta"><h2>Planeje a busca e a governança do Alfresco</h2><p>A Arquindex apoia diagnóstico documental, arquitetura, implantação e operação de Alfresco ECM, com definição de metadados, permissões, testes e rastreabilidade.</p><p><a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · WhatsApp <a href="https://wa.me/5531973632725">(31) 97363-2725</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></section>
+</article></main><footer>Arquindex · Gestão documental, digitalização e ECM · #Alfresco #ECM #BuscaCorporativa #GestãoDocumental #Rastreabilidade</footer></body></html>
