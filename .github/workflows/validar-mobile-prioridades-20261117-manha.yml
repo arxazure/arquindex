@@ -21,7 +21,7 @@ jobs:
           python -m playwright install chromium
       - name: Validar mobile e desktop
         env:
-          URLS: 'https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/porto-velho/|https://www.arquindex.com.br/seo-regional/guarda-documentos-digitalizacao/vespasiano/|https://www.arquindex.com.br/seo-regional/digitalizacao-documentos-ocr/ibirite/|https://www.arquindex.com.br/seo-regional/ged-digitalizacao-documentos/ribeirao-das-neves/|https://www.arquindex.com.br/seo-regional/gestao-documental-ocr/lagoa-santa/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/belem/'
+          URLS: 'https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/porto-velho/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/vespasiano/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/ibirite/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/ribeirao-das-neves/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/lagoa-santa/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/belem/'
         run: |
           python - <<'PY'
           import os,json
