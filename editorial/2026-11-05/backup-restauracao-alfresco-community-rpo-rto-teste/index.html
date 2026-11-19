@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Backup e restauração no Alfresco Community: guia de teste | Arquindex</title>
+  <meta name="description" content="Manual prático para planejar, executar e testar backup e restauração do Alfresco Community com banco, contentstore, configurações, índices, RPO, RTO e evidências.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/backup-restauracao-alfresco-community-rpo-rto-teste/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Backup e restauração no Alfresco Community: como testar RPO, RTO e integridade","description":"Guia operacional para proteger e recuperar um repositório Alfresco Community.","datePublished":"2026-11-05","dateModified":"2026-11-05","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/backup-restauracao-alfresco-community-rpo-rto-teste/"}</script>
+  <style>body{font-family:system-ui,sans-serif;line-height:1.65;color:#172033;margin:0}header,footer{background:#0b2545;color:#fff;padding:1rem}header a,footer a{color:#fff}main{max-width:980px;margin:auto;padding:2rem}h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1}h2{margin-top:2.2rem;color:#0b4f6c}h3{color:#176b87}.answer,.note{padding:1rem;border-left:5px solid #18a999;background:#eefaf8}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd4dd;padding:.65rem;text-align:left;vertical-align:top}th{background:#edf3f8}.cta{background:#0b4f6c;color:#fff;padding:1.4rem;margin-top:2rem}.cta a{color:#fff;font-weight:700}.meta{color:#52606d}.check li{margin:.45rem 0}details{margin:.7rem 0;padding:.7rem;border:1px solid #d7e0e8}</style>
+</head>
+<body>
+<header><a href="https://www.arquindex.com.br/"><strong>ARQUINDEX</strong></a> · <a href="https://www.arquindex.com.br/blog/">Artigos técnicos</a></header>
+<main>
+<article>
+<p class="meta">Autoria institucional: Arquindex · 5 de novembro de 2026 · Conteúdo técnico informativo · Revisão humana necessária antes da implantação</p>
+<h1>Backup e restauração no Alfresco Community: como testar RPO, RTO e integridade</h1>
+<p class="answer"><strong>Resposta direta:</strong> um backup confiável do Alfresco Community precisa proteger, de forma coordenada, o banco de dados, o conteúdo binário armazenado no contentstore, as configurações e extensões necessárias para reconstruir o ambiente e, conforme a arquitetura, os segredos, certificados e manifestos de implantação. Copiar apenas a pasta de documentos ou apenas o banco não basta. A comprovação vem de uma restauração isolada: subir uma instância limpa, recuperar os componentes compatíveis, reindexar quando necessário, abrir uma amostra de documentos, conferir metadados, versões, permissões, pesquisa, auditoria e registrar o tempo e a perda máxima observada.</p>
+
+<h2>Por que o teste de restauração é parte do backup</h2>
+<p>Em um ECM, os arquivos não vivem sozinhos. O banco relaciona cada conteúdo a um nó, tipo, aspecto, versão, proprietário, caminho lógico, permissão, associação e metadado. O contentstore mantém os binários; o índice de pesquisa permite encontrá-los; as configurações definem autenticação, transformações, modelos documentais e integrações. Se esses elementos forem copiados em momentos incompatíveis, a restauração pode produzir referências sem conteúdo ou binários sem referência. Um arquivo ZIP criado com sucesso é apenas uma cópia candidata, não uma recuperação comprovada.</p>
+<p>A documentação do Alfresco organiza administração de backup e restauração justamente porque o repositório é composto por serviços relacionados. A documentação atual do PostgreSQL também separa dump SQL, cópia em nível de sistema de arquivos e arquivamento contínuo, cada qual com pressupostos próprios. O projeto precisa escolher uma técnica compatível com o tamanho, a janela de manutenção, a versão do banco e o objetivo de recuperação, sem transformar um exemplo de comando em política universal.</p>
+<p>O teste reduz quatro incertezas: se todas as partes foram incluídas; se as credenciais e chaves necessárias continuam disponíveis; se a sequência de restauração é conhecida; e se o tempo real atende ao negócio. Ele ainda revela dependências esquecidas, como um módulo AMP/JAR, um modelo de conteúdo, uma extensão de autenticação, um certificado ou um arquivo de composição de contêineres que existia apenas no servidor antigo.</p>
+
+<h2>RPO e RTO em linguagem operacional</h2>
+<p><strong>RPO</strong> é o ponto de recuperação: quanto dado recente a organização admite reconstruir ou perder depois de uma falha. Se o backup ocorre uma vez por dia e não há mecanismo complementar, a perda potencial pode se aproximar de 24 horas. <strong>RTO</strong> é o tempo para restabelecer o serviço em condição aceita. Ele inclui detectar a falha, decidir pela recuperação, preparar infraestrutura, restaurar, validar e liberar usuários. Baixar um arquivo em dez minutos não significa RTO de dez minutos.</p>
+<p>Os valores não devem ser copiados de outra empresa. Um repositório usado para consulta histórica pode tolerar recuperação mais lenta; um fluxo de aprovação de engenharia ou RH pode exigir metas menores. Defina também o nível de serviço restaurado: acesso somente leitura, pesquisa básica ou todas as integrações. Essa distinção evita declarar recuperação quando apenas a tela de login abriu.</p>
+<table><thead><tr><th>Decisão</th><th>Pergunta verificável</th><th>Evidência</th></tr></thead><tbody>
+<tr><td>RPO</td><td>Até qual transação o ambiente restaurado precisa chegar?</td><td>Horário do último backup consistente, logs ou WAL quando aplicável e amostra de documentos recentes.</td></tr>
+<tr><td>RTO</td><td>Em quanto tempo a operação mínima deve voltar?</td><td>Linha do tempo do exercício, com início, marcos, validação e liberação.</td></tr>
+<tr><td>Escopo</td><td>Quais funções precisam estar disponíveis?</td><td>Roteiro de testes de login, navegação, download, pesquisa, versão e permissão.</td></tr>
+<tr><td>Retenção</td><td>Quantos pontos de recuperação permanecem protegidos?</td><td>Inventário de cópias, política de expiração e bloqueio contra exclusão indevida.</td></tr>
+<tr><td>Responsabilidade</td><td>Quem inicia, executa, valida e aprova?</td><td>Matriz de papéis e contatos de contingência.</td></tr>
+</tbody></table>
+
+<h2>O que incluir no conjunto restaurável</h2>
+<h3>Banco de dados</h3>
+<p>O banco contém a estrutura lógica do repositório. Registre produto, versão, extensões, codificação, fuso e método. Um dump lógico pode favorecer portabilidade e inspeção, enquanto uma estratégia física ou contínua pode atender volumes e pontos de recuperação mais rigorosos. A própria documentação do PostgreSQL alerta que as abordagens têm vantagens e limitações. Use ferramentas da versão compatível, capture avisos e teste o retorno com uma conta e um banco isolados.</p>
+<h3>Contentstore e conteúdo excluído</h3>
+<p>O contentstore guarda o conteúdo binário. A cópia precisa preservar integralmente sua árvore, atributos e volume. Se a política incluir recuperação de itens excluídos ou retenções específicas, avalie também a área correspondente. Não conclua que uma contagem igual de arquivos prova consistência: gere inventário, tamanhos e hashes por parte ou por amostra representativa e compare com o banco depois da restauração.</p>
+<h3>Configurações, extensões e modelo documental</h3>
+<p>Inclua propriedades de configuração, arquivos de implantação, módulos, transformadores personalizados, modelos XML, scripts, templates, certificados públicos e documentação da origem dos segredos. Segredos não devem ser gravados em repositório público nem no pacote sem proteção adequada. O objetivo é saber como recuperá-los pelo cofre autorizado e como rotacioná-los se a falha tiver origem em incidente de segurança.</p>
+<h3>Índices de pesquisa</h3>
+<p>Os índices podem ser copiados ou reconstruídos, conforme a versão e a arquitetura. A decisão precisa considerar tempo, espaço e consistência. Se o plano prevê reconstrução, o RTO deve incluir o período até a pesquisa atender ao critério definido. A validação não pode se limitar ao acesso direto por URL: busque por metadado, texto completo, tipo e restrição de acesso.</p>
+<h3>Infraestrutura e integrações</h3>
+<p>Contêineres não eliminam a necessidade de backup dos volumes persistentes. Registre imagens, versões, portas, dependências, filas, proxy, DNS interno e conexões com diretório, e-mail, OCR, antivírus ou sistemas corporativos. Uma integração pode permanecer desativada no exercício, mas essa escolha deve estar explícita e o procedimento de reativação precisa ser conhecido.</p>
+
+<h2>Procedimento seguro em doze etapas</h2>
+<ol>
+<li><strong>Inventarie a arquitetura.</strong> Desenhe repositório, banco, contentstore, pesquisa, transformação, autenticação, proxy, volumes e integrações.</li>
+<li><strong>Classifique criticidade.</strong> Relacione processos dependentes, horários de pico, documentos críticos e exigências contratuais.</li>
+<li><strong>Defina RPO e RTO.</strong> Faça a área de negócio aprovar metas realistas e condições mínimas de retorno.</li>
+<li><strong>Escolha a consistência.</strong> Determine se haverá parada controlada, snapshot coordenado ou mecanismo de backup online suportado.</li>
+<li><strong>Proteja o banco.</strong> Execute a técnica escolhida, retenha logs e trate qualquer aviso como pendência.</li>
+<li><strong>Proteja o contentstore.</strong> Copie sem alterar a origem e gere inventário verificável.</li>
+<li><strong>Capture configuração.</strong> Versione arquivos não secretos e registre como recuperar segredos, certificados e imagens.</li>
+<li><strong>Isole a cópia.</strong> Armazene fora da área publicada e, quando aplicável, em conta ou credencial separada da produção.</li>
+<li><strong>Verifique a cópia.</strong> Confirme tamanho, hash, legibilidade dos arquivos e abrangência do manifesto.</li>
+<li><strong>Restaure em ambiente limpo.</strong> Não use a produção nem sobrescreva o servidor original durante o ensaio.</li>
+<li><strong>Execute testes funcionais.</strong> Confira conteúdo, metadados, versões, ACLs, pesquisa, auditoria e integrações selecionadas.</li>
+<li><strong>Registre e corrija.</strong> Meça tempos, lacunas, ações manuais e atualize o runbook antes do próximo exercício.</li>
+</ol>
+
+<h2>Como executar o ensaio sem contaminar a produção</h2>
+<p>Crie rede, nomes e credenciais de teste distintos. Bloqueie saída de e-mail e webhooks para evitar notificações reais. Se houver integração com LDAP ou SSO, use ambiente de homologação ou contas controladas. A restauração não deve registrar-se automaticamente em serviços externos nem processar filas antigas como se fossem novas.</p>
+<p>Suba primeiro os componentes de persistência compatíveis, restaure o banco e o conteúdo conforme a sequência documentada, depois inicie repositório e pesquisa. Registre versões reais, não apenas o rótulo “latest”. Se o ambiente restaurado exigir atualização de esquema, interrompa e revise: exercício de recuperação não deve se converter em upgrade improvisado.</p>
+<p>Escolha uma amostra de aceite antes do desastre: documentos pequenos e grandes, versões, tipos customizados, nomes com acentos, conteúdo restrito, itens de diferentes datas e um conjunto recente próximo do RPO. Inclua testes negativos: usuário sem permissão não deve abrir o documento; conteúdo excluído ou superado não deve reaparecer no local errado.</p>
+
+<h2>Matriz de validação da restauração</h2>
+<table><thead><tr><th>Controle</th><th>Teste</th><th>Falha que revela</th></tr></thead><tbody>
+<tr><td>Identidade</td><td>Comparar identificador, nome, tipo e caminho lógico.</td><td>Nó ausente ou associação incorreta.</td></tr>
+<tr><td>Integridade</td><td>Abrir o binário e comparar hash quando previsto.</td><td>Conteúdo truncado, trocado ou indisponível.</td></tr>
+<tr><td>Metadados</td><td>Conferir campos obrigatórios e aspectos.</td><td>Modelo ausente ou restauração incompleta.</td></tr>
+<tr><td>Versões</td><td>Abrir histórico e versão atual.</td><td>Perda de sequência ou estado incorreto.</td></tr>
+<tr><td>Permissões</td><td>Testar usuário autorizado e não autorizado.</td><td>Exposição indevida ou bloqueio excessivo.</td></tr>
+<tr><td>Pesquisa</td><td>Pesquisar por nome, metadado e texto.</td><td>Índice ausente, atrasado ou configuração divergente.</td></tr>
+<tr><td>Auditoria</td><td>Consultar eventos e registrar o exercício.</td><td>Trilha insuficiente para investigação.</td></tr>
+<tr><td>RPO</td><td>Localizar documentos próximos ao ponto esperado.</td><td>Perda maior do que a aprovada.</td></tr>
+<tr><td>RTO</td><td>Medir até o aceite operacional.</td><td>Procedimento ou infraestrutura incompatível com a meta.</td></tr>
+</tbody></table>
+
+<h2>Riscos e limites</h2>
+<ul>
+<li>Snapshot de volume sem coordenação com o banco pode registrar estados incompatíveis.</li>
+<li>Backup acessível com a mesma credencial da produção pode ser apagado pelo mesmo incidente.</li>
+<li>Cópia criptografada sem chave recuperável equivale a dado indisponível.</li>
+<li>Restauração em versão diferente pode introduzir migração não planejada.</li>
+<li>Guardar todas as cópias indefinidamente aumenta custo e exposição; retenção deve ser definida.</li>
+<li>Teste somente da interface não prova integridade do conjunto.</li>
+<li>Índice reconstruível ainda consome tempo e precisa entrar no RTO.</li>
+<li>Backup não substitui alta disponibilidade, e alta disponibilidade não substitui backup.</li>
+</ul>
+
+<h2>Checklist de aceite</h2>
+<ul class="check">
+<li>Arquitetura e dependências estão inventariadas e datadas.</li>
+<li>RPO, RTO e operação mínima foram aprovados pelo negócio.</li>
+<li>Banco, contentstore, configurações e extensões constam no manifesto.</li>
+<li>Segredos têm origem autorizada e não foram expostos no pacote.</li>
+<li>Cópia está fora da área pública e protegida contra exclusão indevida.</li>
+<li>Manifesto registra contagem, tamanho, hash e horário quando aplicável.</li>
+<li>Restauração foi feita em ambiente isolado e versão compatível.</li>
+<li>Documentos e versões abriram, com metadados e permissões corretos.</li>
+<li>Pesquisa e reindexação atenderam ao critério documentado.</li>
+<li>Tempos reais, perda observada e pendências foram registrados.</li>
+<li>Runbook foi atualizado e tem responsável e próxima data de teste.</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+<details><summary>Copiar a máquina virtual inteira resolve?</summary><p>Ajuda na recuperação da infraestrutura, mas não elimina a necessidade de consistência entre banco e contentstore, validação, retenção e cópia independente. O método precisa ser suportado e testado na arquitetura real.</p></details>
+<details><summary>Posso reconstruir o índice de pesquisa?</summary><p>Em muitas arquiteturas, sim. A possibilidade, a sequência e o tempo dependem da versão e do volume. Registre a decisão e inclua a reconstrução no RTO.</p></details>
+<details><summary>Quanto tempo devo guardar backups?</summary><p>Não existe prazo universal. Considere necessidade operacional, contratos, retenção de documentos, risco, capacidade e proteção de dados. Manter cópias além da necessidade também cria exposição.</p></details>
+<details><summary>Backup diário garante perda máxima de um dia?</summary><p>Somente se a cópia for consistente, terminar com sucesso e estiver recuperável. O RPO real deve ser medido no exercício, considerando o horário da última transação disponível.</p></details>
+<details><summary>O teste pode ocorrer na produção?</summary><p>O ensaio deve ocorrer em ambiente isolado. Recuperar diretamente sobre a produção aumenta o risco de sobrescrita e indisponibilidade e dificulta separar validação de operação real.</p></details>
+
+<h2>Fontes oficiais e técnicas</h2>
+<ul>
+<li><a href="https://docs.alfresco.com/content-services/community/" rel="noopener">Hyland/Alfresco — documentação do Alfresco Content Services Community Edition</a>, seção de administração, backup e restauração; consultada em 05/11/2026.</li>
+<li><a href="https://docs.alfresco.com/content-services/7.2/" rel="noopener">Hyland/Alfresco — Alfresco Content Services 7.2</a>, arquitetura e administração; consultada em 05/11/2026.</li>
+<li><a href="https://www.postgresql.org/docs/current/backup.html" rel="noopener">PostgreSQL 18 — Backup and Restore</a>, documentação corrente publicada em 2026; consultada em 05/11/2026.</li>
+<li><a href="https://www.postgresql.org/docs/current/app-pgdump.html" rel="noopener">PostgreSQL 18 — pg_dump</a>, documentação corrente publicada em 2026; consultada em 05/11/2026.</li>
+<li><a href="https://csrc.nist.gov/publications/detail/sp/800-34/rev-1/final" rel="noopener">NIST SP 800-34 Rev. 1 — Contingency Planning Guide for Federal Information Systems</a>, maio de 2010; consultada em 05/11/2026.</li>
+<li><a href="https://docs.docker.com/engine/storage/volumes/#back-up-restore-or-migrate-data-volumes" rel="noopener">Docker Docs — backup, restauração e migração de volumes</a>; consultada em 05/11/2026.</li>
+</ul>
+
+<p class="note"><strong>Limite:</strong> este guia não substitui o procedimento da versão implantada, o suporte do fornecedor, o plano de continuidade, a análise de segurança ou a homologação da organização. Comandos e caminhos devem ser validados no ambiente específico.</p>
+
+<div class="cta"><h2>Planeje a continuidade do seu ECM</h2><p>A Arquindex apoia diagnóstico, implantação, modelagem documental, permissões, operação e testes de recuperação do Alfresco conforme o ambiente e os requisitos de cada organização.</p><p><a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · <a href="https://wa.me/5531973632725">WhatsApp (31) 97363-2725</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></div>
+</article>
+</main>
+<footer>Arquindex Gestão Documental · Belo Horizonte/MG · Atendimento sujeito à avaliação técnica e comercial.</footer>
+</body>
+</html>
