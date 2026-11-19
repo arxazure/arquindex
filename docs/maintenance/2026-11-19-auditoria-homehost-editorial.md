@@ -38,7 +38,7 @@ Propriedade ativa consultada: `http://arquindex.com.br/`. A propriedade de domí
 
 ## Páginas SEO regionais
 
-As seis páginas revalidadas em 18/11 continuam HTTP 200 em 19/11. Elas são existentes e não foram contabilizadas como novas. Nenhuma das dez vagas editoriais foi preenchida: o GSC não apresentou intenção comercial distinta e comprovada que justificasse nova página, enquanto há pendências existing-first de sitemap, directory listing, título, schema e link interno. Estados do lote: PLANEJADA 0; CRIADA 0; TESTADA 0; PUBLICADA 0; SUBMETIDA 0; INDEXADA confirmada 0.
+As 72 URLs planejadas do inventário 24 cidades × 3 serviços foram verificadas individualmente em 19/11: 72 responderam HTTP 404 e permanecem PLANEJADAS, sem evidência de publicação, submissão ou indexação. O manifesto registra serviços, cidades, template e o estado uniforme aplicável a cada URL, preservando como fonte detalhada por URL o manifesto do PR #148. As seis páginas regionais existentes revalidadas em 18/11 continuam HTTP 200 em 19/11; elas não usam essas URLs planejadas e não foram contabilizadas como novas. Nenhuma das dez vagas editoriais foi preenchida: o GSC não apresentou intenção comercial distinta e comprovada que justificasse nova página, enquanto há pendências existing-first de sitemap, directory listing, título, schema e link interno. Estados do lote de novas páginas: PLANEJADA 72; CRIADA 0; TESTADA 0; PUBLICADA 0; SUBMETIDA 0; INDEXADA confirmada 0. Déficit frente à capacidade diária: 10 páginas, deliberadamente não produzidas para evitar doorway/canibalização.
 
 ## Dois artigos técnicos originais
 
