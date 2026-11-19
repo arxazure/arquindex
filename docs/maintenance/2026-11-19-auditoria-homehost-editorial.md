@@ -47,6 +47,8 @@ As seis páginas revalidadas em 18/11 continuam HTTP 200 em 19/11. Elas são exi
 
 Ambos possuem H1/H2/H3, resposta direta, procedimento, riscos, checklist, FAQ, fontes oficiais, autoria, canonical proposto, Open Graph, JSON-LD e CTA. A busca no repositório não encontrou conteúdo com as mesmas intenções. Publicação, sitemap e submissão permanecem bloqueados pela falta de confirmação da raiz HomeHost, backup restaurável e FTPS de escrita com TLS válido.
 
+Entrega GitHub: branch `editorial/2-artigos-20261119`, PR draft #150. O diff final contém somente os dois artigos, este relatório e o manifesto. O PR está mergeável; não há status checks registrados para o head. Nenhum merge foi executado.
+
 ## Blogger
 
 Leitura pública do feed do blog `2545952967912533152`: 36 posts; feed atualizado em 18/10/2026; publicação pública mais recente em 01/05/2026. Nenhum dos oito títulos da fila histórica foi encontrado. Não havia Blogger v3 OAuth, Apps Script autenticado nem conector oficial com escrita; nenhum POST foi tentado e nenhum rascunho foi chamado de publicado.
