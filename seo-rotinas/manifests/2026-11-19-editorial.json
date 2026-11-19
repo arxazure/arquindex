@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-19",
+  "timezone": "America/Sao_Paulo",
+  "production_origin": "HomeHost",
+  "publication_preconditions": {
+    "homehost_root_verified": false,
+    "restorable_backup_verified": false,
+    "ftps_tls_write_verified": false,
+    "public_dns_evidence": "NS ns31.servidorwebsite.com/ns32.servidorwebsite.com; apex A 177.234.150.42; www CNAME arquindex.com.br",
+    "public_https_read": "successful with normal TLS verification"
+  },
+  "articles": [
+    {
+      "id": "ARQ-ARTICLE-20261119-PDFA-VERAPDF",
+      "title": "Validação PDF/A com veraPDF: como controlar conformidade e preservação",
+      "intent": "validar PDF/A em lotes documentais com evidências e critérios de aceite",
+      "proposed_url": "https://www.arquindex.com.br/blog/validacao-pdfa-verapdf-preservacao-digital/",
+      "source_path": "artigos-tecnicos/2026-11-19/validacao-pdfa-verapdf-preservacao-digital/index.html",
+      "main_content_words": 1650,
+      "state": "TESTADA",
+      "published": false,
+      "submitted": false,
+      "indexed": false,
+      "sources": [
+        "https://docs.verapdf.org/validation/",
+        "https://docs.verapdf.org/cli/validation/",
+        "https://pdfa.org/pdfa-faq/",
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV205MAI2022.pdf"
+      ],
+      "blocker": "HomeHost document root, restorable backup and FTPS write path have not been verified in this run"
+    },
+    {
+      "id": "ARQ-ARTICLE-20261119-OCR-CER-WER",
+      "title": "Métricas de OCR: como usar CER, WER e amostragem para controlar qualidade",
+      "intent": "medir qualidade de OCR com CER, WER, amostragem e revisão por risco",
+      "proposed_url": "https://www.arquindex.com.br/blog/metricas-ocr-cer-wer-amostragem-qualidade/",
+      "source_path": "artigos-tecnicos/2026-11-19/metricas-ocr-cer-wer-amostragem-qualidade/index.html",
+      "main_content_words": 1827,
+      "state": "TESTADA",
+      "published": false,
+      "submitted": false,
+      "indexed": false,
+      "sources": [
+        "https://nvlpubs.nist.gov/nistpubs/ir/2017/NIST.IR.8199.pdf",
+        "https://github.com/tesseract-ocr/tessdoc/blob/main/ImproveQuality.md",
+        "https://www.nist.gov/publications/impact-image-quality-machine-print-optical-character-recognition",
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV205MAI2022.pdf"
+      ],
+      "blocker": "HomeHost document root, restorable backup and FTPS write path have not been verified in this run"
+    }
+  ],
+  "seo_pages": {
+    "planned": 0,
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed_confirmed": 0,
+    "daily_capacity": 10,
+    "reason": "No new distinct search intent was approved from current GSC evidence; existing-first fixes and sitemap reconciliation take priority"
+  },
+  "blogger": {
+    "blog_id": "2545952967912533152",
+    "public_feed_total_posts": 36,
+    "public_feed_updated": "2026-10-18T12:51:48.501-07:00",
+    "newest_public_post_date": "2026-05-01",
+    "historic_queue_titles_found_publicly": 0,
+    "historic_queue_titles_pending": 8,
+    "published_this_run": 0,
+    "blocker": "No Blogger v3 OAuth, authenticated Apps Script or official write connector was available; no POST attempted"
+  }
+}
