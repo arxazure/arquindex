@@ -42,8 +42,8 @@ As seis páginas revalidadas em 18/11 continuam HTTP 200 em 19/11. Elas são exi
 
 ## Dois artigos técnicos originais
 
-1. `ARQ-ARTICLE-20261119-PDFA-VERAPDF` — 1.650 palavras úteis — estado TESTADA, não publicada.
-2. `ARQ-ARTICLE-20261119-OCR-CER-WER` — 1.827 palavras úteis — estado TESTADA, não publicada.
+1. `ARQ-ARTICLE-20261119-ALFRESCO-TRANSFORM` — 1.584 palavras úteis — estado TESTADA, não publicada.
+2. `ARQ-ARTICLE-20261119-GUARDA-AMBIENTAL` — 1.584 palavras úteis — estado TESTADA, não publicada.
 
 Ambos possuem H1/H2/H3, resposta direta, procedimento, riscos, checklist, FAQ, fontes oficiais, autoria, canonical proposto, Open Graph, JSON-LD e CTA. A busca no repositório não encontrou conteúdo com as mesmas intenções. Publicação, sitemap e submissão permanecem bloqueados pela falta de confirmação da raiz HomeHost, backup restaurável e FTPS de escrita com TLS válido.
 
