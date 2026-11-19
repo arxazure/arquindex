@@ -57,7 +57,52 @@
     "submitted": 0,
     "indexed_confirmed": 0,
     "daily_capacity": 10,
-    "reason": "No new distinct search intent was approved from current GSC evidence; existing-first fixes and sitemap reconciliation take priority"
+    "reason": "No new distinct search intent was approved from current GSC evidence; existing-first fixes and sitemap reconciliation take priority",
+    "regional_campaign": {
+      "inventory_source": "PR #148 — editorial/2026-11-15/manifest.json",
+      "url_template": "https://www.arquindex.com.br/seo/{service}/{city}/empresa",
+      "services": [
+        "digitalizacao-documentos",
+        "guarda-documental",
+        "consultoria-lgpd"
+      ],
+      "cities": [
+        "belo-horizonte",
+        "betim",
+        "brasilia",
+        "campinas",
+        "contagem",
+        "curitiba",
+        "fortaleza",
+        "goiania",
+        "juiz-de-fora",
+        "nova-lima",
+        "porto-alegre",
+        "recife",
+        "ribeirao-das-neves",
+        "rio-de-janeiro",
+        "salvador",
+        "santa-luzia",
+        "santo-andre",
+        "sao-paulo",
+        "set-lagoas",
+        "sorocaba",
+        "uberaba",
+        "uberlandia",
+        "vitoria",
+        "volta-redonda"
+      ],
+      "cartesian_url_count": 72,
+      "checked_at": "2026-11-19",
+      "result_applies_to_each_url": {
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "submitted": false,
+        "indexed_confirmed": false,
+        "note": "Intenção reservada; não criar variação por cidade sem demanda e diferenciação comprovadas."
+      }
+    }
   },
   "blogger": {
     "blog_id": "2545952967912533152",
