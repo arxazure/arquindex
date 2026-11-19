@@ -11,40 +11,40 @@
   },
   "articles": [
     {
-      "id": "ARQ-ARTICLE-20261119-PDFA-VERAPDF",
-      "title": "Validação PDF/A com veraPDF: como controlar conformidade e preservação",
-      "intent": "validar PDF/A em lotes documentais com evidências e critérios de aceite",
-      "proposed_url": "https://www.arquindex.com.br/blog/validacao-pdfa-verapdf-preservacao-digital/",
-      "source_path": "artigos-tecnicos/2026-11-19/validacao-pdfa-verapdf-preservacao-digital/index.html",
-      "main_content_words": 1650,
+      "id": "ARQ-ARTICLE-20261119-ALFRESCO-TRANSFORM",
+      "title": "Alfresco Transform Service: diagnóstico de renditions, previews e conversões",
+      "intent": "diagnosticar falhas de miniatura, preview e conversão no Alfresco Transform Service",
+      "proposed_url": "https://www.arquindex.com.br/blog/alfresco-transform-service-renditions-diagnostico/",
+      "source_path": "artigos-tecnicos/2026-11-19/alfresco-transform-service-renditions-diagnostico/index.html",
+      "main_content_words": 1584,
       "state": "TESTADA",
       "published": false,
       "submitted": false,
       "indexed": false,
       "sources": [
-        "https://docs.verapdf.org/validation/",
-        "https://docs.verapdf.org/cli/validation/",
-        "https://pdfa.org/pdfa-faq/",
-        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV205MAI2022.pdf"
+        "https://docs.alfresco.com/transform-service/latest/",
+        "https://docs.hyland.com/r/Alfresco/Alfresco-Transform-Service/4.1/Alfresco-Transform-Service/Troubleshoot-Transform-Services",
+        "https://docs.hyland.com/r/Alfresco/Alfresco-Transform-Service/4.1/Alfresco-Transform-Service/Transform-Service-components",
+        "https://docs.alfresco.com/content-services/community/"
       ],
       "blocker": "HomeHost document root, restorable backup and FTPS write path have not been verified in this run"
     },
     {
-      "id": "ARQ-ARTICLE-20261119-OCR-CER-WER",
-      "title": "Métricas de OCR: como usar CER, WER e amostragem para controlar qualidade",
-      "intent": "medir qualidade de OCR com CER, WER, amostragem e revisão por risco",
-      "proposed_url": "https://www.arquindex.com.br/blog/metricas-ocr-cer-wer-amostragem-qualidade/",
-      "source_path": "artigos-tecnicos/2026-11-19/metricas-ocr-cer-wer-amostragem-qualidade/index.html",
-      "main_content_words": 1827,
+      "id": "ARQ-ARTICLE-20261119-GUARDA-AMBIENTAL",
+      "title": "Monitoramento ambiental na guarda documental: sensores, alertas e resposta",
+      "intent": "implantar monitoramento de temperatura, umidade, luz, água, pragas e fungos em depósitos documentais",
+      "proposed_url": "https://www.arquindex.com.br/blog/monitoramento-ambiental-guarda-documental/",
+      "source_path": "artigos-tecnicos/2026-11-19/monitoramento-ambiental-guarda-documental/index.html",
+      "main_content_words": 1584,
       "state": "TESTADA",
       "published": false,
       "submitted": false,
       "indexed": false,
       "sources": [
-        "https://nvlpubs.nist.gov/nistpubs/ir/2017/NIST.IR.8199.pdf",
-        "https://github.com/tesseract-ocr/tessdoc/blob/main/ImproveQuality.md",
-        "https://www.nist.gov/publications/impact-image-quality-machine-print-optical-character-recognition",
-        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV205MAI2022.pdf"
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/recomendaes_para_a_produo.pdf/@@display-file/file",
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/recomendaes_para_construo_de_arquivos.pdf",
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV205MAI2022.pdf",
+        "https://www.gov.br/arquivonacional/pt-br/canais_atendimento/imprensa/copy_of_noticias/nota-de-esclarecimento-do-arquivo-nacional"
       ],
       "blocker": "HomeHost document root, restorable backup and FTPS write path have not been verified in this run"
     }
