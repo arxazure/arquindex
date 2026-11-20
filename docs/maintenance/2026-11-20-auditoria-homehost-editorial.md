@@ -58,6 +58,7 @@ O `robots.txt` responde 200 e permite rastreamento público, bloqueando áreas a
 - HomeHost: não existe conector que prove leitura FTPS, raiz pública e backup integral restaurável. Bloqueio de capacidade, não 401/403/429/5xx.
 - GSC: leitura funcionou; não pedir reconexão. Nenhuma URL nova elegível foi publicada.
 - Cloudflare: autenticação funcionou, mas a zona `arquindex.com.br` não está na conexão consultada; nenhuma escrita.
+- Central privada Top10: leitura inofensiva funcionou; há registros históricos em estados `claimed` e `unknown`, por isso nenhuma repetição ou nova publicação foi tentada.
 - Merchant Center: não auditado nesta frente e permanece separado.
 - Limpeza semanal: hoje é sexta-feira; módulo semanal não executado. Removidos/movidos: 0; espaço liberado: 0 bytes.
 
