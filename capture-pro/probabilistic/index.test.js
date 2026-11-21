@@ -1,0 +1,11 @@
+"use strict";
+const test=require("node:test"),assert=require("node:assert/strict");
+const {createIndex,lexicalSearch,semanticSearch,extractFields,validateCorrection,toAlfrescoMetadata}=require("./index");
+const sha="a".repeat(64);
+const doc=()=>createIndex({tenantId:"synthetic-A",documentId:"doc-1",imageSha256:sha,synthetic:true,tokens:[{box:[1,2,30,10],hypotheses:[{text:"arquivo",probability:0.7},{text:"arquiva",probability:0.3}]},{hypotheses:[{text:"2026",probability:1}]}],embedding:[1,0]});
+test("probabilistic lexical search retains alternative hypothesis and image coordinates",()=>{const hits=lexicalSearch(doc(),"arquiva");assert.equal(hits[0].score,0.3);assert.deepEqual(hits[0].box,[1,2,30,10]);assert.equal(hits[0].imageSha256,sha);});
+test("tenant isolation for semantic ranking",()=>{const other=createIndex({tenantId:"synthetic-B",documentId:"doc-2",imageSha256:sha,synthetic:true,tokens:[],embedding:[1,0]});assert.deepEqual(semanticSearch([doc(),other],[1,0],{tenantId:"synthetic-A"}).map(x=>x.documentId),["doc-1"]);});
+test("synthetic-only fail closed",()=>assert.throws(()=>createIndex({tenantId:"a",documentId:"d",imageSha256:sha,tokens:[]}),/SYNTHETIC_ONLY/));
+test("reject malformed confidence distribution",()=>assert.throws(()=>createIndex({tenantId:"a",documentId:"d",imageSha256:sha,synthetic:true,tokens:[{hypotheses:[{text:"x",probability:0.4}]}]}),/PROBABILITIES_NOT_NORMALIZED/));
+test("review is immutable and alfresco output does not upload",()=>{const original=doc(),next=validateCorrection(original,0,"arquivo","reviewer");assert.equal(original.revision,0);assert.equal(next.revision,1);assert.equal(toAlfrescoMetadata(next).transport,"not_implemented");});
+test("field extraction requires review",()=>{const fields=extractFields(doc(),[{name:"ano",pattern:"2026"}]);assert.equal(fields[0].value,"2026");assert.equal(fields[0].requiresHumanReview,true);});
