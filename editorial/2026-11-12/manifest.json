@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-12",
+  "timezone": "America/Sao_Paulo",
+  "repository": "arxazure/arquindex",
+  "base_branch": "master",
+  "base_commit": "326aaadb80df14e347a9811c5c52d48be84b52a9",
+  "target_origin": "HomeHost",
+  "publication_guardrails": {
+    "public_root_confirmed": false,
+    "restorable_backup_confirmed": false,
+    "ftps_tls_confirmed": false,
+    "homehost_write_performed": false,
+    "dns_changed": false,
+    "railway_deployed": false,
+    "sitemap_submitted": false,
+    "gsc_urls_submitted": false,
+    "indexnow_submitted": false,
+    "indexation_confirmed": false
+  },
+  "articles": [
+    {
+      "title": "PDF/A em Databooks de engenharia: perfis, validação e anexos",
+      "intent": "como escolher e validar PDF/A em Databooks de engenharia",
+      "planned_url": "https://www.arquindex.com.br/blog/pdfa-databooks-engenharia-perfis-validacao-anexos/",
+      "file": "editorial/2026-11-12/pdfa-databooks-engenharia-perfis-validacao-anexos/index.html",
+      "useful_words": 2054,
+      "state": "TESTADA",
+      "published": false,
+      "robots_staging": "noindex,follow",
+      "sources": [
+        "https://www.loc.gov/preservation/digital/formats/fdd/fdd000318.shtml",
+        "https://docs.verapdf.org/validation/",
+        "https://docs.verapdf.org/gui/",
+        "https://www.iso.org/standard/50655.html",
+        "https://www.iso.org/standard/57229.html"
+      ]
+    },
+    {
+      "title": "Matriz de acesso no Alfresco: grupos, herança e menor privilégio",
+      "intent": "como desenhar e testar matriz de acesso no Alfresco",
+      "planned_url": "https://www.arquindex.com.br/blog/alfresco-matriz-acesso-heranca-grupos-menor-privilegio/",
+      "file": "editorial/2026-11-12/alfresco-matriz-acesso-heranca-grupos-menor-privilegio/index.html",
+      "useful_words": 2189,
+      "state": "TESTADA",
+      "published": false,
+      "robots_staging": "noindex,follow",
+      "sources": [
+        "https://docs.alfresco.com/content-services/7.2/",
+        "https://docs.alfresco.com/digital-workspace/3.1/",
+        "https://docs.alfresco.com/governance-services/latest/",
+        "https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-sobre-seguranca-da-informacao-para-agentes-de-tratamento-de-pequeno-porte"
+      ]
+    }
+  ],
+  "seo_pages": {
+    "daily_limit": 10,
+    "planned": 0,
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed": 0,
+    "reason": "Existing-first safety gate: the 72 registered regional Railway routes return 404 on the HomeHost public origin, the corresponding templates are short/templated, modern /solucoes routes also return 404 on HomeHost, and the GSC domain property is readable but not activated in the authorized GSC Wizard. Creating more URLs before reconciling the effective HomeHost inventory would risk doorway pages and cannibalization."
+  },
+  "blogger": {
+    "blog": "https://documentosdigitaislegislaoesistemas.blogspot.com/",
+    "public_feed_total": 36,
+    "historical_queue_exact_titles_found": 0,
+    "published_today": 0,
+    "state": "PENDENTE_AUTORIZACAO_BLOGGER",
+    "reason": "No authorized Blogger v3 write connector, authenticated Apps Script execution or official Blogger write channel was available. Public feed read succeeded; no POST was attempted."
+  }
+}
