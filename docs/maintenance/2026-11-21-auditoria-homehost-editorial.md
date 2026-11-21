@@ -46,6 +46,8 @@ Foram preparados dois artigos originais, com 2.024 e 2.108 palavras úteis no `m
 
 A homepage declarou canonical `https://www.arquindex.com.br/`, robots `index,follow,max-image-preview:large`, um H1, viewport móvel e dois blocos JSON-LD. Nenhuma alteração de layout foi feita.
 
+O teste renderizado em viewport de 390 px não foi concluído: o Chromium local encerrou com `socket() failed: Operation not permitted (1)` antes de abrir a página. O erro é do ambiente de execução, não HTTP, autenticação ou código do site. Assim, a presença do viewport foi confirmada no HTML, mas overflow, alvos de toque e layout visual móvel não foram afirmados nesta rodada.
+
 ### Campanha regional 24 × 3
 
 As 72 URLs foram testadas individualmente em 21/11/2026: **72 retornaram HTTP 404**. Permanecem `PLANEJADA`. Foram criadas zero páginas regionais, pois não há evidência suficiente de demanda e atendimento para diferenciar 72 conteúdos sem doorway/canibalização. O manifesto registra cada URL.
