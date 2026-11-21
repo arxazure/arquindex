@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Preservação digital com OAIS: SIP, AIP e DIP | Arquindex</title>
+  <meta name="description" content="Guia prático para estruturar preservação digital com OAIS, pacotes SIP, AIP e DIP, checksums, metadados PREMIS, controle de qualidade e acesso rastreável.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/preservacao-digital-oais-sip-aip-dip-integridade/">
+  <meta property="og:type" content="article"><meta property="og:title" content="Preservação digital com OAIS: como montar SIP, AIP e DIP com integridade verificável"><meta property="og:description" content="Do recebimento ao acesso: um roteiro técnico para preservar documentos digitais com evidência, metadados e verificação de integridade."><meta property="og:url" content="https://www.arquindex.com.br/blog/preservacao-digital-oais-sip-aip-dip-integridade/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Preservação digital com OAIS: como montar pacotes SIP, AIP e DIP com integridade verificável","datePublished":"2026-11-15","dateModified":"2026-11-15","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/preservacao-digital-oais-sip-aip-dip-integridade/"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"OAIS é um software de preservação digital?","acceptedAnswer":{"@type":"Answer","text":"Não. OAIS é um modelo de referência para funções, informações e responsabilidades de um repositório de preservação. Produtos podem apoiar o modelo, mas a conformidade depende do processo completo."}},{"@type":"Question","name":"SIP, AIP e DIP precisam ter o mesmo conteúdo?","acceptedAnswer":{"@type":"Answer","text":"Não. O SIP é a submissão recebida, o AIP é a unidade preservada com informação suficiente para gestão e integridade, e o DIP é preparado para acesso conforme autorização e necessidade."}},{"@type":"Question","name":"Checksum prova autenticidade jurídica sozinho?","acceptedAnswer":{"@type":"Answer","text":"Não. O checksum ajuda a detectar alteração de bits. Autenticidade requer contexto, cadeia de custódia, identidade, controles, metadados, políticas e evidências coerentes."}},{"@type":"Question","name":"Posso descartar o original depois de gerar um AIP?","acceptedAnswer":{"@type":"Answer","text":"A criação de um pacote não autoriza descarte. Temporalidade, requisitos legais, valor probatório, política institucional e validações aplicáveis devem ser analisados antes de qualquer eliminação."}}]}</script>
+  <style>body{font-family:system-ui,sans-serif;line-height:1.7;color:#172033;margin:0}header,footer{background:#0b2545;color:#fff;padding:1rem}header a,footer a{color:#fff}main{max-width:980px;margin:auto;padding:2rem}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.12}h2{margin-top:2.2rem;color:#0b4f6c}h3{color:#176b87}.answer,.note{padding:1rem;border-left:5px solid #18a999;background:#eefaf8}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd4dd;padding:.65rem;text-align:left;vertical-align:top}th{background:#edf3f8}.cta{background:#0b4f6c;color:#fff;padding:1.4rem;margin-top:2rem}.cta a{color:#fff;font-weight:700}.meta{color:#52606d}.check li{margin:.45rem 0}details{margin:.7rem 0;padding:.7rem;border:1px solid #d7e0e8}code{background:#f2f5f7;padding:.1rem .25rem}</style>
+</head>
+<body><header><a href="https://www.arquindex.com.br/"><strong>ARQUINDEX</strong></a> · <a href="https://www.arquindex.com.br/blog/">Artigos técnicos</a></header>
+<main><article>
+<p class="meta">Autoria institucional: Arquindex · Atualizado em 15 de novembro de 2026 · Conteúdo técnico informativo</p>
+<h1>Preservação digital com OAIS: como montar pacotes SIP, AIP e DIP com integridade verificável</h1>
+<p class="answer"><strong>Resposta direta:</strong> preservar documentos digitais por longo prazo exige mais do que fazer cópias. Um programa baseado no modelo OAIS recebe uma submissão controlada, valida arquivos e contexto, transforma o material aceito em um pacote de preservação, monitora integridade e formatos e entrega cópias de acesso adequadas a cada solicitação. SIP, AIP e DIP representam momentos e responsabilidades diferentes. Para funcionar, o processo precisa de identificadores persistentes, checksums, metadados técnicos e de proveniência, registro de eventos, política de formatos, armazenamento redundante, controle de acesso, auditoria e restauração testada. Nenhum pacote, checksum ou software isolado substitui governança arquivística, temporalidade ou análise jurídica.</p>
+
+<h2>Por que a simples cópia não preserva</h2>
+<p>Arquivos digitais dependem de uma cadeia de tecnologias: mídia, sistema de arquivos, formato, codec, aplicativo, sistema operacional, identidade e contexto. Um PDF pode continuar abrindo e ainda assim ter perdido a relação com o processo que o produziu. Uma planilha pode conservar os números, mas não a fórmula, o vínculo externo ou a versão do programa necessária para interpretá-la. Uma fotografia pode manter os pixels enquanto data, autoria e direitos se separam do objeto.</p>
+<p>Backup reduz o risco de perda operacional e é indispensável, porém normalmente replica o estado de um ambiente em intervalos definidos. Preservação acrescenta seleção, descrição, evidência de proveniência, identificação de formatos, verificação periódica de integridade, planejamento de mudanças tecnológicas e acesso compreensível para uma comunidade designada. O objetivo não é congelar cada sistema para sempre, e sim manter a informação utilizável e confiável pelo período definido.</p>
+<p>Isso também muda a pergunta de controle de qualidade. Em vez de perguntar apenas “o arquivo existe?”, a equipe verifica se o objeto está completo, se sua origem é conhecida, se o checksum confere, se o formato foi identificado, se as dependências foram registradas, se as ações realizadas são auditáveis e se uma cópia autorizada pode ser produzida.</p>
+
+<h2>OAIS em linguagem prática</h2>
+<p>O Open Archival Information System, ou OAIS, é um modelo de referência publicado pelo CCSDS e adotado como ISO 14721. A edição CCSDS 650.0-M-3 foi publicada em dezembro de 2024. O modelo organiza responsabilidades e fluxos entre produtor, repositório, gestão e consumidor. Ele não prescreve um produto nem define uma extensão de arquivo obrigatória.</p>
+<p>Seis grupos funcionais ajudam a desenhar o serviço: ingestão, armazenamento arquivístico, gestão de dados, administração, planejamento de preservação e acesso. Na prática, essas funções podem estar distribuídas entre pessoas e sistemas. O importante é que as responsabilidades, entradas, saídas e evidências estejam definidas.</p>
+<p>OAIS também trabalha com a ideia de informação de representação: os bits precisam de conhecimento suficiente para serem compreendidos. Um arquivo CSV, por exemplo, pode exigir codificação de caracteres, delimitador, dicionário de campos, unidades, regras de valores nulos e relação com outras tabelas. A documentação necessária depende da comunidade que deverá entender o conteúdo no futuro.</p>
+
+<h2>SIP, AIP e DIP não são sinônimos</h2>
+<table><thead><tr><th>Pacote</th><th>Função</th><th>Conteúdo típico</th><th>Controle decisivo</th></tr></thead><tbody>
+<tr><td>SIP — Submission Information Package</td><td>Submissão entregue pelo produtor para avaliação e ingestão.</td><td>Arquivos originais, manifesto, metadados fornecidos, checksums e documentação do lote.</td><td>Aceite ou rejeição registrada; o recebimento não significa preservação concluída.</td></tr>
+<tr><td>AIP — Archival Information Package</td><td>Unidade administrada pelo repositório para preservação.</td><td>Objeto preservado, informação de representação, proveniência, contexto, referência, integridade e direitos.</td><td>Identificador estável, fixidez verificável, eventos auditáveis, replicação e política de migração.</td></tr>
+<tr><td>DIP — Dissemination Information Package</td><td>Pacote preparado para uma solicitação de acesso.</td><td>Cópias permitidas, metadados necessários, orientações de uso e, quando cabível, transformação de formato.</td><td>Autorização, proteção de dados, registro de entrega e distinção em relação ao AIP mestre.</td></tr>
+</tbody></table>
+<p>Um SIP pode ser dividido em vários AIPs, e um AIP pode originar DIPs diferentes. Um pesquisador autorizado pode receber arquivos de alta resolução; o público pode receber derivados com dados pessoais ocultados. A preservação não deve reescrever silenciosamente o objeto mestre para atender a uma consulta.</p>
+
+<h2>Entradas, entregáveis e requisitos</h2>
+<table><thead><tr><th>Item</th><th>Entrada mínima</th><th>Entregável verificável</th></tr></thead><tbody>
+<tr><td>Escopo</td><td>Séries documentais, produtores, período, volume, formatos e prazo de guarda.</td><td>Plano de preservação aprovado e critérios de aceite.</td></tr>
+<tr><td>Submissão</td><td>Arquivos, inventário, metadados, responsável e checksum quando disponível.</td><td>Recibo do SIP, relatório de validação e lista de exceções.</td></tr>
+<tr><td>Ingestão</td><td>Regras de vírus, formato, duplicidade, nomenclatura e completude.</td><td>AIP identificado, manifesto final, checksums e vínculo com o SIP.</td></tr>
+<tr><td>Armazenamento</td><td>Classe de segurança, retenção, localização e redundância.</td><td>Réplicas controladas, logs de cópia, verificação de fixidez e teste de restauração.</td></tr>
+<tr><td>Acesso</td><td>Solicitante, finalidade, autorização e formato de entrega.</td><td>DIP, registro de decisão, hash e comprovante de entrega quando aplicável.</td></tr>
+</tbody></table>
+
+<h2>Como estruturar o SIP</h2>
+<h3>1. Acordo de submissão</h3>
+<p>Antes de transferir terabytes, defina quem pode submeter, o que será aceito, quais formatos são preferidos, como os lotes serão identificados, quais metadados são obrigatórios, quem corrige falhas e quando a custódia é considerada transferida. Acordos vagos produzem lotes sem contexto e discussões posteriores sobre responsabilidade.</p>
+<h3>2. Inventário e manifesto</h3>
+<p>O manifesto deve relacionar cada objeto por caminho relativo ou identificador, nome original, tamanho, tipo esperado e checksum. Também deve registrar o identificador do lote, produtor, data, ferramenta usada e versão do esquema. Caminhos absolutos da estação do produtor não são bons identificadores permanentes.</p>
+<h3>3. Empacotamento transportável</h3>
+<p>Uma estrutura inspirada no BagIt, definido no RFC 8493, pode separar conteúdo e arquivos de manifesto. BagIt é útil para transferência e verificação, mas não é, sozinho, um repositório OAIS nem garante que os metadados sejam suficientes. A organização deve decidir algoritmos aceitos, codificação de nomes e tratamento de arquivos ausentes ou extras.</p>
+<h3>4. Transferência segura</h3>
+<p>Use canal autenticado, certificado válido, credenciais de menor privilégio e retomada controlada. Nunca considere o upload concluído apenas porque a barra chegou a 100%. O destino precisa recalcular checksums, comparar o inventário e emitir resultado inequívoco.</p>
+
+<h2>Da quarentena ao AIP em dez etapas</h2>
+<ol>
+  <li><strong>Receber em área de quarentena.</strong> Impedir publicação automática e separar o lote do acervo preservado.</li>
+  <li><strong>Registrar custódia.</strong> Atribuir identificador, produtor, horário, operador e meio de transferência.</li>
+  <li><strong>Verificar segurança.</strong> Examinar código malicioso e riscos sem executar conteúdo ativo desnecessariamente.</li>
+  <li><strong>Conciliar o manifesto.</strong> Detectar ausências, extras, tamanho divergente, duplicidade e checksum incorreto.</li>
+  <li><strong>Identificar formatos.</strong> Não confiar apenas na extensão; registrar ferramenta, versão e grau de certeza.</li>
+  <li><strong>Validar estrutura.</strong> Testar conformidade de formatos selecionados e registrar erros sem “consertar” silenciosamente.</li>
+  <li><strong>Completar metadados.</strong> Acrescentar contexto, direitos, proveniência, informação técnica e relações.</li>
+  <li><strong>Aplicar a política.</strong> Decidir manter original, criar normalizado ou derivado e preservar a ligação entre eles.</li>
+  <li><strong>Gerar o AIP.</strong> Criar identificador estável, manifesto final, checksums e registro dos eventos de ingestão.</li>
+  <li><strong>Replicar e aceitar.</strong> Copiar para locais controlados, verificar novamente e emitir relatório de aceite ou rejeição.</li>
+</ol>
+<p>Cada transformação deve produzir um novo objeto ou versão relacionada, nunca apagar a evidência do que foi recebido. Se uma planilha for convertida para PDF/A para facilitar leitura, o original pode continuar necessário para preservar fórmulas e funcionalidade. A decisão depende do valor informacional e da política.</p>
+
+<h2>PREMIS e os metadados de preservação</h2>
+<p>PREMIS, mantido pela Library of Congress, oferece um dicionário de dados para metadados de preservação. Suas entidades ajudam a descrever objetos, eventos, agentes e direitos. Um evento de verificação de fixidez, por exemplo, relaciona o objeto verificado, a data, a ferramenta, o resultado e o agente responsável.</p>
+<p>Não é necessário preencher todos os campos possíveis. O perfil de aplicação deve escolher elementos necessários ao risco, à duração e ao contexto do acervo. O essencial é que o significado seja documentado e que a implementação não guarde informações críticas apenas em um log efêmero do fornecedor.</p>
+<p>Metadados descritivos ajudam a encontrar; metadados administrativos ajudam a gerir; metadados técnicos ajudam a interpretar; proveniência demonstra a história; direitos delimitam ações; fixidez permite detectar alterações. Um programa robusto conecta essas perspectivas.</p>
+
+<h2>Checksums, fixidez e limites</h2>
+<p>Um checksum é um resumo calculado a partir dos bits. Se o valor mudar inesperadamente, há forte indicação de alteração. A organização deve documentar algoritmo, ferramenta, horário, objeto e resultado. Algoritmos enfraquecidos podem deixar de ser adequados; o planejamento de preservação deve prever transição sem perder os valores históricos.</p>
+<p>Fixidez não equivale a autenticidade completa. Um arquivo adulterado antes do primeiro cálculo pode manter o mesmo checksum desde que entrou. Por isso, proveniência, assinatura quando existente, identificação do produtor, canal, cadeia de custódia e controles organizacionais são igualmente importantes.</p>
+<p>Verificações devem ocorrer após a transferência, após cada cópia, periodicamente e antes de uma disseminação relevante. A frequência considera volume, tecnologia de armazenamento, risco e tempo de detecção aceitável. Resultado divergente exige isolar a réplica, comparar outras cópias, preservar logs e investigar antes de reparar.</p>
+
+<h2>Armazenamento, segurança e restauração</h2>
+<p>Replicar não é apenas manter duas pastas no mesmo servidor. Falha lógica, ransomware, erro administrativo e incidente físico podem atingir cópias ligadas. Separe localização e credenciais, limite escrita, monitore alterações, mantenha ao menos uma proteção resistente à modificação e teste restauração em ambiente isolado.</p>
+<p>Criptografia em trânsito e repouso protege confidencialidade, mas adiciona dependência de chaves. A política deve definir custódia, rotação, cópia segura e recuperação das chaves. Um arquivo perfeitamente preservado torna-se inútil se a chave desaparece.</p>
+<p>LGPD e preservação precisam conviver. Prazo de guarda, finalidade, acesso e eliminação devem ser documentados. Preservar indefinidamente “por segurança” pode aumentar exposição e contrariar regras. Restrições de acesso, segregação de dados sensíveis e DIPs minimizados reduzem risco.</p>
+
+<h2>Como produzir e entregar um DIP</h2>
+<ol>
+  <li>validar identidade, finalidade e autoridade do solicitante;</li>
+  <li>localizar o AIP correto pelo identificador, não por semelhança de nome;</li>
+  <li>registrar a seleção e as restrições aplicadas;</li>
+  <li>criar cópias de acesso sem alterar o mestre;</li>
+  <li>aplicar mascaramento ou conversão quando autorizado e documentar a ferramenta;</li>
+  <li>calcular checksum do pacote entregue;</li>
+  <li>fornecer metadados suficientes para interpretação;</li>
+  <li>registrar data, canal, destinatário, resultado e eventual expiração do acesso.</li>
+</ol>
+<p>O consumidor deve saber se recebeu original preservado, cópia normalizada ou derivado. Expressões como “documento original” não devem ser usadas indiscriminadamente em ambiente digital. O relatório de entrega explica a relação entre o DIP e o AIP.</p>
+
+<h2>Exemplo hipotético: databook de engenharia</h2>
+<p><strong>Exemplo hipotético, não é case de cliente:</strong> uma empresa encerra um projeto industrial com desenhos, certificados, relatórios, fotografias e planilhas. O produtor envia um SIP com manifesto, estrutura lógica do databook e checksums. Na quarentena, a equipe encontra dois arquivos ausentes, uma planilha protegida sem senha registrada e três PDFs inválidos. O lote não é aceito silenciosamente: uma lista de exceções volta ao produtor.</p>
+<p>Após correção, o repositório preserva originais, cria derivados PDF/A apenas onde a política permite, registra ferramentas e mantém relações. O AIP inclui metadados do projeto, proveniência, direitos e histórico de eventos. Anos depois, uma auditoria solicita documentos específicos. O DIP contém cópias autorizadas, índice, checksums e declaração sobre as transformações. Nenhum arquivo mestre é movido ou renomeado para atender ao pedido.</p>
+
+<h2>Checklist de implantação</h2>
+<ul class="check">
+  <li>☐ Comunidade designada e prazo de preservação definidos.</li><li>☐ Produtores, responsabilidades e acordo de submissão formalizados.</li>
+  <li>☐ Formatos aceitos, preferidos e critérios de exceção documentados.</li><li>☐ SIP com identificador, manifesto e checksums.</li>
+  <li>☐ Quarentena, antivírus, conciliação e validação executados.</li><li>☐ AIP com objeto, representação, proveniência, contexto, fixidez e direitos.</li>
+  <li>☐ Perfil de metadados e eventos PREMIS documentado.</li><li>☐ Réplicas separadas e proteção contra alteração indevida.</li>
+  <li>☐ Verificação periódica de fixidez e alerta de divergência.</li><li>☐ Restauração integral e amostral testada.</li>
+  <li>☐ Processo de DIP com autorização e proteção de dados.</li><li>☐ Migração de formato, mudança de algoritmo e saída de fornecedor planejadas.</li>
+</ul>
+
+<h2>Limites e decisões que exigem especialistas</h2>
+<p>OAIS não determina automaticamente a tabela de temporalidade, não transforma um formato ruim em documento confiável e não resolve direitos autorais ou sigilo. Certificação, assinatura digital, valor probatório e descarte exigem avaliação normativa aplicável. Acervos audiovisuais, bases de dados, software e objetos 3D podem precisar de estratégias diferentes.</p>
+<p>A organização também deve evitar prometer preservação eterna. O compromisso precisa declarar escopo, prazo, níveis de serviço, formatos e recursos disponíveis. Um plano realista, revisto periodicamente, protege melhor que uma promessa genérica.</p>
+
+<h2>Perguntas frequentes</h2>
+<details><summary>OAIS é um software de preservação digital?</summary><p>Não. É um modelo de referência. Um software pode apoiar ingestão, armazenamento e acesso, mas pessoas, políticas, contratos, controles e evidências continuam necessários.</p></details>
+<details><summary>SIP, AIP e DIP precisam ter o mesmo conteúdo?</summary><p>Não. O SIP é recebido, o AIP é preservado e o DIP é preparado para acesso. Devem permanecer relacionados por identificadores e registros.</p></details>
+<details><summary>Checksum prova autenticidade jurídica sozinho?</summary><p>Não. Ele detecta alteração de bits dentro do contexto de cálculo. Autenticidade depende também de proveniência, identidade, cadeia de custódia e controles.</p></details>
+<details><summary>BagIt substitui o AIP?</summary><p>Não necessariamente. BagIt padroniza empacotamento e transferência. O AIP precisa conter informação de preservação suficiente para a política e a comunidade designada.</p></details>
+<details><summary>É obrigatório converter tudo para PDF/A?</summary><p>Não. A estratégia depende do tipo de objeto e da função. Converter pode eliminar comportamento, fórmulas, camadas ou metadados; originais e derivados devem ser avaliados.</p></details>
+<details><summary>Posso descartar o original após criar o AIP?</summary><p>Não automaticamente. O descarte depende de temporalidade, requisitos legais, avaliação de risco, valor probatório e autorização.</p></details>
+
+<h2>Fontes oficiais consultadas</h2>
+<ul>
+  <li>CCSDS — <a href="https://public.ccsds.org/Pubs/650x0m3.pdf" rel="noopener">Reference Model for an Open Archival Information System (OAIS), CCSDS 650.0-M-3</a>, dezembro de 2024; consultado em 15/11/2026.</li>
+  <li>IETF — <a href="https://www.rfc-editor.org/rfc/rfc8493" rel="noopener">RFC 8493: The BagIt File Packaging Format</a>, outubro de 2018; consultado em 15/11/2026.</li>
+  <li>Library of Congress — <a href="https://www.loc.gov/standards/premis/" rel="noopener">PREMIS: Preservation Metadata</a>; consultado em 15/11/2026.</li>
+  <li>CONARQ — <a href="https://www.gov.br/conarq/pt-br/assuntos/camaras-tecnicas-setoriais-inativas/camara-tecnica-de-documentos-eletronicos-ctde/carta_para_a_preservacao_do_patrimonio_arquivistico_digital.pdf" rel="noopener">Carta para a Preservação do Patrimônio Arquivístico Digital</a>; consultada em 15/11/2026.</li>
+</ul>
+<p>Leitura complementar: <a href="https://www.arquindex.com.br/gestao-documental.html">gestão documental</a>, <a href="https://www.arquindex.com.br/databook.html">Databooks</a> e <a href="https://www.arquindex.com.br/digitalizacao.html">digitalização de documentos</a>.</p>
+<section class="cta"><h2>Estruture a preservação com evidência</h2><p>A Arquindex apoia inventário, organização, digitalização, metadados, Databooks e implantação de repositórios documentais. O desenho deve respeitar o acervo, a temporalidade e os requisitos reais da organização.</p><p><a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · WhatsApp <a href="https://wa.me/5531973632725">(31) 97363-2725</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></section>
+</article></main><footer>Arquindex · Gestão documental, digitalização e Alfresco ECM</footer></body></html>
