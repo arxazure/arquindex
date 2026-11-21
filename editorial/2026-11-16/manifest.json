@@ -1,0 +1,166 @@
+{
+  "date": "2026-11-16",
+  "timezone": "America/Sao_Paulo",
+  "production_decision": "HomeHost e a origem autorizada do site institucional; nenhuma escrita foi feita sem raiz publica, backup restauravel e FTPS TLS comprovados.",
+  "github": {
+    "master_sha_at_start": "552e15df1b9900244c68b2a9574c856d7a96749f",
+    "hosting_notice_pr": 103,
+    "hosting_notice_merged": true,
+    "previous_editorial_pr": 148,
+    "previous_editorial_pr_state": "OPEN_DRAFT"
+  },
+  "technical": {
+    "homehost_write": false,
+    "backup_validated": false,
+    "ftps_tls_validated": false,
+    "cleanup_run": false,
+    "cleanup_reason": "Segunda-feira; modulo semanal reservado ao domingo. Nenhuma exclusao ou quarentena sem acesso e backup comprovados.",
+    "bytes_freed": 0,
+    "directory_listing": [
+      {
+        "url": "https://www.arquindex.com.br/assets/",
+        "state": "EXPOSED_CONFIRMED_PUBLIC_READ",
+        "title": "Index of /assets/"
+      },
+      {
+        "url": "https://www.arquindex.com.br/seo/",
+        "state": "EXPOSED_CONFIRMED_PUBLIC_READ",
+        "title": "Index of /seo/"
+      }
+    ],
+    "robots": {
+      "url": "https://www.arquindex.com.br/robots.txt",
+      "state": "READABLE",
+      "sitemap_directives": 10
+    },
+    "sitemap": {
+      "url": "https://www.arquindex.com.br/sitemap.xml",
+      "state": "READABLE_SITEMAP_INDEX",
+      "child_sitemaps_observed": 16
+    },
+    "priority_http": [
+      {"url": "https://www.arquindex.com.br/", "http": 200, "total_seconds": 4.902, "canonical": "https://www.arquindex.com.br/", "robots": "index,follow,max-image-preview:large", "h1_count": 2},
+      {"url": "https://www.arquindex.com.br/robots.txt", "http": 200, "total_seconds": 4.347},
+      {"url": "https://www.arquindex.com.br/sitemap.xml", "http": 200, "total_seconds": 3.401},
+      {"url": "https://www.arquindex.com.br/assets/", "http": 200, "total_seconds": 4.564},
+      {"url": "https://www.arquindex.com.br/seo/", "http": 200, "total_seconds": 3.417},
+      {"url": "https://www.arquindex.com.br/guarda_de_documentos.html", "http": 200, "total_seconds": 3.862, "canonical": "https://www.arquindex.com.br/guarda_de_documentos.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1},
+      {"url": "https://www.arquindex.com.br/digitalizacao.html", "http": 200, "total_seconds": 3.765, "canonical": "https://www.arquindex.com.br/digitalizacao.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1},
+      {"url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html", "http": 200, "total_seconds": 4.056, "canonical": "https://www.arquindex.com.br/digitalizacao-com-ocr.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1},
+      {"url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html", "http": 200, "total_seconds": 4.225, "canonical": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html", "robots": "index,follow,max-image-preview:large", "h1_count": 1}
+    ],
+    "homepage_resources": {
+      "declared": 19,
+      "checked_unique": 18,
+      "http_200": 18,
+      "slowest": "external LGPD widget",
+      "slowest_total_seconds": 10.164,
+      "note": "Tempo total observado pelo ambiente de auditoria, nao Core Web Vital. Nenhum recurso testado retornou 4xx/5xx."
+    },
+    "railway": {
+      "project": "Arquindex Plataforma",
+      "service": "arquindex-web",
+      "branch": "railway-production-2026",
+      "root_directory": "/arquindex-platform",
+      "latest_deployment_state": "FAILED",
+      "latest_deployment_id": "84f59841-da49-4fce-9687-914a5fa0b1e4",
+      "staged_changes": 0,
+      "institutional_publication_proof": false
+    }
+  },
+  "search_console": {
+    "property": "http://arquindex.com.br/",
+    "period": "2026-10-17/2026-11-13",
+    "comparison": "2026-09-19/2026-10-16",
+    "clicks": 0,
+    "impressions": 50,
+    "ctr": 0,
+    "average_position": 7.08,
+    "previous_impressions": 52,
+    "previous_average_position": 4.9615,
+    "cannibalization_detected": false,
+    "note": "Volume muito baixo; associacoes irrelevantes como slice na homepage exigem investigacao historica antes de alterar conteudo. A consulta comercial empresa de digitalizacao de documentos teve 2 impressoes e posicao media 25,5."
+  },
+  "articles": [
+    {
+      "title": "Lista Mestra (MDR) em Databooks: revisoes, transmittals, pendencias e aceite final",
+      "path": "editorial/2026-11-16/lista-mestra-mdr-databooks-revisoes-transmittals-aceite/index.html",
+      "proposed_url": "https://www.arquindex.com.br/blog/lista-mestra-mdr-databooks-revisoes-transmittals-aceite/",
+      "main_words": 2262,
+      "state": "CRIADA",
+      "robots": "noindex,follow",
+      "publication_evidence": false
+    },
+    {
+      "title": "Reindexacao no Alfresco: diagnostico, rebuild seguro e validacao da busca",
+      "path": "editorial/2026-11-16/reindexacao-alfresco-diagnostico-rebuild-validacao-busca/index.html",
+      "proposed_url": "https://www.arquindex.com.br/blog/reindexacao-alfresco-diagnostico-rebuild-validacao-busca/",
+      "main_words": 2252,
+      "state": "CRIADA",
+      "robots": "noindex,follow",
+      "publication_evidence": false
+    }
+  ],
+  "seo_pages": {
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed_confirmed": 0,
+    "deficit_vs_limit": 10,
+    "reason": "Sem prova de origem publicadora HomeHost, backup e FTPS TLS; dados GSC nao sustentam dez intencoes novas e a geracao regional mecanica criaria risco de doorway/canibalizacao.",
+    "regional_campaign": {
+      "intent_count": 72,
+      "state": "PLANEJADA",
+      "services": [
+        "digitalizacao-documentos",
+        "guarda-documental",
+        "consultoria-lgpd"
+      ],
+      "cities": [
+        "belo-horizonte",
+        "betim",
+        "brasilia",
+        "campinas",
+        "contagem",
+        "curitiba",
+        "fortaleza",
+        "goiania",
+        "juiz-de-fora",
+        "nova-lima",
+        "porto-alegre",
+        "recife",
+        "ribeirao-das-neves",
+        "rio-de-janeiro",
+        "salvador",
+        "santa-luzia",
+        "santo-andre",
+        "sao-paulo",
+        "sete-lagoas",
+        "sorocaba",
+        "uberaba",
+        "uberlandia",
+        "vitoria",
+        "volta-redonda"
+      ],
+      "persistent_url_inventory": "editorial/2026-11-15/manifest.json#seo_pages.regional_intents",
+      "note": "Fila mantida sem criar paginas de cidade por simples substituicao de texto."
+    }
+  },
+  "indexing": {
+    "gsc_submitted": [],
+    "indexnow_submitted": [],
+    "note": "Nenhuma URL nova publicada e comprovada; nenhum envio foi feito."
+  },
+  "blogger": {
+    "public_read": "SEARCH_ENGINE_QUERY",
+    "historic_queue_exact_title_matches": 0,
+    "published_today": 0,
+    "write_access": false,
+    "note": "A pagina publica nao foi acessivel pelo leitor web e buscas exatas nao localizaram os quatro primeiros titulos historicos. Sem OAuth Blogger v3 de escrita; nenhum POST executado."
+  },
+  "merchant_center": {
+    "audited": false,
+    "state": "PENDING_SEPARATE_AUTHORIZED_ACCESS"
+  }
+}
