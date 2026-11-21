@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Modelo de conteúdo Alfresco: tipos e aspectos | Arquindex</title>
+  <meta name="description" content="Guia técnico para modelar tipos, aspectos, propriedades, restrições e associações no Alfresco sem criar metadados frágeis ou difíceis de migrar.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/modelo-conteudo-alfresco-tipos-aspectos-metadados/">
+  <meta property="og:type" content="article"><meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Modelo de conteúdo no Alfresco: tipos, aspectos e metadados">
+  <meta property="og:description" content="Como transformar requisitos documentais em um modelo evolutivo, pesquisável e testável no Alfresco Content Services.">
+  <meta property="og:url" content="https://www.arquindex.com.br/blog/modelo-conteudo-alfresco-tipos-aspectos-metadados/">
+  <style>body{font:18px/1.65 system-ui,sans-serif;color:#16212c;margin:0}main,header,footer{max-width:920px;margin:auto;padding:24px}h1,h2,h3{line-height:1.2;color:#0b3d5c}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd6dd;padding:10px;text-align:left;vertical-align:top}.direct,.cta{background:#eef7fb;border-left:5px solid #1477a8;padding:18px}.note{background:#fff8df;padding:16px}a{color:#075f91}code{background:#f3f5f6;padding:.1em .3em}nav a{margin-right:12px}</style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Modelo de conteúdo no Alfresco: tipos, aspectos e metadados sem dívida técnica","datePublished":"2026-11-21","dateModified":"2026-11-21","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/modelo-conteudo-alfresco-tipos-aspectos-metadados/","about":["Alfresco Content Services","modelo de conteúdo","metadados","tipos","aspectos"]}</script>
+</head>
+<body>
+<header><a href="https://www.arquindex.com.br/">Arquindex</a><nav><a href="https://instalaralfresco.arquindex.com.br/">Alfresco ECM</a><a href="https://www.arquindex.com.br/digitalizacao.html">Digitalização</a><a href="https://www.arquindex.com.br/guarda_de_documentos.html">Guarda documental</a></nav></header>
+<main><article>
+  <p>Atualizado em <time datetime="2026-11-21">21 de novembro de 2026</time> · Autoria técnica: Arquindex</p>
+  <h1>Modelo de conteúdo no Alfresco: tipos, aspectos e metadados sem dívida técnica</h1>
+  <section class="direct"><h2>Resposta direta</h2><p>Um bom modelo de conteúdo no Alfresco traduz conceitos de negócio em tipos, aspectos, propriedades, associações e restrições estáveis, com namespace próprio, nomes técnicos duráveis e regras compreensíveis. Use tipo quando o documento precisa de uma identidade principal e ciclo comum; use aspecto para uma capacidade ou conjunto de metadados aplicável a classes diferentes; modele propriedades apenas quando haverá fonte, preenchimento, validação, pesquisa ou decisão; aplique restrições sem bloquear exceções legítimas; e versione mudanças com testes de compatibilidade, migração e rollback. Começar pela tela do formulário gera campos, mas não necessariamente um modelo sustentável.</p></section>
+
+  <h2>O problema que o modelo resolve</h2>
+  <p>Sem modelagem, um repositório vira uma árvore de pastas com nomes inconsistentes. “Contrato”, “contrato_assinado”, “CONTRATO FINAL” e “contrato novo 2” podem representar o mesmo conceito. Datas aparecem em texto livre, unidades usam siglas diferentes e revisões são sobrescritas. Busca, automação, retenção, integração e relatórios passam a depender de convenções informais.</p>
+  <p>O modelo de conteúdo fornece vocabulário e estrutura para que o Alfresco reconheça o que cada nó representa e quais informações pode carregar. A documentação oficial da Hyland define modelos como blocos fundamentais do repositório e os organiza em tipos, aspectos, propriedades e restrições. Tipos também podem expressar relacionamentos e herdar definições. Aspectos adicionam dados e comportamento de forma transversal.</p>
+  <p>O público inclui analistas de gestão documental, arquitetos Alfresco, desenvolvedores, administradores, integradores, donos de processo, segurança e privacidade. O método se aplica a contratos, dossiês de RH, documentos de engenharia, Databooks, procedimentos, registros de qualidade e acervos digitalizados. Ele deve ser adaptado à edição e versão do Alfresco, ao mecanismo de implantação e à interface utilizada.</p>
+
+  <h2>Definições essenciais</h2>
+  <h3>Namespace e prefixo</h3>
+  <p>O namespace torna nomes únicos no repositório. O prefixo é a forma curta usada em identificadores qualificados, como <code>arq:contrato</code>. A documentação oficial recomenda namespace específico do modelo; dois fornecedores podem usar o mesmo nome local sem colisão se os namespaces forem diferentes. Depois de conteúdo real depender dele, trocar namespace ou nome técnico pode exigir migração. Por isso, escolha uma URI controlada, prefixo curto e convenção documentada.</p>
+  <h3>Tipo</h3>
+  <p>Tipo é a classificação principal do nó. Um documento tem um tipo por vez e pode herdar de outro tipo. Um <code>arq:contrato</code> pode herdar de um tipo documental comum que já inclui código, assunto e responsável. Tipos funcionam bem quando documentos compartilham identidade, propriedades obrigatórias e comportamento central.</p>
+  <h3>Aspecto</h3>
+  <p>Aspecto é aplicado adicionalmente e pode aparecer em tipos diferentes. “Contém dado pessoal”, “controlado por revisão”, “relacionado a projeto” ou “sujeito a retenção” são candidatos, desde que expressem uma capacidade real. Um nó pode receber vários aspectos. Não use aspecto apenas para contornar uma decisão mal resolvida; excesso de aspectos torna formulários e consultas difíceis.</p>
+  <h3>Propriedade, restrição e associação</h3>
+  <p>Propriedade armazena metadado tipado, como texto, data, número ou booleano. Restrição limita valores ou formato. Associação relaciona nós sem reduzir o vínculo a uma string. Se um contrato se relaciona a uma empresa representada por outro nó, uma associação pode preservar identidade e navegação melhor que copiar apenas o nome — mas aumenta complexidade de interface, permissão e migração.</p>
+
+  <h2>Entradas, requisitos e entregáveis</h2>
+  <table><thead><tr><th>Elemento</th><th>Entrada</th><th>Entregável</th></tr></thead><tbody>
+    <tr><td>Vocabulário</td><td>Tipos documentais, termos, sinônimos e definições</td><td>Glossário aprovado e mapa de conceitos</td></tr>
+    <tr><td>Processos</td><td>Criação, revisão, aprovação, acesso, retenção e descarte</td><td>Matriz processo × metadado × regra</td></tr>
+    <tr><td>Dados</td><td>Fonte, tipo, cardinalidade, obrigatoriedade e qualidade</td><td>Dicionário de propriedades</td></tr>
+    <tr><td>Modelo</td><td>Tipos, aspectos, herança, associações e constraints</td><td>Diagrama, XML ou configuração versionada</td></tr>
+    <tr><td>Interface</td><td>Formulários, busca, listas e ações por perfil</td><td>Configuração de apresentação testada</td></tr>
+    <tr><td>Migração</td><td>Campos legados, valores inválidos e volumes</td><td>Mapeamento, transformação, exceções e reconciliação</td></tr>
+    <tr><td>Governança</td><td>Proprietários, versão, aprovação e compatibilidade</td><td>Registro de decisão e plano de evolução</td></tr>
+    <tr><td>Qualidade</td><td>Cenários positivos, negativos e de regressão</td><td>Testes, evidências e critérios de aceite</td></tr>
+  </tbody></table>
+
+  <h2>Etapas de execução</h2>
+  <h3>1. Modele o negócio antes do repositório</h3>
+  <p>Liste conceitos, não telas. Pergunte o que torna um contrato diferente de um relatório; quais propriedades existem antes do Alfresco; quem cria, valida e usa cada valor; quais decisões dependem dele; e quanto tempo permanece relevante. Separe termo preferencial, sinônimos e exemplos. Se duas áreas usam “projeto” para coisas diferentes, a divergência precisa ser resolvida ou representada explicitamente.</p>
+  <h3>2. Reduza o modelo ao necessário</h3>
+  <p>Um campo só deve existir quando há finalidade e fonte. Metadado sem responsável fica vazio ou incorreto. Campos duplicados — por exemplo, “data do contrato”, “data contrato” e “assinatura” — fragmentam busca. Classifique cada proposta como identificação, descrição, controle, relacionamento, segurança, temporalidade ou uso operacional. Exclua o que pode ser derivado com segurança ou o que ninguém consumirá.</p>
+  <h3>3. Escolha tipo ou aspecto com critérios</h3>
+  <p>Use tipo para identidade principal: contrato, desenho, procedimento ou dossiê. Use aspecto para característica transversal: revisável, confidencial, vinculado a ativo ou com temporalidade. Teste perguntas: o nó continuará sendo este documento sem a característica? Outros tipos precisam dela? A característica pode surgir depois? A resposta tende a apontar aspecto. Se todo documento de um tipo sempre exige aquele conjunto e o comportamento define sua natureza, o tipo ou sua herança podem ser mais claros.</p>
+  <h3>4. Defina propriedades de modo estável</h3>
+  <p>Para cada propriedade, registre nome técnico, rótulo, definição, tipo de dado, valor único ou múltiplo, obrigatoriedade, padrão, fonte, formato, sensibilidade, pesquisa e regra de alteração. Use data como data, não como texto. Evite codificar significado instável no nome. Uma lista fixa de departamentos pode envelhecer; talvez um dicionário administrável ou referência externa seja melhor. A documentação do Model Manager mostra criação de propriedades e limitações que variam por tipo e versão.</p>
+  <h3>5. Use restrições com moderação</h3>
+  <p>Constraints melhoram consistência, mas uma lista rígida pode impedir carga quando aparece valor legítimo novo. Defina proprietário da lista, processo de atualização e comportamento para desconhecido. Uma expressão de formato não garante validade semântica. “2026-99-99” pode obedecer a um padrão textual e continuar inválido; por isso escolha tipo apropriado e validação complementar quando necessário.</p>
+  <h3>6. Modele relações sem duplicar identidade</h3>
+  <p>Copiar nome de projeto para milhares de documentos facilita importação, mas dificulta renomear e distinguir homônimos. Associação a um nó de projeto preserva vínculo, porém exige cuidar de permissões, exclusão, consulta e API. Em alguns cenários, um identificador externo imutável e metadados derivados oferecem equilíbrio. Documente a fonte de verdade e o que acontece quando o objeto relacionado não existe.</p>
+  <h3>7. Separe o modelo da apresentação</h3>
+  <p>O modelo define semântica; formulários e layouts definem como usuários veem e editam. Nem toda propriedade deve aparecer em toda tela. Valores técnicos, de integração ou auditoria podem ser somente leitura. Agrupe campos por tarefa, esconda ruído e forneça ajuda clara. Teste criação, edição, importação, busca, visualização e API. Um modelo correto com formulário impraticável produz dados ruins.</p>
+  <h3>8. Implemente em ambiente controlado</h3>
+  <p>Use Model Manager ou implantação versionada conforme edição, política e complexidade. A documentação oficial indica grupo administrativo específico para gerenciar modelos na interface. Para modelos extensos ou integrados a código, arquivos e módulos versionados favorecem revisão, repetibilidade e automação. Não altere produção antes de backup, teste de restauração, homologação e plano de rollback.</p>
+  <h3>9. Migre com reconciliação</h3>
+  <p>Mapeie campo legado para propriedade nova, transforme datas e listas, mantenha identificadores, aplique tipo e aspectos na ordem prevista e registre rejeições. Faça piloto com amostra representativa e itens extremos. Compare contagens, nós, versões, binários, propriedades, permissões, relacionamentos e resultados de busca. Não trate execução sem erro como prova de migração completa.</p>
+  <h3>10. Governe a evolução</h3>
+  <p>Classifique mudanças como compatíveis, condicionais ou rompedoras. Adicionar propriedade opcional costuma ser menos arriscado que renomear identificador, mudar tipo, tornar campo obrigatório ou alterar lista. Registre versão do modelo, motivação, proprietário, impacto, migração, testes e rollback. Se o modelo for muito grande, a documentação oficial sugere considerar divisão em namespaces coerentes.</p>
+
+  <h2>Controle de qualidade e rastreabilidade</h2>
+  <p>Os testes devem cobrir dicionário e uso. Confirme que o modelo ativa, que nomes qualificados são únicos, heranças resolvem, constraints aceitam e rejeitam valores corretos, propriedades aparecem nas APIs, formulários respeitam leitura e edição, consultas localizam conteúdo e reindexação não perde campos. Teste permissões: metadados sensíveis não podem ficar visíveis apenas porque o binário está protegido.</p>
+  <p>Para migração, produza manifesto por lote, contagens antes e depois, hashes quando previstos, lista de IDs, resultados de transformação, rejeições e evidência de reconciliação. Para evolução, mantenha o artefato de modelo sob controle de versão e associe mudanças a decisão aprovada. A interface pode registrar que uma importação terminou; a rastreabilidade precisa demonstrar o que foi importado e como foi validado.</p>
+
+  <h2>Segurança, privacidade e limites</h2>
+  <p>Metadados também são dados. CPF, matrícula, diagnóstico, salário, endereço ou classificação podem ser mais fáceis de consultar que o próprio arquivo. Aplique minimização, finalidade, controle de acesso, mascaramento quando cabível e retenção. Não crie propriedade pesquisável globalmente sem avaliar exposição. Aspectos que indicam sensibilidade devem acionar política real; um rótulo sozinho não protege.</p>
+  <ul><li>Modelo não substitui política de acesso.</li><li>Campo obrigatório não garante dado verdadeiro.</li><li>Herança excessiva torna impacto difícil de prever.</li><li>Lista rígida sem governança envelhece.</li><li>Nome técnico alterado pode quebrar consultas, formulários e integrações.</li><li>Associação aumenta semântica, mas exige ciclo de vida.</li><li>Busca depende também de indexação e configuração.</li><li>Model Manager e implantação por código têm capacidades e limites por versão.</li></ul>
+  <p class="note">Valide a versão e edição do Alfresco Content Services e a documentação correspondente. Exemplos de nomes são hipotéticos; não representam modelo implantado em cliente nem certificação da Arquindex.</p>
+
+  <h2>Exemplo hipotético de aplicação</h2>
+  <p>Uma empresa fictícia organiza contratos, desenhos e relatórios de inspeção. Todos precisam de projeto e unidade, mas somente contratos têm vigência e parte contratada; desenhos usam código, disciplina e revisão; relatórios têm data de inspeção e equipamento. A equipe cria tipos principais para as três classes, um aspecto <code>arq:relacionadoProjeto</code> com identificador e unidade, e outro <code>arq:controladoRevisao</code> aplicado a desenhos e procedimentos. Valores de disciplina vêm de lista governada; projeto usa identificador imutável validado contra fonte externa. Antes da migração, descobre-se que 7% das datas estão em texto inconsistente e seguem para exceção, em vez de conversão silenciosa. O piloto testa formulário, API, busca e permissões. Esse cenário ilustra método; não é case executado.</p>
+
+  <h2>Manual de decisão: tipo, aspecto ou propriedade?</h2>
+  <table><thead><tr><th>Pergunta</th><th>Decisão provável</th><th>Cuidado</th></tr></thead><tbody>
+    <tr><td>Define o que o nó é?</td><td>Tipo</td><td>Evite muitos subtipos só por departamento</td></tr>
+    <tr><td>Pode ser aplicado a classes diferentes?</td><td>Aspecto</td><td>Não use aspecto como “pasta de campos” sem comportamento</td></tr>
+    <tr><td>É um valor atômico consultado ou validado?</td><td>Propriedade</td><td>Defina fonte, tipo e proprietário</td></tr>
+    <tr><td>Relaciona dois objetos com identidade?</td><td>Associação ou ID externo</td><td>Defina ciclo de vida e permissão</td></tr>
+    <tr><td>Restringe valores aceitáveis?</td><td>Constraint</td><td>Preveja atualização e exceções</td></tr>
+  </tbody></table>
+
+  <h2>Checklist prático</h2>
+  <ul><li>Glossário e conceitos foram aprovados.</li><li>Namespace e prefixo são próprios e estáveis.</li><li>Cada tipo tem identidade e finalidade claras.</li><li>Aspectos representam capacidades transversais reais.</li><li>Cada propriedade tem fonte, responsável e consumidor.</li><li>Tipos de dados e cardinalidade evitam texto livre desnecessário.</li><li>Constraints têm governança e tratamento de exceção.</li><li>Associações têm regra de permissão e ciclo de vida.</li><li>Formulários separam semântica de apresentação.</li><li>Dados sensíveis foram minimizados e protegidos.</li><li>Busca e API foram testadas, não apenas a tela.</li><li>Migração reconcilia contagens, propriedades e rejeições.</li><li>Mudanças têm versão, compatibilidade e rollback.</li><li>Backup e restauração foram validados antes da produção.</li></ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>Todo tipo documental precisa de um tipo customizado?</h3><p>Não. Crie quando houver identidade, propriedades ou comportamento que justifiquem manutenção. Categorias simples podem ser representadas por metadados governados, desde que busca e regras permaneçam claras.</p>
+  <h3>Quando usar aspecto em vez de herança?</h3><p>Quando a característica atravessa tipos diferentes ou pode ser adicionada e removida ao longo do ciclo. Herança funciona melhor para identidade e estrutura essencial.</p>
+  <h3>Posso renomear uma propriedade depois?</h3><p>O rótulo de exibição é mais simples de mudar que o nome técnico. Alterar identificador usado por conteúdo, consultas e integrações exige migração e testes; trate como mudança potencialmente rompedoras.</p>
+  <h3>Uma lista de valores deve ficar no modelo?</h3><p>Depende da estabilidade e governança. Lista pequena e estável pode usar constraint. Valores frequentes ou administrados por negócio podem exigir dicionário ou fonte externa.</p>
+  <h3>Como evitar metadados vazios?</h3><p>Reduza campos, defina fonte, automatize quando confiável, torne obrigatório somente o essencial, melhore o formulário e monitore qualidade. Obrigatoriedade sem processo cria preenchimento fictício.</p>
+
+  <h2>Fontes oficiais consultadas</h2>
+  <ul>
+    <li><a href="https://docs.hyland.com/r/Alfresco/Alfresco-Content-Services/25.2/Alfresco-Content-Services/Configure/Content-models/Introduction/Models">Hyland — Alfresco Content Services 25.2: Models</a>, consultada em 21/11/2026.</li>
+    <li><a href="https://docs.hyland.com/r/Alfresco/Alfresco-Content-Services/26.1/Alfresco-Content-Services/Configure/Content-models/Custom-types-aspects-and-properties">Hyland — Custom types, aspects and properties, ACS 26.1</a>, consultada em 21/11/2026.</li>
+    <li><a href="https://docs.hyland.com/r/Alfresco/Alfresco-Content-Services/26.1/Alfresco-Content-Services/Configure/Content-models/Custom-types-aspects-and-properties/Manage-properties/Create-a-property/Options-for-constraints-of-properties">Hyland — Options for constraints of properties, ACS 26.1</a>, consultada em 21/11/2026.</li>
+    <li><a href="https://docs.hyland.com/r/Alfresco/Alfresco-Content-Services-Community-Edition/26.2/Alfresco-Content-Services-Community-Edition/Configure/Content-models/Create-a-content-model">Hyland — Create a content model, Community Edition 26.2</a>, consultada em 21/11/2026.</li>
+    <li><a href="https://docs.hyland.com/r/Alfresco/Alfresco-Content-Services/23.4/Alfresco-Content-Services/Develop/In-Process-Platform-Extension-Points/Content-Model-Extension-Point/Defining-and-Deploying">Hyland — Defining and Deploying a Content Model, ACS 23.4</a>, consultada em 21/11/2026.</li>
+  </ul>
+  <section class="cta"><h2>Converse com a Arquindex</h2><p>A Arquindex apoia diagnóstico, arquitetura, modelagem, migração e operação Alfresco ECM conforme escopo aprovado. Site: <a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · WhatsApp: <a href="https://wa.me/5531973632725">(31) 97363-2725</a> · e-mail: <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a>.</p></section>
+</article></main>
+<footer><p>Arquindex · Gestão documental, digitalização, Alfresco ECM, LGPD e Databooks.</p></footer>
+</body></html>
