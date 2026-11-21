@@ -35,7 +35,13 @@
         "/img/about.webp",
         "/assets/img/about.webp",
         "/css/IE-fix.css"
-      ]
+      ],
+      "mobile_render": {
+        "completed": false,
+        "error_class": "environment",
+        "message": "Chromium: socket() failed: Operation not permitted (1)",
+        "static_viewport_meta": true
+      }
     },
     "priority_pages": [
       {
