@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Auditoria no Alfresco: trilhas, logs e SIEM | Arquindex</title>
+  <meta name="description" content="Guia técnico para planejar trilhas de auditoria no Alfresco, proteger registros, integrar logs ao SIEM e testar rastreabilidade sem confundir log com prova absoluta.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/auditoria-alfresco-trilhas-logs-siem/">
+  <meta property="og:type" content="article"><meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Auditoria no Alfresco: trilhas, logs e SIEM">
+  <meta property="og:description" content="Como definir eventos, retenção, proteção, exportação e testes de auditoria em um ambiente Alfresco.">
+  <meta property="og:url" content="https://www.arquindex.com.br/blog/auditoria-alfresco-trilhas-logs-siem/">
+  <style>body{font:18px/1.65 system-ui,sans-serif;color:#16212c;margin:0}main,header,footer{max-width:920px;margin:auto;padding:24px}h1,h2,h3{line-height:1.2;color:#0b3d5c}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd6dd;padding:10px;text-align:left;vertical-align:top}.direct,.cta{background:#eef7fb;border-left:5px solid #1477a8;padding:18px}.note{background:#fff8df;padding:16px}a{color:#075f91}code{background:#f3f5f6;padding:.1em .3em}nav a{margin-right:12px}</style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Auditoria no Alfresco: como planejar trilhas, logs e integração com SIEM","datePublished":"2026-11-20","dateModified":"2026-11-20","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/auditoria-alfresco-trilhas-logs-siem/","about":["Alfresco Content Services","auditoria","logs","SIEM","gestão documental"]}</script>
+</head>
+<body>
+<header><a href="https://www.arquindex.com.br/">Arquindex</a><nav><a href="https://instalaralfresco.arquindex.com.br/">Alfresco ECM</a><a href="https://www.arquindex.com.br/digitalizacao.html">Digitalização</a><a href="https://www.arquindex.com.br/guarda_de_documentos.html">Guarda documental</a></nav></header>
+<main>
+<article>
+  <p>Atualizado em <time datetime="2026-11-20">20 de novembro de 2026</time> · Autoria técnica: Arquindex</p>
+  <h1>Auditoria no Alfresco: como planejar trilhas, logs e integração com SIEM</h1>
+  <section class="direct"><h2>Resposta direta</h2><p>Uma trilha de auditoria útil no Alfresco nasce de um objetivo verificável: reconstruir quem realizou qual ação, sobre qual objeto, em que instante, por qual canal e com qual resultado. O projeto precisa selecionar eventos relevantes, documentar identidades e relógios, limitar dados pessoais e segredos, proteger os registros contra alteração, definir retenção e descarte, exportar somente o necessário para análise centralizada e provar, com testes, que o percurso completo funciona. Habilitar todos os logs sem critérios aumenta custo, ruído e risco de exposição; guardar apenas logs de servidor deixa lacunas sobre ações de negócio.</p></section>
+
+  <h2>O problema que a auditoria resolve — e o que ela não resolve</h2>
+  <p>Em um repositório documental, perguntas simples tornam-se difíceis depois de um incidente: um documento foi excluído ou apenas movido? A permissão foi alterada antes ou depois do acesso? A versão consultada era a vigente? A exportação partiu da interface, de uma API, de CMIS ou de uma integração? O usuário humano executou a ação ou uma conta técnica agiu em nome de um processo? Sem eventos correlacionáveis, a equipe depende de memória, e-mails ou capturas de tela isoladas.</p>
+  <p>A auditoria reduz essa incerteza ao registrar fatos técnicos e de negócio. Porém, um registro de log não é prova absoluta por si só. Sua força depende da origem, sincronização de tempo, integridade, controles de acesso, completude e possibilidade de relacioná-lo a outras evidências. Um log que pode ser alterado pelo mesmo administrador que está sendo auditado, ou que perdeu eventos durante indisponibilidade, exige interpretação cautelosa. A finalidade é produzir rastreabilidade defensável, não prometer não repúdio automático.</p>
+  <p>O público principal inclui administradores Alfresco, segurança da informação, DPO/privacidade, auditoria interna, gestão documental, jurídico e responsáveis por processos. A aplicação é relevante em dossiês de RH, contratos, documentos de engenharia, prontuários e acervos regulados, mas o desenho deve variar conforme risco, edição e versão do produto, integrações instaladas e obrigações da organização.</p>
+
+  <h2>Definições essenciais</h2>
+  <h3>Evento, registro e trilha</h3>
+  <p>Evento é a ocorrência observada: autenticação, leitura, criação de versão, alteração de metadado, mudança de permissão, exclusão, restauração ou exportação. Registro é a representação persistida daquele evento. Trilha é o conjunto ordenado e correlacionado de registros que permite reconstruir uma sequência. Um único registro raramente explica o contexto completo.</p>
+  <h3>Auditoria de aplicação, log operacional e log de segurança</h3>
+  <p>O log operacional ajuda a diagnosticar falhas de serviço, memória, banco, pesquisa ou transformação. O log de segurança registra autenticações, autorizações e sinais de abuso. A auditoria de aplicação representa ações significativas no repositório e no processo documental. Os conjuntos podem se relacionar, mas têm finalidades, acesso e prazos diferentes. Misturá-los em um arquivo sem classificação dificulta busca, retenção e resposta a incidentes.</p>
+  <h3>Correlação</h3>
+  <p>Correlação é a capacidade de unir eventos por identificadores consistentes: usuário, conta técnica, nó, site, tipo documental, solicitação, sessão, endereço de origem, integração e identificador de correlação. O identificador não deve conter um segredo ou dado pessoal desnecessário. Quando uma integração cria documento em nome de outra aplicação, a trilha deve distinguir a conta de serviço da identidade de negócio, quando tecnicamente e juridicamente possível.</p>
+
+  <h2>Entradas, requisitos e entregáveis</h2>
+  <table><thead><tr><th>Elemento</th><th>Entrada necessária</th><th>Entregável verificável</th></tr></thead><tbody>
+    <tr><td>Escopo</td><td>Processos, documentos críticos, versões do Alfresco e integrações</td><td>Matriz de casos de uso e eventos prioritários</td></tr>
+    <tr><td>Identidade</td><td>SSO, diretórios, contas locais, técnicas e delegações</td><td>Mapa de identidade e regras de atribuição</td></tr>
+    <tr><td>Tempo</td><td>Fontes NTP, fusos e tolerância de desvio</td><td>Critério de sincronização e alerta de divergência</td></tr>
+    <tr><td>Dados</td><td>Campos disponíveis e classificação da informação</td><td>Dicionário de eventos com campos permitidos e mascarados</td></tr>
+    <tr><td>Retenção</td><td>Finalidade, obrigação, contrato e volume diário</td><td>Política de retenção, arquivamento e descarte</td></tr>
+    <tr><td>Proteção</td><td>Perfis administrativos, armazenamento e transporte</td><td>Matriz de acesso, integridade e cópia protegida</td></tr>
+    <tr><td>Monitoramento</td><td>SIEM, alertas e capacidade da equipe</td><td>Regras de correlação, limiares e runbooks</td></tr>
+    <tr><td>Validação</td><td>Cenários positivos, negativos e de falha</td><td>Plano de testes, evidências e aceite</td></tr>
+  </tbody></table>
+
+  <h2>Etapas de execução</h2>
+  <h3>1. Comece pelas perguntas de auditoria</h3>
+  <p>Liste decisões que a organização precisa sustentar. Exemplos: identificar quem alterou a classificação de um contrato; reconstruir acesso a um dossiê sensível; detectar concessão de permissão ampla; comprovar que uma versão foi substituída; ou investigar exportação atípica. Cada pergunta deve virar um cenário com ação, ator, objeto, resultado esperado e evidência mínima. Essa abordagem evita habilitar eventos sem consumidor definido.</p>
+  <h3>2. Inventarie todas as rotas de ação</h3>
+  <p>Uma mesma alteração pode ocorrer pela interface web, REST, CMIS, WebDAV, regra de pasta, workflow, módulo customizado ou integração externa. Testar só a interface cria falsa sensação de cobertura. Registre versão do produto, componentes opcionais e pontos de extensão. A documentação oficial e o ambiente de homologação devem orientar nomes e capacidades; não copie propriedades de outra versão sem validação.</p>
+  <h3>3. Modele um dicionário de eventos</h3>
+  <p>Para cada evento, defina nome, descrição, fonte, severidade, ator, alvo, data/hora, resultado, motivo, correlação, dados proibidos e responsável pelo uso. Dê preferência a campos estruturados. Mensagens livres dificultam consulta e podem sofrer injeção de conteúdo. Senhas, tokens, chaves, conteúdo integral do documento e dados pessoais sem finalidade não devem ir para o log.</p>
+  <h3>4. Dimensione volume e impacto</h3>
+  <p>Meça eventos por hora em carga normal e pico, tamanho médio, crescimento, consultas e custo de retenção. A leitura de cada documento pode gerar volume muito maior que alterações de permissão. Habilite por etapas em homologação, compare latência e banco, e defina limites. Se o repositório degrada quando a auditoria cresce, a solução não está pronta para produção.</p>
+  <h3>5. Proteja geração, transporte e armazenamento</h3>
+  <p>Separe a administração do repositório da administração da plataforma de logs quando o risco justificar. Use transporte autenticado e cifrado, privilégios mínimos, registro de acesso aos próprios logs, rotação testada e detecção de interrupção. Uma cópia centralizada ou imutável pode elevar a confiança, mas precisa de política de retenção e recuperação. Imutabilidade não corrige evento incompleto ou identidade errada.</p>
+  <h3>6. Integre ao SIEM com contrato explícito</h3>
+  <p>Defina formato, versão do esquema, fuso, codificação, campos obrigatórios, tratamento de repetição e comportamento quando o destino estiver indisponível. Normalize somente depois de preservar o registro original necessário. Regras iniciais podem apontar concessão de administrador, desativação de auditoria, exportações em massa, falhas repetidas de acesso, exclusões e alterações de permissão fora de janela. Alertas devem ter responsável e procedimento; alertar sem resposta gera acúmulo.</p>
+  <h3>7. Teste ponta a ponta</h3>
+  <p>Execute cenários com usuário comum, administrador, conta técnica e integração. Confirme evento, campos, horário, sequência, chegada ao SIEM, alerta e investigação. Simule falta de espaço, queda de rede, indisponibilidade do coletor, relógio divergente e entrada malformada. Teste também silêncio: se a auditoria parar, alguém é avisado? Registre evidências e aceite, sem incluir segredos.</p>
+
+  <h2>Controle de qualidade e rastreabilidade</h2>
+  <p>O controle deve medir cobertura, completude, pontualidade, unicidade e integridade. Cobertura pergunta se cada caso crítico gera evento. Completude verifica campos obrigatórios. Pontualidade compara atraso entre ocorrência e disponibilidade. Unicidade detecta duplicações que poderiam inflar alertas. Integridade confirma que alterações ou exclusões não passam despercebidas. Uma amostra periódica pode cruzar ações controladas no Alfresco com registros locais e centralizados.</p>
+  <p>Mantenha versão do dicionário, configuração aprovada, hash ou mecanismo equivalente quando previsto, lista de mudanças, resultado de testes e responsáveis. Mudança de versão do Alfresco, SSO, proxy, banco ou integração pode alterar a trilha. Por isso, auditoria é um controle contínuo, não uma configuração única.</p>
+
+  <h2>Riscos e limites</h2>
+  <ul>
+    <li><strong>Excesso de dados:</strong> aumenta exposição de dados pessoais, custo e tempo de investigação.</li>
+    <li><strong>Falsa completude:</strong> uma tela de auditoria pode não cobrir todas as APIs e extensões.</li>
+    <li><strong>Relógios divergentes:</strong> prejudicam a ordem dos acontecimentos.</li>
+    <li><strong>Conta compartilhada:</strong> impede atribuição confiável ao indivíduo.</li>
+    <li><strong>Privilégio concentrado:</strong> o mesmo perfil pode gerar, alterar e apagar evidências.</li>
+    <li><strong>Retenção indefinida:</strong> viola minimização e eleva risco; retenção curta demais destrói utilidade.</li>
+    <li><strong>Alerta sem processo:</strong> produz ruído e não reduz tempo de resposta.</li>
+  </ul>
+  <p class="note">Este guia não substitui análise jurídica, de privacidade ou forense. A edição Community e produtos comerciais podem ter recursos e suporte diferentes. Confirme versão, licenciamento e documentação antes de implantar.</p>
+
+  <h2>Exemplo hipotético de aplicação</h2>
+  <p>Uma empresa fictícia usa Alfresco para contratos. O objetivo é detectar concessões de acesso amplo e reconstruir alterações de versão. A equipe define eventos de mudança de permissão, criação de versão, exclusão e restauração; associa nó, site, usuário, conta técnica, resultado e correlação; exclui conteúdo e tokens; exporta campos estruturados ao SIEM; e cria alerta para inclusão de grupo externo em pasta restrita. Em homologação, uma integração via REST atualiza o documento, mas o ator aparece apenas como conta técnica. O teste revela a lacuna antes da produção. A equipe adiciona um identificador de solicitante aprovado no contexto da integração, documenta seu nível de confiança e repete os testes. O resultado é uma trilha mais útil, sem alegar que o registro sozinho prova intenção ou autoria jurídica.</p>
+
+  <h2>Checklist prático</h2>
+  <ul><li>Objetivos e casos críticos estão escritos.</li><li>Versão, edição, APIs e módulos foram inventariados.</li><li>Eventos e campos têm dicionário versionado.</li><li>Segredos e dados pessoais desnecessários são excluídos ou mascarados.</li><li>Relógios e fuso têm controle e alerta.</li><li>Volume, desempenho, rotação e recuperação foram testados.</li><li>Acesso aos logs é restrito e auditado.</li><li>Falha de envio ou parada da auditoria gera sinal.</li><li>SIEM preserva origem, resultado e identificadores de correlação.</li><li>Regras de alerta possuem responsável e runbook.</li><li>Retenção e descarte têm fundamento e aprovação.</li><li>Testes cobrem interface, APIs, integrações e falhas.</li></ul>
+
+  <h2>Perguntas frequentes</h2>
+  <h3>O log padrão do servidor basta?</h3><p>Não necessariamente. Ele pode mostrar requisições e erros, mas não representar a semântica de uma alteração documental, versão, permissão ou workflow. Use fontes complementares e teste a cobertura real.</p>
+  <h3>É correto registrar o conteúdo do documento?</h3><p>Em geral, não. O objetivo costuma ser registrar identificador, tipo, ação e resultado. Copiar conteúdo para logs amplia exposição e deve exigir finalidade e proteção específicas.</p>
+  <h3>Enviar tudo ao SIEM resolve integridade?</h3><p>Não. Centralização ajuda a correlação e separação de funções, mas a confiança depende também de origem, transporte, controles, relógio, completude e retenção.</p>
+  <h3>Como definir o prazo dos logs?</h3><p>Relacione finalidade operacional e de segurança, obrigações aplicáveis, investigação, custo e minimização. Documente prazos por classe; não adote retenção infinita por conveniência.</p>
+  <h3>Uma trilha de auditoria garante não repúdio?</h3><p>Não automaticamente. Logs ajudam a atribuição, mas podem depender do sistema que os produz. Assinaturas, controles de identidade, proteção e cadeia de custódia podem ser necessários conforme o risco.</p>
+
+  <h2>Fontes oficiais consultadas</h2>
+  <ul>
+    <li><a href="https://docs.alfresco.com/governance-services/latest/">Alfresco Governance Services 23.2 — documentação oficial</a>, consultada em 20/11/2026.</li>
+    <li><a href="https://docs.alfresco.com/governance-services/community/">Alfresco Governance Services Community — documentação oficial</a>, consultada em 20/11/2026.</li>
+    <li><a href="https://csrc.nist.gov/pubs/sp/800/92/final">NIST SP 800-92 — Guide to Computer Security Log Management</a>, publicação final de 13/09/2006, consultada em 20/11/2026.</li>
+    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html">OWASP Logging Cheat Sheet</a>, consultada em 20/11/2026.</li>
+  </ul>
+  <section class="cta"><h2>Converse com a Arquindex</h2><p>A Arquindex apoia diagnóstico, arquitetura documental, Alfresco ECM, permissões, migração e rastreabilidade conforme escopo aprovado. Site: <a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · WhatsApp: <a href="https://wa.me/5531973632725">(31) 97363-2725</a> · e-mail: <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a>.</p></section>
+</article>
+</main>
+<footer><p>Arquindex · Gestão documental, digitalização, Alfresco ECM, LGPD e Databooks.</p></footer>
+</body></html>
