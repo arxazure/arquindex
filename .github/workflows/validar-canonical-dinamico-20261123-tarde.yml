@@ -1,0 +1,58 @@
+name: Validar canonical dinamico 2026-11-23 tarde
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/validar-canonical-dinamico-20261123-tarde.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Instalar Playwright
+        run: |
+          pip install playwright
+          python -m playwright install chromium
+      - name: Comparar estado renderizado
+        env:
+          URLS: 'https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/betim/|https://www.arquindex.com.br/seo-regional/gestao-documental-ecm-databooks/contagem/|https://www.arquindex.com.br/digitalize/belo-horizonte/|https://www.arquindex.com.br/digitalize/contagem/|https://www.arquindex.com.br/digitalize/betim/|https://www.arquindex.com.br/digitalize/nova-lima/'
+        run: |
+          python - <<'PY'
+          import os,json
+          from playwright.sync_api import sync_playwright
+          out=[]
+          with sync_playwright() as p:
+              browser=p.chromium.launch(headless=True)
+              for url in os.environ['URLS'].split('|'):
+                  page=browser.new_page(viewport={'width':1440,'height':1000})
+                  response=page.goto(url,wait_until='networkidle',timeout=45000)
+                  data=page.evaluate("""() => ({
+                    requestedUrl: location.href,
+                    title: document.title,
+                    h1: [...document.querySelectorAll('h1')].map(x=>x.innerText.trim()),
+                    canonicals: [...document.querySelectorAll('link[rel~="canonical"]')].map(x=>x.href),
+                    description: document.querySelector('meta[name="description"]')?.content || null,
+                    robots: document.querySelector('meta[name="robots"]')?.content || null,
+                    articleCount: document.querySelectorAll('article').length,
+                    jsonLdCount: document.querySelectorAll('script[type="application/ld+json"]').length
+                  })""")
+                  data['input_url']=url; data['http_status']=response.status if response else None
+                  out.append(data); print(json.dumps(data,ensure_ascii=False)); page.close()
+              browser.close()
+          with open('canonical-dinamico-20261123-tarde.json','w',encoding='utf-8') as f:
+              json.dump(out,f,ensure_ascii=False,indent=2)
+          assert len(out)==6
+          assert all(x['http_status']==200 for x in out)
+          PY
+      - name: Guardar evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-dinamico-20261123-tarde
+          path: canonical-dinamico-20261123-tarde.json
