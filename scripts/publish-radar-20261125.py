@@ -53,18 +53,29 @@ def check():
   assert b'SMS DP' not in b and b'/root/' not in b
  ET.fromstring((ROOT/'sitemap-radar-20261125.xml').read_bytes())
  print('LOCAL_CHECK_OK',len(ROWS),flush=True)
+def connect_verified():
+ ips=set(socket.gethostbyname_ex('ftp.arquindex.com.br')[2])
+ candidates=list(dict.fromkeys([os.getenv('FTP_TLS_HOST') or 'h59.servidorhh.com','h59.servidorhh.com']))
+ errors=[]
+ for host in candidates:
+  assert host in ('h59.servidorhh.com','ftp.arquindex.com.br'),'UNREVIEWED_FTPS_HOST'
+  if not ips & set(socket.gethostbyname_ex(host)[2]):continue
+  f=ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=45)
+  try:
+   f.connect(host,21);f.auth()
+  except (ssl.SSLCertVerificationError,ssl.SSLError) as e:
+   errors.append(type(e).__name__);f.close();continue
+  f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+  print('FTPS_TLS_VERIFIED',host,flush=True)
+  return f
+ raise RuntimeError('FTPS_CERTIFICATE_NOT_VERIFIED '+','.join(errors))
 def publish():
  check()
  # Origin identity must match both the public domain and the verified HomeHost endpoint.
  status,final,headers,public_home=http(BASE)
  assert status==200 and 'arquindex' in public_home.decode('utf-8','replace').lower(),'PUBLIC_ORIGIN_UNAVAILABLE'
- host=os.getenv('FTP_TLS_HOST') or 'h59.servidorhh.com'
- assert host in ('h59.servidorhh.com','ftp.arquindex.com.br'),'UNREVIEWED_FTPS_HOST'
- ips=set(socket.gethostbyname_ex('ftp.arquindex.com.br')[2])
- assert ips & set(socket.gethostbyname_ex(host)[2]),'FTPS_ORIGIN_IP_MISMATCH'
  previous={};applied=[]
- with ftplib.FTP_TLS(context=ssl.create_default_context(),timeout=45) as f:
-  f.connect(host,21);f.login('arquind2',os.environ['FTP_PASSWORD']);f.prot_p()
+ with connect_verified() as f:
   home=get(f,'/public_html/index.html') or get(f,'/public_html/index.php')
   assert home and b'arquindex' in home.lower(),'PUBLIC_ROOT_NOT_CONFIRMED'
   planned={'/public_html/'+r['path']:(ROOT/r['path']).read_bytes() for r in ROWS}
