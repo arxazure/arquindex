@@ -1,0 +1,32 @@
+name: Publicar radar documental 25-11-2026
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'open-source-documental/radar/2026-11-25/**'
+      - 'scripts/publish-radar-20261125.py'
+      - '.github/workflows/publicar-radar-20261125.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arquindex-seo-queue
+  cancel-in-progress: false
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar artigos e links internos
+        run: python scripts/publish-radar-20261125.py --check
+      - name: Publicar na HomeHost com TLS, backup e leitura publica
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_TLS_HOST: ${{ vars.FTP_TLS_HOST }}
+        run: python scripts/publish-radar-20261125.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: radar-20261125-publication
+          path: publish-report/radar-20261125/
