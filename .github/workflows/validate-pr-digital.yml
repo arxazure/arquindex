@@ -1,0 +1,32 @@
+name: PR Digital - validar paginas
+on:
+  pull_request:
+    paths:
+      - 'pr-digital/**'
+      - 'scripts/validate-pr-digital*'
+      - 'scripts/publish-pr-digital.py'
+      - 'scripts/backup-homehost-resumable.py'
+      - 'tests/*pr-digital*'
+      - '.github/workflows/validate-pr-digital.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Regression tests
+        run: |
+          python tests/test-pr-digital-validator.py
+          python tests/test-pr-digital-publish.py
+          python tests/test-pr-digital-backup.py
+          node tests/pr-digital-calculator.mjs
+      - name: Validate static PR Digital pages and sitemap
+        run: node scripts/validate-pr-digital.mjs
