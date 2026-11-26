@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arquindex | Relatório de Produção Alfresco</title>
+<style>
+:root{font-family:Inter,system-ui,Arial,sans-serif;color:#14243a;background:#f3f6fa}
+*{box-sizing:border-box}body{margin:0}.top{background:#102b43;color:#fff;padding:23px max(22px,calc((100vw - 1250px)/2))}
+.top small{color:#91dacc;letter-spacing:.12em;text-transform:uppercase}.top h1{margin:8px 0;font-size:clamp(23px,3vw,34px)}
+main{max-width:1250px;margin:24px auto;padding:0 20px}.intro{color:#516276}.panel{background:#fff;border:1px solid #dbe4ec;border-radius:14px;padding:20px;margin:18px 0;box-shadow:0 2px 8px #1232}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:13px}
+label{display:grid;gap:6px;font-size:13px;font-weight:700}input,select,button{font:inherit;border:1px solid #b9cad6;border-radius:8px;padding:10px;max-width:100%}
+button{background:#116d6b;color:white;border:0;cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+.metric{background:white;border:1px solid #dbe4ec;border-radius:12px;padding:16px}
+.metric strong{display:block;font-size:29px;margin-top:6px}.metric span{font-size:12px;color:#5c6876}
+.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid #e4eaf0;text-align:left;padding:11px;white-space:nowrap}
+th{background:#eaf2f5}h2{font-size:19px;margin:5px 0 14px}.muted{color:#586b79;font-size:13px}.error{color:#a32626}
+</style></head><body>
+<header class="top"><small>Arquindex · Governança Documental</small><h1>Relatório de Produção Alfresco</h1>
+<div>Recebimento, envio, validação, temporalidade e produtividade por departamento</div></header>
+<main>
+<p class="intro">Visualizador local: os dados são processados no navegador. Nenhum arquivo é enviado para servidores por esta página. Carregue um JSON exportado pelo backend autorizado. Não utilize dados clínicos desnecessários.</p>
+<section class="panel"><h2>Fonte e filtros</h2><div class="filters">
+<label>Importar JSON<input id="file" type="file" accept=".json,application/json"></label>
+<label>Empresa<select id="empresa"><option value="">Todas</option></select></label>
+<label>Departamento<select id="departamento"><option value="">Todos</option></select></label>
+<label>Situação<select id="status"><option value="">Todas</option></select></label>
+<label>Temporalidade<select id="temporalidade"><option value="">Todas</option></select></label>
+<label>Data inicial<input type="date" id="de"></label>
+<label>Data final<input type="date" id="ate"></label>
+<label>Busca por lote, código ou tipo<input id="busca" placeholder="Ex: 01.20.006.001"></label>
+</div><div class="actions"><button id="export" disabled>Exportar CSV filtrado</button><span id="info" class="muted" role="status">Nenhuma informação carregada.</span></div></section>
+<div class="metrics" id="metrics"></div>
+<section class="panel"><h2>Produção por departamento</h2><div class="tablewrap"><table><thead><tr><th>Departamento</th><th>Documentos</th><th>Validados</th><th>Falhas</th><th>Temporalidade aplicada</th><th>Temporalidade pendente</th><th>Páginas conhecidas</th></tr></thead><tbody id="departamentos"></tbody></table></div></section>
+<section class="panel"><h2>Produção por tipo documental</h2><div class="tablewrap"><table><thead><tr><th>Código</th><th>Tipo</th><th>Documentos</th><th>Validados</th><th>Falhas</th><th>Temporalidade pendente</th></tr></thead><tbody id="tipos"></tbody></table></div></section>
+<section class="panel"><h2>Documentos enviados e situação</h2><div class="tablewrap"><table><thead><tr><th>Data/hora</th><th>Departamento</th><th>Documento</th><th>Código</th><th>Lote</th><th>Situação</th><th>Temporalidade</th><th>ID Alfresco</th></tr></thead><tbody id="documentos"></tbody></table></div></section>
+</main><script>
+"use strict";
+let rows=[];
+const $=id=>document.getElementById(id);
+const clean=s=>String(s??"");
+function cell(tr,value){const td=document.createElement("td");td.textContent=clean(value);tr.append(td);}
+function group(records,fields){const m=new Map();for(const r of records){const key=fields.map(f=>clean(r[f]||"Não informado")).join(" · ");if(!m.has(key))m.set(key,[]);m.get(key).push(r);}return [...m.entries()].sort((a,b)=>b[1].length-a[1].length);}
+function counts(r){return {all:r.length,valid:r.filter(x=>x.status==="VALIDADO").length,
+ fail:r.filter(x=>x.status==="FALHA").length,
+ applied:r.filter(x=>x.temporalidade==="APLICADA").length,
+ pending:r.filter(x=>x.temporalidade==="PENDENTE").length,
+ pages:r.reduce((a,x)=>a+(Number.isSafeInteger(x.paginas)&&x.paginas>=0?x.paginas:0),0)};}
+function drawTable(id,records,fields){const body=$(id);body.replaceChildren();for(const vals of records){const tr=document.createElement("tr");for(const value of vals)cell(tr,value);body.append(tr);}if(!records.length){const tr=document.createElement("tr");const td=document.createElement("td");td.colSpan=fields;td.textContent="Nenhum registro";tr.append(td);body.append(tr);}}
+function choices(id,prop){const el=$(id),keep=el.value;el.replaceChildren(new Option("Todas",""));for(const value of [...new Set(rows.map(r=>clean(r[prop]||"Não informado")))].sort())el.add(new Option(value,value));el.value=keep;}
+function filtered(){return rows.filter(r=>(!$("empresa").value||clean(r.empresa||"Não informado")===$("empresa").value)
+&&(!$("departamento").value||clean(r.departamento||"Não informado")===$("departamento").value)
+&&(!$("status").value||r.status===$("status").value)
+&&(!$("temporalidade").value||r.temporalidade===$("temporalidade").value)
+&&(!$("de").value||r.enviadoEm.slice(0,10)>=$("de").value)
+&&(!$("ate").value||r.enviadoEm.slice(0,10)<=$("ate").value)
+&&(!$("busca").value||[r.codigo,r.tipoDocumental,r.loteId].join(" ").toLowerCase().includes($("busca").value.toLowerCase())));}
+function render(){const list=filtered(),n=counts(list);
+const metrics=[["Documentos",n.all],["Validados",n.valid],["Falhas",n.fail],["Temporalidade aplicada",n.applied],["Temporalidade pendente",n.pending],["Páginas informadas",n.pages]];
+$("metrics").replaceChildren();for(const [k,v] of metrics){const e=document.createElement("div");e.className="metric";const label=document.createElement("span"),number=document.createElement("strong");label.textContent=k;number.textContent=v.toLocaleString("pt-BR");e.append(label,number);$("metrics").append(e);}
+drawTable("departamentos",group(list,["departamento"]).map(([k,v])=>{const c=counts(v);return[k,c.all,c.valid,c.fail,c.applied,c.pending,c.pages]}),7);
+drawTable("tipos",group(list,["codigo","tipoDocumental"]).map(([k,v])=>{const c=counts(v);return [...k.split(" · "),c.all,c.valid,c.fail,c.pending]}),6);
+drawTable("documentos",list.map(r=>[r.enviadoEm,r.departamento,r.nomeArquivo,r.codigo,r.loteId,r.status,r.temporalidade,r.alfrescoNodeId??"—"]),8);
+$("export").disabled=list.length===0;$("info").textContent=`${list.length} documento(s) no filtro · dados locais, não sincronizados`;}
+function csvEscape(v){const s=clean(v);return '"'+s.replaceAll('"','""')+'"';}
+$("export").addEventListener("click",()=>{const cols=["enviadoEm","empresa","departamento","nomeArquivo","codigo","tipoDocumental","loteId","operador","status","temporalidade","alfrescoNodeId","paginas","bytes","erro"];const csv=[cols.join(";"),...filtered().map(r=>cols.map(k=>csvEscape(r[k])).join(";"))].join("\r\n");const blob=new Blob(["\uFEFF",csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="arquindex-producao-alfresco.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$("file").addEventListener("change",async event=>{try{const f=event.target.files?.[0];if(!f)return;if(f.size>20*1024*1024)throw Error("Limite de 20 MB por arquivo");const obj=JSON.parse(await f.text());const data=Array.isArray(obj)?obj:obj.documentos;if(!Array.isArray(data))throw Error("Informe um array ou objeto com documentos");if(data.length>100000)throw Error("Limite de 100.000 registros");const uniq=new Map();for(const r of data){if(!r||typeof r!=="object"||!r.documentoId||!r.eventoId||!r.enviadoEm)throw Error("Registros precisam de documentoId, eventoId e enviadoEm");const old=uniq.get(r.documentoId);if(!old||r.enviadoEm>old.enviadoEm||(r.enviadoEm===old.enviadoEm&&clean(r.eventoId)>clean(old.eventoId)))uniq.set(r.documentoId,r);}rows=[...uniq.values()];for(const p of ["empresa","departamento","status","temporalidade"])choices(p,p);render();}catch(e){rows=[];render();$("info").textContent="Erro de leitura: "+e.message;$("info").className="error";}});
+for(const id of ["empresa","departamento","status","temporalidade","de","ate","busca"])$(id).addEventListener("input",render);
+render();
+</script></body></html>
