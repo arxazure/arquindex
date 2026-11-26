@@ -1,0 +1,1853 @@
+{
+  "nome": "Top10 Google",
+  "geradoEm": "2026-10-24",
+  "natureza": "plano editorial e contrato operacional, sem publicação automática",
+  "metas": {
+    "postsPorCanalDia": 3,
+    "paginasNovas": 100,
+    "artigos": 15
+  },
+  "seguranca": [
+    "nao alterar hospedagem HomeHost antes de backup integral validado",
+    "credenciais só em secret manager e rotação após incidente Railway",
+    "token OAuth de longa duração quando permitido com refresh e revogação",
+    "nunca contornar autenticação nem prometer reconexão inexistente",
+    "identificador idempotente por canal/data/campanha",
+    "fila durável, backoff e dead-letter",
+    "consultar remoto antes de reprocessar estado desconhecido",
+    "cada postagem com recibo e URL pública",
+    "publicação sujeita a políticas e limites de cada canal",
+    "IndexNow é sinalização, não garantia de indexação; não usar Bing Places como rede de posts",
+    "páginas locais sem doorway/spam e somente regiões efetivamente atendidas"
+  ],
+  "arquitetura": {
+    "fonte": "GitHub revisado",
+    "api": "Railway existente ou Cloudflare Workers",
+    "banco": "Postgres",
+    "orquestracao": "fila duravel com agendamento, retries e auditoria",
+    "metricas": "Search Console, Bing Webmaster, GA4, analytics autorizados por rede",
+    "painel": [
+      "estado por canal e último sucesso",
+      "cliques impressoes CTR posicao por consulta e pagina",
+      "visitas leitura scroll leads conversoes",
+      "paginas 200/404 canonical sitemap indexadas",
+      "posicao por cidade intencao e servico",
+      "visibilidade citada em respostas de IA medida por amostra auditável",
+      "oportunidades por industria/regiao",
+      "status OAuth com validade e consentimento"
+    ],
+    "canaisEmRevisao": [
+      "TikTok",
+      "YouTube Studio",
+      "Facebook",
+      "Reddit",
+      "WhatsApp Business Status",
+      "Blogger",
+      "Threads",
+      "X",
+      "Bing Places",
+      "Bing Webmaster",
+      "Google Maps"
+    ],
+    "observacoes": [
+      "Threads nao e Google Threads; e servico Meta",
+      "Google Maps pode exibir dados do Perfil da Empresa; nao equivale a canal independente de postagem",
+      "WhatsApp Business Status nao possui necessariamente interface oficial de publicacao automatizada",
+      "perfis em IA variam por provedor e nao oferecem ranking pago ou inclusao garantida"
+    ]
+  },
+  "paginas": [
+    {
+      "n": 1,
+      "cidade": "Belo Horizonte MG",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/belo-horizonte-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 2,
+      "cidade": "Contagem MG",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/contagem-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 3,
+      "cidade": "Betim MG",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/betim-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 4,
+      "cidade": "Nova Lima MG",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/nova-lima-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 5,
+      "cidade": "Sete Lagoas MG",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/sete-lagoas-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 6,
+      "cidade": "Lagoa Santa MG",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/lagoa-santa-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 7,
+      "cidade": "Santa Luzia MG",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/santa-luzia-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 8,
+      "cidade": "Sabara MG",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/sabara-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 9,
+      "cidade": "Ribeirao das Neves MG",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/ribeirao-das-neves-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 10,
+      "cidade": "Ibirite MG",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/ibirite-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 11,
+      "cidade": "Brumadinho MG",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/brumadinho-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 12,
+      "cidade": "Itabira MG",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/itabira-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 13,
+      "cidade": "Conselheiro Lafaiete MG",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/conselheiro-lafaiete-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 14,
+      "cidade": "Ouro Preto MG",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/ouro-preto-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 15,
+      "cidade": "Mariana MG",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/mariana-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 16,
+      "cidade": "Congonhas MG",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/congonhas-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 17,
+      "cidade": "Ipatinga MG",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/ipatinga-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 18,
+      "cidade": "Coronel Fabriciano MG",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/coronel-fabriciano-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 19,
+      "cidade": "Timoteo MG",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/timoteo-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 20,
+      "cidade": "Joao Monlevade MG",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/joao-monlevade-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 21,
+      "cidade": "Governador Valadares MG",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/governador-valadares-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 22,
+      "cidade": "Uberlandia MG",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/uberlandia-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 23,
+      "cidade": "Uberaba MG",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/uberaba-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 24,
+      "cidade": "Juiz de Fora MG",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/juiz-de-fora-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 25,
+      "cidade": "Montes Claros MG",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/montes-claros-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 26,
+      "cidade": "Pocos de Caldas MG",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/pocos-de-caldas-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 27,
+      "cidade": "Pouso Alegre MG",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/pouso-alegre-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 28,
+      "cidade": "Varginha MG",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/varginha-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 29,
+      "cidade": "Divinopolis MG",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/divinopolis-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 30,
+      "cidade": "Arcos MG",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/arcos-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 31,
+      "cidade": "Tres Coracoes MG",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/tres-coracoes-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 32,
+      "cidade": "Araxá MG",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/araxa-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 33,
+      "cidade": "Patos de Minas MG",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/patos-de-minas-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 34,
+      "cidade": "Matozinhos MG",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/matozinhos-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 35,
+      "cidade": "Sao Jose da Lapa MG",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/sao-jose-da-lapa-mg/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 36,
+      "cidade": "Rio de Janeiro RJ",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/rio-de-janeiro-rj/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 37,
+      "cidade": "Duque de Caxias RJ",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/duque-de-caxias-rj/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 38,
+      "cidade": "Macae RJ",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/macae-rj/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 39,
+      "cidade": "Volta Redonda RJ",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/volta-redonda-rj/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 40,
+      "cidade": "Resende RJ",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/resende-rj/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 41,
+      "cidade": "Sao Paulo SP",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/sao-paulo-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 42,
+      "cidade": "Campinas SP",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/campinas-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 43,
+      "cidade": "Sao Jose dos Campos SP",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/sao-jose-dos-campos-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 44,
+      "cidade": "Santos SP",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/santos-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 45,
+      "cidade": "Sorocaba SP",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/sorocaba-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 46,
+      "cidade": "Ribeirao Preto SP",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/ribeirao-preto-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 47,
+      "cidade": "Piracicaba SP",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/piracicaba-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 48,
+      "cidade": "Sao Bernardo do Campo SP",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/sao-bernardo-do-campo-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 49,
+      "cidade": "Jundiai SP",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/jundiai-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 50,
+      "cidade": "Taubate SP",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/taubate-sp/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 51,
+      "cidade": "Curitiba PR",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/curitiba-pr/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 52,
+      "cidade": "Araucaria PR",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/araucaria-pr/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 53,
+      "cidade": "Londrina PR",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/londrina-pr/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 54,
+      "cidade": "Maringa PR",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/maringa-pr/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 55,
+      "cidade": "Ponta Grossa PR",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/ponta-grossa-pr/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 56,
+      "cidade": "Joinville SC",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/joinville-sc/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 57,
+      "cidade": "Blumenau SC",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/blumenau-sc/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 58,
+      "cidade": "Chapeco SC",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/chapeco-sc/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 59,
+      "cidade": "Itajai SC",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/itajai-sc/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 60,
+      "cidade": "Florianopolis SC",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/florianopolis-sc/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 61,
+      "cidade": "Porto Alegre RS",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/porto-alegre-rs/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 62,
+      "cidade": "Caxias do Sul RS",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/caxias-do-sul-rs/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 63,
+      "cidade": "Canoas RS",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/canoas-rs/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 64,
+      "cidade": "Rio Grande RS",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/rio-grande-rs/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 65,
+      "cidade": "Pelotas RS",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/pelotas-rs/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 66,
+      "cidade": "Brasilia DF",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/brasilia-df/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 67,
+      "cidade": "Goiania GO",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/goiania-go/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 68,
+      "cidade": "Anapolis GO",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/anapolis-go/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 69,
+      "cidade": "Catalão GO",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/catalao-go/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 70,
+      "cidade": "Rio Verde GO",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/rio-verde-go/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 71,
+      "cidade": "Campo Grande MS",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/campo-grande-ms/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 72,
+      "cidade": "Tres Lagoas MS",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/tres-lagoas-ms/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 73,
+      "cidade": "Dourados MS",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/dourados-ms/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 74,
+      "cidade": "Cuiaba MT",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/cuiaba-mt/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 75,
+      "cidade": "Rondonopolis MT",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/rondonopolis-mt/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 76,
+      "cidade": "Sinop MT",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/sinop-mt/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 77,
+      "cidade": "Salvador BA",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/salvador-ba/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 78,
+      "cidade": "Camacari BA",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/camacari-ba/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 79,
+      "cidade": "Feira de Santana BA",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/feira-de-santana-ba/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 80,
+      "cidade": "Luis Eduardo Magalhaes BA",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/luis-eduardo-magalhaes-ba/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 81,
+      "cidade": "Recife PE",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/recife-pe/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 82,
+      "cidade": "Suape PE",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/suape-pe/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 83,
+      "cidade": "Petrolina PE",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/petrolina-pe/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 84,
+      "cidade": "Fortaleza CE",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/fortaleza-ce/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 85,
+      "cidade": "Maracanau CE",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/maracanau-ce/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 86,
+      "cidade": "Sao Luis MA",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/sao-luis-ma/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 87,
+      "cidade": "Imperatriz MA",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/imperatriz-ma/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 88,
+      "cidade": "Belem PA",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/belem-pa/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 89,
+      "cidade": "Parauapebas PA",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/parauapebas-pa/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 90,
+      "cidade": "Maraba PA",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/maraba-pa/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 91,
+      "cidade": "Canaa dos Carajas PA",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/canaa-dos-carajas-pa/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 92,
+      "cidade": "Santarem PA",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/santarem-pa/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 93,
+      "cidade": "Manaus AM",
+      "servico": "databook-engenharia",
+      "slug": "/solucoes/databook-engenharia/manaus-am/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 94,
+      "cidade": "Porto Velho RO",
+      "servico": "digitalizacao-prontuarios",
+      "slug": "/solucoes/digitalizacao-prontuarios/porto-velho-ro/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 95,
+      "cidade": "Boa Vista RR",
+      "servico": "ocr-indexacao",
+      "slug": "/solucoes/ocr-indexacao/boa-vista-rr/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 96,
+      "cidade": "Macapa AP",
+      "servico": "descarte-seguro",
+      "slug": "/solucoes/descarte-seguro/macapa-ap/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 97,
+      "cidade": "Palmas TO",
+      "servico": "digitalizacao-certificada",
+      "slug": "/solucoes/digitalizacao-certificada/palmas-to/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 98,
+      "cidade": "Araguaina TO",
+      "servico": "guarda-e-gestao-documental",
+      "slug": "/solucoes/guarda-e-gestao-documental/araguaina-to/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 99,
+      "cidade": "Vitoria ES",
+      "servico": "lgpd-dpo",
+      "slug": "/solucoes/lgpd-dpo/vitoria-es/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    },
+    {
+      "n": 100,
+      "cidade": "Serra ES",
+      "servico": "ecm-alfresco",
+      "slug": "/solucoes/ecm-alfresco/serra-es/",
+      "status": "planejada",
+      "requisitos": [
+        "conteudo original e util",
+        "prova de atendimento real",
+        "FAQ local e setorial",
+        "schema JSON-LD adequado",
+        "canonical",
+        "internal links",
+        "CTA",
+        "sitemap somente apos HTTP 200"
+      ]
+    }
+  ],
+  "artigos": [
+    {
+      "n": 1,
+      "title": "Digitalização certificada e Decreto 10.278: condições legais e limites",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 2,
+      "title": "Guarda física versus digital: modelo de decisão e retenção",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 3,
+      "title": "Como organizar arquivos industriais abandonados com segurança",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 4,
+      "title": "OCR para prontuários ocupacionais: privacidade e precisão",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 5,
+      "title": "Dossiês de RH: cinco chaves de indexação que evitam homônimos",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 6,
+      "title": "Databooks de engenharia: índice mestre e controle de revisões",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 7,
+      "title": "ECM Alfresco e IA local: arquitetura e governança",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 8,
+      "title": "LGPD: ROPA, RIPD e gestão de evidências",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 9,
+      "title": "Como escolher DPO terceirizado para empresa industrial",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 10,
+      "title": "Descarte documental seguro e tabela de temporalidade",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 11,
+      "title": "Inventário de caixas e rastreabilidade de movimentações",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 12,
+      "title": "Gestão documental de empresas com múltiplas filiais",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 13,
+      "title": "Digitalização para advocacia e escritórios contábeis",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 14,
+      "title": "Integração entre captura documental e workflows",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    },
+    {
+      "n": 15,
+      "title": "Como medir ROI de projetos de transformação documental",
+      "status": "pauta",
+      "validar": "pesquisa técnica + revisão humana + publicação com URL comprovada"
+    }
+  ]
+}
