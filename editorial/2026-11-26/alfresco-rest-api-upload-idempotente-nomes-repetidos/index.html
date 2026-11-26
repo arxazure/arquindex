@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alfresco REST API: upload idempotente com nomes repetidos | Arquindex</title>
+<meta name="description" content="Guia para integrar arquivos ao Alfresco sem duplicação: chave idempotente, busca, conflito 409, overwrite, autoRename, versionamento, recibos e reconciliação.">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://www.arquindex.com.br/blog/alfresco-rest-api-upload-idempotente-nomes-repetidos/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Alfresco REST API: upload idempotente com nomes repetidos">
+<meta property="og:description" content="Como criar uma integração repetível, auditável e segura sem confundir renomear, sobrescrever e versionar.">
+<meta property="og:url" content="https://www.arquindex.com.br/blog/alfresco-rest-api-upload-idempotente-nomes-repetidos/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Alfresco REST API: upload idempotente com nomes repetidos","datePublished":"2026-11-26","dateModified":"2026-11-26","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/alfresco-rest-api-upload-idempotente-nomes-repetidos/"}
+</script>
+</head>
+<body>
+<main>
+<article>
+<header>
+<p>Guia técnico Arquindex • atualização em 26 de novembro de 2026</p>
+<h1>Alfresco REST API: como fazer upload idempotente quando os nomes se repetem</h1>
+<p><strong>Resposta direta:</strong> uma integração idempotente não decide duplicidade apenas pelo nome do arquivo. Antes de criar um nó, ela calcula ou recebe uma chave estável de negócio, procura o registro correspondente, compara conteúdo e estado e então escolhe entre criar, criar versão, atualizar metadados, ignorar ou enviar para exceção. As opções <em>autoRename</em> e <em>overwrite</em> da API resolvem conflitos técnicos específicos, mas não substituem essa política. O resultado de cada tentativa deve gerar um recibo persistente com chave idempotente, identificador do nó, versão, checksum, código HTTP e decisão.</p>
+</header>
+
+<section>
+<h2>O problema real por trás dos nomes repetidos</h2>
+<p>Pastas de origem frequentemente contêm arquivos chamados contrato.pdf, relatorio.pdf ou scan0001.pdf. O mesmo nome pode representar documentos diferentes, novas versões do mesmo documento, reenvios idênticos ou correções de uma captura anterior. Se a integração tratar todo conflito como duplicata, ela perde conteúdo. Se usar renomeação automática indiscriminadamente, cria cópias que parecem legítimas. Se sobrescrever sempre, pode apagar uma versão relevante ou alterar o significado de um registro.</p>
+<p>Idempotência significa que repetir a mesma operação, com a mesma intenção, não produz efeitos adicionais indesejados. Isso é essencial porque integrações falham entre o envio e a confirmação: o Alfresco pode ter criado o nó, mas o cliente perde a resposta por queda de rede. Uma nova tentativa cega cria duplicata. A solução é separar identidade documental, nome de exibição, conteúdo binário e tentativa técnica.</p>
+</section>
+
+<section>
+<h2>Quatro identidades que não devem ser confundidas</h2>
+<h3>Nome do arquivo</h3>
+<p>É útil para leitura humana e pode participar da busca, mas raramente é único. Ele também muda por normalização, política de caracteres ou decisão editorial.</p>
+<h3>Chave de negócio</h3>
+<p>Representa a identidade do documento no processo: número do contrato, combinação de matrícula e competência, código do ativo com tipo documental, ou identificador gerado pelo sistema de origem. Deve ser estável e registrada como propriedade pesquisável do nó.</p>
+<h3>Checksum do conteúdo</h3>
+<p>Resume os bytes do arquivo e ajuda a reconhecer reenvio idêntico. Não responde sozinho se dois arquivos com o mesmo conteúdo devem ser tratados como o mesmo registro em contextos diferentes. Guarde algoritmo e valor, por exemplo SHA-256, e calcule antes do upload.</p>
+<h3>Identificador do nó</h3>
+<p>É a identidade atribuída pelo repositório. Depois da primeira criação confirmada, o integrador deve persistir esse identificador e usá-lo para versões, propriedades e consultas. Não tente reconstruí-lo a partir do caminho.</p>
+</section>
+
+<section>
+<h2>Contrato de idempotência</h2>
+<p>Defina o contrato antes de escrever código. Ele precisa dizer qual campo forma a chave, em qual escopo ela é única, o que caracteriza nova versão, o que ocorre quando o conteúdo é igual, como tratar metadados divergentes e quem decide conflitos. Uma chave pode ser única em todo o repositório, em um processo ou somente em uma pasta. Essa escolha deve corresponder à realidade do negócio.</p>
+<p>Um contrato simples pode estabelecer: mesma chave e mesmo checksum significa reenvio, portanto não criar; mesma chave e checksum diferente significa candidato a nova versão; chave nova e nome repetido significa documento diferente, portanto criar com política de nome; múltiplos nós com a mesma chave significa inconsistência, portanto bloquear e revisar. O contrato deve prever documentos sem chave confiável. Nesse caso, use uma área de quarentena ou fila de exceção, em vez de inventar identidade pelo nome.</p>
+</section>
+
+<section>
+<h2>Fluxo recomendado passo a passo</h2>
+<h3>1. Validar a entrada</h3>
+<p>Confirme tamanho, tipo permitido, nome, origem, chave, checksum e metadados obrigatórios. Rejeite arquivos vazios, extensões não autorizadas e valores fora do contrato. Normalize o nome para exibição, mas preserve o nome recebido em propriedade própria ou no registro da tentativa.</p>
+<h3>2. Reservar a operação</h3>
+<p>Crie no lado do integrador um registro com a chave idempotente e estado “recebido”. Uma restrição única no banco evita que dois trabalhadores processem a mesma chave simultaneamente. Se houver fila, use confirmação e tempo de visibilidade; se houver API, aceite um identificador de requisição fornecido pelo chamador.</p>
+<h3>3. Procurar pelo identificador de negócio</h3>
+<p>Consulte uma propriedade indexada e limite o escopo. Não confie somente em listar filhos e comparar nomes quando a pasta pode crescer. Trate zero, um ou vários resultados como estados distintos. Vários resultados indicam quebra de unicidade e exigem investigação antes de qualquer escrita.</p>
+<h3>4. Decidir a operação</h3>
+<p>Para zero resultados, prepare criação. Para um resultado, compare checksum, tipo, estado e metadados. Conteúdo idêntico pode ser confirmado sem novo binário; conteúdo diferente pode criar versão se o contrato autorizar. Mudança apenas de metadados pode ser atualizada separadamente, preservando histórico quando necessário.</p>
+<h3>5. Criar ou versionar</h3>
+<p>A API pública de nós do Alfresco permite criar um filho com POST no endpoint de children e aceita JSON ou multipart/form-data. Em upload, o campo <em>filedata</em> transporta o conteúdo; <em>name</em> define o nome e outros campos podem acompanhar a requisição. A documentação oficial também descreve respostas como 201 para criação, 409 para conflito de nome, 413 para limite de tamanho, 415 para tipo não suportado e 422 para integridade do modelo ou nome inválido.</p>
+<h3>6. Registrar o recibo</h3>
+<p>Após sucesso, persista nodeId, versão, caminho, checksum, chave, horário, resposta e identificador de correlação. Se a resposta se perder, a reconciliação deve procurar pela chave e pelo checksum antes de repetir. O registro só passa a “confirmado” quando o readback encontra o nó e as propriedades esperadas.</p>
+</section>
+
+<section>
+<h2>autoRename, overwrite e versionamento: diferenças importantes</h2>
+<p><strong>autoRename</strong> tenta resolver choque de nome acrescentando um sufixo inteiro. É útil quando documentos diferentes podem compartilhar o mesmo nome e a política aceita nomes ajustados. Não é prova de que o novo arquivo seja distinto. Se uma tentativa repetida usar autoRename sem consultar a chave, contrato.pdf pode virar contrato-1.pdf e depois contrato-2.pdf, criando duplicatas silenciosas.</p>
+<p><strong>overwrite</strong> procura um arquivo existente pelo nome e substitui o conteúdo. A documentação dos clientes oficiais explica que, quando o nó é versionável, o conteúdo existente é substituído e opções como <em>majorVersion</em> e comentário podem participar do histórico. Isso pode ser adequado a uma política de versão, mas é perigoso quando nomes iguais representam documentos diferentes. Sobrescrever por nome não é idempotência.</p>
+<p><strong>versionamento</strong> relaciona estados sucessivos do mesmo nó. Decida se a mudança é principal ou secundária, registre comentário e preserve a chave de negócio. Uma nova versão deve ser intencional. Um scanner que gerou bytes diferentes por metadados internos, embora a página visual seja igual, pode alterar o checksum; por isso, o contrato pode precisar de comparação adicional ou revisão, em vez de criar versão automaticamente.</p>
+</section>
+
+<section>
+<h2>Tabela de decisão</h2>
+<table>
+<thead><tr><th>Situação</th><th>Ação recomendada</th><th>Controle</th></tr></thead>
+<tbody>
+<tr><td>Chave nova, nome livre</td><td>Criar nó</td><td>Persistir nodeId e checksum</td></tr>
+<tr><td>Chave nova, nome já usado por outro documento</td><td>Criar com nome definido pela política ou autoRename autorizado</td><td>Não associar ao nó antigo</td></tr>
+<tr><td>Mesma chave, mesmo checksum</td><td>Confirmar reenvio sem novo conteúdo</td><td>Registrar nova tentativa no mesmo recibo lógico</td></tr>
+<tr><td>Mesma chave, checksum diferente e versão autorizada</td><td>Atualizar conteúdo como versão</td><td>Comentário, versão e readback</td></tr>
+<tr><td>Mesma chave, checksum diferente sem autorização</td><td>Bloquear</td><td>Fila de exceção</td></tr>
+<tr><td>Mais de um nó para a mesma chave</td><td>Não escrever</td><td>Reconciliação e correção controlada</td></tr>
+<tr><td>Resposta perdida após POST</td><td>Consultar chave e checksum</td><td>Nunca repetir cegamente</td></tr>
+<tr><td>HTTP 409</td><td>Reavaliar identidade e política de nome</td><td>Não converter automaticamente em sucesso</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>Exemplo de requisição e de recibo</h2>
+<p>Em um upload multipart, envie o binário, o nome planejado, o tipo do nó e propriedades do modelo. Use o endpoint do pai conhecido, não um caminho inferido de texto livre. Inclua um identificador de correlação nos logs do integrador. Segredos e tokens nunca devem aparecer em logs, URLs ou relatórios.</p>
+<pre><code>POST /alfresco/api/-default-/public/alfresco/versions/1/nodes/{parentId}/children
+Content-Type: multipart/form-data
+
+filedata: @documento.pdf
+name: contrato-2026-0042.pdf
+nodeType: cm:content
+properties: {
+  "arq:chaveIntegracao": "contrato:2026:0042",
+  "arq:checksumSha256": "...",
+  "arq:sistemaOrigem": "ERP"
+}</code></pre>
+<p>O recibo do integrador pode conter: chave, requestId, ação decidida, nodeId, versão, checksum enviado, checksum confirmado, código HTTP, horário, número de tentativas e estado. Ele não precisa armazenar credenciais nem todo o conteúdo da resposta. Em falha, registre classe do erro e se a operação pode ter sido aplicada. Erro antes do envio permite nova tentativa; tempo esgotado após o envio exige reconciliação.</p>
+</section>
+
+<section>
+<h2>Tratamento de erros sem duplicar</h2>
+<p>Classifique erros. Um 400 indica entrada ou parâmetro inválido e não deve ser repetido sem correção. Um 401 indica autenticação falhou; um 403, ausência de permissão. Um 404 pode significar pai inexistente ou referência incorreta. Um 409 é conflito de nome e pede aplicação consciente da política. Um 413 exige revisar tamanho ou infraestrutura. Um 415 aponta tipo não suportado. Erros 5xx e falhas de rede podem ser transitórios, mas a tentativa seguinte precisa consultar o estado.</p>
+<p>Use retentativa com espera progressiva e limite. Não reenvie imediatamente dezenas de arquivos quando o serviço está indisponível. Implemente disjuntor e fila de mensagens mortas para falhas persistentes. Em cada retentativa, reaproveite a mesma chave idempotente. Se o Alfresco já criou o nó, a consulta deve transformar a tentativa em confirmação, não em novo POST.</p>
+</section>
+
+<section>
+<h2>Concorrência e condições de corrida</h2>
+<p>Duas requisições podem consultar a mesma chave, ambas não encontrarem resultado e ambas tentarem criar. A proteção mais forte deve existir no ponto em que a unicidade é controlada: banco do integrador, propriedade com validação apropriada, lock de processo ou serviço de orquestração. Apenas “consultar antes de criar” não elimina corrida.</p>
+<p>Quando não for possível impor unicidade no repositório, registre uma reserva transacional no integrador. O trabalhador vencedor processa; o segundo lê o recibo. Ainda assim, execute reconciliações periódicas, porque operações manuais ou integrações antigas podem criar nós fora do contrato. A reconciliação compara chaves duplicadas, recibos sem nó, nós sem recibo e checksums divergentes.</p>
+</section>
+
+<section>
+<h2>Segurança e governança</h2>
+<p>Use uma conta técnica com apenas as permissões necessárias nas pastas e tipos envolvidos. Separe ambientes, proteja tokens e renove credenciais. Valide MIME e conteúdo, limite tamanho, bloqueie caminhos não autorizados e considere verificação antimalware conforme a arquitetura. O nome original fornecido por usuário não deve controlar caminho nem consulta sem saneamento.</p>
+<p>Metadados podem conter dados pessoais. Defina finalidade, acesso, retenção e campos expostos em logs. Não registre conteúdo integral, CPF ou dado sensível apenas para depuração. A trilha de auditoria deve ser suficiente para explicar a decisão e cumprir governança, sem criar uma cópia paralela desnecessária do acervo.</p>
+</section>
+
+<section>
+<h2>Observabilidade e controle de qualidade</h2>
+<p>Acompanhe taxa de criação, reenvio, versão, conflito e exceção; latência; erros por código; retentativas; recibos pendentes; e divergências de reconciliação. Uma taxa crescente de autoRename pode indicar chave ausente ou problema no sistema de origem. Muitos 409 podem apontar política de nome inadequada. Muitas versões com intervalo curto podem indicar repetição de processamento.</p>
+<p>Faça readback amostral e, para campos críticos, obrigatório. Confirme nodeId, nome, pai, tipo, propriedades e tamanho. Quando possível, valide checksum do conteúdo recuperado ou evidência equivalente. Teste cenários de queda: resposta perdida, arquivo grande, permissão revogada, nó movido, nome inválido, chave duplicada e dois trabalhadores simultâneos.</p>
+</section>
+
+<section>
+<h2>Exemplo hipotético de aplicação</h2>
+<p><strong>Exemplo hipotético, não um case comprovado:</strong> um sistema de RH envia dossiês mensais. A chave é formada por organização, matrícula, competência e tipo documental. O arquivo “holerite.pdf” aparece para milhares de empregados, portanto nome não identifica o documento. A integração calcula SHA-256, reserva a chave e procura a propriedade correspondente.</p>
+<p>No primeiro envio, cria o nó e registra o identificador. Um reenvio com os mesmos bytes é confirmado sem criar conteúdo. Se a empresa corrigir o documento, o checksum muda; a regra exige autorização e comentário antes de gerar versão. Se o mesmo nome chegar para outra matrícula, a chave é diferente e o arquivo é criado na pasta correta, com nome ajustado pela convenção. Se dois nós aparecerem com a mesma chave, a automação bloqueia e abre exceção.</p>
+</section>
+
+<section>
+<h2>Checklist de implantação</h2>
+<ul>
+<li>Definir chave de negócio, escopo e propriedade indexada.</li>
+<li>Calcular checksum antes do upload e registrar algoritmo.</li>
+<li>Estabelecer quando criar, versionar, ignorar ou bloquear.</li>
+<li>Não usar nome como única identidade.</li>
+<li>Persistir requestId, nodeId, versão e recibo.</li>
+<li>Proteger concorrência com reserva ou unicidade no integrador.</li>
+<li>Reconhecer resposta perdida como estado incerto.</li>
+<li>Consultar antes de repetir uma escrita de resultado incerto.</li>
+<li>Usar autoRename apenas quando a política autorizar.</li>
+<li>Usar overwrite somente para o mesmo documento identificado.</li>
+<li>Tratar códigos HTTP por classe, sem loop infinito.</li>
+<li>Executar readback e reconciliação periódica.</li>
+<li>Testar permissões, tamanho, MIME e nomes inválidos.</li>
+<li>Monitorar conflitos, versões, retentativas e exceções.</li>
+</ul>
+</section>
+
+<section>
+<h2>Limites do método</h2>
+<p>A API não define a identidade de negócio por você. Ela oferece operações sobre nós e conteúdo, enquanto a aplicação deve traduzir regras documentais. Checksum identifica bytes, não necessariamente equivalência jurídica ou semântica. autoRename preserva a criação, mas pode esconder repetição. overwrite atualiza conteúdo, mas pode atingir o nó errado se a correspondência for apenas por nome. Versionamento mantém histórico técnico, mas não substitui classificação, temporalidade e controle de acesso.</p>
+<p>Também não há garantia de processamento exatamente uma vez em uma rede distribuída. O objetivo prático é obter efeito exatamente uma vez por meio de chave, consulta, registro e reconciliação. Em estados ambíguos, a decisão segura é ler e comparar antes de escrever.</p>
+</section>
+
+<section>
+<h2>Perguntas frequentes</h2>
+<h3>autoRename torna o upload idempotente?</h3>
+<p>Não. Ele apenas resolve conflito de nome criando um nome único. Uma repetição pode gerar várias cópias com sufixos. Idempotência exige chave estável e consulta do estado.</p>
+<h3>Posso usar overwrite para sempre manter o arquivo mais recente?</h3>
+<p>Somente se o contrato comprovar que o arquivo existente é o mesmo documento lógico. Comparar nome não basta. Use nodeId ou chave de negócio e uma política explícita de versão.</p>
+<h3>O checksum substitui a chave de negócio?</h3>
+<p>Não. Arquivos idênticos podem pertencer a contextos distintos, e representações diferentes podem ser versões do mesmo documento. Use checksum e chave como sinais complementares.</p>
+<h3>O que fazer quando o cliente perde a resposta do POST?</h3>
+<p>Trate o resultado como incerto. Consulte a chave e o checksum. Se o nó existir e corresponder, confirme o recibo; se não existir, a política pode autorizar nova tentativa.</p>
+<h3>Como lidar com múltiplos nós para a mesma chave?</h3>
+<p>Bloqueie escrita automática, identifique origem, versões e recibos e faça reconciliação controlada. Não apague ou mescle sem análise e backup.</p>
+<h3>É melhor criar pastas pelo relativePath?</h3>
+<p>O relativePath é útil em operações suportadas, mas a estrutura deve ser determinística e autorizada. Para fluxos críticos, prefira parentId conhecido e valide o caminho retornado. Não permita que entrada livre do usuário crie hierarquias inesperadas.</p>
+</section>
+
+<section>
+<h2>Fontes oficiais consultadas</h2>
+<ul>
+<li><a href="https://github.com/Alfresco/alfresco-android-kotlin-api/blob/main/content/definitions/merged.yaml">Alfresco — definição oficial da Content REST API, createNode, multipart, autoRename e códigos de resposta</a>, consultada em 26/11/2026.</li>
+<li><a href="https://github.com/Alfresco/alfresco-js-api/blob/develop/src/api/content-rest-api/api/nodes.api.ts">Alfresco JavaScript API — Nodes API, overwrite, versionamento, autoRename e relativePath</a>, consultada em 26/11/2026.</li>
+<li><a href="https://github.com/Alfresco/alfresco-community-repo/blob/master/remote-api/src/main/java/org/alfresco/rest/api/Nodes.java">Alfresco Community Repository — parâmetros públicos da API de nós</a>, consultada em 26/11/2026.</li>
+</ul>
+</section>
+
+<footer>
+<p><strong>Autoria:</strong> equipe técnica Arquindex. Este guia descreve um padrão de engenharia; endpoints, modelo, permissões e política de versão devem ser testados na instalação utilizada.</p>
+<p>Precisa organizar ingestão, metadados e rastreabilidade em ECM? Veja <a href="https://www.arquindex.com.br/alfresco.html">serviços relacionados ao Alfresco</a>, <a href="https://www.arquindex.com.br/digitalizacao-com-ocr.html">digitalização com OCR</a> e <a href="https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html">gestão de documentos de colaboradores</a>. Fale com a Arquindex: WhatsApp <a href="https://wa.me/5531973632725">(31) 97363-2725</a> ou <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a>.</p>
+</footer>
+</article>
+</main>
+</body>
+</html>
