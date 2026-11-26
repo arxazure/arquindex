@@ -1,0 +1,19 @@
+{
+  "campaign": "transformacao-digital-guarda-documental",
+  "created": "2026-10-24",
+  "status": "source_code_only_not_published",
+  "origin": "https://www.arquindex.com.br",
+  "main_url": "https://www.arquindex.com.br/transformacao-digital-guarda-documental/",
+  "regional_urls": [
+    "https://www.arquindex.com.br/transformacao-digital-guarda-documental/belo-horizonte-mg/",
+    "https://www.arquindex.com.br/transformacao-digital-guarda-documental/contagem-mg/",
+    "https://www.arquindex.com.br/transformacao-digital-guarda-documental/betim-mg/",
+    "https://www.arquindex.com.br/transformacao-digital-guarda-documental/sao-paulo-sp/",
+    "https://www.arquindex.com.br/transformacao-digital-guarda-documental/guarulhos-sp/",
+    "https://www.arquindex.com.br/transformacao-digital-guarda-documental/uberlandia-mg/"
+  ],
+  "subdomains": "Not configured: DNS/TLS/hosting verification required; use consolidated main-domain canonicals first",
+  "claim": "No publication, Google indexing or social post is proven by this manifest",
+  "legal_reference": "Decreto 10.278/2020 arts. 9-12",
+  "notes": "Avoid doorway content, duplicate canonic URLs, invented customer cases, automated physical document destruction."
+}
