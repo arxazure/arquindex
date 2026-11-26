@@ -1,0 +1,144 @@
+{
+  "date": "2026-11-26",
+  "timezone": "America/Sao_Paulo",
+  "production_decision": {
+    "institutional_site": "HomeHost",
+    "evidence": [
+      "GitHub master config/site-hosting.json and AGENTS.md",
+      "PR #103 merged on 2026-11-02",
+      "authoritative NS ns31.servidorwebsite.com and ns32.servidorwebsite.com",
+      "apex A 177.234.150.42"
+    ],
+    "railway_role": "Arquindex Plataforma only; deployment success is not evidence of publication on the institutional domain"
+  },
+  "branch": {
+    "name": "editorial/2-artigos-20261126",
+    "base_commit": "b3357464bed6e00e4509e4a43f229dbf6fb5f3d7"
+  },
+  "articles": [
+    {
+      "title": "OCR de formulários e tabelas: como controlar campos, confiança e fila de exceção",
+      "intent": "technical guidance for structured OCR, review and traceability",
+      "proposed_url": "https://www.arquindex.com.br/blog/ocr-formularios-tabelas-campos-confianca-excecao/",
+      "useful_words": 2209,
+      "sources": [
+        "https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html",
+        "https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html",
+        "https://tesseract-ocr.github.io/tessdoc/FAQ"
+      ],
+      "state": "CRIADA",
+      "public_http": 404,
+      "index_directive_in_draft": "noindex,follow",
+      "publication_evidence": null
+    },
+    {
+      "title": "Alfresco REST API: como fazer upload idempotente quando os nomes se repetem",
+      "intent": "technical guidance for idempotent Alfresco ingestion and conflict handling",
+      "proposed_url": "https://www.arquindex.com.br/blog/alfresco-rest-api-upload-idempotente-nomes-repetidos/",
+      "useful_words": 2466,
+      "sources": [
+        "https://github.com/Alfresco/alfresco-android-kotlin-api/blob/main/content/definitions/merged.yaml",
+        "https://github.com/Alfresco/alfresco-js-api/blob/develop/src/api/content-rest-api/api/nodes.api.ts",
+        "https://github.com/Alfresco/alfresco-community-repo/blob/master/remote-api/src/main/java/org/alfresco/rest/api/Nodes.java"
+      ],
+      "state": "CRIADA",
+      "public_http": 404,
+      "index_directive_in_draft": "noindex,follow",
+      "publication_evidence": null
+    }
+  ],
+  "seo_pages": {
+    "daily_limit": 10,
+    "planned": 0,
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed": 0,
+    "reason": "No distinct, demand-backed page opportunity was approved after inventory review; avoided doorway and cannibalizing pages."
+  },
+  "regional_campaign": {
+    "expected_intents": 72,
+    "model": "24 cities x 3 services",
+    "tested": 72,
+    "http_200": 0,
+    "http_404": 72,
+    "action": "No publication or redirect without confirmed HomeHost source root, backup and per-URL content review."
+  },
+  "public_audit": {
+    "checked_at": "2026-11-26",
+    "endpoints": {
+      "https://arquindex.com.br/": 200,
+      "https://www.arquindex.com.br/": 200,
+      "https://www.arquindex.com.br/robots.txt": 200,
+      "https://www.arquindex.com.br/sitemap.xml": 200,
+      "https://www.arquindex.com.br/sitemap-index.xml": 404,
+      "https://www.arquindex.com.br/assets/": 200,
+      "https://www.arquindex.com.br/seo/": 200,
+      "https://www.arquindex.com.br/guarda_de_documentos.html": 200,
+      "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html": 200,
+      "https://www.arquindex.com.br/digitalizacao.html": 200,
+      "https://www.arquindex.com.br/digitalizacao-com-ocr.html": 200
+    },
+    "findings": [
+      "Directory listing remains publicly reachable at /assets/ and /seo/.",
+      "Public sitemap has 17 children and 212 URL/sitemap entries.",
+      "GSC last downloaded the main sitemap on 2026-11-18 and reports 579 submitted URLs with 3 warnings.",
+      "Sitemap reconciliation is required before resubmission."
+    ]
+  },
+  "gsc": {
+    "property": "http://arquindex.com.br/",
+    "current_period": {
+      "start": "2026-10-27",
+      "end": "2026-11-23",
+      "clicks": 0,
+      "impressions": 56,
+      "ctr_percent": 0,
+      "avg_position": 5.857142857
+    },
+    "previous_period": {
+      "clicks": 0,
+      "impressions": 49,
+      "avg_position": 7.163265306
+    },
+    "settled_through": "2026-11-24",
+    "action": "No sitemap or URL submission in this run."
+  },
+  "railway": {
+    "project": "Arquindex Plataforma",
+    "service_root": "/arquindex-platform",
+    "source_branch": "railway-production-2026",
+    "latest_deployment_id": "9904bd1e-d2e9-46bc-af55-ba0ba4f1a7f8",
+    "latest_status": "SUCCESS",
+    "latest_created_at": "2026-11-24T10:18:09Z",
+    "source_commit": "163221cbd268323ed17d9ace415d8990c6addac7",
+    "staged_changes": null,
+    "institutional_publication_evidence": false
+  },
+  "blogger": {
+    "public_read_today": "BLOCKED",
+    "attempts": [
+      "public web/feed read returned inaccessible/internal error",
+      "connected browser tool returned Unknown tool"
+    ],
+    "last_verified_baseline": "2026-11-22: 36 posts; no exact matches for the eight historical queue titles",
+    "published_today": 0,
+    "write_attempted": false
+  },
+  "homehost": {
+    "read_only_public_checks_completed": true,
+    "ftps_write_attempted": false,
+    "backup_verified_in_this_run": false,
+    "cleanup_due_today": false,
+    "destructive_changes": 0
+  },
+  "submissions": {
+    "gsc": 0,
+    "indexnow": 0,
+    "bing": 0
+  },
+  "merchant_center": {
+    "status": "SEPARATE_NOT_AUDITED"
+  }
+}
