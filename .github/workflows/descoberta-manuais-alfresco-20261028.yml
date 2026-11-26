@@ -1,0 +1,35 @@
+name: Descoberta dos cinco URLs de manuais Alfresco
+on:
+  push:
+    branches: [editorial/manuais-alfresco-20261028]
+    paths: [.github/workflows/descoberta-manuais-alfresco-20261028.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: descoberta-manuais-alfresco-20261028
+  cancel-in-progress: false
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Conferir paginas publicas e submeter uma vez
+        env:
+          GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
+          GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
+          GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: python scripts/descoberta-manuais-alfresco-20261028.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: descoberta-manuais-alfresco-20261028
+          path: publish-report/descoberta-manuais-alfresco-20261028.json
+          retention-days: 30
