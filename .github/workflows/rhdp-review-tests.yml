@@ -1,0 +1,56 @@
+name: RHDP and social image gate - offline tests
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "seo/review/2026-10-27/**"
+      - "seo/review/2026-11-01/**"
+      - "scripts/validar-postagem-com-imagem.py"
+      - "scripts/test_validar_postagem_com_imagem.py"
+      - "scripts/verificar-midia-social-http.py"
+      - "scripts/test_verificar_midia_social_http.py"
+      - ".github/workflows/rhdp-review-tests.yml"
+  push:
+    branches:
+      - seo/revisao-rhdp-matriz72-20261023
+    paths:
+      - "seo/review/2026-10-27/**"
+      - "seo/review/2026-11-01/**"
+      - "scripts/validar-postagem-com-imagem.py"
+      - "scripts/test_validar_postagem_com_imagem.py"
+      - "scripts/verificar-midia-social-http.py"
+      - "scripts/test_verificar_midia_social_http.py"
+      - ".github/workflows/rhdp-review-tests.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax check
+        run: |
+          python -m py_compile seo/review/2026-10-27/publicar-rhdp-homehost.py
+          python -m py_compile seo/review/2026-10-27/test_publicar_rhdp.py
+          python -m py_compile scripts/validar-postagem-com-imagem.py
+          python -m py_compile scripts/test_validar_postagem_com_imagem.py
+          python -m py_compile scripts/verificar-midia-social-http.py
+          python -m py_compile scripts/test_verificar_midia_social_http.py
+      - name: RHDP tests
+        run: python -m unittest discover -s seo/review/2026-10-27 -p 'test_*.py' -v
+      - name: Social media gate tests
+        run: python -m unittest discover -s scripts -p 'test_validar_postagem_com_imagem.py' -v
+      - name: Social HTTP media tests
+        run: python -m unittest discover -s scripts -p 'test_verificar_midia_social_http.py' -v
+      - name: SEO landing page checks
+        run: python seo/review/2026-11-01/validar-paginas.py
+      - name: Assert review artifacts exist
+        run: |
+          test -s seo/review/2026-10-27/rhdp-dossies-bloco-editorial.html
+          test -s seo/review/2026-10-27/publicar-rhdp-homehost.py
+# Offline checks only; no social publishing, FTPS, production secrets or deploy.
