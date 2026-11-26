@@ -1,0 +1,25 @@
+[
+  {
+    "url": "https://www.arquindex.com.br/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://www.arquindex.com.br/digitalizacao.html",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://www.arquindex.com.br/digitalizacao-com-ocr.html",
+    "legacy_references": [
+      "/arquindex-favicon.png",
+      "/img/about.webp"
+    ]
+  },
+  {
+    "url": "https://www.arquindex.com.br/guarda_de_documentos.html",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://www.arquindex.com.br/gestao_de_colaboradores_documentos.html",
+    "legacy_references": []
+  }
+]
