@@ -1,0 +1,117 @@
+{
+  "date": "2026-11-19",
+  "timezone": "America/Sao_Paulo",
+  "production_origin": "HomeHost",
+  "publication_preconditions": {
+    "homehost_root_verified": false,
+    "restorable_backup_verified": false,
+    "ftps_tls_write_verified": false,
+    "public_dns_evidence": "NS ns31.servidorwebsite.com/ns32.servidorwebsite.com; apex A 177.234.150.42; www CNAME arquindex.com.br",
+    "public_https_read": "successful with normal TLS verification"
+  },
+  "articles": [
+    {
+      "id": "ARQ-ARTICLE-20261119-ALFRESCO-TRANSFORM",
+      "title": "Alfresco Transform Service: diagnóstico de renditions, previews e conversões",
+      "intent": "diagnosticar falhas de miniatura, preview e conversão no Alfresco Transform Service",
+      "proposed_url": "https://www.arquindex.com.br/blog/alfresco-transform-service-renditions-diagnostico/",
+      "source_path": "artigos-tecnicos/2026-11-19/alfresco-transform-service-renditions-diagnostico/index.html",
+      "main_content_words": 1584,
+      "state": "TESTADA",
+      "published": false,
+      "submitted": false,
+      "indexed": false,
+      "sources": [
+        "https://docs.alfresco.com/transform-service/latest/",
+        "https://docs.hyland.com/r/Alfresco/Alfresco-Transform-Service/4.1/Alfresco-Transform-Service/Troubleshoot-Transform-Services",
+        "https://docs.hyland.com/r/Alfresco/Alfresco-Transform-Service/4.1/Alfresco-Transform-Service/Transform-Service-components",
+        "https://docs.alfresco.com/content-services/community/"
+      ],
+      "blocker": "HomeHost document root, restorable backup and FTPS write path have not been verified in this run"
+    },
+    {
+      "id": "ARQ-ARTICLE-20261119-GUARDA-AMBIENTAL",
+      "title": "Monitoramento ambiental na guarda documental: sensores, alertas e resposta",
+      "intent": "implantar monitoramento de temperatura, umidade, luz, água, pragas e fungos em depósitos documentais",
+      "proposed_url": "https://www.arquindex.com.br/blog/monitoramento-ambiental-guarda-documental/",
+      "source_path": "artigos-tecnicos/2026-11-19/monitoramento-ambiental-guarda-documental/index.html",
+      "main_content_words": 1584,
+      "state": "TESTADA",
+      "published": false,
+      "submitted": false,
+      "indexed": false,
+      "sources": [
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/recomendaes_para_a_produo.pdf/@@display-file/file",
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/recomendaes_para_construo_de_arquivos.pdf",
+        "https://www.gov.br/conarq/pt-br/centrais-de-conteudo/publicacoes/EARQV205MAI2022.pdf",
+        "https://www.gov.br/arquivonacional/pt-br/canais_atendimento/imprensa/copy_of_noticias/nota-de-esclarecimento-do-arquivo-nacional"
+      ],
+      "blocker": "HomeHost document root, restorable backup and FTPS write path have not been verified in this run"
+    }
+  ],
+  "seo_pages": {
+    "planned": 0,
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed_confirmed": 0,
+    "daily_capacity": 10,
+    "reason": "No new distinct search intent was approved from current GSC evidence; existing-first fixes and sitemap reconciliation take priority",
+    "regional_campaign": {
+      "inventory_source": "PR #148 — editorial/2026-11-15/manifest.json",
+      "url_template": "https://www.arquindex.com.br/seo/{service}/{city}/empresa",
+      "services": [
+        "digitalizacao-documentos",
+        "guarda-documental",
+        "consultoria-lgpd"
+      ],
+      "cities": [
+        "belo-horizonte",
+        "betim",
+        "brasilia",
+        "campinas",
+        "contagem",
+        "curitiba",
+        "fortaleza",
+        "goiania",
+        "juiz-de-fora",
+        "nova-lima",
+        "porto-alegre",
+        "recife",
+        "ribeirao-das-neves",
+        "rio-de-janeiro",
+        "salvador",
+        "santa-luzia",
+        "santo-andre",
+        "sao-paulo",
+        "set-lagoas",
+        "sorocaba",
+        "uberaba",
+        "uberlandia",
+        "vitoria",
+        "volta-redonda"
+      ],
+      "cartesian_url_count": 72,
+      "checked_at": "2026-11-19",
+      "result_applies_to_each_url": {
+        "state": "PLANEJADA",
+        "public_http": 404,
+        "publication_evidence": false,
+        "submitted": false,
+        "indexed_confirmed": false,
+        "note": "Intenção reservada; não criar variação por cidade sem demanda e diferenciação comprovadas."
+      }
+    }
+  },
+  "blogger": {
+    "blog_id": "2545952967912533152",
+    "public_feed_total_posts": 36,
+    "public_feed_updated": "2026-10-18T12:51:48.501-07:00",
+    "newest_public_post_date": "2026-05-01",
+    "historic_queue_titles_found_publicly": 0,
+    "historic_queue_titles_pending": 8,
+    "published_this_run": 0,
+    "blocker": "No Blogger v3 OAuth, authenticated Apps Script or official write connector was available; no POST attempted"
+  }
+}
