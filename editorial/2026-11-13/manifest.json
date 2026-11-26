@@ -1,0 +1,731 @@
+{
+  "date": "2026-11-13",
+  "timezone": "America/Sao_Paulo",
+  "production_decision": {
+    "institutional_host": "HomeHost",
+    "public_origin": "https://www.arquindex.com.br/",
+    "dns_apex_a": "177.234.150.42",
+    "authoritative_ns": [
+      "ns31.servidorwebsite.com",
+      "ns32.servidorwebsite.com"
+    ],
+    "github_repo": "arxazure/arquindex",
+    "railway_role": "Arquindex Plataforma separada; não é prova de publicação institucional"
+  },
+  "technical_audit": {
+    "homepage_http": 200,
+    "priority_pages_http_200": 5,
+    "regional_200": 0,
+    "regional_404": 72,
+    "robots_http": 200,
+    "sitemap_http": 200,
+    "sitemap_children": 16,
+    "sitemap_entries": 579,
+    "sitemap_index_http": 404,
+    "homehost_write_attempted": false,
+    "reason_no_write": "Raiz pública, backup completo restaurável fora de public_html e listagem FTPS com TLS válido não foram comprovados em conjunto"
+  },
+  "seo_daily_goal": {
+    "maximum": 10,
+    "created": 0,
+    "tested": 0,
+    "published": 0,
+    "submitted": 0,
+    "indexed_confirmed": 0,
+    "reason": "Existing-first: GSC Wizard não ativou a propriedade e as 72 rotas regionais continuam 404; não criar páginas sem demanda comprovada ou com risco de doorway/canibalização"
+  },
+  "articles": [
+    {
+      "title": "Assentamento funcional digital: estrutura, metadados, acesso e documentos de saúde ocupacional",
+      "path": "editorial/2026-11-13/assentamento-funcional-digital-metadados-acesso-saude-ocupacional/index.html",
+      "planned_url": "https://www.arquindex.com.br/blog/assentamento-funcional-digital-metadados-acesso-saude-ocupacional/",
+      "useful_words": 2363,
+      "state": "TESTADA",
+      "published": false,
+      "submitted": false,
+      "indexed_confirmed": false
+    },
+    {
+      "title": "Migração para Alfresco: lote-piloto, reconciliação, hashes e rollback",
+      "path": "editorial/2026-11-13/migracao-alfresco-lote-piloto-reconciliacao-hashes-rollback/index.html",
+      "planned_url": "https://www.arquindex.com.br/blog/migracao-alfresco-lote-piloto-reconciliacao-hashes-rollback/",
+      "useful_words": 2523,
+      "state": "TESTADA",
+      "published": false,
+      "submitted": false,
+      "indexed_confirmed": false
+    }
+  ],
+  "blogger": {
+    "public_posts": 36,
+    "queue_exact_title_matches": 0,
+    "pending_historic_titles": 8,
+    "write_attempted": false,
+    "reason": "Nenhum canal Blogger v3, Apps Script autenticado ou conector oficial com escopo de escrita disponível"
+  },
+  "gsc": {
+    "property": "sc-domain:arquindex.com.br",
+    "read_access": true,
+    "activated_in_connector": false,
+    "audit_error": "INVALID_ARGUMENT",
+    "submitted_urls": 0
+  },
+  "indexnow": {
+    "submitted_urls": 0,
+    "reason": "Nenhuma URL nova ou corrigida foi publicada e validada"
+  },
+  "merchant_center": {
+    "audited": false,
+    "reason": "Frente separada; sem acesso próprio usado nesta execução"
+  },
+  "regional_intents": [
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/belo-horizonte/empresa",
+      "city": "Belo Horizonte",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/belo-horizonte/empresa",
+      "city": "Belo Horizonte",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/belo-horizonte/empresa",
+      "city": "Belo Horizonte",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/contagem/empresa",
+      "city": "Contagem",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/contagem/empresa",
+      "city": "Contagem",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/contagem/empresa",
+      "city": "Contagem",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/betim/empresa",
+      "city": "Betim",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/betim/empresa",
+      "city": "Betim",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/betim/empresa",
+      "city": "Betim",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/nova-lima/empresa",
+      "city": "Nova Lima",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/nova-lima/empresa",
+      "city": "Nova Lima",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/nova-lima/empresa",
+      "city": "Nova Lima",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/ribeirao-das-neves/empresa",
+      "city": "Ribeirão das Neves",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/ribeirao-das-neves/empresa",
+      "city": "Ribeirão das Neves",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/ribeirao-das-neves/empresa",
+      "city": "Ribeirão das Neves",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/santa-luzia/empresa",
+      "city": "Santa Luzia",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/santa-luzia/empresa",
+      "city": "Santa Luzia",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/santa-luzia/empresa",
+      "city": "Santa Luzia",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/sabara/empresa",
+      "city": "Sabará",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/sabara/empresa",
+      "city": "Sabará",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/sabara/empresa",
+      "city": "Sabará",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/venda-nova/empresa",
+      "city": "Venda Nova",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/venda-nova/empresa",
+      "city": "Venda Nova",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/venda-nova/empresa",
+      "city": "Venda Nova",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/brasilia/empresa",
+      "city": "Brasília",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/brasilia/empresa",
+      "city": "Brasília",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/brasilia/empresa",
+      "city": "Brasília",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/sao-paulo/empresa",
+      "city": "São Paulo",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/sao-paulo/empresa",
+      "city": "São Paulo",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/sao-paulo/empresa",
+      "city": "São Paulo",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/rio-de-janeiro/empresa",
+      "city": "Rio de Janeiro",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/rio-de-janeiro/empresa",
+      "city": "Rio de Janeiro",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/rio-de-janeiro/empresa",
+      "city": "Rio de Janeiro",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/salvador/empresa",
+      "city": "Salvador",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/salvador/empresa",
+      "city": "Salvador",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/salvador/empresa",
+      "city": "Salvador",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/fortaleza/empresa",
+      "city": "Fortaleza",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/fortaleza/empresa",
+      "city": "Fortaleza",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/fortaleza/empresa",
+      "city": "Fortaleza",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/recife/empresa",
+      "city": "Recife",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/recife/empresa",
+      "city": "Recife",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/recife/empresa",
+      "city": "Recife",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/porto-alegre/empresa",
+      "city": "Porto Alegre",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/porto-alegre/empresa",
+      "city": "Porto Alegre",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/porto-alegre/empresa",
+      "city": "Porto Alegre",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/curitiba/empresa",
+      "city": "Curitiba",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/curitiba/empresa",
+      "city": "Curitiba",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/curitiba/empresa",
+      "city": "Curitiba",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/goiania/empresa",
+      "city": "Goiânia",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/goiania/empresa",
+      "city": "Goiânia",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/goiania/empresa",
+      "city": "Goiânia",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/manaus/empresa",
+      "city": "Manaus",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/manaus/empresa",
+      "city": "Manaus",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/manaus/empresa",
+      "city": "Manaus",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/belem/empresa",
+      "city": "Belém",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/belem/empresa",
+      "city": "Belém",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/belem/empresa",
+      "city": "Belém",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/vitoria/empresa",
+      "city": "Vitória",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/vitoria/empresa",
+      "city": "Vitória",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/vitoria/empresa",
+      "city": "Vitória",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/uberlandia/empresa",
+      "city": "Uberlândia",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/uberlandia/empresa",
+      "city": "Uberlândia",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/uberlandia/empresa",
+      "city": "Uberlândia",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/juiz-de-fora/empresa",
+      "city": "Juiz de Fora",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/juiz-de-fora/empresa",
+      "city": "Juiz de Fora",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/juiz-de-fora/empresa",
+      "city": "Juiz de Fora",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/montes-claros/empresa",
+      "city": "Montes Claros",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/montes-claros/empresa",
+      "city": "Montes Claros",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/montes-claros/empresa",
+      "city": "Montes Claros",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/digitalizacao-documentos/ipatinga/empresa",
+      "city": "Ipatinga",
+      "service": "Digitalização de documentos",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/guarda-documental/ipatinga/empresa",
+      "city": "Ipatinga",
+      "service": "Guarda documental",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    },
+    {
+      "url": "https://www.arquindex.com.br/seo/consultoria-lgpd/ipatinga/empresa",
+      "city": "Ipatinga",
+      "service": "Consultoria LGPD",
+      "state": "PLANEJADA",
+      "public_http": 404,
+      "eligible_for_publication": false,
+      "blocker": "URL inexistente na HomeHost; conteúdo regional diferenciado e demanda ainda não comprovados; risco de doorway/canibalização"
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Migração para Alfresco: piloto, hashes e rollback | Arquindex</title>
+  <meta name="description" content="Manual de migração para Alfresco com inventário, mapeamento de metadados, lote-piloto, hashes, reconciliação, testes, corte, rollback e aceite.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://www.arquindex.com.br/blog/migracao-alfresco-lote-piloto-reconciliacao-hashes-rollback/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Migração para Alfresco: lote-piloto, reconciliação, hashes e rollback">
+  <meta property="og:description" content="Como mover documentos e metadados para o Alfresco sem perder contagem, contexto, permissões, versões ou caminho de retorno.">
+  <meta property="og:url" content="https://www.arquindex.com.br/blog/migracao-alfresco-lote-piloto-reconciliacao-hashes-rollback/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Migração para Alfresco: lote-piloto, reconciliação, hashes e rollback","description":"Manual técnico para planejar, testar e aceitar uma migração documental para Alfresco Content Services.","datePublished":"2026-11-13","dateModified":"2026-11-13","inLanguage":"pt-BR","author":{"@type":"Organization","name":"Arquindex"},"publisher":{"@type":"Organization","name":"Arquindex","url":"https://www.arquindex.com.br/"},"mainEntityOfPage":"https://www.arquindex.com.br/blog/migracao-alfresco-lote-piloto-reconciliacao-hashes-rollback/"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Por que fazer lote-piloto antes da migração para o Alfresco?","acceptedAnswer":{"@type":"Answer","text":"O piloto testa mapeamento, formatos, metadados, permissões, desempenho e tratamento de exceções com volume controlado. Ele revela problemas antes do corte e produz critérios objetivos para escalar."}},{"@type":"Question","name":"O hash garante que a migração ficou correta?","acceptedAnswer":{"@type":"Answer","text":"O hash ajuda a verificar integridade do arquivo, mas não confirma sozinho metadados, versões, permissões, relacionamentos ou contexto. A aceitação precisa reconciliar todos esses elementos."}},{"@type":"Question","name":"Rollback é apenas restaurar o backup?","acceptedAnswer":{"@type":"Answer","text":"Não. O plano deve definir ponto de decisão, estado das fontes, novas transações, responsáveis, tempo máximo, sequência de retorno e validação. Restaurar dados sem reconciliar mudanças pode criar perda ou duplicidade."}},{"@type":"Question","name":"Quando o sistema antigo pode ser desligado?","acceptedAnswer":{"@type":"Answer","text":"Somente após reconciliação aprovada, testes funcionais e de segurança, período de estabilização, preservação necessária e confirmação de que integrações e processos dependentes foram tratados."}}]}</script>
+  <style>body{font-family:system-ui,sans-serif;line-height:1.7;color:#172033;margin:0}header,footer{background:#0b2545;color:#fff;padding:1rem}header a,footer a{color:#fff}main{max-width:980px;margin:auto;padding:2rem}h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.12}h2{margin-top:2.2rem;color:#0b4f6c}h3{color:#176b87}.answer,.note{padding:1rem;border-left:5px solid #18a999;background:#eefaf8}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccd4dd;padding:.65rem;text-align:left;vertical-align:top}th{background:#edf3f8}.cta{background:#0b4f6c;color:#fff;padding:1.4rem;margin-top:2rem}.cta a{color:#fff;font-weight:700}.meta{color:#52606d}.check li{margin:.45rem 0}details{margin:.7rem 0;padding:.7rem;border:1px solid #d7e0e8}</style>
+</head>
+<body>
+<header><a href="https://www.arquindex.com.br/"><strong>ARQUINDEX</strong></a> · <a href="https://www.arquindex.com.br/blog/">Artigos técnicos</a></header>
+<main><article>
+<p class="meta">Autoria institucional: Arquindex · Atualizado em 13 de novembro de 2026 · Conteúdo técnico informativo</p>
+<h1>Migração para Alfresco: lote-piloto, reconciliação, hashes e rollback</h1>
+<p class="answer"><strong>Resposta direta:</strong> uma migração segura para Alfresco Content Services deve ser tratada como transformação de informação, e não como simples cópia de arquivos. O processo precisa inventariar fontes, congelar uma linha de base, mapear conteúdo e metadados, preservar versões e relações necessárias, testar permissões, executar um lote-piloto representativo, reconciliar origem e destino e manter plano de rollback. Hashes confirmam integridade de arquivos, mas não provam que classe, proprietário, data, versão, associação e acesso foram importados corretamente. O aceite combina contagens, manifestos, amostragem, testes funcionais, segurança e aprovação dos donos do processo.</p>
+
+<h2>O problema que a migração precisa resolver</h2>
+<p>Organizações migram para um ECM porque documentos estão dispersos, a busca é fraca, versões se confundem ou controles não acompanham o processo. Se o projeto apenas transfere a desorganização, o novo repositório nasce com os mesmos defeitos e mais uma camada técnica. Pastas de rede podem ter nomes inconsistentes; sistemas legados podem guardar metadados em tabelas separadas; e-mails podem conter anexos sem vínculo; arquivos podem estar corrompidos ou duplicados.</p>
+<p>O Alfresco oferece repositório, modelos de conteúdo, pesquisa, versionamento, permissões, API e capacidades de governança conforme os componentes implantados. Essas capacidades dependem de configuração. Importar milhões de PDFs em uma única pasta, sem tipo e sem propriedades, não produz gestão documental. O projeto deve definir como a informação será usada depois da migração.</p>
+<p>Também é necessário controlar o período de transição. Enquanto o lote é extraído, usuários continuam criando e alterando documentos. Sem regra de congelamento ou migração incremental, o destino pode ficar desatualizado antes do corte. O rollback precisa considerar essas transações, não apenas a cópia inicial.</p>
+
+<h2>Princípios de uma migração auditável</h2>
+<h3>Origem imutável ou mudança controlada</h3>
+<p>Para reconciliar, é preciso saber qual estado foi migrado. A fonte pode ficar somente leitura durante a janela ou registrar alterações para uma carga delta. A escolha depende da operação, mas deve existir uma linha de base com data, identificador do lote, contagem, bytes e hash quando aplicável.</p>
+<h3>Transformação explícita</h3>
+<p>Todo campo de origem precisa de destino, regra de conversão ou justificativa de descarte. Datas, usuários, estados, códigos, categorias, permissões e versões não devem ser transformados por suposição. O dicionário de mapeamento é versionado e testado.</p>
+<h3>Exceção visível</h3>
+<p>Arquivo ilegível, metadado inválido, usuário inexistente e formato não suportado são resultados que precisam aparecer no manifesto. A soma de importados, rejeitados, duplicados justificados e pendentes deve explicar a quantidade extraída. Itens com erro não podem desaparecer silenciosamente.</p>
+<h3>Aceite pelo processo, não apenas pela TI</h3>
+<p>A equipe técnica confirma carga e desempenho; os donos do processo confirmam pesquisa, contexto, completude e uso. Segurança valida acesso e logs. Arquivo e jurídico analisam retenção e evidências. O aceite é conjunto porque a migração afeta mais de uma dimensão.</p>
+
+<h2>Inventário antes de qualquer carga</h2>
+<table><thead><tr><th>Dimensão</th><th>O que levantar</th><th>Risco se ignorada</th></tr></thead><tbody>
+<tr><td>Fontes</td><td>Sistemas, bancos, pastas, nuvem, e-mail, mídias, responsáveis e autoridade.</td><td>Deixar conteúdo válido fora ou importar cópia não oficial.</td></tr>
+<tr><td>Volume</td><td>Itens, versões, bytes, crescimento, formatos e distribuição por período.</td><td>Subdimensionar janela, armazenamento e indexação.</td></tr>
+<tr><td>Qualidade</td><td>Duplicidades, corrupção, nomes inválidos, metadados vazios e OCR.</td><td>Travar a carga ou contaminar a busca.</td></tr>
+<tr><td>Contexto</td><td>Classe, processo, relacionamento, pasta, proprietário e estado.</td><td>Recuperar o arquivo sem entender sua função.</td></tr>
+<tr><td>Segurança</td><td>Usuários, grupos, regras herdadas, exceções e compartilhamentos.</td><td>Ampliar ou bloquear acesso no destino.</td></tr>
+<tr><td>Integrações</td><td>Aplicações, robôs, URLs, IDs externos, APIs e relatórios.</td><td>Quebrar processos mesmo com documentos importados.</td></tr>
+<tr><td>Temporalidade</td><td>Prazo, evento inicial, bloqueio, destinação e registro de eliminação.</td><td>Reter ou eliminar incorretamente.</td></tr>
+</tbody></table>
+<p>O inventário deve distinguir arquivo lógico, binário, versão e relacionamento. Uma pasta com dez documentos pode conter cinquenta versões. Um item pode aparecer em várias visões sem ser duplicado fisicamente. O modelo de contagem precisa ser definido antes de comparar.</p>
+
+<h2>Mapeamento para o modelo de conteúdo do Alfresco</h2>
+<p>No Alfresco, tipos e aspectos permitem representar propriedades e comportamentos. O desenho deve evitar extremos: um único tipo genérico com dezenas de campos opcionais reduz qualidade; tipos demais aumentam manutenção e confundem usuários. Comece por processos e classes que realmente influenciam busca, retenção, permissão ou workflow.</p>
+<table><thead><tr><th>Elemento de origem</th><th>Possível destino</th><th>Regra de validação</th></tr></thead><tbody>
+<tr><td>Categoria documental</td><td>Tipo ou propriedade controlada.</td><td>Mapa de códigos, valor padrão apenas quando justificado.</td></tr>
+<tr><td>Campos reutilizáveis</td><td>Aspectos do modelo.</td><td>Aplicação coerente e propriedades obrigatórias testadas.</td></tr>
+<tr><td>Estrutura de pastas</td><td>Sites, bibliotecas e pastas.</td><td>Fronteira de processo e acesso, sem copiar caminhos inúteis.</td></tr>
+<tr><td>Usuário proprietário</td><td>Identidade Alfresco ou conta de migração mais campo de origem.</td><td>Tabela de correspondência e tratamento de contas extintas.</td></tr>
+<tr><td>ACL/permissão</td><td>Grupos, papéis e regras locais.</td><td>Matriz aprovada e teste de herança.</td></tr>
+<tr><td>Versões</td><td>Histórico de versões quando necessário.</td><td>Ordem, autor, data, rótulo e conteúdo reconciliados.</td></tr>
+<tr><td>ID legado</td><td>Propriedade única e indexada conforme necessidade.</td><td>Sem colisão; usada para idempotência e rastreamento.</td></tr>
+<tr><td>Relacionamentos</td><td>Associações, links ou propriedades de referência.</td><td>Destino existente e cardinalidade conferida.</td></tr>
+</tbody></table>
+
+<h2>Como construir um lote-piloto útil</h2>
+<p>O piloto não deve ser formado apenas por documentos fáceis. Ele precisa representar formatos, tamanhos, classes, permissões, versões, usuários desativados, caracteres especiais, relacionamentos, conteúdo com OCR e exceções conhecidas. Um lote pequeno demais pode passar sem revelar problemas; um lote grande demais torna a análise lenta.</p>
+<h3>Critérios de seleção</h3>
+<p>Inclua itens recentes e antigos, simples e versionados, públicos e restritos, pequenos e grandes. Adicione arquivos potencialmente corrompidos, nomes longos e metadados incompletos para validar a fila de erro. O objetivo não é alcançar cem por cento de sucesso artificial, mas demonstrar que falhas são detectadas e tratadas.</p>
+<h3>Critérios de saída</h3>
+<p>Defina antes da execução: percentual de itens importados, zero perda não explicada, correspondência de hashes para binários não transformados, tolerância de desempenho, sucesso dos testes de permissão e resolução de defeitos críticos. Se houver transformação deliberada, como normalização de formato, preserve hash da origem e gere hash do resultado com registro da operação.</p>
+
+<h2>Fluxo técnico em dez etapas</h2>
+<h3>1. Congelar a especificação</h3>
+<p>Aprove versão do modelo de conteúdo, mapeamento, matriz de acesso, escopo do lote e critérios de aceite. Alterar regras durante a execução sem versionamento torna resultados incomparáveis.</p>
+<h3>2. Extrair com manifesto</h3>
+<p>Gere identificador por item, origem, caminho ou ID, versões, tamanho, data, hash, metadados e permissões relevantes. O manifesto deve ser processável por máquina e legível para auditoria.</p>
+<h3>3. Preparar ambiente de teste</h3>
+<p>Use versão, extensões, configurações de busca e modelo compatíveis com o destino. Documente diferenças. Sanitizar ou sintetizar dados pode ser necessário para proteger informações, mas o teste deve conservar características técnicas.</p>
+<h3>4. Validar antes de importar</h3>
+<p>Cheque duplicidade de ID, campos obrigatórios, datas, códigos, arquivos ausentes, tamanho, formato e correspondência de usuários. Rejeite de maneira controlada o que não atende à regra, sem interromper todo o lote quando a política permitir.</p>
+<h3>5. Importar de forma idempotente</h3>
+<p>Uma repetição não deve criar nova cópia. Use ID legado ou chave de migração para localizar o item e decidir criar, atualizar, ignorar ou reportar conflito. Registre tentativa e resultado.</p>
+<h3>6. Aplicar metadados, versões e relações</h3>
+<p>Respeite dependências: o documento relacionado precisa existir antes da associação. Para versões, confirme ordem, datas e autores conforme a capacidade e a necessidade de preservação. Não atribua a um usuário atual uma autoria que não pode ser comprovada.</p>
+<h3>7. Aplicar e testar permissões</h3>
+<p>Configure grupos e herança conforme a matriz. Use contas representativas para confirmar pesquisa, pré-visualização, download, edição, exclusão, compartilhamento e API. Testes negativos são obrigatórios para conteúdo restrito.</p>
+<h3>8. Reconciliar</h3>
+<p>Compare contagem, bytes, hashes, metadados críticos, versões, associações e exceções. Produza totais por classe e motivo de rejeição. A soma precisa fechar; “aproximadamente” não é aceitável para provar completude.</p>
+<h3>9. Medir e ajustar</h3>
+<p>Avalie tempo de extração, importação, indexação, busca e correção. Investigue gargalos antes de projetar a janela final. Aumentar paralelismo sem observar banco, armazenamento e índice pode degradar o ambiente.</p>
+<h3>10. Aprovar o piloto</h3>
+<p>Registre defeitos, correções, resultados e pendências. Só escale quando critérios de saída forem atendidos ou houver aceitação formal de risco. A versão aprovada da ferramenta e da configuração torna-se linha de base.</p>
+
+<h2>Reconciliação: o que comparar</h2>
+<table><thead><tr><th>Controle</th><th>Origem</th><th>Destino</th><th>Resultado esperado</th></tr></thead><tbody>
+<tr><td>Quantidade lógica</td><td>Itens extraídos por classe.</td><td>Itens criados, atualizados, rejeitados e duplicados.</td><td>Total explicado sem perda silenciosa.</td></tr>
+<tr><td>Binários</td><td>Tamanho e hash por versão.</td><td>Tamanho e hash do conteúdo recuperado.</td><td>Correspondência, salvo transformação registrada.</td></tr>
+<tr><td>Metadados</td><td>Valores normalizados antes da carga.</td><td>Propriedades persistidas e pesquisáveis.</td><td>Campos críticos iguais ou convertidos pela regra.</td></tr>
+<tr><td>Versões</td><td>Sequência e conteúdo.</td><td>Histórico disponível.</td><td>Ordem e quantidade conforme escopo aprovado.</td></tr>
+<tr><td>Permissões</td><td>Matriz de origem e regra alvo.</td><td>Permissão efetiva por perfil.</td><td>Ações permitidas e negadas conferidas.</td></tr>
+<tr><td>Relacionamentos</td><td>Links e chaves externas.</td><td>Associações e referências.</td><td>Sem alvo ausente ou ligação invertida.</td></tr>
+<tr><td>Busca</td><td>Conjunto de consultas de referência.</td><td>Resultados no índice.</td><td>Precisão, filtros e tempo dentro do aceite.</td></tr>
+</tbody></table>
+<p>SHA-256 é um algoritmo amplamente usado para gerar resumo criptográfico. Na migração, o valor deve ser calculado com procedimento consistente. Se o arquivo for convertido, comprimido novamente ou tiver metadados embutidos alterados, o hash muda. Isso não implica erro quando a transformação foi autorizada, mas exige registro da origem, operação e resultado.</p>
+
+<h2>Plano de corte e migração delta</h2>
+<p>Depois do piloto, a equipe define ondas por unidade, processo, período ou sistema. Cada onda possui janela, responsáveis, comunicação, capacidade, critérios de parada e tempo de estabilização. Se a fonte não puder ficar somente leitura, registre transações posteriores à extração e aplique um delta antes da abertura do destino.</p>
+<p>O corte deve coordenar integrações, URLs, atalhos e procedimentos. Usuários precisam saber onde consultar e onde incluir documentos. Acesso simultâneo de escrita em origem e destino cria divergência. Uma página de aviso não substitui o controle técnico.</p>
+
+<h2>Rollback: voltar com segurança</h2>
+<p>Rollback não é sinônimo de restaurar um backup. O plano define o evento que dispara retorno, quem decide, qual ponto de recuperação será usado e como tratar documentos criados durante a janela. Se usuários já trabalharam no destino, simplesmente reabrir a fonte pode perder ou duplicar transações.</p>
+<table><thead><tr><th>Elemento</th><th>Definição necessária</th></tr></thead><tbody>
+<tr><td>Gatilho</td><td>Falha crítica, perda não explicada, permissão indevida, desempenho inaceitável ou integração indisponível.</td></tr>
+<tr><td>Ponto de decisão</td><td>Horário limite para continuar, pausar ou retornar.</td></tr>
+<tr><td>Estado da fonte</td><td>Somente leitura, ativa ou recebendo log de delta.</td></tr>
+<tr><td>Novas transações</td><td>Como exportar, reconciliar e reintegrar alterações feitas no destino.</td></tr>
+<tr><td>Sequência</td><td>Bloquear escrita, preservar evidências, restaurar serviços, testar e comunicar.</td></tr>
+<tr><td>Validação</td><td>Testes de disponibilidade, integridade, acesso e integrações após o retorno.</td></tr>
+<tr><td>Responsáveis</td><td>Decisor, executores, segurança, negócio, comunicação e fornecedor.</td></tr>
+</tbody></table>
+<p>O plano deve ser ensaiado. Um backup que nunca foi restaurado é apenas uma expectativa. Teste compatibilidade de versão, banco, conteúdo, índice, extensões, configurações e credenciais protegidas. Registre tempo real de restauração e diferenças em relação ao objetivo operacional.</p>
+
+<h2>Segurança e controle de qualidade</h2>
+<p>Pacotes de migração costumam concentrar documentos e metadados sensíveis. Proteja área de staging, credenciais, arquivos temporários, logs e manifestos. Restrinja usuários, criptografe transferências e armazene segredos fora do código. Elimine temporários conforme procedimento após o aceite, sem antecipar a remoção.</p>
+<p>Os logs devem evitar conteúdo completo ou dados pessoais desnecessários. Registre ID técnico, etapa, resultado, data e motivo de erro. Contas de migração precisam de escopo mínimo e prazo. Após o corte, revogue credenciais e confirme que diretórios temporários não ficaram expostos.</p>
+<p>Qualidade inclui legibilidade, completude, metadados, associação, versão, permissão e pesquisa. Amostragem deve ser estratificada por classe e risco. Itens sensíveis, transformados ou rejeitados podem exigir conferência total. A amostra aleatória sozinha pode não encontrar defeitos raros e graves.</p>
+
+<h2>Exemplo hipotético</h2>
+<p><strong>Exemplo hipotético, não case de cliente:</strong> uma empresa de engenharia migra documentos de projetos de uma pasta de rede para Alfresco. O inventário identifica PDFs, planilhas, desenhos, três níveis de pasta e listas externas de responsáveis. O lote-piloto reúne 2.000 itens de dois projetos, incluindo revisões, documentos restritos, nomes longos e arquivos corrompidos.</p>
+<p>A primeira execução importa 1.962 itens, rejeita 21 por arquivo ausente e encontra 17 duplicidades pelo ID legado. A reconciliação mostra que dez documentos receberam data de upload no lugar da data documental. A regra é corrigida e o lote é repetido de forma idempotente, sem criar cópias. Testes negativos revelam que um grupo amplo encontra miniaturas de uma área restrita; a herança é ajustada. Somente depois de fechar contagens, hashes, metadados e permissões a equipe aprova a próxima onda.</p>
+<p>Os números são meramente ilustrativos. Um projeto real deve usar volumes, tolerâncias e critérios próprios. O valor do exemplo está na lógica: falhas do piloto são evidência útil, desde que fiquem registradas e sejam resolvidas antes de escalar.</p>
+
+<h2>Checklist de preparação e aceite</h2>
+<ul class="check">
+<li>Fontes, responsáveis e autoridade de cada cópia foram inventariados.</li>
+<li>Contagem distingue itens, versões, binários e relações.</li>
+<li>Modelo de conteúdo e dicionário de mapeamento estão versionados.</li>
+<li>ID legado permite idempotência e rastreamento.</li>
+<li>Usuários extintos e grupos sem correspondência têm regra explícita.</li>
+<li>O piloto inclui casos normais, sensíveis e excepcionais.</li>
+<li>Manifesto registra contagens, bytes, hashes, status e motivo de erro.</li>
+<li>Itens rejeitados permanecem em fila controlada e reconciliada.</li>
+<li>Permissões foram testadas por ações permitidas e negadas.</li>
+<li>Busca e indexação foram avaliadas após a carga terminar.</li>
+<li>Backup restaurável e rollback foram ensaiados.</li>
+<li>Delta de alterações está definido para fontes que continuam ativas.</li>
+<li>Negócio, segurança e equipe técnica aprovaram os critérios.</li>
+<li>Credenciais e staging serão revogados ou eliminados após aceite.</li>
+</ul>
+
+<h2>Perguntas frequentes</h2>
+<details><summary>Por que fazer lote-piloto?</summary><p>O piloto testa regras, formatos, metadados, permissões, desempenho e exceções com impacto controlado. Ele permite corrigir o processo antes da carga completa.</p></details>
+<details><summary>Hash garante que tudo migrou corretamente?</summary><p>Não. O hash verifica integridade do binário. Metadados, versões, relações, permissões e contexto precisam de controles próprios.</p></details>
+<details><summary>É possível repetir a importação sem duplicar?</summary><p>Sim, se a ferramenta for idempotente e usar uma chave estável. A repetição deve localizar o item e decidir criar, atualizar, ignorar ou reportar conflito.</p></details>
+<details><summary>Rollback é apenas restaurar o backup?</summary><p>Não. É preciso tratar o estado da fonte, novas transações, integrações, responsáveis, tempo máximo e validação após o retorno.</p></details>
+<details><summary>Quando o legado pode ser desligado?</summary><p>Após reconciliação aprovada, testes, estabilização e tratamento das integrações e obrigações de preservação. O desligamento não deve ocorrer apenas porque a carga terminou.</p></details>
+<details><summary>Devemos migrar todos os documentos?</summary><p>Não necessariamente. Duplicidades, versões dispensáveis, documentos sem valor e itens já destinados podem exigir decisão. A exclusão deve seguir regra aprovada, não conveniência técnica.</p></details>
+
+<h2>Fontes oficiais consultadas</h2>
+<ul>
+<li>Hyland/Alfresco, <a href="https://docs.alfresco.com/content-services/7.2/">Alfresco Content Services 7.2 — documentação oficial</a>, incluindo administração, modelos, importação, API, backup, migração, auditoria e segurança; consultada em 13 de novembro de 2026.</li>
+<li>Hyland/Alfresco, <a href="https://docs.alfresco.com/governance-services/community/">Alfresco Governance Services Community — documentação oficial</a>, ciclo de vida e governança de registros; consultada em 13 de novembro de 2026.</li>
+<li>CONARQ, <a href="https://www.gov.br/conarq/pt-br/legislacao-arquivistica/resolucoes-do-conarq/resolucao-no-50-de-06-de-maio-de-2022">Resolução nº 50, de 6 de maio de 2022</a>, e-ARQ Brasil versão 2; consultada em 13 de novembro de 2026.</li>
+<li>NIST, <a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">FIPS PUB 180-4 — Secure Hash Standard</a>, publicação oficial sobre algoritmos de hash seguro; consultada em 13 de novembro de 2026.</li>
+<li>ANPD, <a href="https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-sobre-seguranca-da-informacao-para-agentes-de-tratamento-de-pequeno-porte">Guia orientativo sobre segurança da informação</a>, página atualizada em 23 de janeiro de 2025; consultada em 13 de novembro de 2026.</li>
+</ul>
+
+<h2>Conteúdos e serviços relacionados</h2>
+<p>Consulte os <a href="https://www.arquindex.com.br/blog/">artigos técnicos</a>, a página de <a href="https://www.arquindex.com.br/gestao-documental.html">gestão documental</a> e as soluções de <a href="https://www.arquindex.com.br/alfresco.html">Alfresco ECM</a>.</p>
+
+<div class="cta"><h2>Precisa planejar uma migração documental para Alfresco?</h2><p>A Arquindex apoia inventário, modelo de conteúdo, metadados, ferramentas de carga, reconciliação, testes de acesso, governança, corte e estabilização. O escopo é definido após avaliar fontes, volumes, integrações e requisitos.</p><p><a href="https://www.arquindex.com.br/">www.arquindex.com.br</a> · WhatsApp <a href="https://wa.me/5531973632725">(31) 97363-2725</a> · <a href="mailto:comercial@arquindex.com.br">comercial@arquindex.com.br</a></p></div>
+</article></main>
+<footer>Arquindex · Gestão documental, digitalização, ECM, LGPD e Databooks</footer>
+</body>
+</html>
